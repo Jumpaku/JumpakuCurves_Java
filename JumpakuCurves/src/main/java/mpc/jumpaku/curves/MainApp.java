@@ -14,7 +14,7 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
         
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root, 640, 480);
         scene.getStylesheets().add("/styles/Styles.css");
         
         stage.setTitle("JavaFX and Maven");
@@ -31,6 +31,8 @@ public class MainApp extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        System.out.println(new BezierCurve2DByDeCasteljau(new Vec2D(), new Vec2D(1.0, 0.0), new Vec2D(0.0, 1.0), new Vec2D(1.0, 1.0)).evaluate(0.5));
+
         launch(args);
     }
 
