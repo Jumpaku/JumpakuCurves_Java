@@ -34,6 +34,7 @@ public class BezierCurve2DByDeCasteljau extends BezierCurve2D{
             controlPoints = controlPoints.zipWith(controlPoints.drop(1),
                         (p, n) -> p.scalarMultiply(1.0-t).add(n.scalarMultiply(t)));
         }
+        
         return controlPoints.head();
     }
 }

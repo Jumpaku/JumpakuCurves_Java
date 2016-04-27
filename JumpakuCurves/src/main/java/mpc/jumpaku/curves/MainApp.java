@@ -1,15 +1,11 @@
 package mpc.jumpaku.curves;
 
-import mpc.jumpaku.curves.beziercurve.BezierCurve2DByDeCasteljau;
-import java.util.List;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import mpc.jumpaku.curves.beziercurve.BezierCurve2DByBernstein;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 
 public class MainApp extends Application {
@@ -22,6 +18,7 @@ public class MainApp extends Application {
         scene.getStylesheets().add("/styles/Styles.css");
         
         stage.setTitle("JavaFX and Maven");
+        
         stage.setScene(scene);
         stage.show();
     }
@@ -35,9 +32,6 @@ public class MainApp extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println(new BezierCurve2DByDeCasteljau(new Vec2D(), new Vec2D(1.0, 0.0), new Vec2D(0.0, 1.0), new Vec2D(1.0, 1.0)).evaluate(0.5));
-        System.out.println(new BezierCurve2DByBernstein(new Vec2D(), new Vec2D(1.0, 0.0), new Vec2D(0.0, 1.0), new Vec2D(1.0, 1.0)).evaluate(0.5));
-
         launch(args);
     }
 

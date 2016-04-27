@@ -12,6 +12,6 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
  * @author ito
  */
 @FunctionalInterface
-public interface Curve2D {
+public interface Curve2D{
     Vector2D evaluate(Double t);
 }
