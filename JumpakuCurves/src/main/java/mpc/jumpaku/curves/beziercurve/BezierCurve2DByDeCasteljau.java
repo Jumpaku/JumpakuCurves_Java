@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mpc.jumpaku.curves;
+package mpc.jumpaku.curves.beziercurve;
 
 import fj.data.Stream;
 import java.util.Arrays;
@@ -29,12 +29,11 @@ public class BezierCurve2DByDeCasteljau extends BezierCurve2D{
         if(!getDomain().isIn(t)){
             throw new IllegalArgumentException("The parameter t is must be in domain [0,1], but t = " + t);
         }
-        return deCasteljau(t, Stream.iterableStream(getControlPoints())).head();
-    }
-    
-    static private Stream<Vector2D> deCasteljau(Double t, Stream<Vector2D> controlPoints){
-        return controlPoints.length() == 1 ? controlPoints : 
-                deCasteljau(t, controlPoints.zipWith(controlPoints.drop(1),
-                        (p, n) -> p.scalarMultiply(1.0-t).add(n.scalarMultiply(t))));
+        Stream<Vector2D> controlPoints = Stream.iterableStream(getControlPoints());
+        while(controlPoints.length() > 1){
+            controlPoints = controlPoints.zipWith(controlPoints.drop(1),
+                        (p, n) -> p.scalarMultiply(1.0-t).add(n.scalarMultiply(t)));
+        }
+        return controlPoints.head();
     }
 }

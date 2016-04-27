@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mpc.jumpaku.curves;
+package mpc.jumpaku.curves.beziercurve;
 
 import mpc.jumpaku.curves.domain.Domain;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import mpc.jumpaku.curves.Curve2D;
 import mpc.jumpaku.curves.domain.ClosedDomain;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
@@ -40,6 +41,10 @@ public abstract class BezierCurve2D implements Curve2D{
 
     public final Domain getDomain() {
         return domain;
+    }
+    
+    public Integer getDegree(){
+        return controlPoints.size() - 1;
     }
 
     

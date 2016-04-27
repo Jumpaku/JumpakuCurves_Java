@@ -22,13 +22,4 @@ public class ClosedDomain implements Domain{
     public Boolean isIn(Double t) {
         return from <= t && t <= to;
     }
-
-    public Double getFrom() {
-        return from;
-    }
-
-    public Double getTo() {
-        return to;
-    }
-    
 }
