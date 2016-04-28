@@ -2,6 +2,10 @@ package mpc.jumpaku.curves;
 
 import fj.F;
 import fj.data.Stream;
+import java.io.BufferedWriter;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
@@ -56,6 +60,10 @@ public class FXMLController implements Initializable {
     }
     private static void renderPoints(GraphicsContext context, List<Vector2D> points){
         points.forEach(p -> context.fillOval(p.getX()-4, p.getY()-4, 8, 8));
+    }
+    
+    private static void outputGnuplot(PrintWriter ostream){
+        ostream.println("");
     }
        
     @Override
