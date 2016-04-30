@@ -45,10 +45,12 @@ public class FXMLController implements Initializable {
         
         context.setFill(Color.GOLD);
         renderPoints(context, controlPoints);
+        context.setStroke(Color.GOLD);
+        renderPolyline(context, controlPoints);
     }
     
     private static void renderCurve(GraphicsContext context, Curve2D curve){
-        final Double d = Math.pow(2, -4);
+        final Double d = Math.pow(2, -6);
         Stream<Vector2D> points = Stream.iterateWhile(t -> t + d, t -> t <= 1.0, 0.0)
                 .map(curve::evaluate);
         Vector2D begin = points.head();
@@ -61,6 +63,18 @@ public class FXMLController implements Initializable {
     private static void renderPoints(GraphicsContext context, List<Vector2D> points){
         points.forEach(p -> context.fillOval(p.getX()-4, p.getY()-4, 8, 8));
     }
+    private static void renderPolyline(GraphicsContext context, List<Vector2D> points){
+        Stream<Vector2D> ps = Stream.iterableStream(points);
+        context.beginPath();
+        ps.zip(ps.drop(1))
+                .forEach(p -> {
+                    context.moveTo(p._1().getX(), p._1().getY());
+                    context.lineTo(p._2().getX(), p._2().getY());
+                });
+        
+        context.stroke();
+    }
+    
     
     private static void outputGnuplot(PrintWriter ostream){
         ostream.println("");
