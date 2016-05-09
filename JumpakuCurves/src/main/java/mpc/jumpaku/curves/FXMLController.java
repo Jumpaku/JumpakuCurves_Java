@@ -26,26 +26,28 @@ public class FXMLController implements Initializable {
     
     @FXML
     private void onClick(MouseEvent e){
-        controlPoints.add(new Vector2D(e.getX(), e.getY()));
-        GraphicsContext context = canvas.getGraphicsContext2D();
-        context.clearRect(0, 0, 600, 400);
+        synchronized(controlPoints){
+            controlPoints.add(new Vector2D(e.getX(), e.getY()));
+            GraphicsContext context = canvas.getGraphicsContext2D();
+            context.clearRect(0, 0, 600, 400);
 
-        final Curve2D decas = new BezierCurve2DByDeCasteljau(controlPoints);
-        context.setStroke(Color.CORAL);
-        context.setLineWidth(5);
-        renderCurve(context, decas);
+            final Curve2D decas = new BezierCurve2DByDeCasteljau(controlPoints);
+            context.setStroke(Color.CORAL);
+            context.setLineWidth(5);
+            renderCurve(context, decas);
 
-        final Curve2D bern = new BezierCurve2DByBernstein(controlPoints);
-        context.setStroke(Color.CADETBLUE);
-        context.setLineWidth(1);
-        renderCurve(context, bern);
-        
-        context.setFill(Color.GOLD);
-        renderPoints(context, controlPoints);
-        context.setStroke(Color.GOLD);
-        renderPolyline(context, controlPoints);
-        
-        outputScript(System.out, controlPoints.size());
+            final Curve2D bern = new BezierCurve2DByBernstein(controlPoints);
+            context.setStroke(Color.CADETBLUE);
+            context.setLineWidth(1);
+            renderCurve(context, bern);
+
+            context.setFill(Color.GOLD);
+            renderPoints(context, controlPoints);
+            context.setStroke(Color.GOLD);
+            renderPolyline(context, controlPoints);
+
+            outputScript(System.out, controlPoints.size());
+        }
     }
     
     private static void renderCurve(GraphicsContext context, Curve2D curve){

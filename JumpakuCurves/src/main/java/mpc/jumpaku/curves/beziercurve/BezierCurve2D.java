@@ -19,10 +19,8 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
  * @author ito
  */
 public abstract class BezierCurve2D implements Curve2D{
+    
     private final List<Vector2D> controlPoints;
-    public List<Vector2D> getControlPoints() {
-        return Collections.unmodifiableList(controlPoints);
-    }
     
     private final Domain domain;
     
@@ -32,7 +30,7 @@ public abstract class BezierCurve2D implements Curve2D{
         }
         controlPoints = new LinkedList<>();
         domain = new ClosedDomain(0.0, 1.0);
-        cp.forEach(v->controlPoints.add(v));
+        cp.forEach(v -> controlPoints.add(v));
     }
     
     public BezierCurve2D(Vector2D... cp) {
@@ -41,6 +39,10 @@ public abstract class BezierCurve2D implements Curve2D{
 
     public final Domain getDomain() {
         return domain;
+    }
+    
+    public List<Vector2D> getControlPoints() {
+        return Collections.unmodifiableList(controlPoints);
     }
     
     public Integer getDegree(){
