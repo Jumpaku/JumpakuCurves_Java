@@ -5,13 +5,14 @@
  */
 package mpc.jumpaku.curves;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.commons.math3.geometry.Vector;
 
 /**
  *
  * @author ito
+ * @param <V>
  */
 @FunctionalInterface
-public interface Curve2D{
-    Vector2D evaluate(Double t);
+public interface Curve<V extends Vector>{
+    V evaluate(Double t);
 }

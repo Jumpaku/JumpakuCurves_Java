@@ -5,6 +5,7 @@
  */
 package mpc.jumpaku.curves.utils;
 
+import org.apache.commons.math3.geometry.Vector;
 import org.apache.commons.math3.geometry.euclidean.twod.Segment;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
@@ -31,5 +32,12 @@ public class GeomUtils {
             throw new IllegalArgumentException("The parameter t is must be in domain [0,1], but t = " + t);
         }
         return new Vector2D(1.0-t, s.getStart(), t, s.getEnd());
+    }
+    
+    public static <V extends Vector> Vector internallyDivide(Double t, V start, V end){
+        if(t < 0 || 1 < t){
+            throw new IllegalArgumentException("The parameter t is must be in domain [0,1], but t = " + t);
+        }
+        return start.scalarMultiply(1.0-t).add(end.scalarMultiply(t));
     }
 }

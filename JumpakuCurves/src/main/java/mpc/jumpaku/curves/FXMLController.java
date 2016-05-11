@@ -31,12 +31,12 @@ public class FXMLController implements Initializable {
             GraphicsContext context = canvas.getGraphicsContext2D();
             context.clearRect(0, 0, 600, 400);
 
-            final Curve2D decas = new BezierCurve2DByDeCasteljau(controlPoints);
+            final Curve<Vector2D> decas = new BezierCurve2DByDeCasteljau(controlPoints);
             context.setStroke(Color.CORAL);
             context.setLineWidth(5);
             renderCurve(context, decas);
 
-            final Curve2D bern = new BezierCurve2DByBernstein(controlPoints);
+            final Curve<Vector2D> bern = new BezierCurve2DByBernstein(controlPoints);
             context.setStroke(Color.CADETBLUE);
             context.setLineWidth(1);
             renderCurve(context, bern);
@@ -50,7 +50,7 @@ public class FXMLController implements Initializable {
         }
     }
     
-    private static void renderCurve(GraphicsContext context, Curve2D curve){
+    private static void renderCurve(GraphicsContext context, Curve<Vector2D> curve){
         final Double d = Math.pow(2, -6);
         Stream<Vector2D> points = Stream.iterateWhile(t -> t + d, t -> t <= 1.0, 0.0)
                 .map(curve::evaluate);

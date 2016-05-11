@@ -1,5 +1,6 @@
 package mpc.jumpaku.curves;
 
+import fj.data.Stream;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +33,9 @@ public class MainApp extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        launch(args);
+        
+        Stream.range(0, 10).bind(e->Stream.arrayStream(e+1,e-1,e*2)).forEach(System.out::println);
+        //launch(args);
     }
 
 }
