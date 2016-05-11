@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.UnaryOperator;
 import org.apache.commons.math3.geometry.Vector;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficientDouble;
 
 /**
