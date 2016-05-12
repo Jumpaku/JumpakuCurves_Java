@@ -6,6 +6,7 @@
 package mpc.jumpaku.curves.beziercurve;
 
 import fj.data.Stream;
+import java.util.Collections;
 import mpc.jumpaku.curves.domain.Domain;
 import java.util.List;
 import mpc.jumpaku.curves.Curve;
@@ -38,6 +39,6 @@ public abstract interface BezierCurve<V extends Vector> extends Curve<V>{
         result.append(tmp);
         result.append(Stream.single(_cp.get(n)));
         
-        return result.toJavaList();
+        return Collections.unmodifiableList(result.toJavaList());
     }
 }

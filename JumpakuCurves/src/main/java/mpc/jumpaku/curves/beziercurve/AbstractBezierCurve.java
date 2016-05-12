@@ -12,7 +12,6 @@ import java.util.List;
 import mpc.jumpaku.curves.domain.ClosedDomain;
 import mpc.jumpaku.curves.domain.Domain;
 import org.apache.commons.math3.geometry.Vector;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 /**
  *
@@ -59,6 +58,7 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
     }
     
     public static <V extends Vector> BezierCurve<V> elevate(BezierCurve<V> original){
+        List<V> cp = BezierCurve.createElevatedControlPonts(original.getControlPoints());
         return new BezierCurve<V>(){            
             @Override
             public Domain getDomain() {
@@ -67,7 +67,7 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
 
             @Override
             public List<V> getControlPoints() {
-                return BezierCurve.createElevatedControlPonts(original.getControlPoints());
+                return cp;
             }
 
             @Override
