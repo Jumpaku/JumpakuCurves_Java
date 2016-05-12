@@ -39,9 +39,8 @@ public class BezierCurve2DByDeCasteljau<V extends Vector> extends AbstractBezier
     }
 
     @Override
-    public BezierCurve<V> elevate() {
-        return new BezierCurve2DByDeCasteljau(BezierCurve.createElevatedControlPonts(getControlPoints()));
+    protected V evaluate(List<V> controlPoints, Double t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     
 }

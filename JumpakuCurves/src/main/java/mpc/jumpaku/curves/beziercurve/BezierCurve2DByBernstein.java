@@ -40,4 +40,17 @@ public class BezierCurve2DByBernstein<V extends Vector> extends AbstractBezierCu
                 .zipWith(Stream.iterableStream(getControlPoints()), (b, cp) -> cp.scalarMultiply(b.apply(t)))
                 .foldLeft1((v1, v2) -> v1.add(v2));
     }
+
+    @Override
+    protected V evaluate(List<V> controlPoints, Double t) {
+        if(!getDomain().isIn(t))
+            throw new IllegalArgumentException("The parameter t is must be in domain [0,1], but t = " + t);
+
+        final Integer degree = super.getControlPoints().size() - 1;
+        return (V) Stream.iterableStream(controlPoints).zip(
+                Stream.range(0).map(i -> binomialCoefficientDouble(degree, i)))                
+                .zipWith(Stream.range(0), 
+                        (p, i) -> p._1().scalarMultiply(p._2()*Math.pow(t, i)*Math.pow(1-t, degree-i)))
+                .foldLeft1((v1, v2)->v1.add(v2));
+    }
 }
