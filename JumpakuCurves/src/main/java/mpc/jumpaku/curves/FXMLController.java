@@ -8,13 +8,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -95,10 +92,8 @@ public class FXMLController implements Initializable {
         renderPoints(context, curve.getControlPoints(), Color.GOLD);
         renderPolyline(context, curve.getControlPoints(), Color.GOLD);
 
-        //context.setFill(Color.RED);
         renderPoints(context, firstCp, Color.RED);
         renderPoints(context, secondCp, Color.RED);
-        //context.setStroke(Color.RED);
         renderPolyline(context, firstCp, Color.RED);  
         renderPolyline(context, secondCp, Color.RED);       
     }

@@ -25,4 +25,7 @@ public abstract interface BezierCurve<V extends Vector> extends Curve<V>{
     BezierCurve<V> elevate();
     
     List<BezierCurve<V>> divide(Double t);
+    
+    @Override
+    public abstract V evaluate(Double t);
 }
