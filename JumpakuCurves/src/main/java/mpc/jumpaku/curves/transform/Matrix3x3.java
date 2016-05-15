@@ -18,12 +18,10 @@ import org.apache.commons.math3.linear.RealVector;
 public class Matrix3x3 implements Affine2D {
 
     private final RealMatrix matrix;
-
-    public Matrix3x3() {
-        this.matrix = MatrixUtils.createRealIdentityMatrix(3);
-    }
     
-    public Matrix3x3(RealMatrix matrix){
+    private static final Matrix3x3 IDENTITY = new Matrix3x3(MatrixUtils.createRealIdentityMatrix(3));
+
+    protected Matrix3x3(RealMatrix matrix){
         this.matrix = matrix.copy();
     }
     
@@ -37,39 +35,48 @@ public class Matrix3x3 implements Affine2D {
         return convert(m.operate(convert(v)));
     }
     
-    public static Matrix3x3 scaling(Double x, Double y){
+    public static Affine2D createScaling(Double x, Double y){
         return new Matrix3x3(MatrixUtils.createRealDiagonalMatrix(new double[]{x, y, 1}));
     }
-    public static Matrix3x3 scaling(Double scalar){
-        return scaling(scalar, scalar);
-    }    
-    public static Matrix3x3 rotation(Double radian){
+    public static Affine2D createScaling(Double scalar){
+        return Matrix3x3.createScaling(scalar, scalar);
+    }
+    public static Affine2D createScalingAt(Vector2D center, Double scalar){
+        return createScalingAt(center, scalar, scalar);
+    }
+    public static Affine2D createScalingAt(Vector2D center, Double x, Double y){
+        return createTranslation(center.negate()).scale(x, y).translate(center);
+    }
+    public static Affine2D createRotation(Double radian){
         return new Matrix3x3(MatrixUtils.createRealMatrix(new double[][]{
-            { Math.cos(radian), Math.sin(radian), 0 },
-            { Math.sin(radian), -Math.sin(radian), 0},
+            { Math.cos(radian), -Math.sin(radian), 0 },
+            { Math.sin(radian), Math.cos(radian), 0},
             {0, 0, 1}
         }));
     }
-    public static Affine2D rotationAt(Vector2D center, Double radian){
-        return rotation(radian).translate(center);
+    public static Affine2D createRotationAt(Vector2D center, Double radian){
+        return createTranslation(center.negate()).rotate(radian).translate(center);
     }
-    public static Matrix3x3 translation(Vector2D v){
+    public static Affine2D createTranslation(Vector2D v){
         return new Matrix3x3(MatrixUtils.createRealMatrix(new double[][]{
             { 1, 0, v.getX() },
             { 0, 1, v.getY() },
             { 0, 0, 1 }
         }));
     }
-    public static Matrix3x3 shearing(Double x, Double y){
+    public static Affine2D createShearing(Double x, Double y){
         return new Matrix3x3(MatrixUtils.createRealMatrix(new double[][]{
             { 1, x, 0 },
             { y, 1, 0 },
             { 0, 0, 1 }
         }));
     }
+    public static Affine2D createShearingAt(Vector2D pivot, Double x, Double y){
+        return createTranslation(pivot.negate()).shear(x, y).translate(pivot);
+    }
     
-    public static Matrix3x3 identity(){
-        return new Matrix3x3();
+    public static Affine2D identity(){
+        return IDENTITY;
     }
     
     protected final Double get(Integer i, Integer j){
@@ -78,7 +85,7 @@ public class Matrix3x3 implements Affine2D {
     
     @Override
     public final Affine2D scale(Double x, Double y) {
-        return concatenate(scaling(x, y));
+        return concatenate(Matrix3x3.createScaling(x, y));
     }
 
     @Override
@@ -87,8 +94,18 @@ public class Matrix3x3 implements Affine2D {
     }
 
     @Override
+    public Affine2D scaleAt(Vector2D center, Double x, Double y) {
+        return concatenate(createScalingAt(center, x, y));
+    }
+
+    @Override
+    public Affine2D scaleAt(Vector2D center, Double scale) {
+        return concatenate(createScalingAt(center, scale));
+    }
+    
+    @Override
     public final Affine2D rotate(Double radian) {
-        return concatenate(rotation(radian));
+        return concatenate(createRotation(radian));
     }
     
     @Override
@@ -98,7 +115,7 @@ public class Matrix3x3 implements Affine2D {
 
     @Override
     public final Affine2D translate(Vector2D v) {
-        return concatenate(translation(v));
+        return concatenate(createTranslation(v));
     }
 
     @Override
@@ -108,7 +125,7 @@ public class Matrix3x3 implements Affine2D {
 
     @Override
     public final Affine2D shear(Double x, Double y) {
-        return concatenate(shearing(x, y));
+        return concatenate(createShearing(x, y));
     }
 
     @Override
@@ -125,26 +142,26 @@ public class Matrix3x3 implements Affine2D {
     public final Affine2D concatenate(Affine2D t) {
         Affine2D original = this;
         return (t instanceof Matrix3x3) ?
-                new Matrix3x3(matrix.multiply(((Matrix3x3)t).matrix)) :
+                new Matrix3x3(((Matrix3x3)t).matrix.multiply(matrix)) :
                 new AbstractAffine2D(){
                     @Override
-                    protected Affine2D scaling(Double x, Double y) {
-                        return Matrix3x3.scaling(x, y);
+                    protected Affine2D createScaling(Double x, Double y) {
+                        return Matrix3x3.createScaling(x, y);
                     }
 
                     @Override
-                    protected Affine2D rotation(Double radian) {
-                        return Matrix3x3.rotation(radian);
+                    protected Affine2D createRotation(Double radian) {
+                        return Matrix3x3.createRotation(radian);
                     }
 
                     @Override
-                    protected Affine2D translation(Vector2D v) {
-                        return Matrix3x3.translation(v);
+                    protected Affine2D createTranslation(Vector2D v) {
+                        return Matrix3x3.createTranslation(v);
                     }
 
                     @Override
-                    protected Affine2D shearing(Double x, Double y) {
-                        return Matrix3x3.shearing(x, y);
+                    protected Affine2D createShearing(Double x, Double y) {
+                        return Matrix3x3.createShearing(x, y);
                     }
 
                     @Override

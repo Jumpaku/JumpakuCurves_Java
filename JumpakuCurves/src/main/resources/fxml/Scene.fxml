@@ -10,13 +10,13 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mpc.jumpaku.curves.FXMLController">
    <children>
-      <Canvas fx:id="canvas" height="430.0" onMouseClicked="#onClick" width="640.0" />
+      <Canvas fx:id="canvas" height="430.0" onMousePressed="#onClick" width="640.0" />
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
           <Button mnemonicParsing="false" onAction="#onElevate" text="Elevate" />
-            <Slider fx:id="divideAt" blockIncrement="0.01" majorTickUnit="0.1" max="1.0" minorTickCount="1" showTickLabels="true" showTickMarks="true" />
+            <Slider fx:id="divideAt" blockIncrement="0.01" majorTickUnit="0.5" max="1.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" />
+            <Button mnemonicParsing="false" onAction="#onTransform" text="Transform" />
             <Button mnemonicParsing="false" onAction="#onSaveGraph" text="SaveGraph" />
-            <Button mnemonicParsing="false" onAction="#onSaveScript" text="SaveScript" />
             <Button mnemonicParsing="false" onAction="#onClear" text="Clear" />
         </items>
       </ToolBar>
