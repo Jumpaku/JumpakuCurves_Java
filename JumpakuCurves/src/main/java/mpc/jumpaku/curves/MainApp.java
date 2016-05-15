@@ -33,9 +33,7 @@ public class MainApp extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        Stream.range(0, 10).bind(e->Stream.arrayStream(e+1,e-1,e*2)).forEach(System.out::println);
-        //launch(args);
+        launch(args);
     }
 
 }

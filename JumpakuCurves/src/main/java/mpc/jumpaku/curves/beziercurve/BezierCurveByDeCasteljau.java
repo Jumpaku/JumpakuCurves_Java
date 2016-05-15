@@ -15,20 +15,20 @@ import org.apache.commons.math3.geometry.Vector;
  * @author ito
  * @param <V>
  */
-public class BezierCurve2DByDeCasteljau<V extends Vector> extends AbstractBezierCurve<V> {
-    public BezierCurve2DByDeCasteljau(List<V> cp) {
+public class BezierCurveByDeCasteljau<V extends Vector> extends AbstractBezierCurve<V> {
+    public BezierCurveByDeCasteljau(List<V> cp) {
         super(cp);
     }
     
-    public BezierCurve2DByDeCasteljau(V... cp) {
+    public BezierCurveByDeCasteljau(V... cp) {
         this(Arrays.asList(cp));
     }
     
     @Override
     public V evaluate(Double t) {
-        if(!getDomain().isIn(t)){
-            throw new IllegalArgumentException("The parameter t is must be in domain [0,1], but t = " + t);
-        }
+        if(!getDomain().isIn(t))
+            throw new IllegalArgumentException("The parameter t must be in domain [0,1], but t = " + t);
+        
         Object[] buffer = getControlPoints().toArray();
         for(int n = getDegree(); n > 0; --n){
             for(int i = 0; i < n; ++i){
@@ -37,10 +37,4 @@ public class BezierCurve2DByDeCasteljau<V extends Vector> extends AbstractBezier
         }
         return (V)buffer[0];
     }
-
-    @Override
-    protected V evaluate(List<V> controlPoints, Double t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

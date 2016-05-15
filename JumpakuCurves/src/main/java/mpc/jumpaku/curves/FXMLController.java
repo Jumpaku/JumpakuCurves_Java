@@ -1,20 +1,34 @@
 package mpc.jumpaku.curves;
 
 import fj.data.Stream;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Slider;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import mpc.jumpaku.curves.beziercurve.BezierCurve2DByBernstein;
-import mpc.jumpaku.curves.beziercurve.BezierCurve2DByDeCasteljau;
+import javafx.scene.paint.Paint;
+import javax.imageio.ImageIO;
+import mpc.jumpaku.curves.beziercurve.BezierCurve;
+import mpc.jumpaku.curves.beziercurve.BezierCurveByBernstein;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 public class FXMLController implements Initializable {
@@ -22,36 +36,76 @@ public class FXMLController implements Initializable {
     @FXML
     private Canvas canvas;
     
-    private final List<Vector2D> controlPoints = new LinkedList<>();
+    @FXML
+    private Slider divideAt;
+    
+    private List<Vector2D> firstCp = new LinkedList<>();
+    private List<Vector2D> secondCp = new LinkedList<>();
+    private BezierCurve<Vector2D> curve = null;
     
     @FXML
-    private void onClick(MouseEvent e){
-        synchronized(controlPoints){
-            controlPoints.add(new Vector2D(e.getX(), e.getY()));
-            GraphicsContext context = canvas.getGraphicsContext2D();
-            context.clearRect(0, 0, 600, 400);
-
-            final Curve<Vector2D> decas = new BezierCurve2DByDeCasteljau(controlPoints);
-            context.setStroke(Color.CORAL);
-            context.setLineWidth(5);
-            renderCurve(context, decas);
-
-            final Curve<Vector2D> bern = new BezierCurve2DByBernstein(controlPoints);
-            context.setStroke(Color.CADETBLUE);
-            context.setLineWidth(1);
-            renderCurve(context, bern);
-
-            context.setFill(Color.GOLD);
-            renderPoints(context, controlPoints);
-            context.setStroke(Color.GOLD);
-            renderPolyline(context, controlPoints);
-
-            outputScript(System.out, controlPoints.size());
+    private synchronized void onClick(MouseEvent e){
+        LinkedList<Vector2D> controlPoints = new LinkedList<>();
+        if(curve != null){
+            controlPoints.addAll(curve.getControlPoints());
+        }
+        controlPoints.add(new Vector2D(e.getX(), e.getY()));
+        curve = new BezierCurveByBernstein<>(controlPoints);
+        render();
+    }
+    
+    @FXML
+    private synchronized void onClear(ActionEvent e){
+        firstCp = new LinkedList<>();
+        secondCp = new LinkedList<>();
+        curve = null;
+        GraphicsContext context = canvas.getGraphicsContext2D();
+        context.clearRect(0, 0, 640, 430);
+    }
+    
+    @FXML
+    private synchronized void onElevate(ActionEvent e){
+        if(curve != null){
+            curve = curve.elevate();
+            render();
         }
     }
     
-    private static void renderCurve(GraphicsContext context, Curve<Vector2D> curve){
-        final Double d = Math.pow(2, -6);
+    @FXML
+    private synchronized void onSaveGraph(ActionEvent e){
+        if(curve == null)
+            return;
+        WritableImage image = canvas.snapshot(null, null);
+        String filePath = curve.getDegree() + ".png";
+        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
+        try {
+            ImageIO.write(bufferedImage, "png", new File(filePath));
+        }
+        catch (IOException ex) {
+        }
+    }
+
+    private void render(){
+        GraphicsContext context = canvas.getGraphicsContext2D();
+        context.clearRect(0, 0, 640, 430);
+
+        context.setLineWidth(1);
+        renderCurve(context, curve, Color.CADETBLUE);
+
+        renderPoints(context, curve.getControlPoints(), Color.GOLD);
+        renderPolyline(context, curve.getControlPoints(), Color.GOLD);
+
+        //context.setFill(Color.RED);
+        renderPoints(context, firstCp, Color.RED);
+        renderPoints(context, secondCp, Color.RED);
+        //context.setStroke(Color.RED);
+        renderPolyline(context, firstCp, Color.RED);  
+        renderPolyline(context, secondCp, Color.RED);       
+    }
+    
+    private static void renderCurve(GraphicsContext context, Curve<Vector2D> curve, Paint color){
+        context.setStroke(color);
+        final Double d = Math.pow(2, -5);
         Stream<Vector2D> points = Stream.iterateWhile(t -> t + d, t -> t <= 1.0, 0.0)
                 .map(curve::evaluate);
         context.beginPath();
@@ -64,11 +118,18 @@ public class FXMLController implements Initializable {
         context.stroke();
     }
     
-    private static void renderPoints(GraphicsContext context, List<Vector2D> points){
+    private static void renderPoints(GraphicsContext context, List<Vector2D> points, Paint color){
+        context.setFill(color);
         points.forEach(p -> context.fillOval(p.getX()-4, p.getY()-4, 8, 8));
+        if(points.isEmpty())
+            return;
+        context.setFill(Color.BLACK);
+        context.fillOval(points.get(0).getX()-4, points.get(0).getY()-4, 8, 8);
+        context.fillOval(points.get(points.size()-1).getX()-4, points.get(points.size()-1).getY()-4, 8, 8);
     }
     
-    private static void renderPolyline(GraphicsContext context, List<Vector2D> points){
+    private static void renderPolyline(GraphicsContext context, List<Vector2D> points, Paint color){
+        context.setStroke(color);
         Stream<Vector2D> ps = Stream.iterableStream(points);
         context.beginPath();
         ps.zip(ps.drop(1))
@@ -80,7 +141,22 @@ public class FXMLController implements Initializable {
         context.stroke();
     }
     
-    private static void outputScript(PrintStream ostream, Integer n){
+    @FXML
+    private void onSaveScript(ActionEvent e){
+        String path = "./Berntein.plt";
+        File file = new File(path);
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+            }
+        }
+        try{
+            writeScript(new PrintStream(new FileOutputStream(file)), curve.getDegree());
+        } catch (FileNotFoundException ex) {
+        }
+    }
+    private static void writeScript(PrintStream ostream, Integer n){
         ostream.println(String.join(System.lineSeparator(), Arrays.asList(new String[]{
                 "n="+n,
                 "set terminal png size 640,480",
@@ -101,6 +177,15 @@ public class FXMLController implements Initializable {
        
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        divideAt.valueProperty().addListener((v, p, n)->{
+            synchronized(this){
+                if(curve != null){
+                    List<BezierCurve<Vector2D>> divideds = curve.divide((Double) n);
+                    firstCp = divideds.get(0).getControlPoints();
+                    secondCp = divideds.get(1).getControlPoints();
+                    render();
+                }
+            }
+        });
     }    
 }

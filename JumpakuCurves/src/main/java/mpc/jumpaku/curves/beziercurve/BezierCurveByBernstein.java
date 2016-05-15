@@ -17,9 +17,9 @@ import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficie
  * @author ito
  * @param <V>
  */
-public class BezierCurve2DByBernstein<V extends Vector> extends AbstractBezierCurve<V> {
+public class BezierCurveByBernstein<V extends Vector> extends AbstractBezierCurve<V> {
     private final fj.data.List<UnaryOperator<Double>> bernsteinBasis;
-    public BezierCurve2DByBernstein(List<V> cp) {
+    public BezierCurveByBernstein(List<V> cp) {
         super(cp);
         final Integer degree = super.getControlPoints().size() - 1;
         final fj.data.List<Integer> range = fj.data.List.range(0, degree + 1);
@@ -27,30 +27,17 @@ public class BezierCurve2DByBernstein<V extends Vector> extends AbstractBezierCu
         this.bernsteinBasis = conbinations.zipWith(range, (c, i) -> (t -> c*Math.pow(t, i)*Math.pow(1-t, degree-i)));
     }
     
-    public BezierCurve2DByBernstein(V... cp) {
+    public BezierCurveByBernstein(V... cp) {
         this(Arrays.asList(cp));
     }
     
     @Override
     public V evaluate(Double t) {
-        if(!getDomain().isIn(t)){
-            throw new IllegalArgumentException("The parameter t is must be in domain [0,1], but t = " + t);
-        }
+        if(!getDomain().isIn(t))
+            throw new IllegalArgumentException("The parameter t must be in domain [0,1], but t = " + t);
+        
         return (V) bernsteinBasis.toStream()
                 .zipWith(Stream.iterableStream(getControlPoints()), (b, cp) -> cp.scalarMultiply(b.apply(t)))
                 .foldLeft1((v1, v2) -> v1.add(v2));
-    }
-
-    @Override
-    protected V evaluate(List<V> controlPoints, Double t) {
-        if(!getDomain().isIn(t))
-            throw new IllegalArgumentException("The parameter t is must be in domain [0,1], but t = " + t);
-
-        final Integer degree = super.getControlPoints().size() - 1;
-        return (V) Stream.iterableStream(controlPoints).zip(
-                Stream.range(0).map(i -> binomialCoefficientDouble(degree, i)))                
-                .zipWith(Stream.range(0), 
-                        (p, i) -> p._1().scalarMultiply(p._2()*Math.pow(t, i)*Math.pow(1-t, degree-i)))
-                .foldLeft1((v1, v2)->v1.add(v2));
     }
 }
