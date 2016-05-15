@@ -72,80 +72,85 @@ public class Matrix3x3AffineTransform implements AffineTransform2D {
         return new Matrix3x3AffineTransform();
     }
     
+    protected final Double get(Integer i, Integer j){
+        return matrix.getEntry(i, j);
+    }
+    
     @Override
-    public AffineTransform2D scale(Double x, Double y) {
+    public final AffineTransform2D scale(Double x, Double y) {
         return concatenate(scaling(x, y));
     }
 
     @Override
-    public AffineTransform2D scale(Double scalar) {
+    public final AffineTransform2D scale(Double scalar) {
         return scale(scalar, scalar);
     }
 
     @Override
-    public AffineTransform2D rotate(Double radian) {
+    public final AffineTransform2D rotate(Double radian) {
         return concatenate(rotation(radian));
     }
     
     @Override
-    public AffineTransform2D rotateAt(Vector2D center, Double radian) {
+    public final AffineTransform2D rotateAt(Vector2D center, Double radian) {
         return invert().rotate(radian).translate(center);
     }
 
     @Override
-    public AffineTransform2D translate(Vector2D v) {
+    public final AffineTransform2D translate(Vector2D v) {
         return concatenate(translation(v));
     }
 
     @Override
-    public AffineTransform2D shearAt(Vector2D pivot, Double x, Double y) {
+    public final AffineTransform2D shearAt(Vector2D pivot, Double x, Double y) {
         return invert().shear(x, y).translate(pivot);
     }
 
     @Override
-    public AffineTransform2D shear(Double x, Double y) {
+    public final AffineTransform2D shear(Double x, Double y) {
         return concatenate(shearing(x, y));
     }
 
     @Override
-    public Vector2D apply(Vector2D v) {
+    public final Vector2D apply(Vector2D v) {
         return multiply(matrix, v);
     }
 
     @Override
-    public AffineTransform2D invert() {
+    public final AffineTransform2D invert() {
         return new Matrix3x3AffineTransform(MatrixUtils.inverse(matrix));
     }
 
     @Override
-    public AffineTransform2D concatenate(AffineTransform2D t) {
+    public final AffineTransform2D concatenate(AffineTransform2D t) {
         AffineTransform2D original = this;
-        return (t instanceof Matrix3x3AffineTransform) ? new Matrix3x3AffineTransform(matrix.multiply(((Matrix3x3AffineTransform)t).matrix)) :
-            new AbstractAffineTransform2D(){
-            @Override
-            protected AffineTransform2D scaling(Double x, Double y) {
-                return Matrix3x3AffineTransform.scaling(x, y);
-            }
+        return (t instanceof Matrix3x3AffineTransform) ?
+                new Matrix3x3AffineTransform(matrix.multiply(((Matrix3x3AffineTransform)t).matrix)) :
+                new AbstractAffineTransform2D(){
+                    @Override
+                    protected AffineTransform2D scaling(Double x, Double y) {
+                        return Matrix3x3AffineTransform.scaling(x, y);
+                    }
 
-            @Override
-            protected AffineTransform2D rotation(Double radian) {
-                return Matrix3x3AffineTransform.rotation(radian);
-            }
+                    @Override
+                    protected AffineTransform2D rotation(Double radian) {
+                        return Matrix3x3AffineTransform.rotation(radian);
+                    }
 
-            @Override
-            protected AffineTransform2D translation(Vector2D v) {
-                return Matrix3x3AffineTransform.translation(v);
-            }
+                    @Override
+                    protected AffineTransform2D translation(Vector2D v) {
+                        return Matrix3x3AffineTransform.translation(v);
+                    }
 
-            @Override
-            protected AffineTransform2D shearing(Double x, Double y) {
-                return Matrix3x3AffineTransform.shearing(x, y);
-            }
+                    @Override
+                    protected AffineTransform2D shearing(Double x, Double y) {
+                        return Matrix3x3AffineTransform.shearing(x, y);
+                    }
 
-            @Override
-            public Vector2D apply(Vector2D v) {
-                return t.apply(original.apply(v));
-            }
-        };
+                    @Override
+                    public Vector2D apply(Vector2D v) {
+                        return t.apply(original.apply(v));
+                    }
+                };
     }
 }

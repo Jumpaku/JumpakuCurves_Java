@@ -66,7 +66,7 @@ public abstract class AbstractAffineTransform2D implements AffineTransform2D{
     }
     
     @Override
-    public AffineTransform2D invert() {
+    public final AffineTransform2D invert() {
         return transforms
                 .map(m -> m.invert())
                 .reverse()
@@ -74,7 +74,7 @@ public abstract class AbstractAffineTransform2D implements AffineTransform2D{
     }
 
     @Override
-    public AffineTransform2D concatenate(AffineTransform2D t) {
+    public final AffineTransform2D concatenate(AffineTransform2D t) {
         AbstractAffineTransform2D original = this;
         return new AbstractAffineTransform2D(transforms.append(List.single(t))) {
             @Override
