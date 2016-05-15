@@ -10,8 +10,10 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import mpc.jumpaku.curves.domain.ClosedDomain;
 import mpc.jumpaku.curves.domain.Domain;
+import mpc.jumpaku.curves.transform.AffineTransform;
 import mpc.jumpaku.curves.utils.GeomUtils;
 import org.apache.commons.math3.geometry.Vector;
 
@@ -34,7 +36,7 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
         cp.forEach(v -> controlPoints.add(v));
     }
     
-    public AbstractBezierCurve(V... cp) {
+    public AbstractBezierCurve(V v, V... cp) {
         this(Arrays.asList(cp));
     }
 
@@ -94,6 +96,11 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
             public List<BezierCurve<V>> divide(Double t) {
                 return AbstractBezierCurve.divide(t, elevatedControlPoints, evaluator);
             }
+
+            @Override
+            public BezierCurve<V> transform(AffineTransform<V> transform) {
+                return AbstractBezierCurve.transform(transform, elevatedControlPoints, evaluator);
+            }
         };
     }
     
@@ -131,6 +138,18 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
         return Collections.unmodifiableList(result);
     }
     
+    private static <V extends Vector> BezierCurve<V> transform(AffineTransform<V> transform, List<V> controlPoints, Function<Double, V> evaluator){
+        List<V> transformedControlPoints = controlPoints.stream()
+                .map(cp -> transform.apply(cp))
+                .collect(Collectors.toList());
+        return new AbstractBezierCurve<V>(transformedControlPoints) {
+            @Override
+            public V evaluate(Double t) {
+                return transform.apply(evaluator.apply(t));
+            }
+        };
+    }
+    
     @Override
     public final Domain getDomain() {
         return DOMAIN;
@@ -154,6 +173,11 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
     @Override
     public final List<BezierCurve<V>> divide(Double t){
         return divide(t, getControlPoints(), this::evaluate);
+    }
+    
+    @Override
+    public BezierCurve<V> transform(AffineTransform<V> transform){
+        return transform(transform, getControlPoints(), this::evaluate);
     }
     
     @Override

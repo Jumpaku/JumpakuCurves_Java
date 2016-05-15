@@ -8,6 +8,7 @@ package mpc.jumpaku.curves.beziercurve;
 import mpc.jumpaku.curves.domain.Domain;
 import java.util.List;
 import mpc.jumpaku.curves.Curve;
+import mpc.jumpaku.curves.transform.AffineTransform;
 import org.apache.commons.math3.geometry.Vector;
 
 /**
@@ -25,6 +26,8 @@ public abstract interface BezierCurve<V extends Vector> extends Curve<V>{
     BezierCurve<V> elevate();
     
     List<BezierCurve<V>> divide(Double t);
+    
+    BezierCurve<V> transform(AffineTransform<V> transform);
     
     @Override
     public abstract V evaluate(Double t);

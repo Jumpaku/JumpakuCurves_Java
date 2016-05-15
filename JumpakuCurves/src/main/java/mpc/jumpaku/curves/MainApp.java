@@ -1,12 +1,17 @@
 package mpc.jumpaku.curves;
 
-import fj.data.Stream;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.apache.commons.math3.geometry.Point;
+import org.apache.commons.math3.geometry.euclidean.threed.Euclidean3D;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.commons.math3.geometry.partitioning.Hyperplane;
+import org.apache.commons.math3.geometry.partitioning.SubHyperplane;
+import org.apache.commons.math3.geometry.partitioning.Transform;
 
 
 public class MainApp extends Application {
