@@ -13,9 +13,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import mpc.jumpaku.curves.domain.ClosedDomain;
 import mpc.jumpaku.curves.domain.Domain;
-import mpc.jumpaku.curves.transform.AffineTransform;
 import mpc.jumpaku.curves.utils.GeomUtils;
 import org.apache.commons.math3.geometry.Vector;
+import mpc.jumpaku.curves.transform.Transform;
 
 /**
  *
@@ -98,7 +98,7 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
             }
 
             @Override
-            public BezierCurve<V> transform(AffineTransform<V> transform) {
+            public BezierCurve<V> transform(Transform<V> transform) {
                 return AbstractBezierCurve.transform(transform, elevatedControlPoints, evaluator);
             }
         };
@@ -138,7 +138,7 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
         return Collections.unmodifiableList(result);
     }
     
-    private static <V extends Vector> BezierCurve<V> transform(AffineTransform<V> transform, List<V> controlPoints, Function<Double, V> evaluator){
+    private static <V extends Vector> BezierCurve<V> transform(Transform<V> transform, List<V> controlPoints, Function<Double, V> evaluator){
         List<V> transformedControlPoints = controlPoints.stream()
                 .map(cp -> transform.apply(cp))
                 .collect(Collectors.toList());
@@ -176,7 +176,7 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
     }
     
     @Override
-    public BezierCurve<V> transform(AffineTransform<V> transform){
+    public BezierCurve<V> transform(Transform<V> transform){
         return transform(transform, getControlPoints(), this::evaluate);
     }
     

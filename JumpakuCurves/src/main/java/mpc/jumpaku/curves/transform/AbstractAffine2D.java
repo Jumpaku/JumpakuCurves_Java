@@ -12,61 +12,61 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
  *
  * @author ito
  */
-public abstract class AbstractAffineTransform2D implements AffineTransform2D{
-    private final List<AffineTransform2D> transforms;
-    public AbstractAffineTransform2D(){
+public abstract class AbstractAffine2D implements Affine2D{
+    private final List<Affine2D> transforms;
+    public AbstractAffine2D(){
         transforms = List.nil();
     }
-    public AbstractAffineTransform2D(AffineTransform2D transform){
+    public AbstractAffine2D(Affine2D transform){
         transforms = List.single(transform);
     }
-    public AbstractAffineTransform2D(List<AffineTransform2D> transforms){
+    public AbstractAffine2D(List<Affine2D> transforms){
         this.transforms = transforms;
     }
     
-    protected final List<AffineTransform2D> getTransforms(){
+    protected final List<Affine2D> getTransforms(){
         return transforms;
     }
     
-    protected abstract AffineTransform2D scaling(Double x, Double y);
+    protected abstract Affine2D scaling(Double x, Double y);
     
-    protected abstract AffineTransform2D rotation(Double radian);
+    protected abstract Affine2D rotation(Double radian);
     
-    protected abstract AffineTransform2D translation(Vector2D v);
+    protected abstract Affine2D translation(Vector2D v);
     
-    protected abstract AffineTransform2D shearing(Double x, Double y);
+    protected abstract Affine2D shearing(Double x, Double y);
     
     @Override
-    public AffineTransform2D scale(Double x, Double y){
+    public Affine2D scale(Double x, Double y){
         return concatenate(scaling(x, y));
     }
     @Override
-    public AffineTransform2D scale(Double scalar){
+    public Affine2D scale(Double scalar){
         return scale(scalar, scalar);
     }
     @Override
-    public AffineTransform2D rotate(Double radian){
+    public Affine2D rotate(Double radian){
         return concatenate(rotation(radian));
     }
     @Override
-    public AffineTransform2D rotateAt(Vector2D center, Double radian){
+    public Affine2D rotateAt(Vector2D center, Double radian){
         return invert().rotate(radian).translate(center);
     }
     @Override
-    public AffineTransform2D translate(Vector2D v){
+    public Affine2D translate(Vector2D v){
         return concatenate(translation(v));
     }
     @Override
-    public AffineTransform2D shear(Double x, Double y){
+    public Affine2D shear(Double x, Double y){
         return concatenate(shearing(x, y));
     }
     @Override
-    public AffineTransform2D shearAt(Vector2D pivot, Double x, Double y){
+    public Affine2D shearAt(Vector2D pivot, Double x, Double y){
         return invert().shear(x, y).translate(pivot);
     }
     
     @Override
-    public final AffineTransform2D invert() {
+    public final Affine2D invert() {
         return transforms
                 .map(m -> m.invert())
                 .reverse()
@@ -74,31 +74,31 @@ public abstract class AbstractAffineTransform2D implements AffineTransform2D{
     }
 
     @Override
-    public final AffineTransform2D concatenate(AffineTransform2D t) {
-        AbstractAffineTransform2D original = this;
-        return new AbstractAffineTransform2D(transforms.append(List.single(t))) {
+    public final Affine2D concatenate(Affine2D t) {
+        AbstractAffine2D original = this;
+        return new AbstractAffine2D(transforms.append(List.single(t))) {
             @Override
             public Vector2D apply(Vector2D vector) {
                 return getTransforms().foldLeft((v, m)->m.apply(v), vector);
             }
 
             @Override
-            protected AffineTransform2D scaling(Double x, Double y) {
+            protected Affine2D scaling(Double x, Double y) {
                 return original.scaling(x, y);
             }
 
             @Override
-            protected AffineTransform2D rotation(Double radian) {
+            protected Affine2D rotation(Double radian) {
                 return original.rotation(radian);
             }
 
             @Override
-            protected AffineTransform2D translation(Vector2D v) {
+            protected Affine2D translation(Vector2D v) {
                 return original.translation(v);
             }
 
             @Override
-            protected AffineTransform2D shearing(Double x, Double y) {
+            protected Affine2D shearing(Double x, Double y) {
                 return original.shearing(x, y);
             }
         };

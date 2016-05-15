@@ -12,7 +12,7 @@ import org.apache.commons.math3.geometry.Vector;
  * @author ito
  * @param <V>
  */
-public interface AffineTransform <V extends Vector> {
+public interface Transform <V extends Vector> {
     V apply(V v);
     //AffineTransform<V> invert();
     //AffineTransform<V> concatenate(AffineTransform<V> t);    
