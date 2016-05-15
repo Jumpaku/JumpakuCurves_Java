@@ -51,7 +51,7 @@ public class FXMLController implements Initializable {
     
     @FXML
     private synchronized void onTransform(ActionEvent e){
-        curve = curve.transform(Matrix3x3.createScalingAt(new Vector2D(320, 215), 2.0));//.createShearingAt(new Vector2D(320, 215), 0.5, 0.0));//, Double.NaN, Double.NaN)createRotationAt(new Vector2D(320, 215), Math.PI/12));
+        curve = curve.transform(Matrix3x3.createTranslation(new Vector2D(20,10)));//RotationAt(new Vector2D(320, 215), Math.PI/3));//createScalingAt(new Vector2D(320, 215), 1.5));//.createShearingAt(new Vector2D(320, 215), 0.5, 0.0));//
         render();
     }
     @FXML
