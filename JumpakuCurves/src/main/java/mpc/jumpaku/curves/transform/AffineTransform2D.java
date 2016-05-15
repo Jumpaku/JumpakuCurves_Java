@@ -13,9 +13,12 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
  */
 public interface AffineTransform2D extends AffineTransform<Vector2D>{
     AffineTransform2D scale(Double scalar);
+    AffineTransform2D scale(Double x, Double y);
     AffineTransform2D rotate(Double radian);
+    AffineTransform2D rotateAt(Vector2D center, Double radian);
     AffineTransform2D translate(Vector2D v);
     AffineTransform2D shear(Double x, Double y);
+    AffineTransform2D shearAt(Vector2D pivot, Double x, Double y);
     
     AffineTransform2D invert();
     AffineTransform2D concatenate(AffineTransform2D t); 

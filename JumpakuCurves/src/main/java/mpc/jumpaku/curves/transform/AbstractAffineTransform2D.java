@@ -37,12 +37,20 @@ public abstract class AbstractAffineTransform2D implements AffineTransform2D{
     protected abstract AffineTransform2D shearing(Double x, Double y);
     
     @Override
+    public AffineTransform2D scale(Double x, Double y){
+        return concatenate(scaling(x, y));
+    }
+    @Override
     public AffineTransform2D scale(Double scalar){
-        return concatenate(scaling(scalar, scalar));
+        return scale(scalar, scalar);
     }
     @Override
     public AffineTransform2D rotate(Double radian){
         return concatenate(rotation(radian));
+    }
+    @Override
+    public AffineTransform2D rotateAt(Vector2D center, Double radian){
+        return invert().rotate(radian).translate(center);
     }
     @Override
     public AffineTransform2D translate(Vector2D v){
@@ -51,6 +59,10 @@ public abstract class AbstractAffineTransform2D implements AffineTransform2D{
     @Override
     public AffineTransform2D shear(Double x, Double y){
         return concatenate(shearing(x, y));
+    }
+    @Override
+    public AffineTransform2D shearAt(Vector2D pivot, Double x, Double y){
+        return invert().shear(x, y).translate(pivot);
     }
     
     @Override

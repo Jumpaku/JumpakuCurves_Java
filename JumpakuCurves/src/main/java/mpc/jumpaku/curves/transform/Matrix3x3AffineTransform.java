@@ -37,16 +37,21 @@ public class Matrix3x3AffineTransform implements AffineTransform2D {
         return convert(m.operate(convert(v)));
     }
     
-    public static Matrix3x3AffineTransform scaling(Double scalar){
-        return new Matrix3x3AffineTransform(MatrixUtils.createRealDiagonalMatrix(new double[]{scalar, scalar, 1}));
+    public static Matrix3x3AffineTransform scaling(Double x, Double y){
+        return new Matrix3x3AffineTransform(MatrixUtils.createRealDiagonalMatrix(new double[]{x, y, 1}));
     }
-    
+    public static Matrix3x3AffineTransform scaling(Double scalar){
+        return scaling(scalar, scalar);
+    }    
     public static Matrix3x3AffineTransform rotation(Double radian){
         return new Matrix3x3AffineTransform(MatrixUtils.createRealMatrix(new double[][]{
             { Math.cos(radian), Math.sin(radian), 0 },
             { Math.sin(radian), -Math.sin(radian), 0},
             {0, 0, 1}
         }));
+    }
+    public static AffineTransform2D rotationAt(Vector2D center, Double radian){
+        return rotation(radian).translate(center);
     }
     public static Matrix3x3AffineTransform translation(Vector2D v){
         return new Matrix3x3AffineTransform(MatrixUtils.createRealMatrix(new double[][]{
@@ -68,18 +73,33 @@ public class Matrix3x3AffineTransform implements AffineTransform2D {
     }
     
     @Override
+    public AffineTransform2D scale(Double x, Double y) {
+        return concatenate(scaling(x, y));
+    }
+
+    @Override
     public AffineTransform2D scale(Double scalar) {
-        return concatenate(scaling(scalar));
+        return scale(scalar, scalar);
     }
 
     @Override
     public AffineTransform2D rotate(Double radian) {
         return concatenate(rotation(radian));
     }
+    
+    @Override
+    public AffineTransform2D rotateAt(Vector2D center, Double radian) {
+        return invert().rotate(radian).translate(center);
+    }
 
     @Override
     public AffineTransform2D translate(Vector2D v) {
         return concatenate(translation(v));
+    }
+
+    @Override
+    public AffineTransform2D shearAt(Vector2D pivot, Double x, Double y) {
+        return invert().shear(x, y).translate(pivot);
     }
 
     @Override
@@ -99,7 +119,33 @@ public class Matrix3x3AffineTransform implements AffineTransform2D {
 
     @Override
     public AffineTransform2D concatenate(AffineTransform2D t) {
-        return new Matrix3x3AffineTransform();
+        AffineTransform2D original = this;
+        return (t instanceof Matrix3x3AffineTransform) ? new Matrix3x3AffineTransform(matrix.multiply(((Matrix3x3AffineTransform)t).matrix)) :
+            new AbstractAffineTransform2D(){
+            @Override
+            protected AffineTransform2D scaling(Double x, Double y) {
+                return Matrix3x3AffineTransform.scaling(x, y);
+            }
+
+            @Override
+            protected AffineTransform2D rotation(Double radian) {
+                return Matrix3x3AffineTransform.rotation(radian);
+            }
+
+            @Override
+            protected AffineTransform2D translation(Vector2D v) {
+                return Matrix3x3AffineTransform.translation(v);
+            }
+
+            @Override
+            protected AffineTransform2D shearing(Double x, Double y) {
+                return Matrix3x3AffineTransform.shearing(x, y);
+            }
+
+            @Override
+            public Vector2D apply(Vector2D v) {
+                return t.apply(original.apply(v));
+            }
+        };
     }
-    
 }
