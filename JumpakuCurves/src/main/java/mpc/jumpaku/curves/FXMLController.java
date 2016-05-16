@@ -22,6 +22,8 @@ import javaslang.collection.Stream;
 import javax.imageio.ImageIO;
 import mpc.jumpaku.curves.beziercurve.BezierCurve;
 import mpc.jumpaku.curves.beziercurve.BezierCurveByBernstein;
+import mpc.jumpaku.curves.transform.Affine2D;
+import mpc.jumpaku.curves.transform.Affine2DChain;
 import mpc.jumpaku.curves.transform.Matrix3x3;
 import mpc.jumpaku.curves.utils.GeomUtils;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
@@ -51,7 +53,9 @@ public class FXMLController implements Initializable {
     
     @FXML
     private synchronized void onTransform(ActionEvent e){
-        curve = curve.transform(Matrix3x3.createTranslation(new Vector2D(20,10)));//RotationAt(new Vector2D(320, 215), Math.PI/3));//createScalingAt(new Vector2D(320, 215), 1.5));//.createShearingAt(new Vector2D(320, 215), 0.5, 0.0));//
+        Affine2D affine = Affine2DChain.identity();//Matrix3x3.identity();//
+        affine = affine.translate(new Vector2D(-100, -100)).refrectOrigin().translate(new Vector2D(100,100));
+        curve = curve.transform(affine);//Matrix3x3.createRotationAt(new Vector2D(320, 215), Math.PI/3));//RotationAt(new Vector2D(320, 215), Math.PI/3));//createScalingAt(new Vector2D(320, 215), 1.5));//.createShearingAt(new Vector2D(320, 215), 0.5, 0.0));//
         render();
     }
     @FXML
