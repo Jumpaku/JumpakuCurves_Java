@@ -5,10 +5,11 @@
  */
 package mpc.jumpaku.curves.beziercurve;
 
-import fj.data.Stream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.UnaryOperator;
+import javaslang.Tuple;
+import javaslang.collection.Stream;
 import org.apache.commons.math3.geometry.Vector;
 import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficientDouble;
 
@@ -18,13 +19,14 @@ import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficie
  * @param <V>
  */
 public class BezierCurveByBernstein<V extends Vector> extends AbstractBezierCurve<V> {
-    private final fj.data.List<UnaryOperator<Double>> bernsteinBasis;
+    private final javaslang.collection.List<Double> conbinations;
     public BezierCurveByBernstein(List<V> cp) {
         super(cp);
         final Integer degree = super.getControlPoints().size() - 1;
-        final fj.data.List<Integer> range = fj.data.List.range(0, degree + 1);
-        final fj.data.List<Double> conbinations = range.map(i -> binomialCoefficientDouble(degree, i));
-        this.bernsteinBasis = conbinations.zipWith(range, (c, i) -> (t -> c*Math.pow(t, i)*Math.pow(1-t, degree-i)));
+        conbinations = javaslang.collection.List.range(0, degree + 1)
+                .map(i -> binomialCoefficientDouble(degree, i));
+        //this.bernsteinBasis = conbinations.zipWithIndex()
+          //      .map(p -> (t -> p._1()*Math.pow(t, p._2())*Math.pow(1-t, degree-p._2())));
     }
     
     public BezierCurveByBernstein(V... cp) {
@@ -35,9 +37,11 @@ public class BezierCurveByBernstein<V extends Vector> extends AbstractBezierCurv
     public V evaluate(Double t) {
         if(!getDomain().isIn(t))
             throw new IllegalArgumentException("The parameter t must be in domain [0,1], but t = " + t);
-        
-        return (V) bernsteinBasis.toStream()
-                .zipWith(Stream.iterableStream(getControlPoints()), (b, cp) -> cp.scalarMultiply(b.apply(t)))
-                .foldLeft1((v1, v2) -> v1.add(v2));
+        double degree = getDegree();
+        return (V) Stream.ofAll(conbinations).zip(javaslang.collection.List.ofAll(getControlPoints()))
+                .zipWithIndex()
+                .map(ncmcpi -> ncmcpi.transform((ncmcp, i)-> Tuple.of(ncmcp._1(), ncmcp._2(), i)))
+                .map(ncmcpi -> ncmcpi.transform((ncm, cp, i)->cp.scalarMultiply(ncm*Math.pow(t, i)*Math.pow(1-t, degree-i))))
+                .reduce((v1, v2)->v1.add(v2));
     }
 }

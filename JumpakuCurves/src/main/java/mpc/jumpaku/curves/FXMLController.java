@@ -1,6 +1,5 @@
 package mpc.jumpaku.curves;
 
-import fj.data.Stream;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +18,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javaslang.collection.Stream;
 import javax.imageio.ImageIO;
 import mpc.jumpaku.curves.beziercurve.BezierCurve;
 import mpc.jumpaku.curves.beziercurve.BezierCurveByBernstein;
@@ -106,9 +106,9 @@ public class FXMLController implements Initializable {
     
     private static void renderCurve(GraphicsContext context, Curve<Vector2D> curve, Paint color){
         context.setStroke(color);
-        final Double d = Math.pow(2, -5);
-        Stream<Vector2D> begins = Stream.iterateWhile(t -> t + d, t -> t <= 1.0, 0.0).map(curve::evaluate);
-        Stream<Vector2D> ends = Stream.iterateWhile(t -> t + d, t -> t <= 1.0, 0.0).map(curve::evaluate).drop(1);
+        final Double d = Math.pow(2, -10);
+        Stream<Vector2D> begins = Stream.gen(0.0, t -> t + d).takeWhile(t -> t <= 1.0).map(curve::evaluate);
+        Stream<Vector2D> ends = Stream.gen(0.0, t -> t + d).takeWhile(t -> t <= 1.0).map(curve::evaluate).drop(1);
         context.beginPath();
         begins.zip(ends)
                 .forEach(p -> {
@@ -132,10 +132,10 @@ public class FXMLController implements Initializable {
         if(points.isEmpty())
             return;
         context.setStroke(color);
-        Stream<Vector2D> begins = Stream.iterableStream(points);
-        Stream<Vector2D> ends = Stream.iterableStream(points).drop(1);
+        Stream<Vector2D> begins = Stream.ofAll(points);
+        Stream<Vector2D> ends = Stream.ofAll(points).drop(1);
         context.beginPath();
-        begins.zip(closed ? ends.append(Stream.single(points.get(0))) : ends)
+        begins.zip(closed ? ends.append(points.get(0)) : ends)
                 .forEach(p -> {
                     context.moveTo(p._1().getX(), p._1().getY());
                     context.lineTo(p._2().getX(), p._2().getY());

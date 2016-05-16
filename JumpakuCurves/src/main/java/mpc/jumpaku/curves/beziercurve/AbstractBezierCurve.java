@@ -116,7 +116,7 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
     }
     
     private static <V extends Vector> BezierCurve<V> reverse(List<V> controlPoints, Function<Double, V> evaluator){
-        return new AbstractBezierCurve<V>(fj.data.List.iterableList(controlPoints).reverse().toJavaList()) {
+        return new AbstractBezierCurve<V>(javaslang.collection.List.ofAll(controlPoints).reverse().toJavaList()) {
             @Override
             public V evaluate(Double t) {
                 return evaluator.apply(1-t);
