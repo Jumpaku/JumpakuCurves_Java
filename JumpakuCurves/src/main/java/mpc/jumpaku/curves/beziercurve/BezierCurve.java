@@ -29,6 +29,8 @@ public abstract interface BezierCurve<V extends Vector> extends Curve<V>{
     
     BezierCurve<V> transform(Transform<V> transform);
     
+    BezierCurve<V> reverse();
+    
     @Override
     public abstract V evaluate(Double t);
 }

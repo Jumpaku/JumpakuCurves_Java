@@ -101,6 +101,11 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
             public BezierCurve<V> transform(Transform<V> transform) {
                 return AbstractBezierCurve.transform(transform, elevatedControlPoints, evaluator);
             }
+
+            @Override
+            public BezierCurve<V> reverse() {
+                return AbstractBezierCurve.reverse(elevatedControlPoints, evaluator);
+            }    
         };
     }
     
@@ -149,6 +154,14 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
             }
         };
     }
+    private static <V extends Vector> BezierCurve<V> reverse(List<V> controlPoints, Function<Double, V> evaluator){
+        return new AbstractBezierCurve<V>(fj.data.List.iterableList(controlPoints).reverse().toJavaList()) {
+            @Override
+            public V evaluate(Double t) {
+                return evaluator.apply(1-t);
+            }
+        };
+    } 
     
     @Override
     public final Domain getDomain() {
@@ -178,6 +191,11 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
     @Override
     public BezierCurve<V> transform(Transform<V> transform){
         return transform(transform, getControlPoints(), this::evaluate);
+    }
+    
+    @Override
+    public final BezierCurve<V> reverse(){
+        return reverse(getControlPoints(), this::evaluate);
     }
     
     @Override
