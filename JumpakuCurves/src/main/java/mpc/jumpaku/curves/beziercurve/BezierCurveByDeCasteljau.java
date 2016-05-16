@@ -25,9 +25,9 @@ public class BezierCurveByDeCasteljau<V extends Vector> extends AbstractBezierCu
     }
     
     @Override
-    public V evaluate(Double t) {
+    final public V evaluate(Double t) {
         if(!getDomain().isIn(t))
-            throw new IllegalArgumentException("The parameter t must be in domain [0,1], but t = " + t);
+            throw new IllegalArgumentException("t must be in domain [0,1], but t = " + t);
         
         Object[] buffer = getControlPoints().toArray();
         for(int n = getDegree(); n > 0; --n){

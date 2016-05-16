@@ -98,10 +98,10 @@ public class FXMLController implements Initializable {
         List<Vector2D> convexHull = GeomUtils.createConvexHull(curve);
         renderPolyline(context, convexHull, Color.AQUAMARINE, true);
         
-        //renderPoints(context, firstCp, Color.RED);
-        //renderPoints(context, secondCp, Color.RED);
-        //renderPolyline(context, firstCp, Color.RED);  
-        //renderPolyline(context, secondCp, Color.RED);       
+        renderPoints(context, firstCp, Color.RED);
+        renderPoints(context, secondCp, Color.RED);
+        renderPolyline(context, firstCp, Color.RED, false);  
+        renderPolyline(context, secondCp, Color.RED, false);       
     }
     
     private static void renderCurve(GraphicsContext context, Curve<Vector2D> curve, Paint color){
