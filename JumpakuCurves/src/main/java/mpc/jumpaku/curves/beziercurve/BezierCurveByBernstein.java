@@ -25,8 +25,6 @@ public class BezierCurveByBernstein<V extends Vector> extends AbstractBezierCurv
         final Integer degree = super.getControlPoints().size() - 1;
         conbinations = javaslang.collection.List.range(0, degree + 1)
                 .map(i -> binomialCoefficientDouble(degree, i));
-        //this.bernsteinBasis = conbinations.zipWithIndex()
-          //      .map(p -> (t -> p._1()*Math.pow(t, p._2())*Math.pow(1-t, degree-p._2())));
     }
     
     public BezierCurveByBernstein(V... cp) {

@@ -16,6 +16,7 @@ import mpc.jumpaku.curves.domain.Domain;
 import mpc.jumpaku.curves.utils.GeomUtils;
 import org.apache.commons.math3.geometry.Vector;
 import mpc.jumpaku.curves.transform.Transform;
+import mpc.jumpaku.curves.utils.MathUtils;
 
 /**
  *
@@ -122,7 +123,7 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
                 return evaluator.apply(1-t);
             }
         };
-    } 
+    }
     
     @Override
     public final Domain getDomain() {

@@ -29,6 +29,14 @@ public interface Affine2D extends Transform<Vector2D>{
     default Affine2D rotateAt(Vector2D center, Double radian){
         return translate(center.negate()).rotate(radian).translate(center);
     }
+    default Affine2D rotate(Vector2D to, Vector2D from){
+        return rotateAt(Vector2D.ZERO, from, from);
+    }
+    default Affine2D rotateAt(Vector2D center, Vector2D from, Vector2D to){
+        Double cross = to.crossProduct(center, from);
+        Double radian = Vector2D.angle(from, to);
+        return rotateAt(center, cross > 0 ? radian : -radian);
+    }
     default Affine2D shearX(Double x){
         return shear(x, 0.0);
     }

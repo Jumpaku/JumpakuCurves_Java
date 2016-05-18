@@ -99,8 +99,8 @@ public class FXMLController implements Initializable {
         renderPoints(context, curve.getControlPoints(), Color.GOLD);
         renderPolyline(context, curve.getControlPoints(), Color.GOLD, false);
 
-        List<Vector2D> convexHull = GeomUtils.createConvexHull(curve);
-        renderPolyline(context, convexHull, Color.AQUAMARINE, true);
+        //List<Vector2D> convexHull = GeomUtils.createConvexHull(curve);
+        //renderPolyline(context, convexHull, Color.AQUAMARINE, true);
         
         renderPoints(context, firstCp, Color.RED);
         renderPoints(context, secondCp, Color.RED);
@@ -110,16 +110,9 @@ public class FXMLController implements Initializable {
     
     private static void renderCurve(GraphicsContext context, Curve<Vector2D> curve, Paint color){
         context.setStroke(color);
-        final Double d = Math.pow(2, -10);
-        Stream<Vector2D> begins = Stream.gen(0.0, t -> t + d).takeWhile(t -> t <= 1.0).map(curve::evaluate);
-        Stream<Vector2D> ends = Stream.gen(0.0, t -> t + d).takeWhile(t -> t <= 1.0).map(curve::evaluate).drop(1);
-        context.beginPath();
-        begins.zip(ends)
-                .forEach(p -> {
-                    context.moveTo(p._1().getX(), p._1().getY());
-                    context.lineTo(p._2().getX(), p._2().getY());
-                });        
-        context.stroke();
+        final Double d = Math.pow(2, -5);
+        List<Vector2D> points = Stream.gen(0.0, t -> t + d).takeWhile(t -> t <= 1.0).map(curve::evaluate).toJavaList();
+        renderPolyline(context, points, color, Boolean.FALSE);
     }
     
     private static void renderPoints(GraphicsContext context, List<Vector2D> points, Paint color){
@@ -136,16 +129,12 @@ public class FXMLController implements Initializable {
         if(points.isEmpty())
             return;
         context.setStroke(color);
-        Stream<Vector2D> begins = Stream.ofAll(points);
-        Stream<Vector2D> ends = Stream.ofAll(points).drop(1);
-        context.beginPath();
-        begins.zip(closed ? ends.append(points.get(0)) : ends)
-                .forEach(p -> {
-                    context.moveTo(p._1().getX(), p._1().getY());
-                    context.lineTo(p._2().getX(), p._2().getY());
-                });
-        
-        context.stroke();
+        if(closed){
+            context.strokePolygon(points.stream().mapToDouble(v->v.getX()).toArray(), points.stream().mapToDouble(v->v.getY()).toArray(), points.size());
+        }
+        else{
+            context.strokePolyline(points.stream().mapToDouble(v->v.getX()).toArray(), points.stream().mapToDouble(v->v.getY()).toArray(), points.size());
+        }
     }
     
     @Override
