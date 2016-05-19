@@ -26,6 +26,7 @@ import mpc.jumpaku.curves.transform.Affine2D;
 import mpc.jumpaku.curves.transform.Affine2DChain;
 import mpc.jumpaku.curves.transform.Matrix3x3;
 import mpc.jumpaku.curves.utils.GeomUtils;
+import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 public class FXMLController implements Initializable {
@@ -38,7 +39,7 @@ public class FXMLController implements Initializable {
     
     private List<Vector2D> firstCp = new LinkedList<>();
     private List<Vector2D> secondCp = new LinkedList<>();
-    private BezierCurve<Vector2D> curve = null;
+    private BezierCurve<Euclidean2D, Vector2D> curve = null;
     
     @FXML
     private synchronized void onClick(MouseEvent e){
@@ -108,7 +109,7 @@ public class FXMLController implements Initializable {
         renderPolyline(context, secondCp, Color.RED, false);       
     }
     
-    private static void renderCurve(GraphicsContext context, BezierCurve<Vector2D> curve, Paint color){
+    private static void renderCurve(GraphicsContext context, BezierCurve<Euclidean2D, Vector2D> curve, Paint color){
         context.setStroke(color);
         final Double d = Math.pow(2, -5);
         List<Vector2D> points = Stream.gen(0.0, t -> t + d).takeWhile(t -> t <= 1.0).map(curve::evaluate).toJavaList();
@@ -153,7 +154,7 @@ public class FXMLController implements Initializable {
         divideAt.valueProperty().addListener((v, p, n)->{
             synchronized(this){
                 if(curve != null){
-                    List<BezierCurve<Vector2D>> divideds = curve.divide((Double) n);
+                    List<BezierCurve<Euclidean2D, Vector2D>> divideds = curve.divide((Double) n);
                     firstCp = divideds.get(0).getControlPoints();
                     secondCp = divideds.get(1).getControlPoints();
                     render();

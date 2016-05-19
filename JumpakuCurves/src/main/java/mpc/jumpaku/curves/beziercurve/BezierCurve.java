@@ -10,26 +10,27 @@ import java.util.List;
 import mpc.jumpaku.curves.Curve;
 import org.apache.commons.math3.geometry.Vector;
 import mpc.jumpaku.curves.transform.Transform;
+import org.apache.commons.math3.geometry.Space;
 
 /**
  *
  * @author ito
- * @param <V>
+ * @param <S>
  */
-public abstract interface BezierCurve<V extends Vector> extends Curve<V>{
+public abstract interface BezierCurve<S extends Space, V extends Vector<S>> extends Curve<S>{
     Domain getDomain();
     
     List<V> getControlPoints();
     
     Integer getDegree();
     
-    BezierCurve<V> elevate();
+    BezierCurve<S, V> elevate();
     
-    List<BezierCurve<V>> divide(Double t);
+    List<BezierCurve<S, V>> divide(Double t);
     
-    BezierCurve<V> transform(Transform<V> transform);
+    BezierCurve<S, V> transform(Transform<V> transform);
     
-    BezierCurve<V> reverse();
+    BezierCurve<S, V> reverse();
     
     V computeTangent(Double t);
     

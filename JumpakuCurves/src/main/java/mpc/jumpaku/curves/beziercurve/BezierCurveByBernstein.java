@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 import javaslang.Tuple;
 import javaslang.collection.Stream;
+import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficientDouble;
 
@@ -18,7 +19,7 @@ import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficie
  * @author ito
  * @param <V>
  */
-public class BezierCurveByBernstein<V extends Vector> extends AbstractBezierCurve<V> {
+public class BezierCurveByBernstein<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
     private final javaslang.collection.List<Double> conbinations;
     public BezierCurveByBernstein(List<V> cp) {
         super(cp);

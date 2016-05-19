@@ -5,6 +5,7 @@
  */
 package mpc.jumpaku.curves;
 
+import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 
 /**
@@ -14,6 +15,6 @@ import org.apache.commons.math3.geometry.Vector;
  * @param <V> {@link Curve<V>#evaluate(java.lang.Double) の返り値の型. {@link Vector}のサブクラスでなければならない.
  */
 @FunctionalInterface
-public interface Curve<V extends Vector>{
-    V evaluate(Double t);
+public interface Curve<S extends Space>{
+    Vector<S> evaluate(Double t);
 }
