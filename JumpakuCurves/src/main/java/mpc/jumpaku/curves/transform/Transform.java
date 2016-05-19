@@ -5,6 +5,7 @@
  */
 package mpc.jumpaku.curves.transform;
 
+import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 
 /**
@@ -12,6 +13,6 @@ import org.apache.commons.math3.geometry.Vector;
  * @author ito
  * @param <V>
  */
-public interface Transform <V extends Vector> {
+public interface Transform <S extends Space, V extends Vector> {
     V apply(V v);    
 }

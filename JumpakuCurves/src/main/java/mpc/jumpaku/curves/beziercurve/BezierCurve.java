@@ -28,7 +28,7 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
     
     List<BezierCurve<S, V>> divide(Double t);
     
-    BezierCurve<S, V> transform(Transform<V> transform);
+    BezierCurve<S, V> transform(Transform<S, V> transform);
     
     BezierCurve<S, V> reverse();
     

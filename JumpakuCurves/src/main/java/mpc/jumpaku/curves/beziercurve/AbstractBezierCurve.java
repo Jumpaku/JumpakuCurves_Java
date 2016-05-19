@@ -105,7 +105,7 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
         return Collections.unmodifiableList(result);
     }
     
-    private static <S extends Space, V extends Vector<S>> BezierCurve<S, V> transform(Transform<V> transform, List<V> controlPoints, Function<Double, V> evaluator){
+    private static <S extends Space, V extends Vector<S>> BezierCurve<S, V> transform(Transform<S, V> transform, List<V> controlPoints, Function<Double, V> evaluator){
         List<V> transformedControlPoints = controlPoints.stream()
                 .map(cp -> transform.apply(cp))
                 .collect(Collectors.toList());
@@ -152,7 +152,7 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     }
     
     @Override
-    public BezierCurve<S, V> transform(Transform<V> transform){
+    public BezierCurve<S, V> transform(Transform<S, V> transform){
         return transform(transform, getControlPoints(), this::evaluate);
     }
     

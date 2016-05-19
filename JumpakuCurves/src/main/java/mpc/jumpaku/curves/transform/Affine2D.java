@@ -5,13 +5,14 @@
  */
 package mpc.jumpaku.curves.transform;
 
+import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 /**
  *
  * @author ito
  */
-public interface Affine2D extends Transform<Vector2D>{
+public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
     Affine2D scale(Double x, Double y);
     Affine2D rotate(Double radian);
     Affine2D translate(Vector2D v);
