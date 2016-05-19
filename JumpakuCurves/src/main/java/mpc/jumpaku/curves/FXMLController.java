@@ -54,7 +54,7 @@ public class FXMLController implements Initializable {
     @FXML
     private synchronized void onTransform(ActionEvent e){
         Affine2D affine = Affine2DChain.identity();//Matrix3x3.identity();//
-        affine = affine.translate(new Vector2D(-100, -100)).refrectOrigin().translate(new Vector2D(100,100));
+        affine = affine.rotateAt(curve.getControlPoints().get(curve.getDegree()), new Vector2D(1.0,0.0), new Vector2D(1.0, 1.0));//translate(new Vector2D(-100, -100)).refrectOrigin().translate(new Vector2D(100,100));
         curve = curve.transform(affine);//Matrix3x3.createRotationAt(new Vector2D(320, 215), Math.PI/3));//RotationAt(new Vector2D(320, 215), Math.PI/3));//createScalingAt(new Vector2D(320, 215), 1.5));//.createShearingAt(new Vector2D(320, 215), 0.5, 0.0));//
         render();
     }
@@ -108,11 +108,22 @@ public class FXMLController implements Initializable {
         renderPolyline(context, secondCp, Color.RED, false);       
     }
     
-    private static void renderCurve(GraphicsContext context, Curve<Vector2D> curve, Paint color){
+    private static void renderCurve(GraphicsContext context, BezierCurve<Vector2D> curve, Paint color){
         context.setStroke(color);
         final Double d = Math.pow(2, -5);
         List<Vector2D> points = Stream.gen(0.0, t -> t + d).takeWhile(t -> t <= 1.0).map(curve::evaluate).toJavaList();
         renderPolyline(context, points, color, Boolean.FALSE);
+        /*Stream<Vector2D> tangents = Stream.gen(0.0, t -> t + d)
+                .takeWhile(t -> t <= 1.0)
+                .map((Double t) -> GeomUtils.computeTangent(curve, t));
+        context.beginPath();
+        tangents.zip(points)
+                .forEach(t -> {
+                    Vector2D to = t._1().add(t._2());
+                    context.moveTo(t._2().getX(), t._2().getY());
+                    context.lineTo(to.getX(), to.getY());
+                });
+        context.stroke();*/        
     }
     
     private static void renderPoints(GraphicsContext context, List<Vector2D> points, Paint color){

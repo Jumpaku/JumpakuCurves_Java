@@ -161,5 +161,20 @@ public abstract class AbstractBezierCurve<V extends Vector> implements BezierCur
     }
     
     @Override
+    public final V computeTangent(Double t){
+        if(!DOMAIN.isIn(t))
+            throw new IllegalArgumentException("t must be in [0, 1]");
+        Integer n = getDegree();
+        Object[] cp = getControlPoints().toArray();
+        Object[] combinations = MathUtils.combinations(n-1).toArray();
+        V result = (V)((V)cp[0]).getZero();
+        for(int i = 0; i < n; ++i){
+            V delta = (V)((V)cp[i+1]).subtract((V)cp[i]).scalarMultiply((Double)combinations[i]*Math.pow(t, i)*Math.pow(1-t, n-1-i));
+            result = (V)result.add(delta);
+        }
+        return (V)result.scalarMultiply(n);
+    }
+    
+    @Override
     public abstract V evaluate(Double t);
 }

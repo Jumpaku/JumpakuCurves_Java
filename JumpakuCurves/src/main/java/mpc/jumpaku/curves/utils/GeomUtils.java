@@ -6,11 +6,8 @@
 package mpc.jumpaku.curves.utils;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import mpc.jumpaku.curves.beziercurve.BezierCurve;
-import mpc.jumpaku.curves.transform.Matrix3x3;
 import org.apache.commons.math3.geometry.Vector;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.geometry.euclidean.twod.hull.MonotoneChain;

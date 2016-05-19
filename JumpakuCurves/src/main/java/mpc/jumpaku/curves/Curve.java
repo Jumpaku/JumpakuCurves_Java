@@ -8,9 +8,10 @@ package mpc.jumpaku.curves;
 import org.apache.commons.math3.geometry.Vector;
 
 /**
- *
+ * 曲線のインターフェイス Interface of curve.
+ * 実数から平面や空間への写像を表し, {@link Curve<V>#evaluate(java.lang.Double)  }はパラメータtに対応する評価点のベクトルを返す.
  * @author ito
- * @param <V>
+ * @param <V> {@link Curve<V>#evaluate(java.lang.Double) の返り値の型. {@link Vector}のサブクラスでなければならない.
  */
 @FunctionalInterface
 public interface Curve<V extends Vector>{

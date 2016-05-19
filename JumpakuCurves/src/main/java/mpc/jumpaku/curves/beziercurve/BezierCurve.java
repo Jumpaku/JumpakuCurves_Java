@@ -31,6 +31,8 @@ public abstract interface BezierCurve<V extends Vector> extends Curve<V>{
     
     BezierCurve<V> reverse();
     
+    V computeTangent(Double t);
+    
     @Override
     public abstract V evaluate(Double t);
 }
