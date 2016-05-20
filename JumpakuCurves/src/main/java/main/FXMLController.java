@@ -22,11 +22,8 @@ import javaslang.collection.Stream;
 import javax.imageio.ImageIO;
 import org.jumpaku.curves.beziercurve.BezierCurve;
 import org.jumpaku.curves.beziercurve.twod.BezierCurve2D;
-import org.jumpaku.curves.beziercurve.BezierCurveByBernstein;
 import org.jumpaku.curves.transform.Affine2D;
 import org.jumpaku.curves.transform.Affine2DChain;
-import org.jumpaku.curves.transform.Matrix3x3;
-import org.jumpaku.curves.utils.GeomUtils;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
@@ -101,7 +98,7 @@ public class FXMLController implements Initializable {
         renderPoints(context, curve.getControlPoints(), Color.GOLD);
         renderPolyline(context, curve.getControlPoints(), Color.GOLD, false);
 
-        //List<Vector2D> convexHull = GeomUtils.createConvexHull(curve);
+       //List<Vector2D> convexHull = GeomUtils.createConvexHull(curve);
         //renderPolyline(context, convexHull, Color.AQUAMARINE, true);
         
         renderPoints(context, firstCp, Color.RED);
@@ -115,17 +112,6 @@ public class FXMLController implements Initializable {
         final Double d = Math.pow(2, -5);
         List<Vector2D> points = Stream.gen(0.0, t -> t + d).takeWhile(t -> t <= 1.0).map(curve::evaluate).toJavaList();
         renderPolyline(context, points, color, Boolean.FALSE);
-        /*Stream<Vector2D> tangents = Stream.gen(0.0, t -> t + d)
-                .takeWhile(t -> t <= 1.0)
-                .map((Double t) -> GeomUtils.computeTangent(curve, t));
-        context.beginPath();
-        tangents.zip(points)
-                .forEach(t -> {
-                    Vector2D to = t._1().add(t._2());
-                    context.moveTo(t._2().getX(), t._2().getY());
-                    context.lineTo(to.getX(), to.getY());
-                });
-        context.stroke();*/        
     }
     
     private static void renderPoints(GraphicsContext context, List<Vector2D> points, Paint color){

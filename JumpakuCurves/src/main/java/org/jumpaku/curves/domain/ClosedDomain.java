@@ -9,7 +9,7 @@ import org.jumpaku.curves.domain.Domain;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  */
 public class ClosedDomain implements Domain{
     private final Double from;

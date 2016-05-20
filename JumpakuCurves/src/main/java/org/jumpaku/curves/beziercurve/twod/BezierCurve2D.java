@@ -17,7 +17,7 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  */
 public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
 

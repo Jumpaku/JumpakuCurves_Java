@@ -11,7 +11,7 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  */
 public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
     Affine2D scale(Double x, Double y);

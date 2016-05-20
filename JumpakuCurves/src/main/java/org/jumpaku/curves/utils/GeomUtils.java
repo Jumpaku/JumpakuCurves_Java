@@ -14,7 +14,7 @@ import org.jumpaku.curves.beziercurve.twod.BezierCurve2D;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  */
 public class GeomUtils {
     private GeomUtils(){}

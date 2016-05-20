@@ -17,7 +17,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  */
 public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
 

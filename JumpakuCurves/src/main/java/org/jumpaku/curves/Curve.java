@@ -9,12 +9,20 @@ import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 
 /**
- * 曲線のインターフェイス Interface of curve.<br>
- * 実数から平面や空間への写像を表す.<br>
- * Represents mapping from real number to plane or space.
+ * 曲線のインターフェイス. Interface of curve.
+ * <p>
+ * 実数から平面や空間への写像を表す.</p>
+ * <p>
+ * {@code S}は{@link Space}のサブクラスでなければならない.
+ * {@code V}は{@link Vector}のサブクラスでなければならない.</p>
+ * <p>
+ * Represents mapping to plane or space from real number.<br>
+ * <p>
+ * {@code S} must be inherited {@link Space}.
+ * {@code V} must be inherited {@link Vector}.</p>
  * @author jumpaku
- * @param <S> 座標空間の種類 Type of the space. {@link Space}のサブクラスでなければばらない. S must be inherited {@link Space}
- * @param <V> {@link Curve#evaluate(java.lang.Double)} の返り値の型. {@link Vector}のサブクラスでなければならない. V must be inherited {@link Vector}
+ * @param <S> 座標空間の種類  Type of the space. 
+ * @param <V> {@link Curve#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link Curve#evaluate(java.lang.Double)}.
  */
 @FunctionalInterface
 public interface Curve<S extends Space, V extends Vector<S>>{

@@ -12,7 +12,7 @@ import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficie
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  */
 public class MathUtils {
     private MathUtils(){}

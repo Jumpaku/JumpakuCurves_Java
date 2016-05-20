@@ -9,7 +9,7 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  */
 public abstract class Affine2DChain extends AbstractAffine2D{
     public static class Scaling extends Affine2DChain{

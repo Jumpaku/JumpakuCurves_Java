@@ -14,7 +14,7 @@ import org.apache.commons.math3.geometry.Vector;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  * @param <V>
  */
 public class BezierCurveByDeCasteljau<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {

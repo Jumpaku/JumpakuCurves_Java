@@ -10,7 +10,7 @@ import javaslang.collection.Traversable;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  */
 public class FuncUtils {
     private FuncUtils(){}

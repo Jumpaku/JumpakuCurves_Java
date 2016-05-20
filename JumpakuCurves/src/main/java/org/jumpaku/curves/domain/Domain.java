@@ -7,7 +7,7 @@ package org.jumpaku.curves.domain;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  */
 public interface Domain {
     Boolean isIn(Double t);

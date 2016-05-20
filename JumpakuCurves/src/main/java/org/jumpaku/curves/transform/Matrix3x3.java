@@ -13,7 +13,7 @@ import org.apache.commons.math3.linear.RealVector;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  */
 public class Matrix3x3 implements Affine2D {
 

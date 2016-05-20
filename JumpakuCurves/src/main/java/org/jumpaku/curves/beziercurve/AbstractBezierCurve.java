@@ -1,7 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * and open the template in the edJumpakur.
  */
 package org.jumpaku.curves.beziercurve;
 
@@ -21,8 +21,9 @@ import org.apache.commons.math3.geometry.Space;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  * @param <S>
+ * @param <V>
  */
 public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> implements BezierCurve<S, V>{
     

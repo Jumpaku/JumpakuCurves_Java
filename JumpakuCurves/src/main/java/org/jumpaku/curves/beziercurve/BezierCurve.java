@@ -14,7 +14,7 @@ import org.apache.commons.math3.geometry.Space;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  * @param <S>
  * @param <V>
  */

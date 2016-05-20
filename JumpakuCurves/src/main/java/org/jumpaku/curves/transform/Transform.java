@@ -10,7 +10,7 @@ import org.apache.commons.math3.geometry.Vector;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  * @param <S>
  * @param <V>
  */

@@ -9,7 +9,7 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 /**
  *
- * @author ito
+ * @author Jumpaku
  */
 public abstract class AbstractAffine2D implements Affine2D {
     
