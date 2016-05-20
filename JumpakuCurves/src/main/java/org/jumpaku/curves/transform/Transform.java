@@ -11,6 +11,7 @@ import org.apache.commons.math3.geometry.Vector;
 /**
  *
  * @author ito
+ * @param <S>
  * @param <V>
  */
 public interface Transform <S extends Space, V extends Vector> {

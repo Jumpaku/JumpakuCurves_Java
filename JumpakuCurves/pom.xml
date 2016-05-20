@@ -21,6 +21,21 @@
                     <mainClass>mpc.jumpaku.curves.MainApp</mainClass>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <configuration>
+                    <author>false</author>
+                    <source>1.8</source>
+                    <encoding>UTF-8</encoding>
+                    <charset>UTF-8</charset>
+                    <docencoding>UTF-8</docencoding>
+                    <defaultAuthor>Jumpaku</defaultAuthor>
+                    <locale>en</locale>
+                    <!--<locale>ja</locale>-->
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
