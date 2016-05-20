@@ -9,6 +9,7 @@ package org.jumpaku.curves.domain;
  *
  * @author Jumpaku
  */
+@FunctionalInterface
 public interface Domain {
     Boolean isIn(Double t);
 }
