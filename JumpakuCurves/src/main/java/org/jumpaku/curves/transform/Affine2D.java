@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mpc.jumpaku.curves.transform;
+package org.jumpaku.curves.transform;
 
+import org.jumpaku.curves.transform.Transform;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
@@ -56,8 +57,14 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
     default Affine2D squeeze(Double k){
         return scale(k, 1/k);
     }
+    default Affine2D squeezeAt(Vector2D center, Double k){
+        return translate(center.negate()).squeeze(k).translate(center);
+    }
     default Affine2D refrectOrigin(){
         return scale(-1.0);
+    }
+    default Affine2D refrectAt(Vector2D center){
+        return scaleAt(center, -1.0);
     }
     default Affine2D refrectXAxis(){
         return scale(1.0, -1.0);

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mpc.jumpaku.curves.beziercurve;
+package org.jumpaku.curves.beziercurve;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,12 +11,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import mpc.jumpaku.curves.domain.ClosedDomain;
-import mpc.jumpaku.curves.domain.Domain;
-import mpc.jumpaku.curves.utils.GeomUtils;
+import org.jumpaku.curves.domain.ClosedDomain;
+import org.jumpaku.curves.domain.Domain;
+import org.jumpaku.curves.utils.GeomUtils;
 import org.apache.commons.math3.geometry.Vector;
-import mpc.jumpaku.curves.transform.Transform;
-import mpc.jumpaku.curves.utils.MathUtils;
+import org.jumpaku.curves.transform.Transform;
+import org.jumpaku.curves.utils.MathUtils;
 import org.apache.commons.math3.geometry.Space;
 
 /**

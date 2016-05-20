@@ -1,4 +1,4 @@
-package mpc.jumpaku.curves;
+package main;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -20,12 +20,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javaslang.collection.Stream;
 import javax.imageio.ImageIO;
-import mpc.jumpaku.curves.beziercurve.BezierCurve;
-import mpc.jumpaku.curves.beziercurve.BezierCurveByBernstein;
-import mpc.jumpaku.curves.transform.Affine2D;
-import mpc.jumpaku.curves.transform.Affine2DChain;
-import mpc.jumpaku.curves.transform.Matrix3x3;
-import mpc.jumpaku.curves.utils.GeomUtils;
+import org.jumpaku.curves.beziercurve.BezierCurve;
+import org.jumpaku.curves.beziercurve.twod.BezierCurve2D;
+import org.jumpaku.curves.beziercurve.BezierCurveByBernstein;
+import org.jumpaku.curves.transform.Affine2D;
+import org.jumpaku.curves.transform.Affine2DChain;
+import org.jumpaku.curves.transform.Matrix3x3;
+import org.jumpaku.curves.utils.GeomUtils;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
@@ -39,7 +40,7 @@ public class FXMLController implements Initializable {
     
     private List<Vector2D> firstCp = new LinkedList<>();
     private List<Vector2D> secondCp = new LinkedList<>();
-    private BezierCurve<Euclidean2D, Vector2D> curve = null;
+    private BezierCurve2D curve = null;
     
     @FXML
     private synchronized void onClick(MouseEvent e){
@@ -48,7 +49,7 @@ public class FXMLController implements Initializable {
             controlPoints.addAll(curve.getControlPoints());
         }
         controlPoints.add(new Vector2D(e.getX(), e.getY()));
-        curve = new BezierCurveByBernstein<>(controlPoints);
+        curve = BezierCurve2D.createBernstein(controlPoints);
         render();
     }
     
@@ -154,7 +155,7 @@ public class FXMLController implements Initializable {
         divideAt.valueProperty().addListener((v, p, n)->{
             synchronized(this){
                 if(curve != null){
-                    List<BezierCurve<Euclidean2D, Vector2D>> divideds = curve.divide((Double) n);
+                    List<BezierCurve2D> divideds = curve.divide((Double) n);
                     firstCp = divideds.get(0).getControlPoints();
                     secondCp = divideds.get(1).getControlPoints();
                     render();

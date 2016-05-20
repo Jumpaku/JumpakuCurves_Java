@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mpc.jumpaku.curves.beziercurve;
+package org.jumpaku.curves.beziercurve;
 
+import org.jumpaku.curves.beziercurve.AbstractBezierCurve;
 import java.util.Arrays;
 import java.util.List;
-import mpc.jumpaku.curves.utils.GeomUtils;
+import org.jumpaku.curves.utils.GeomUtils;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 

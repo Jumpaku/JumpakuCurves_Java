@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mpc.jumpaku.curves;
+package org.jumpaku.curves;
 
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
@@ -15,6 +15,6 @@ import org.apache.commons.math3.geometry.Vector;
  * @param <V> {@link Curve<V>#evaluate(java.lang.Double) の返り値の型. {@link Vector}のサブクラスでなければならない.
  */
 @FunctionalInterface
-public interface Curve<S extends Space>{
-    Vector<S> evaluate(Double t);
+public interface Curve<S extends Space, V extends Vector<S>>{
+    V evaluate(Double t);
 }

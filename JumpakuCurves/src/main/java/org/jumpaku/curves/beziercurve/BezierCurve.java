@@ -3,21 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mpc.jumpaku.curves.beziercurve;
+package org.jumpaku.curves.beziercurve;
 
-import mpc.jumpaku.curves.domain.Domain;
+import org.jumpaku.curves.domain.Domain;
 import java.util.List;
-import mpc.jumpaku.curves.Curve;
+import org.jumpaku.curves.Curve;
 import org.apache.commons.math3.geometry.Vector;
-import mpc.jumpaku.curves.transform.Transform;
+import org.jumpaku.curves.transform.Transform;
 import org.apache.commons.math3.geometry.Space;
 
 /**
  *
  * @author ito
  * @param <S>
+ * @param <V>
  */
-public abstract interface BezierCurve<S extends Space, V extends Vector<S>> extends Curve<S>{
+public abstract interface BezierCurve<S extends Space, V extends Vector<S>> extends Curve<S, V>{
     Domain getDomain();
     
     List<V> getControlPoints();
@@ -26,7 +27,7 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
     
     BezierCurve<S, V> elevate();
     
-    List<BezierCurve<S, V>> divide(Double t);
+    List<? extends BezierCurve<S, V>> divide(Double t);
     
     BezierCurve<S, V> transform(Transform<S, V> transform);
     

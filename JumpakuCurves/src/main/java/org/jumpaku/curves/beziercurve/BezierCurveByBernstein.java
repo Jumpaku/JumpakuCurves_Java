@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mpc.jumpaku.curves.beziercurve;
+package org.jumpaku.curves.beziercurve;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.UnaryOperator;
 import javaslang.Tuple;
 import javaslang.collection.Stream;
 import org.apache.commons.math3.geometry.Space;
@@ -17,6 +16,7 @@ import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficie
 /**
  *
  * @author ito
+ * @param <S>
  * @param <V>
  */
 public class BezierCurveByBernstein<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
@@ -37,10 +37,10 @@ public class BezierCurveByBernstein<S extends Space, V extends Vector<S>> extend
         if(!getDomain().isIn(t))
             throw new IllegalArgumentException("The parameter t must be in domain [0,1], but t = " + t);
         double degree = getDegree();
-        return (V) Stream.ofAll(conbinations).zip(javaslang.collection.List.ofAll(getControlPoints()))
-                .zipWithIndex()
+        return (V) Stream.ofAll(conbinations).zip(javaslang.collection.List.ofAll(getControlPoints())).zipWithIndex()
                 .map(ncmcpi -> ncmcpi.transform((ncmcp, i)-> Tuple.of(ncmcp._1(), ncmcp._2(), i)))
-                .map(ncmcpi -> ncmcpi.transform((ncm, cp, i)->cp.scalarMultiply(ncm*Math.pow(t, i)*Math.pow(1-t, degree-i))))
+                .map(ncmcpi -> ncmcpi.transform(
+                        (ncm, cp, i)->cp.scalarMultiply(ncm*Math.pow(t, i)*Math.pow(1-t, degree-i))))
                 .reduce((v1, v2)->v1.add(v2));
     }
 }

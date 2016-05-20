@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mpc.jumpaku.curves.domain;
+package org.jumpaku.curves.domain;
+
+import org.jumpaku.curves.domain.Domain;
 
 /**
  *
