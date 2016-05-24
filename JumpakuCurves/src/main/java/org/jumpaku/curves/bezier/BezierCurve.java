@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curves.beziercurve;
+package org.jumpaku.curves.bezier;
 
 import org.jumpaku.curves.domain.Domain;
 import java.util.List;
@@ -36,5 +36,5 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
     V computeTangent(Double t);
     
     @Override
-    public abstract V evaluate(Double t);
+    V evaluate(Double t);
 }

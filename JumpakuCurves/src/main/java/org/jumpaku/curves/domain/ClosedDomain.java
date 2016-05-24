@@ -5,8 +5,6 @@
  */
 package org.jumpaku.curves.domain;
 
-import org.jumpaku.curves.domain.Domain;
-
 /**
  *
  * @author Jumpaku
@@ -22,6 +20,6 @@ public class ClosedDomain implements Domain{
     
     @Override
     public Boolean isIn(Double t) {
-        return from <= t && t <= to;
+        return from.compareTo(t) <= 0 && to.compareTo(t) >= 0;
     }
 }

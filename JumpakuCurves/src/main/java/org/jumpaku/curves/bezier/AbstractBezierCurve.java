@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the edJumpakur.
  */
-package org.jumpaku.curves.beziercurve;
+package org.jumpaku.curves.bezier;
 
 import java.util.Arrays;
 import java.util.Collections;

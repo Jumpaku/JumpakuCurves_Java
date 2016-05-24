@@ -10,7 +10,7 @@ import java.util.List;
 import org.apache.commons.math3.geometry.Vector;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.geometry.euclidean.twod.hull.MonotoneChain;
-import org.jumpaku.curves.beziercurve.twod.BezierCurve2D;
+import org.jumpaku.curves.bezier.twod.BezierCurve2D;
 
 /**
  *

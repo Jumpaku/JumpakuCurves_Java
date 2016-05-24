@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curves.beziercurve.threed;
+package org.jumpaku.curves.bezier.threed;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.jumpaku.curves.beziercurve.BezierCurve;
-import org.jumpaku.curves.beziercurve.BezierCurveByBernstein;
-import org.jumpaku.curves.beziercurve.BezierCurveByDeCasteljau;
+import org.jumpaku.curves.bezier.BezierCurve;
+import org.jumpaku.curves.bezier.BezierCurveByBernstein;
+import org.jumpaku.curves.bezier.BezierCurveByDeCasteljau;
 import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.transform.Transform;
 import org.apache.commons.math3.geometry.euclidean.threed.Euclidean3D;
