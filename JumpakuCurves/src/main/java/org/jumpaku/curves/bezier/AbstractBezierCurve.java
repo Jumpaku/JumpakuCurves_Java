@@ -5,6 +5,7 @@
  */
 package org.jumpaku.curves.bezier;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -35,8 +36,7 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
         if(cp.isEmpty())
             throw new IllegalArgumentException("The number of control points must be greater than 0 but no control points was given.");
 
-        controlPoints = new LinkedList<>();
-        cp.forEach(v -> controlPoints.add(v));
+        controlPoints = Collections.unmodifiableList(new ArrayList<>(cp));
     }
     
     public AbstractBezierCurve(V v, V... cp) {
@@ -68,15 +68,14 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     
     private static <S extends Space, V extends Vector<S>> List<V> createElevatedControlPonts(List<? extends V> controlPoints){
         Integer n = controlPoints.size() - 1;
-        Object[] cp = controlPoints.toArray();
         List<V> result = new LinkedList<>();
-        result.add((V)cp[0]);        
+        result.add(controlPoints.get(0));        
         for(int i = 1; i <= n; ++i){
             Double a = i/(double)(n+1);
             Double b = 1-a;
-            result.add(GeomUtils.scalingAdd(b, (V)cp[i], a, (V)cp[i-1]));
+            result.add(GeomUtils.scalingAdd(b, controlPoints.get(i), a, controlPoints.get(i-1)));
         }
-        result.add((V)cp[n]);
+        result.add(controlPoints.get(n));
         return Collections.unmodifiableList(result);
     }
     
@@ -134,7 +133,7 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     
     @Override
     public final List<V> getControlPoints() {
-        return Collections.unmodifiableList(controlPoints);
+        return controlPoints;
     }
     
     @Override
