@@ -5,6 +5,7 @@
  */
 package org.jumpaku.curves.bezier;
 
+import java.util.ArrayList;
 import org.jumpaku.curves.bezier.AbstractBezierCurve;
 import java.util.Arrays;
 import java.util.List;
@@ -31,12 +32,12 @@ public class BezierCurveByDeCasteljau<S extends Space, V extends Vector<S>> exte
         if(!getDomain().isIn(t))
             throw new IllegalArgumentException("t must be in domain [0,1], but t = " + t);
         
-        Object[] buffer = getControlPoints().toArray();
+        List<V> cp = new ArrayList<>(getControlPoints());
         for(int n = getDegree(); n > 0; --n){
             for(int i = 0; i < n; ++i){
-                buffer[i] = GeomUtils.internallyDivide(t, (Vector<S>)buffer[i], (Vector<S>)buffer[i+1]);
+                cp.set(i, (V)GeomUtils.internallyDivide(t, (Vector<S>)cp.get(i), (Vector<S>)cp.get(i+1)));
             }
         }
-        return (V)buffer[0];
+        return (V)cp.get(0);
     }
 }

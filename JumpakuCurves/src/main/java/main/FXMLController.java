@@ -24,6 +24,7 @@ import javax.imageio.ImageIO;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.jumpaku.curves.Curve;
+import org.jumpaku.curves.bezier.twod.BezierCurve2D;
 import org.jumpaku.curves.spline.SplineCurve2D;
 
 public class FXMLController implements Initializable {
@@ -31,8 +32,8 @@ public class FXMLController implements Initializable {
     @FXML
     private Canvas canvas;
     
-    private List<Vector2D> controlPoints = new LinkedList<>();
-    private SplineCurve2D curve = null;
+    private final List<Vector2D> controlPoints = new LinkedList<>();
+    private BezierCurve2D curve = null;
     private final Integer n = 3;
     
     Array<Double> knots;
@@ -40,10 +41,7 @@ public class FXMLController implements Initializable {
     @FXML
     private synchronized void onClick(MouseEvent e){
         controlPoints.add(new Vector2D(e.getX(), e.getY()));
-        if(controlPoints.size() > n){
-            knots = javaslang.collection.List.range(0, n+1+controlPoints.size()).map(i->(double)i).toArray();
-            curve = new SplineCurve2D(knots.toJavaList(), controlPoints, n);
-        }
+        curve = BezierCurve2D.createBernstein(controlPoints);
         render();
     }
     
@@ -81,11 +79,11 @@ public class FXMLController implements Initializable {
         renderPolyline(context, controlPoints, Color.GOLD, false);
     }
     
-    private static void renderCurve(GraphicsContext context, SplineCurve2D curve, Paint color){
+    private static void renderCurve(GraphicsContext context, BezierCurve2D curve, Paint color){
         context.setStroke(color);
         final Double d = Math.pow(2, -5);
-        List<Vector2D> points = Stream.gen(curve.getKnots().get(curve.getDegree()), t -> t + d)
-                .takeWhile(t -> t <= curve.getKnots().get(curve.getControlPoints().size()))
+        List<Vector2D> points = Stream.gen(0.0, t -> t + d)
+                .takeWhile(t -> t <= 1)
                 .map(curve::evaluate)
                 .toJavaList();
         renderPolyline(context, points, color, Boolean.FALSE);

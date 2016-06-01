@@ -34,7 +34,9 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     
     public AbstractBezierCurve(List<V> cp) {
         if(cp.isEmpty())
-            throw new IllegalArgumentException("The number of control points must be greater than 0 but no control points was given.");
+            throw new IllegalArgumentException("Control points is empty.");
+        if(cp.stream().anyMatch(p -> p == null))
+            throw new IllegalArgumentException("Control points contains null.");
 
         controlPoints = Collections.unmodifiableList(new ArrayList<>(cp));
     }
@@ -45,7 +47,7 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     
     public static <S extends Space, V extends Vector<S>> List<List<V>> createDividedControlPoints(Object[] cp, Double t){
         if(!DOMAIN.isIn(t))
-            throw new IllegalArgumentException("The parameter t must be in domain [0,1], but t = " + t);
+            throw new IllegalArgumentException("The parameter t isout of domain [0,1], t = " + t);
         
         List<List<V>> result = new LinkedList<>();
         LinkedList<V> first = new LinkedList<>();
