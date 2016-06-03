@@ -85,11 +85,14 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     private static <S extends Space, V extends Vector<S>> List<V> createReducedControlPonts(List<? extends V> originalcps){
         Integer n = originalcps.size() - 1;
         Integer m = n + 1;
-        if(m < 3)
+        if(m < 2)
             throw new IllegalArgumentException("degree is too small");
             
         Object[] cps = new Object[n];
-        if(m%2==0){
+        if(m == 2){
+            cps[0] = originalcps.get(0).add(originalcps.get(1)).scalarMultiply(0.5);
+        }
+        else if(m%2==0){
             Integer r = (m-2)/2;
             cps[0] = originalcps.get(0);
             for(int i = 1; i <= r-1; ++i){
@@ -121,7 +124,7 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
             }
         }
         
-        return Arrays.stream(cps).map(o->(V)o).collect(Collectors.toList());
+        return Arrays.stream(cps).map(o -> (V)o).collect(Collectors.toList());
     }
     
     private static class DegreeElevated<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V>{
