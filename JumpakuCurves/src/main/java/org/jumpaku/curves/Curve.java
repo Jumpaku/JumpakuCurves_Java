@@ -11,12 +11,12 @@ import org.apache.commons.math3.geometry.Vector;
 /**
  * 曲線のインターフェイス. Interface of curve.
  * <p>
- * 実数から平面や空間への写像を表す.</p>
+ * 実数から平面や空間への写像を表します.</p>
  * <p>
- * {@code S}は{@link Space}のサブクラスでなければならない.
- * {@code V}は{@link Vector}のサブクラスでなければならない.</p>
+ * {@code S}は{@link Space}のサブクラスでなければならなりません.
+ * {@code V}は{@link Vector}のサブクラスでなければならなりません.</p>
  * <p>
- * Represents mapping to plane or space from real number.<br>
+ * Represents mapping to plane or space from real number.</p>
  * <p>
  * {@code S} must be inherited {@link Space}.
  * {@code V} must be inherited {@link Vector}.</p>
@@ -29,7 +29,7 @@ public interface Curve<S extends Space, V extends Vector<S>>{
     /**
      * パラメータtに対応する評価点のベクトルを返す.
      * @param t パラメータ parameter
-     * @return 
+     * @return 評価点 Evaluated point
      */
     V evaluate(Double t);
 }

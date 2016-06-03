@@ -18,6 +18,11 @@ import org.jumpaku.curves.domain.Domain;
  * @param <V>
  */
 public interface SplineCurve<S extends Space, V extends Vector<S>>extends Curve<S, V>{
+
+    /**
+     *
+     * @return
+     */
     Domain getDomain();
     
     List<V> getControlPoints();
@@ -25,7 +30,6 @@ public interface SplineCurve<S extends Space, V extends Vector<S>>extends Curve<
     List<Double> getKnots();
     
     Integer getDegree();
-    
     
     @Override
     V evaluate(Double t);

@@ -19,7 +19,7 @@ public class ClosedDomain implements Domain{
     }
     
     @Override
-    public Boolean isIn(Double t) {
+    public final Boolean isIn(Double t) {
         return from.compareTo(t) <= 0 && to.compareTo(t) >= 0;
     }
 }

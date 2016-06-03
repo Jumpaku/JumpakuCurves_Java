@@ -5,7 +5,6 @@
  */
 package org.jumpaku.curves.bezier;
 
-import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
@@ -14,8 +13,8 @@ import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficie
 /**
  *
  * @author Jumpaku
- * @param <S>
- * @param <V>
+ * @param <S> 座標空間の種類  Type of the space. 
+ * @param <V> {@link BezierCurveByBernstein#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link BezierCurveByBernstein#evaluate(java.lang.Double)}.
  */
 public class BezierCurveByBernstein<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
     
@@ -31,15 +30,17 @@ public class BezierCurveByBernstein<S extends Space, V extends Vector<S>> extend
     @Override
     public final V evaluate(Double t) {
         if(!getDomain().isIn(t))
-            throw new IllegalArgumentException("The parameter t must be in domain [0,1], but t = " + t);
+            throw new IllegalArgumentException("Parameter t out of domain [0,1]");
+        
         List<V> cps = getControlPoints();
         Integer degree = getDegree();
 
-        if(t.compareTo(0.0) == 0)
+        if(t.compareTo(0.0) == 0){
             return cps.get(0);
-        
-        if(t.compareTo(1.0) == 0)
+        }
+        if(t.compareTo(1.0) == 0){
             return cps.get(degree);
+        }
         
         Double ct = Math.pow(1-t, degree);
         Vector<S> result = cps.get(0).getZero();

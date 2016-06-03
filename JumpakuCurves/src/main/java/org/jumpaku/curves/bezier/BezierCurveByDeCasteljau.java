@@ -15,8 +15,8 @@ import org.apache.commons.math3.geometry.Vector;
 /**
  *
  * @author Jumpaku
- * @param <S>
- * @param <V>
+ * @param <S> 座標空間の種類  Type of the space. 
+ * @param <V> {@link BezierCurveByDeCasteljau#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link BezierCurveByDeCasteljau#evaluate(java.lang.Double)}.
  */
 public class BezierCurveByDeCasteljau<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
     public BezierCurveByDeCasteljau(List<V> cp) {
@@ -35,7 +35,7 @@ public class BezierCurveByDeCasteljau<S extends Space, V extends Vector<S>> exte
         List<V> cp = new ArrayList<>(getControlPoints());
         for(int n = getDegree(); n > 0; --n){
             for(int i = 0; i < n; ++i){
-                cp.set(i, (V)GeomUtils.internallyDivide(t, (Vector<S>)cp.get(i), (Vector<S>)cp.get(i+1)));
+                cp.set(i, (V)GeomUtils.internallyDivide(t, cp.get(i), cp.get(i+1)));
             }
         }
         return (V)cp.get(0);

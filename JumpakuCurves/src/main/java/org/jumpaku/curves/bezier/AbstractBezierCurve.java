@@ -21,10 +21,14 @@ import org.jumpaku.curves.utils.MathUtils;
 import org.apache.commons.math3.geometry.Space;
 
 /**
- *
+ * <p>Bezier曲線の基底クラス Basic class of Bezier Curve.</p>
+ * <p>
+ * {@link AbstractBezierCurve#evaluate(java.lang.Double) }をオーバーライドしてください.</p>
+ * <p>
+ * Override {@link AbstractBezierCurve#evaluate(java.lang.Double) }.
  * @author Jumpaku
- * @param <S>
- * @param <V>
+ * @param <S> 座標空間の種類  Type of the space. 
+ * @param <V> {@link AbstractBezierCurve#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link AbstractBezierCurve#evaluate(java.lang.Double)}.
  */
 public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> implements BezierCurve<S, V>{
     
@@ -220,7 +224,7 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     }
     
     @Override
-    public BezierCurve<S, V> transform(Transform<S, V> transform){
+    public final BezierCurve<S, V> transform(Transform<S, V> transform){
         return transform(transform, getControlPoints(), this::evaluate);
     }
     
@@ -244,6 +248,15 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
         return (V)result.scalarMultiply(n);
     }
     
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Bezier曲線の評価処理を実装してください.</p>
+     * <p>
+     * Implement evaluation execution of Bezier Curve.</p>
+     * @param t [0,1]に含まれるパラメータ parameter in [0,1]
+     * @return 評価点 evaluated point
+     */
     @Override
     public abstract V evaluate(Double t);
 }
