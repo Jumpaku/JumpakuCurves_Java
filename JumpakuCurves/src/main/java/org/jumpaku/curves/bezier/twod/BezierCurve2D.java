@@ -8,7 +8,6 @@ package org.jumpaku.curves.bezier.twod;
 import java.util.LinkedList;
 import java.util.List;
 import org.jumpaku.curves.bezier.BezierCurve;
-import org.jumpaku.curves.bezier.BezierCurveByBernstein;
 import org.jumpaku.curves.bezier.BezierCurveByDeCasteljau;
 import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.transform.Transform;
@@ -22,12 +21,13 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
 
     private final BezierCurve<Euclidean2D, Vector2D> curve;
+    
     private BezierCurve2D(BezierCurve<Euclidean2D, Vector2D> curve) {
         this.curve = curve;
     }
     
-    public static BezierCurve2D createBernstein(List<Vector2D> cp){
-        return new BezierCurve2D(new BezierCurveByBernstein<>(cp));
+    public static BezierCurve2D create(List<Vector2D> cp){
+        return new BezierCurve2D(BezierCurve.<Euclidean2D, Vector2D>create(cp));
     }
     
     public static BezierCurve2D createDeCasteljau(List<Vector2D> cp){
@@ -55,12 +55,17 @@ public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
     }
 
     @Override
+    public BezierCurve2D reduce() {
+        return new BezierCurve2D(curve.reduce());
+    }
+    
+    @Override
     public List<BezierCurve2D> divide(Double t) {
         return new LinkedList<BezierCurve2D>(){
-                {
-                    add(new BezierCurve2D(curve.divide(t).get(0)));
-                    add(new BezierCurve2D(curve.divide(t).get(1)));
-                }
+            {
+                add(new BezierCurve2D(curve.divide(t).get(0)));
+                add(new BezierCurve2D(curve.divide(t).get(1)));
+            }
         };
     }
 
@@ -83,5 +88,4 @@ public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
     public Vector2D evaluate(Double t) {
         return curve.evaluate(t);
     }
-    
 }
