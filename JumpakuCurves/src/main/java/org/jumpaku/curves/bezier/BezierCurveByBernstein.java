@@ -28,10 +28,6 @@ public class BezierCurveByBernstein<S extends Space, V extends Vector<S>> extend
                 .map(i -> binomialCoefficientDouble(degree, i));
     }
     
-    public BezierCurveByBernstein(V... cp) {
-        this(Arrays.asList(cp));
-    }
-    
     @Override
     public final V evaluate(Double t) {
         if(!getDomain().isIn(t))

@@ -5,6 +5,7 @@
  */
 package org.jumpaku.curves.bezier.twod;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import org.jumpaku.curves.bezier.BezierCurve;
@@ -27,40 +28,42 @@ public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
     }
     
     public static BezierCurve2D create(List<Vector2D> cp){
-        return new BezierCurve2D(BezierCurve.<Euclidean2D, Vector2D>create(cp));
+        return new BezierCurve2D(BezierCurve.create(cp));
     }
     
-    public static BezierCurve2D createDeCasteljau(List<Vector2D> cp){
-        return new BezierCurve2D(new BezierCurveByDeCasteljau<>(cp));
+    public static BezierCurve2D create(Vector2D cp, Vector2D... cps){
+        LinkedList<Vector2D> tmp = new LinkedList<>(Arrays.asList(cps));
+        tmp.addFirst(cp);
+        return BezierCurve2D.create(tmp);
     }
     
     @Override
-    public Domain getDomain() {
+    public final Domain getDomain() {
         return curve.getDomain();
     }
 
     @Override
-    public List<Vector2D> getControlPoints() {
+    public final List<Vector2D> getControlPoints() {
         return curve.getControlPoints();
     }
 
     @Override
-    public Integer getDegree() {
+    public final Integer getDegree() {
         return curve.getDegree();
     }
 
     @Override
-    public BezierCurve2D elevate() {
+    public final BezierCurve2D elevate() {
         return new BezierCurve2D(curve.elevate());
     }
 
     @Override
-    public BezierCurve2D reduce() {
+    public final BezierCurve2D reduce() {
         return new BezierCurve2D(curve.reduce());
     }
     
     @Override
-    public List<BezierCurve2D> divide(Double t) {
+    public final List<BezierCurve2D> divide(Double t) {
         return new LinkedList<BezierCurve2D>(){
             {
                 add(new BezierCurve2D(curve.divide(t).get(0)));
@@ -70,22 +73,22 @@ public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
     }
 
     @Override
-    public BezierCurve2D transform(Transform<Euclidean2D, Vector2D> transform) {
+    public final BezierCurve2D transform(Transform<Euclidean2D, Vector2D> transform) {
         return new BezierCurve2D(curve.transform(transform));
     }
 
     @Override
-    public BezierCurve2D reverse() {
+    public final BezierCurve2D reverse() {
         return new BezierCurve2D(curve.reverse());
     }
 
     @Override
-    public Vector2D computeTangent(Double t) {
+    public final Vector2D computeTangent(Double t) {
         return curve.computeTangent(t);
     }
 
     @Override
-    public Vector2D evaluate(Double t) {
+    public final Vector2D evaluate(Double t) {
         return curve.evaluate(t);
     }
 }
