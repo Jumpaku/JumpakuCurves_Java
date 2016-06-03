@@ -22,18 +22,43 @@ import org.jumpaku.curves.utils.GeomUtils;
  */
 public class TimeMeasurement {
     static final int n = 2;
-    static Long measureAndCheck(BiFunction<Double, List<Vector2D>, Vector2D> bezier){
-        Double t = 0.5;
-        MersenneTwister random = new MersenneTwister(13024019);        
-        List<Vector2D> cps = Collections.unmodifiableList(java.util.stream.Stream.generate(
+    
+    static MersenneTwister random = new MersenneTwister(13024019);        
+    
+    static List<Vector2D> cps = Collections.unmodifiableList(java.util.stream.Stream.generate(
                 ()->new Vector2D(random.nextDouble(), random.nextDouble())).limit(n + 1).collect(Collectors.toList()));
+    
+    static Double t = 0.6;
+    
+    static Long measureAndCheck(BiFunction<Double, List<Vector2D>, Vector2D> bezier){
         long s = System.nanoTime();
-        System.out.println(bezier.apply(t, cps));
+        //System.out.println();
+        bezier.apply(t, cps);
         return System.nanoTime() - s;
     }
+    
     public static void main(String[] args) {
+        List<Double> bs = IntStream.rangeClosed(0, n).mapToObj(i -> binomialCoefficientDouble(n, i)).collect(Collectors.toList());
+        for(int i = 0; i < 10000; ++i){
+            measureAndCheck((Double t1, List<Vector2D> u) -> Vector2D.NaN);
+        }
+        
+        Long d2 = 0L;
+        for(int i = 0; i < 10000; ++i){
+            d2 += measureAndCheck((t, cps)->{
+                Double ct = Math.pow(1-t, n);
+                Vector2D result = Vector2D.ZERO;
+                for(int j = 0; j <= n; ++j){
+                    result = result.add(cps.get(j).scalarMultiply(bs.get(j)*ct));
+                    ct *= (t / (1 - t));
+                }
+                return result;
+            });
+        }
+        System.out.println(d2 + "ns : O(n)");
+        
         Long d = 0L;
-        for(int i = 0; i < 1000; ++i){
+        for(int i = 0; i < 10000; ++i){
             d += measureAndCheck((t, _cps)->{
                 List<Vector2D> cps = new ArrayList<>(_cps);
                 for(int degree = n-1; degree > 0; --degree){
@@ -44,37 +69,18 @@ public class TimeMeasurement {
                 return cps.get(0);
             });
         }
-        System.out.println(d/1000 + "ns");
+        System.out.println(d + "ns : decas");
         
-        Long d2 = 0L;
-        double[] bs = IntStream.rangeClosed(0, n).mapToDouble(i -> binomialCoefficientDouble(n, i)).toArray();
-        for(int i = 0; i < 1000; ++i){
-            d2 += measureAndCheck((t, cps)->{
-                Double ct = Math.pow(1-t, n);
-                Vector2D result = Vector2D.ZERO;
-                Vector2D error = Vector2D.ZERO;
-                for(int j = 0; j <= n; ++j){
-                    Vector2D cp = cps.get(j).scalarMultiply(bs[j]*ct).subtract(error);
-                    Vector2D tmp = result.add(cp);
-                    error = tmp.subtract(result).subtract(cp);
-                    result = tmp;
-                    ct *= (t / (1 - t));
-                }
-                return result;
-            });
-        }
-        System.out.println(d2/1000 + "ns");
-
         Long d3 = 0L;
-        for(int i = 0; i < 1000; ++i){
+        for(int i = 0; i < 10000; ++i){
             d3 += measureAndCheck((t, cps)->{
                 Vector2D result = Vector2D.ZERO;
                 for(int j = 0; j <= n; ++j){
-                    result = result.add(cps.get(j).scalarMultiply(bs[j]* Math.pow(t, j)*Math.pow(1-t, n-j)));
+                    result = result.add(cps.get(j).scalarMultiply(bs.get(j)* Math.pow(t, j)*Math.pow(1-t, n-j)));
                 }
                 return result;
             });
         }
-        System.out.println(d3/1000 + "ns");
+        System.out.println(d3 + "ns : O(n^2)");   
     }
 }

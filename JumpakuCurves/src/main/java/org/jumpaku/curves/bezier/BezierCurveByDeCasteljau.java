@@ -6,7 +6,6 @@
 package org.jumpaku.curves.bezier;
 
 import java.util.ArrayList;
-import org.jumpaku.curves.bezier.AbstractBezierCurve;
 import java.util.Arrays;
 import java.util.List;
 import org.jumpaku.curves.utils.GeomUtils;
@@ -16,6 +15,7 @@ import org.apache.commons.math3.geometry.Vector;
 /**
  *
  * @author Jumpaku
+ * @param <S>
  * @param <V>
  */
 public class BezierCurveByDeCasteljau<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {

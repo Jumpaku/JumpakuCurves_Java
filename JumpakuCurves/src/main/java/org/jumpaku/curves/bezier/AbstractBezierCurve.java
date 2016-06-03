@@ -35,17 +35,18 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     public AbstractBezierCurve(List<V> cp) {
         if(cp.isEmpty())
             throw new IllegalArgumentException("Control points is empty.");
+        
         if(cp.stream().anyMatch(p -> p == null))
             throw new IllegalArgumentException("Control points contains null.");
 
         controlPoints = Collections.unmodifiableList(new ArrayList<>(cp));
     }
     
-    public AbstractBezierCurve(V v, V... cp) {
+    public AbstractBezierCurve(V... cp) {
         this(Arrays.asList(cp));
     }
     
-    public static <S extends Space, V extends Vector<S>> List<List<V>> createDividedControlPoints(Object[] cp, Double t){
+    private static <S extends Space, V extends Vector<S>> List<List<V>> createDividedControlPoints(Object[] cp, Double t){
         if(!DOMAIN.isIn(t))
             throw new IllegalArgumentException("The parameter t isout of domain [0,1], t = " + t);
         
@@ -81,14 +82,71 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
         return Collections.unmodifiableList(result);
     }
     
-    private static <S extends Space, V extends Vector<S>> BezierCurve<S, V> elevate(List<V> originalControlPoints, Function<Double, V> evaluator){
-        final List<V> elevatedControlPoints = createElevatedControlPonts(originalControlPoints);
-        return new AbstractBezierCurve<S, V>(elevatedControlPoints){
-            @Override
-            public V evaluate(Double t) {
-                return evaluator.apply(t);
+    private static <S extends Space, V extends Vector<S>> List<V> createReducedControlPonts(List<? extends V> originalcps){
+        Integer n = originalcps.size() - 1;
+        Integer m = n + 1;
+        if(m < 3)
+            throw new IllegalArgumentException("degree is too small");
+            
+        Object[] cps = new Object[n];
+        if(m%2==0){
+            Integer r = (m-2)/2;
+            cps[0] = originalcps.get(0);
+            for(int i = 1; i <= r-1; ++i){
+                Double a = i/(m-1.0);
+                cps[i] = originalcps.get(i).add(-a, (Vector<S>)cps[i-1]).scalarMultiply(1.0/(1.0-a));
             }
-        };
+            cps[n-1] = originalcps.get(n);
+            for(int i = m-3; i >= r+1; --i){
+                Double a = (i+1.0)/(m-1.0);
+                cps[i] = originalcps.get(i+1).add(-1.0+a, (Vector<S>)cps[i+1]).scalarMultiply(1.0/a);
+            }
+            Double al = r/(m-1.0);
+            Double ar = (r+1)/(m-1.0);
+            Vector<S> left = originalcps.get(r).add(-al, (Vector<S>)cps[r-1]).scalarMultiply(1.0/(1.0-al));
+            Vector<S> right = originalcps.get(r+1).add(-1.0+ar, (Vector<S>)cps[r+1]).scalarMultiply(1.0/ar);
+            cps[r] = left.add(right).scalarMultiply(0.5);
+        }
+        else{
+            cps[0] = originalcps.get(0);
+            Integer r = (m-3)/2;
+            for(int i = 1; i <= r; ++i){
+                Double a = i/(m-1.0);
+                cps[i] = originalcps.get(i).add(-a, (Vector<S>)cps[i-1]).scalarMultiply(1.0/(1.0-a));
+            }
+            cps[n-1] = originalcps.get(n);
+            for(int i = m - 3; i >= r+1; --i){
+                Double a = (i+1.0)/(m-1.0);
+                cps[i] = originalcps.get(i+1).add(-1.0+a, (Vector<S>)cps[i+1]).scalarMultiply(1.0/a);
+            }
+        }
+        
+        return Arrays.stream(cps).map(o->(V)o).collect(Collectors.toList());
+    }
+    
+    private static class DegreeElevated<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V>{
+        private final Integer elevated;
+        private final AbstractBezierCurve<S, V> reduced;
+        public DegreeElevated(Integer elevated, List<V> cps, AbstractBezierCurve<S, V> reduced) {
+            super(cps);
+            this.elevated = elevated;
+            this.reduced = reduced;
+        }        
+        
+        @Override
+        public V evaluate(Double t) {
+            return reduced.evaluate(t);
+        }
+        
+        @Override
+        public final BezierCurve<S, V> elevate(){
+            return new DegreeElevated<>(elevated+1, createElevatedControlPonts(getControlPoints()), this);
+        }
+        
+        @Override
+        public BezierCurve<S, V> reduce(){
+            return elevated >= 1 ? reduced : BezierCurve.create(createReducedControlPonts(getControlPoints()));
+        }
     }
     
     private static <S extends Space, V extends Vector<S>> List<BezierCurve<S, V>> divide(Double t, List<V> controlPoints, Function<Double, V> evaluator){
@@ -144,8 +202,13 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     }
 
     @Override
-    public final BezierCurve<S, V> elevate(){
-        return elevate(getControlPoints(), this::evaluate);
+    public BezierCurve<S, V> elevate(){
+        return new DegreeElevated<>(1, createElevatedControlPonts(getControlPoints()), this);
+    }
+    
+    @Override
+    public BezierCurve<S, V> reduce(){
+        return BezierCurve.create(createReducedControlPonts(getControlPoints()));
     }
     
     @Override
@@ -168,12 +231,12 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
         if(!DOMAIN.isIn(t))
             throw new IllegalArgumentException("t must be in [0, 1]");
         Integer n = getDegree();
-        Object[] cp = getControlPoints().toArray();
+        List<V> cp = getControlPoints();
         Object[] combinations = MathUtils.combinations(n-1).toArray();
-        Vector<S> result = (Vector<S>)((Vector<S>)cp[0]).getZero();
+        Vector<S> result = (Vector<S>)cp.get(0).getZero();
         for(int i = 0; i < n; ++i){
-            Vector<S> delta = (Vector<S>)((Vector<S>)cp[i+1]).subtract((Vector<S>)cp[i]).scalarMultiply((Double)combinations[i]*Math.pow(t, i)*Math.pow(1-t, n-1-i));
-            result = (Vector<S>)result.add(delta);
+            Vector<S> delta = (cp.get(i+1).subtract(cp.get(i))).scalarMultiply((Double)combinations[i] * Math.pow(t, i) * Math.pow(1-t, n-1-i));
+            result = result.add(delta);
         }
         return (V)result.scalarMultiply(n);
     }

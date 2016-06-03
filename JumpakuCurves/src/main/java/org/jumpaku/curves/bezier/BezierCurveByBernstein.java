@@ -7,8 +7,6 @@ package org.jumpaku.curves.bezier;
 
 import java.util.Arrays;
 import java.util.List;
-import javaslang.Tuple;
-import javaslang.collection.Stream;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficientDouble;
@@ -20,11 +18,13 @@ import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficie
  * @param <V>
  */
 public class BezierCurveByBernstein<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
-    private final javaslang.collection.List<Double> conbinations;
+    
+    private final javaslang.collection.Array<Double> combinations;
+    
     public BezierCurveByBernstein(List<V> cp) {
         super(cp);
-        final Integer degree = super.getControlPoints().size() - 1;
-        conbinations = javaslang.collection.List.range(0, degree + 1)
+        final Integer degree = cp.size() - 1;
+        combinations = javaslang.collection.Array.rangeClosed(0, degree)
                 .map(i -> binomialCoefficientDouble(degree, i));
     }
     
@@ -33,14 +33,26 @@ public class BezierCurveByBernstein<S extends Space, V extends Vector<S>> extend
     }
     
     @Override
-    public V evaluate(Double t) {
+    public final V evaluate(Double t) {
         if(!getDomain().isIn(t))
             throw new IllegalArgumentException("The parameter t must be in domain [0,1], but t = " + t);
-        double degree = getDegree();
-        return (V) Stream.ofAll(conbinations).zip(javaslang.collection.List.ofAll(getControlPoints())).zipWithIndex()
-                .map(ncmcpi -> ncmcpi.transform((ncmcp, i)-> Tuple.of(ncmcp._1(), ncmcp._2(), i)))
-                .map(ncmcpi -> ncmcpi.transform(
-                        (ncm, cp, i)->cp.scalarMultiply(ncm*Math.pow(t, i)*Math.pow(1-t, degree-i))))
-                .reduce((v1, v2)->v1.add(v2));
+        List<V> cps = getControlPoints();
+        Integer degree = getDegree();
+
+        if(t.compareTo(0.0) == 0)
+            return cps.get(0);
+        
+        if(t.compareTo(1.0) == 0)
+            return cps.get(degree);
+        
+        Double ct = Math.pow(1-t, degree);
+        Vector<S> result = cps.get(0).getZero();
+        
+        for(int i = 0; i <= degree; ++i){
+            result = result.add(cps.get(i).scalarMultiply(combinations.get(i)*ct));
+            ct *= (t / (1 - t));
+        }
+        
+        return (V)result;
     }
 }

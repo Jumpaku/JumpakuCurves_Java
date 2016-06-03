@@ -8,8 +8,6 @@ package org.jumpaku.curves.bezier.threed;
 import java.util.LinkedList;
 import java.util.List;
 import org.jumpaku.curves.bezier.BezierCurve;
-import org.jumpaku.curves.bezier.BezierCurveByBernstein;
-import org.jumpaku.curves.bezier.BezierCurveByDeCasteljau;
 import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.transform.Transform;
 import org.apache.commons.math3.geometry.euclidean.threed.Euclidean3D;
@@ -22,18 +20,15 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
 
     private final BezierCurve<Euclidean3D, Vector3D> curve;
+    
     private BezierCurve3D(BezierCurve<Euclidean3D, Vector3D> curve) {
         this.curve = curve;
     }
     
-    public static BezierCurve3D createBernstein(List<Vector3D> cp){
-        return new BezierCurve3D(new BezierCurveByBernstein<>(cp));
+    public static BezierCurve3D create(List<Vector3D> cp){
+        return new BezierCurve3D(BezierCurve.<Euclidean3D, Vector3D>create(cp));
     }
     
-    public static BezierCurve3D createDeCasteljau(List<Vector3D> cp){
-        return new BezierCurve3D(new BezierCurveByDeCasteljau<>(cp));
-    }
-
     @Override
     public Domain getDomain() {
         return curve.getDomain();
@@ -55,12 +50,17 @@ public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
     }
 
     @Override
+    public BezierCurve<Euclidean3D, Vector3D> reduce() {
+        return new BezierCurve3D(curve.reduce());
+    }
+    
+    @Override
     public List<BezierCurve3D> divide(Double t) {
         return new LinkedList<BezierCurve3D>(){
-                {
-                    add(new BezierCurve3D(curve.divide(t).get(0)));
-                    add(new BezierCurve3D(curve.divide(t).get(1)));
-                }
+            {
+                add(new BezierCurve3D(curve.divide(t).get(0)));
+                add(new BezierCurve3D(curve.divide(t).get(1)));
+            }
         };
     }
 
@@ -83,5 +83,4 @@ public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
     public Vector3D evaluate(Double t) {
         return curve.evaluate(t);
     }
-    
 }
