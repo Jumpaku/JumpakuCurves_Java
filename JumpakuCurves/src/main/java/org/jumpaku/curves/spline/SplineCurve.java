@@ -9,10 +9,12 @@ import java.util.List;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.Curve;
+import org.jumpaku.curves.domain.ClosedDomain;
 import org.jumpaku.curves.domain.Domain;
 
 /**
- *
+ * <p>Spline曲線のインターフェイス Interface of Spline Curve.</p>
+ * 
  * @author Jumpaku
  * @param <S>
  * @param <V>
@@ -23,7 +25,7 @@ public interface SplineCurve<S extends Space, V extends Vector<S>>extends Curve<
      *
      * @return
      */
-    Domain getDomain();
+    ClosedDomain getDomain();
     
     List<V> getControlPoints();
     

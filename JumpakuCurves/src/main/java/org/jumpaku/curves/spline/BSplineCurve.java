@@ -12,7 +12,6 @@ import javaslang.collection.Stream;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.domain.ClosedDomain;
-import org.jumpaku.curves.domain.Domain;
 
 /**
  *
@@ -22,7 +21,7 @@ import org.jumpaku.curves.domain.Domain;
  */
 public class BSplineCurve<S extends Space, V extends Vector<S>> implements SplineCurve<S, V>{
 
-    private final Domain domain;
+    private final ClosedDomain domain;
     private final List<Double> knots;
     private final List<V> controlPoints;
     private final Integer degree;
@@ -55,7 +54,7 @@ public class BSplineCurve<S extends Space, V extends Vector<S>> implements Splin
     }
     
     @Override
-    public Domain getDomain() {
+    public ClosedDomain getDomain() {
         return domain;
     }
 
