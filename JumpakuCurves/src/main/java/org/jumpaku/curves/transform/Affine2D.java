@@ -22,7 +22,7 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * <p>
      * This method concatenates scaling transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Center of scaling is the origin, magnification rate for x-axis and y-axis are given.</p>
+     * Center of scaling is the origin, magnification rates for x-axis and y-axis are given.</p>
      * @param x x-軸方向の拡大率(0であってはいけない) magnification rate for x-axis(not 0)
      * @param y y-軸方向の拡大率(0であってはいけない) magnification rate for y-axis(not 0)
      * @return 拡大縮小変換を追加したアフィン変換 Affine concatenated Scaling
@@ -68,7 +68,7 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * <p>
      * This method concatenates shearing transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Pivot of shearing is the origin, parameter for x-axis and y-axis are given.</p>
+     * Pivot of shearing is the origin, parameters for x-axis and y-axis are given.</p>
      * @param x x-軸方向の剪断パラメータ parameter for x-axis
      * @param y y-軸方向の剪断パラメータ parameter for y-axis
      * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
@@ -101,7 +101,7 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * <p>
      * This method concatenates scaling transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Center of scaling is specified, magnification rate for x-axis and y-axis are given.</p>
+     * Center of scaling is specified, magnification rates for x-axis and y-axis are given.</p>
      * @param center 拡大縮小の中心 center of Scaling
      * @param x x-軸方向の拡大率(0であってはいけない) scaling rate for x-axis(not 0)
      * @param y y-軸方向の拡大率(0であってはいけない) scaling rate for y-axis(not 0)
@@ -120,7 +120,7 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * <p>
      * This method concatenates scaling transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Center of scaling is the origin, magnification rate for x-axis and y-axis are given.</p>
+     * Center of scaling is the origin, magnification rates for x-axis and y-axis are given.</p>
      * @param center 拡大縮小の中心 center of scaling
      * @param scale 拡大率(0であってはいけない) magnification rate
      * @return 拡大縮小変換を追加したアフィン変換 Affine concatenated Scaling
@@ -222,7 +222,15 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
     }
     
     /**
-     * 
+     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
+     * <p>
+     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される剪断変換(シャーリング)は指定された点を軸にして, x軸方向, y軸方向にそれぞれ指定されたパラメータで変換します.</p>
+     * <p>
+     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Pivot of shearing and parameters for x-axis and y-axis are given.</p>
      * @param pivot
      * @param x x軸方向のパラメータ parameter for x-axis
      * @param y y軸方向のパラメータ parameter for y-axis
@@ -233,8 +241,16 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
     }
     
     /**
-     * 
-     * @param pivot
+     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
+     * <p>
+     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される剪断変換(シャーリング)は指定された点を軸にして, x軸方向の指定されたパラメータで変換します.</p>
+     * <p>
+     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Pivot of shearing and parameter for x-axis are given.</p>
+     * @param pivot 剪断変換(シャーリング)の軸 pivot of shearing
      * @param x x軸方向のパラメータ parameter for x-axis
      * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
      */
@@ -243,8 +259,16 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
     }
     
     /**
-     * 
-     * @param pivot
+     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
+     * <p>
+     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される剪断変換(シャーリング)は指定された点を軸にして, y軸方向の指定されたパラメータで変換します.</p>
+     * <p>
+     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Pivot of shearing and parameter for y-axis are given.</p>
+     * @param pivot 剪断変換(シャーリング)の軸 pivot of shearing
      * @param y y軸方向のパラメータ parameter for y-axis
      * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
      */
@@ -253,6 +277,7 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
     }
     
     /**
+     * <p>スクイーズ変換 Squeezing.</p>
      * 
      * @param k
      * @return 
