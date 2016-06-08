@@ -16,14 +16,14 @@ import org.apache.commons.math3.geometry.Vector;
  *
  * @author Jumpaku
  * @param <S> 座標空間の種類  Type of the space. 
- * @param <V> {@link BezierCurveByDeCasteljau#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link BezierCurveByDeCasteljau#evaluate(java.lang.Double)}.
+ * @param <V> {@link BezierCurveDeCasteljau#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link BezierCurveDeCasteljau#evaluate(java.lang.Double)}.
  */
-public class BezierCurveByDeCasteljau<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
-    public BezierCurveByDeCasteljau(List<V> cp) {
+public class BezierCurveDeCasteljau<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
+    public BezierCurveDeCasteljau(List<V> cp) {
         super(cp);
     }
     
-    public BezierCurveByDeCasteljau(V... cp) {
+    public BezierCurveDeCasteljau(V... cp) {
         this(Arrays.asList(cp));
     }
     

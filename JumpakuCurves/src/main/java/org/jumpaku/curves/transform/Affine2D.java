@@ -278,26 +278,47 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
     
     /**
      * <p>スクイーズ変換 Squeezing.</p>
-     * 
-     * @param k
-     * @return 
+     * <p>
+     * このAffine変換に更にスクイーズ変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加されるスクイーズ変換は原点を中心にして, 指定されたパラメータkに対してx軸方向にk倍, y軸方向に1/k倍に拡大縮小します.</p>
+     * <p>
+     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Center of squeezeing is origin.<br>
+     * Let k be given parameter, squeezing scales k times for x-axis and 1/k times for y-axis.</p>
+     * @param k パラメータ parameter
+     * @return スクイーズ変換を追加したアフィン変換 Affine concatenated squeezing
      */
     default Affine2D squeeze(Double k){
         return scale(k, 1/k);
     }
     
     /**
-     * 
-     * @param center
-     * @param k
-     * @return 
+     * <p>スクイーズ変換 Squeezing.</p>
+     * <p>
+     * このAffine変換に更にスクイーズ変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加されるスクイーズ変換は原点を中心にして, 指定されたパラメータkに対してx軸方向にk倍, y軸方向に1/k倍に拡大縮小します.</p>
+     * <p>
+     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Center of squeezeing is specified.<br>
+     * Let k be given parameter, squeezing scales k times for x-axis and 1/k times for y-axis.</p>
+     * @param center 中心 center
+     * @param k パラメータ parameter
+     * @return スクイーズ変換を追加したアフィン変換 Affine concatenated squeezing
      */
     default Affine2D squeezeAt(Vector2D center, Double k){
         return translate(center.negate()).squeeze(k).translate(center);
     }
     
     /**
-     * 
+     * <p>鏡映変換 Refrection</p>
+     * <p>
+     * このAffine変換に更にスクイーズ変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * </p>
      * @return 
      */
     default Affine2D refrectOrigin(){

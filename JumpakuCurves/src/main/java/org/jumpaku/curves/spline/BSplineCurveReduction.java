@@ -5,74 +5,23 @@
  */
 package org.jumpaku.curves.spline;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javaslang.collection.Stream;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
-import org.jumpaku.curves.domain.ClosedDomain;
 
 /**
  *
- * @author ito tomohiko
+ * @author jumpaku
  * @param <S>
  * @param <V>
  */
-public class BSplineCurve<S extends Space, V extends Vector<S>> implements SplineCurve<S, V>{
+public class BSplineCurveReduction<S extends Space, V extends Vector<S>> extends AbstractBSplineCurve<S, V>{
 
-    private final ClosedDomain domain;
-    private final List<Double> knots;
-    private final List<V> controlPoints;
-    private final Integer degree;
-
-    public BSplineCurve(List<Double> knots, List<V> controlPoints, Integer degree) {
-        if(knots.stream().anyMatch(k -> k == null))
-            throw new IllegalArgumentException("knots contain null");
-        
-        if(controlPoints.stream().anyMatch(cp -> cp == null))
-            throw new IllegalArgumentException("control points contain null");
-        
-        for(int i = 0; i < knots.size()-1; ++i){
-            if(knots.get(i) > knots.get(i+1))
-                throw new IllegalArgumentException("knots must be in ascending order, but knot[" + i +  "] > knot[" + (i+1)+ "]");
-        }
-        
-        if(controlPoints.isEmpty())
-            throw new IllegalArgumentException("control points must be not empty");
-        
-        if(degree < 0)
-            throw new IllegalArgumentException("degree must be positive or 0");
-        
-        if(controlPoints.size() - 1 != knots.size() - degree - 2)
-            throw new IllegalArgumentException("control points and knots are wrong");
-        
-        this.knots = new ArrayList<>(knots);
-        this.controlPoints = new ArrayList<>(controlPoints);
-        this.degree = degree;
-        this.domain = new ClosedDomain(knots.get(degree-1), knots.get(knots.size()-degree-1));  
+    public BSplineCurveReduction(List<Double> knots, List<V> controlPoints, Integer degree) {
+        super(knots, controlPoints, degree);
     }
     
-    @Override
-    public ClosedDomain getDomain() {
-        return domain;
-    }
-
-    @Override
-    public List<V> getControlPoints() {
-        return Collections.unmodifiableList(controlPoints);
-    }
-
-    @Override
-    public List<Double> getKnots() {
-        return Collections.unmodifiableList(knots);
-    }
-
-    @Override
-    public Integer getDegree() {
-        return degree;
-    }
-
     @Override
     public V evaluate(Double t) {
         if(!getDomain().isIn(t))

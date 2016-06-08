@@ -81,7 +81,7 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
                     }
                 };
             default:
-                return new BezierCurveByBernstein<>(controlPoints);
+                return new BezierCurveBernstein<>(controlPoints);
         }
     }
     

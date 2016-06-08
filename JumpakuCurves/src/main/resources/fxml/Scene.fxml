@@ -15,6 +15,7 @@
         <items>
             <Button mnemonicParsing="false" onAction="#onSaveGraph" text="SaveGraph" />
             <Button mnemonicParsing="false" onAction="#onClear" text="Clear" />
+            <Button mnemonicParsing="false" onAction="#onCompute" text="Compute" />
             <Button mnemonicParsing="false" onAction="#onElevate" text="Elevate" />
             <Button mnemonicParsing="false" onAction="#onReduce" text="Reduce" />
         </items>

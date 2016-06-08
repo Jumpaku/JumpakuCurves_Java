@@ -19,8 +19,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javaslang.collection.Stream;
 import javax.imageio.ImageIO;
+import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.jumpaku.curves.bezier.twod.BezierCurve2D;
+import org.jumpaku.curves.spline.BSplineCurveRecursive;
+import org.jumpaku.curves.spline.SplineCurve;
 
 public class FXMLController implements Initializable {
     
@@ -28,25 +31,32 @@ public class FXMLController implements Initializable {
     private Canvas canvas;
     
     private List<Vector2D> controlPoints = new LinkedList<>();
-    private BezierCurve2D curve = null;
+    private SplineCurve<Euclidean2D, Vector2D> curve = null;
     
     @FXML
     private synchronized void onClick(MouseEvent e){
         controlPoints.add(new Vector2D(e.getX(), e.getY()));
-        curve = BezierCurve2D.create(controlPoints);
+        //curve = BezierCurve2D.create(controlPoints);
+        
+        render();
+    }
+    
+    @FXML
+    private synchronized void onCompute(ActionEvent e){
+        curve = new BSplineCurveRecursive<>(Stream.rangeClosed(0, controlPoints.size() + 3).map(i -> Double.valueOf(i)).toJavaList(), controlPoints, 3);
         render();
     }
     
     @FXML
     private synchronized void onElevate(ActionEvent e){
-        curve = curve.elevate();
+        //curve = curve.elevate();
         controlPoints = curve.getControlPoints();
         render();
     }
     
     @FXML
     private synchronized void onReduce(ActionEvent e){
-        curve = curve.reduce();
+        //curve = curve.reduce();
         controlPoints = curve.getControlPoints();
         render();
     }
@@ -81,15 +91,15 @@ public class FXMLController implements Initializable {
         if(curve != null){
             renderCurve(context, curve, Color.CADETBLUE);
         }
-        renderPoints(context, curve.getControlPoints(), Color.GOLD);
-        renderPolyline(context, curve.getControlPoints(), Color.GOLD, false);
+        renderPoints(context, controlPoints, Color.GOLD);
+        renderPolyline(context, controlPoints, Color.GOLD, false);
     }
     
-    private static void renderCurve(GraphicsContext context, BezierCurve2D curve, Paint color){
+    private static void renderCurve(GraphicsContext context, SplineCurve<Euclidean2D, Vector2D> curve, Paint color){
         context.setStroke(color);
         final Double d = Math.pow(2, -5);
-        List<Vector2D> points = Stream.gen(0.0, t -> t + d)
-                .takeWhile(t -> t <= 1)
+        List<Vector2D> points = Stream.gen(curve.getDomain().getFrom(), t -> t + d)
+                .takeWhile(t -> t < curve.getDomain().getTo())
                 .map(curve::evaluate)
                 .toJavaList();
         renderPolyline(context, points, color, Boolean.FALSE);

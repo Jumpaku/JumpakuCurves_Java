@@ -14,13 +14,13 @@ import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficie
  *
  * @author Jumpaku
  * @param <S> 座標空間の種類  Type of the space. 
- * @param <V> {@link BezierCurveByBernstein#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link BezierCurveByBernstein#evaluate(java.lang.Double)}.
+ * @param <V> {@link BezierCurveBernstein#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link BezierCurveBernstein#evaluate(java.lang.Double)}.
  */
-public class BezierCurveByBernstein<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
+public class BezierCurveBernstein<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
     
     private final javaslang.collection.Array<Double> combinations;
     
-    public BezierCurveByBernstein(List<V> cp) {
+    public BezierCurveBernstein(List<V> cp) {
         super(cp);
         final Integer degree = cp.size() - 1;
         combinations = javaslang.collection.Array.rangeClosed(0, degree)
