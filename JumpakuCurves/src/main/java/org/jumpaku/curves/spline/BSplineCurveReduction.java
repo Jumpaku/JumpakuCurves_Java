@@ -5,7 +5,7 @@
  */
 package org.jumpaku.curves.spline;
 
-import java.util.List;
+import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
@@ -18,7 +18,7 @@ import org.apache.commons.math3.geometry.Vector;
  */
 public final class BSplineCurveReduction<S extends Space, V extends Vector<S>> extends AbstractBSplineCurve<S, V>{
 
-    public BSplineCurveReduction(List<Double> knots, List<V> controlPoints, Integer degree) {
+    public BSplineCurveReduction(Array<Double> knots, Array<V> controlPoints, Integer degree) {
         super(knots, controlPoints, degree);
     }
     
@@ -36,7 +36,7 @@ public final class BSplineCurveReduction<S extends Space, V extends Vector<S>> e
         return c.compareTo(d) == 0 ? 0 : (a-b)/(c-d);
     }
     
-    private static Double bSplineBasis(Integer j, Integer n, List<Double> knots, Double t){
+    private static Double bSplineBasis(Integer j, Integer n, Array<Double> knots, Double t){
         if(n == 0)
             return (knots.get(j).compareTo(t) <= 0 && knots.get(j+1).compareTo(t) > 0) ? 1.0 : 0.0;
         

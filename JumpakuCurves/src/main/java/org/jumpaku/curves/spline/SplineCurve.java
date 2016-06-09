@@ -5,7 +5,7 @@
  */
 package org.jumpaku.curves.spline;
 
-import java.util.List;
+import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.Curve;
@@ -30,13 +30,13 @@ public interface SplineCurve<S extends Space, V extends Vector<S>>extends Curve<
      * 
      * @return 
      */
-    List<V> getControlPoints();
+    Array<V> getControlPoints();
     
     /**
      * 
      * @return 
      */
-    List<Double> getKnots();
+    Array<Double> getKnots();
     
     /**
      * 

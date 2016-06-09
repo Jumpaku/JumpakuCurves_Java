@@ -5,11 +5,9 @@
  */
 package org.jumpaku.curves.spline;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
-import javaslang.collection.Stream;
+import javaslang.collection.List;
+import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.domain.ClosedDomain;
@@ -23,15 +21,15 @@ import org.jumpaku.curves.domain.ClosedDomain;
 public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>> implements SplineCurve<S, V> {
         
     private final ClosedDomain domain;
-    private final List<Double> knots;
-    private final List<V> controlPoints;
+    private final Array<Double> knots;
+    private final Array<V> controlPoints;
     private final Integer degree;
 
-    public AbstractBSplineCurve(List<Double> knots, List<V> controlPoints, Integer degree) {
-        if(knots.stream().anyMatch(k -> k == null))
+    public AbstractBSplineCurve(Array<Double> knots, Array<V> controlPoints, Integer degree) {
+        if(knots.exists(k -> k == null))
             throw new IllegalArgumentException("knots contain null");
         
-        if(controlPoints.stream().anyMatch(cp -> cp == null))
+        if(controlPoints.exists(cp -> cp == null))
             throw new IllegalArgumentException("control points contain null");
         
         for(int i = 0; i < knots.size()-1; ++i){
@@ -48,8 +46,8 @@ public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>>
         if(controlPoints.size() != knots.size() - degree - 1)
             throw new IllegalArgumentException("control points and knots are wrong");
         
-        this.knots = Collections.unmodifiableList(new ArrayList<>(knots));
-        this.controlPoints = Collections.unmodifiableList(new ArrayList<>(controlPoints));
+        this.knots = knots;
+        this.controlPoints = controlPoints;
         this.degree = degree;
         this.domain = new ClosedDomain(knots.get(degree), knots.get(knots.size() - degree - 1));  
     }
@@ -60,12 +58,12 @@ public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>>
     }
 
     @Override
-    public final List<V> getControlPoints() {
+    public final Array<V> getControlPoints() {
         return controlPoints;
     }
 
     @Override
-    public final List<Double> getKnots() {
+    public final Array<Double> getKnots() {
         return knots;
     }
 
@@ -79,28 +77,22 @@ public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>>
         if(!getDomain().isIn(u))
             throw new IllegalArgumentException("New knot to add is out of domain.");
         
-        List<Double> nknots = new LinkedList<>(getKnots());
-        Integer k = Stream.ofAll(nknots).lastIndexWhere(knot -> knot <= u);
-
-        Integer p = getDegree();
+        final Array<Double> oknots = getKnots();
+        final Integer k = oknots.lastIndexWhere(knot -> knot <= u);
+        final Integer n = getDegree();
         
-        List<V> ocps = getControlPoints();
-        List<V> tmp = new LinkedList<>();
-        for(int i = k-p+1; i <= k; ++i){
-            Double a = (u - nknots.get(i)) / (nknots.get(i+p) - nknots.get(i));
-            tmp.add((V)ocps.get(i - 1).scalarMultiply(1.0 - a).add(ocps.get(i).scalarMultiply(a)));
+        final List<V> ocps = getControlPoints().toList();
+        List<V> tmp = List.empty();
+        for(int i = k; i >= k-n+1; --i){
+            Double a = (u - oknots.get(i)) / (oknots.get(i+n) - oknots.get(i));
+            tmp = tmp.prepend((V)ocps.get(i - 1).scalarMultiply(1.0 - a).add(ocps.get(i).scalarMultiply(a)));
         }
-
-        List<V> ncps = new LinkedList<>();  
-        ncps.addAll(ocps.subList(0, k-p + 1));
-        ncps.addAll(tmp);
-        ncps.addAll(ocps.subList(k, ocps.size()));
-
-        nknots.add(u);
-        Collections.sort(nknots);
+        
+        Array<V> ncps = Array.ofAll(ocps.subSequence(k, ocps.size()).prependAll(tmp).prependAll(ocps.subSequence(0, k-n + 1)));
+        Array<Double> nknots = oknots.insert(k + 1, u);
         
         final SplineCurve<S, V> original = this;        
-        return new AbstractBSplineCurve<S, V>(nknots, ncps, p) {
+        return new AbstractBSplineCurve<S, V>(nknots, ncps, n) {
             @Override
             public V evaluate(Double t) {
                 return original.evaluate(t);

@@ -5,9 +5,7 @@
  */
 package org.jumpaku.curves.bezier.threed;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import javaslang.collection.Array;
 import org.jumpaku.curves.bezier.BezierCurve;
 import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.transform.Transform;
@@ -26,14 +24,12 @@ public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
         this.curve = curve;
     }
     
-    public static BezierCurve3D create(List<Vector3D> cp){
+    public static BezierCurve3D create(Array<Vector3D> cp){
         return new BezierCurve3D(BezierCurve.<Euclidean3D, Vector3D>create(cp));
     }
     
-    public static BezierCurve3D create(Vector3D cp, Vector3D... cps){
-        LinkedList<Vector3D> tmp = new LinkedList<>(Arrays.asList(cps));
-        tmp.addFirst(cp);
-        return BezierCurve3D.create(tmp);
+    public static BezierCurve3D create(Vector3D... cps){
+        return BezierCurve3D.create(Array.of(cps));
     }
     
     @Override
@@ -42,7 +38,7 @@ public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
     }
 
     @Override
-    public final List<Vector3D> getControlPoints() {
+    public final Array<Vector3D> getControlPoints() {
         return curve.getControlPoints();
     }
 
@@ -62,13 +58,9 @@ public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
     }
     
     @Override
-    public final List<BezierCurve3D> divide(Double t) {
-        return new LinkedList<BezierCurve3D>(){
-            {
-                add(new BezierCurve3D(curve.divide(t).get(0)));
-                add(new BezierCurve3D(curve.divide(t).get(1)));
-            }
-        };
+    public final Array<BezierCurve3D> divide(Double t) {
+        return Array.of(new BezierCurve3D(curve.divide(t).get(0)),
+                new BezierCurve3D(curve.divide(t).get(1)));
     }
 
     @Override
