@@ -5,11 +5,12 @@
  */
 package org.jumpaku.curves.spline;
 
-import java.util.List;
+import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.Curve;
-import org.jumpaku.curves.domain.ClosedDomain;
+import org.jumpaku.curves.domain.Closed;
+import org.jumpaku.curves.domain.Interval;
 
 /**
  * <p>Spline曲線のインターフェイス Interface of Spline Curve.</p>
@@ -24,16 +25,38 @@ public interface SplineCurve<S extends Space, V extends Vector<S>>extends Curve<
      *
      * @return
      */
-    ClosedDomain getDomain();
+    Interval getDomain();
     
-    List<V> getControlPoints();
+    /**
+     * 
+     * @return 
+     */
+    Array<V> getControlPoints();
     
-    List<Double> getKnots();
+    /**
+     * 
+     * @return 
+     */
+    Array<Double> getKnots();
     
+    /**
+     * 
+     * @return 
+     */
     Integer getDegree();
     
+    /**
+     * 
+     * @param u
+     * @return 
+     */
     SplineCurve<S, V> insertKnot(Double u);
     
+    /**
+     * 
+     * @param t
+     * @return 
+     */
     @Override
     V evaluate(Double t);
 }

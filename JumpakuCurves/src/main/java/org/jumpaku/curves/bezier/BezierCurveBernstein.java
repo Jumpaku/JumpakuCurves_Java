@@ -5,7 +5,7 @@
  */
 package org.jumpaku.curves.bezier;
 
-import java.util.List;
+import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficientDouble;
@@ -18,9 +18,9 @@ import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficie
  */
 public class BezierCurveBernstein<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
     
-    private final javaslang.collection.Array<Double> combinations;
+    private final Array<Double> combinations;
     
-    public BezierCurveBernstein(List<V> cp) {
+    public BezierCurveBernstein(Array<V> cp) {
         super(cp);
         final Integer degree = cp.size() - 1;
         combinations = javaslang.collection.Array.rangeClosed(0, degree)
@@ -32,7 +32,7 @@ public class BezierCurveBernstein<S extends Space, V extends Vector<S>> extends 
         if(!getDomain().isIn(t))
             throw new IllegalArgumentException("Parameter t out of domain [0,1]");
         
-        List<V> cps = getControlPoints();
+        Array<V> cps = getControlPoints();
         Integer degree = getDegree();
 
         if(t.compareTo(0.0) == 0){

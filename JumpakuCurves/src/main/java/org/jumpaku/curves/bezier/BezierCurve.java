@@ -6,11 +6,12 @@
 package org.jumpaku.curves.bezier;
 
 import org.jumpaku.curves.domain.Domain;
-import java.util.List;
+import javaslang.collection.Array;
 import org.jumpaku.curves.Curve;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.transform.Transform;
 import org.apache.commons.math3.geometry.Space;
+import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.utils.GeomUtils;
 
 /**
@@ -38,14 +39,14 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
      * @param controlPoints 制御点リスト
      * @return 引数の制御点リストで定義されるBezier曲線. Bezier curve defined given control points.
      */
-    public static <S extends Space, V extends Vector<S>> BezierCurve<S, V> create(List<V> controlPoints){
+    public static <S extends Space, V extends Vector<S>> BezierCurve<S, V> create(Array<V> controlPoints){
         if(controlPoints == null)
             throw new IllegalArgumentException("control points are null");
         
         if(controlPoints.isEmpty())
             throw new IllegalArgumentException("control points are empty");
         
-        if(controlPoints.stream().anyMatch(p -> p == null))
+        if(controlPoints.exists(p -> p == null))
             throw new IllegalArgumentException("control points contain null");
         
         switch (controlPoints.size()) {
@@ -60,7 +61,7 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
                 return new AbstractBezierCurve<S, V>(controlPoints) {
                     @Override
                     public V evaluate(Double t) {
-                        List<V> cp = getControlPoints();
+                        Array<V> cp = getControlPoints();
                         return GeomUtils.internallyDivide(t, cp.get(0), cp.get(1));
                     }
                 };
@@ -68,7 +69,7 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
                 return new AbstractBezierCurve<S, V>(controlPoints) {
                     @Override
                     public V evaluate(Double t) {
-                        List<V> cp = getControlPoints();
+                        Array<V> cp = getControlPoints();
                         return (V) cp.get(0).scalarMultiply((1-t)*(1-t)).add(2*t*(1-t), cp.get(1)).add(t*t, cp.get(2));
                     }
                 };
@@ -76,7 +77,7 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
                 return new AbstractBezierCurve<S, V>(controlPoints) {
                     @Override
                     public V evaluate(Double t) {
-                        List<V> cp = getControlPoints();
+                        Array<V> cp = getControlPoints();
                         return (V) cp.get(0).scalarMultiply((1-t)*(1-t)*(1-t)).add(3*t*(1-t)*(1-t), cp.get(1)).add(3*t*t*(1-t), cp.get(2)).add(t*t*t, cp.get(3));
                     }
                 };
@@ -89,13 +90,13 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
      * 定義域を取得する Returns domain
      * @return 定義域 domain
      */
-    Domain getDomain();
+    Interval getDomain();
     
     /**
      * 不変な制御点リストを返します Returns unmodifiable list of control points.
      * @return 制御点リスト list of control points
      */
-    List<V> getControlPoints();
+    Array<V> getControlPoints();
     
     /**
      * 次数を取得する Returns degree.
@@ -141,7 +142,7 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
      * @param t 分割地点のパラメータ where curve is divided
      * @return 分割された2曲線を要素とするリスト list contains 2 divided curves
      */
-    List<? extends BezierCurve<S, V>> divide(Double t);
+    Array<? extends BezierCurve<S, V>> divide(Double t);
     
     /**
      * 指定された変換を適用したBezier曲線を返す Creates Bezier Curve applied specified transfomation.

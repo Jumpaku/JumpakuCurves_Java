@@ -5,9 +5,7 @@
  */
 package org.jumpaku.curves.bezier;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import javaslang.collection.Array;
 import org.jumpaku.curves.utils.GeomUtils;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
@@ -19,12 +17,12 @@ import org.apache.commons.math3.geometry.Vector;
  * @param <V> {@link BezierCurveDeCasteljau#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link BezierCurveDeCasteljau#evaluate(java.lang.Double)}.
  */
 public class BezierCurveDeCasteljau<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
-    public BezierCurveDeCasteljau(List<V> cp) {
+    public BezierCurveDeCasteljau(Array<V> cp) {
         super(cp);
     }
     
     public BezierCurveDeCasteljau(V... cp) {
-        this(Arrays.asList(cp));
+        this(Array.of(cp));
     }
     
     @Override
@@ -32,12 +30,12 @@ public class BezierCurveDeCasteljau<S extends Space, V extends Vector<S>> extend
         if(!getDomain().isIn(t))
             throw new IllegalArgumentException("t must be in domain [0,1], but t = " + t);
         
-        List<V> cp = new ArrayList<>(getControlPoints());
+        Object[] cp = getControlPoints().toJavaArray();
         for(int n = getDegree(); n > 0; --n){
             for(int i = 0; i < n; ++i){
-                cp.set(i, (V)GeomUtils.internallyDivide(t, cp.get(i), cp.get(i+1)));
+                cp[i] = (V)GeomUtils.internallyDivide(t, (V)cp[i], (V)cp[i+1]);
             }
         }
-        return (V)cp.get(0);
+        return (V)cp[0];
     }
 }

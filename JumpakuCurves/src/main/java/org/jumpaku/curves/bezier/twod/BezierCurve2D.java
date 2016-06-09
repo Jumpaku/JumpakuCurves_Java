@@ -5,15 +5,13 @@
  */
 package org.jumpaku.curves.bezier.twod;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import javaslang.collection.Array;
 import org.jumpaku.curves.bezier.BezierCurve;
-import org.jumpaku.curves.bezier.BezierCurveDeCasteljau;
 import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.transform.Transform;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.jumpaku.curves.domain.Interval;
 
 /**
  *
@@ -27,23 +25,21 @@ public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
         this.curve = curve;
     }
     
-    public static BezierCurve2D create(List<Vector2D> cp){
+    public static BezierCurve2D create(Array<Vector2D> cp){
         return new BezierCurve2D(BezierCurve.create(cp));
     }
     
-    public static BezierCurve2D create(Vector2D cp, Vector2D... cps){
-        LinkedList<Vector2D> tmp = new LinkedList<>(Arrays.asList(cps));
-        tmp.addFirst(cp);
-        return BezierCurve2D.create(tmp);
+    public static BezierCurve2D create(Vector2D... cps){
+        return BezierCurve2D.create(Array.of(cps));
     }
     
     @Override
-    public final Domain getDomain() {
+    public final Interval getDomain() {
         return curve.getDomain();
     }
 
     @Override
-    public final List<Vector2D> getControlPoints() {
+    public final Array<Vector2D> getControlPoints() {
         return curve.getControlPoints();
     }
 
@@ -63,13 +59,8 @@ public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
     }
     
     @Override
-    public final List<BezierCurve2D> divide(Double t) {
-        return new LinkedList<BezierCurve2D>(){
-            {
-                add(new BezierCurve2D(curve.divide(t).get(0)));
-                add(new BezierCurve2D(curve.divide(t).get(1)));
-            }
-        };
+    public final Array<BezierCurve2D> divide(Double t) {
+        return Array.of(new BezierCurve2D(curve.divide(t).get(0)), new BezierCurve2D(curve.divide(t).get(1)));
     }
 
     @Override
