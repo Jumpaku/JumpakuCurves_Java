@@ -316,57 +316,85 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
     /**
      * <p>鏡映変換 Refrection</p>
      * <p>
-     * このAffine変換に更にスクイーズ変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このAffine変換に更に鏡映変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
      * このオブジェクト自体は変更されません.<br>
-     * </p>
-     * @return 
+     * 追加される鏡映変換は原点を中心に点対称に変換します.</p>
+     * <p>
+     * This method concatenates refrection transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * This refrection is point-symmetrical transformation about the origin.</p>
+     * @return 鏡映変換を追加したアフィン変換 Affine concatenated refrection
      */
     default Affine2D refrectOrigin(){
         return scale(-1.0);
     }
     
     /**
-     * 
-     * @param center
-     * @return 
+     * <p>鏡映変換 Refrection</p>
+     * <p>
+     * このAffine変換に更に鏡映変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される鏡映変換は指定された点を中心に点対称に変換します.</p>
+     * <p>
+     * This method concatenates refrection transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * This refrection is point-symmetrical transformation about specified center.</p>
+     * @param center 点対称の中心 center of refrection
+     * @return 鏡映変換を追加したアフィン変換 Affine concatenated refrection
      */
     default Affine2D refrectAt(Vector2D center){
         return scaleAt(center, -1.0);
     }
     
     /**
-     * 
-     * @return 
+     * <p>鏡映変換 Refrection</p>
+     * <p>
+     * このAffine変換に更に鏡映変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される鏡映変換はx軸で線対称に変換します.</p>
+     * <p>
+     * This method concatenates refrection transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * This refrection is line-symmetrical transformation about x-axis.</p>
+     * @return 鏡映変換を追加したアフィン変換 Affine concatenated refrection
      */
     default Affine2D refrectXAxis(){
         return scale(1.0, -1.0);
     }
     
     /**
-     * 
-     * @return 
+     * <p>鏡映変換 Refrection</p>
+     * <p>
+     * このAffine変換に更に鏡映変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される鏡映変換は指定された点を中心に点対称に変換します.</p>
+     * <p>
+     * This method concatenates refrection transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * This refrection is line-symmetrical transformation about y-axis.</p>
+     * @return 鏡映変換を追加したアフィン変換 Affine concatenated refrection
      */
     default Affine2D refrectYAxis(){
         return scale(-1.0, 1.0);
     }
     
     /**
-     * 逆変換 Inversion
-     * @return 
+     * <p>逆変換 Inversion.</p>
+     * @return 元の変換の逆変換 Inverted affine
      */
     Affine2D invert();
     
     /**
-     * 
-     * @param t
-     * @return 
+     * <p>合成 concatenation.</p>
+     * @param a 追加するアフィン変換 Affine to be added
+     * @return 合成後のアフィン変換 Affine concatenated a
      */
-    Affine2D concatenate(Affine2D t);
+    Affine2D concatenate(Affine2D a);
     
     /**
-     * ベクトルを変換します Apply transform to vector.
-     * @param v
-     * @return 
+     * <p>ベクトルの変換 Apply transform to a vector.</p>
+     * @param v 変換されるベクトル vector to be transformed
+     * @return 変換されたベクトル transformed vector 
      */
     @Override
     Vector2D apply(Vector2D v);

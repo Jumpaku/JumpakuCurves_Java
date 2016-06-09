@@ -17,9 +17,9 @@ import org.apache.commons.math3.geometry.Vector;
  * @param <S>
  * @param <V>
  */
-public class BSplineCurveRecursive<S extends Space, V extends Vector<S>> extends AbstractBSplineCurve<S, V> {
+public final class BSplineCurveDeBoor<S extends Space, V extends Vector<S>> extends AbstractBSplineCurve<S, V> {
     
-    public BSplineCurveRecursive(List<Double> knots, List<V> controlPoints, Integer degree) {
+    public BSplineCurveDeBoor(List<Double> knots, List<V> controlPoints, Integer degree) {
         super(knots, controlPoints, degree);
     }
     

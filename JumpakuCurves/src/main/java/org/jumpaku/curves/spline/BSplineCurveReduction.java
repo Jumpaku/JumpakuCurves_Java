@@ -16,7 +16,7 @@ import org.apache.commons.math3.geometry.Vector;
  * @param <S>
  * @param <V>
  */
-public class BSplineCurveReduction<S extends Space, V extends Vector<S>> extends AbstractBSplineCurve<S, V>{
+public final class BSplineCurveReduction<S extends Space, V extends Vector<S>> extends AbstractBSplineCurve<S, V>{
 
     public BSplineCurveReduction(List<Double> knots, List<V> controlPoints, Integer degree) {
         super(knots, controlPoints, degree);

@@ -53,22 +53,22 @@ public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>>
     }
     
     @Override
-    public ClosedDomain getDomain() {
+    public final ClosedDomain getDomain() {
         return domain;
     }
 
     @Override
-    public List<V> getControlPoints() {
+    public final List<V> getControlPoints() {
         return controlPoints;
     }
 
     @Override
-    public List<Double> getKnots() {
+    public final List<Double> getKnots() {
         return knots;
     }
 
     @Override
-    public Integer getDegree() {
+    public final Integer getDegree() {
         return degree;
     }
 

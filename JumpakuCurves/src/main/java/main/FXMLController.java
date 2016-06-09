@@ -22,7 +22,8 @@ import javax.imageio.ImageIO;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.jumpaku.curves.bezier.twod.BezierCurve2D;
-import org.jumpaku.curves.spline.BSplineCurveRecursive;
+import org.jumpaku.curves.spline.BSplineCurveDeBoor;
+import org.jumpaku.curves.spline.BSplineCurveReduction;
 import org.jumpaku.curves.spline.SplineCurve;
 
 public class FXMLController implements Initializable {
@@ -43,7 +44,7 @@ public class FXMLController implements Initializable {
     
     @FXML
     private synchronized void onCompute(ActionEvent e){
-        curve = new BSplineCurveRecursive<>(Stream.rangeClosed(0, controlPoints.size() + 3).map(i -> Double.valueOf(i)).toJavaList(), controlPoints, 3);
+        curve = new BSplineCurveDeBoor<>(Stream.rangeClosed(0, controlPoints.size() + 3).map(i -> Double.valueOf(i)).toJavaList(), controlPoints, 3);
         render();
     }
     
@@ -102,7 +103,15 @@ public class FXMLController implements Initializable {
                 .takeWhile(t -> t < curve.getDomain().getTo())
                 .map(curve::evaluate)
                 .toJavaList();
+        context.setLineWidth(3);
         renderPolyline(context, points, color, Boolean.FALSE);
+        SplineCurve<Euclidean2D, Vector2D> c = new BSplineCurveReduction<>(curve.getKnots(), curve.getControlPoints(), 3);
+        List<Vector2D> points_ = Stream.gen(c.getDomain().getFrom(), t -> t + d)
+                .takeWhile(t -> t < c.getDomain().getTo())
+                .map(c::evaluate)
+                .toJavaList();
+        context.setLineWidth(1);
+        renderPolyline(context, points_, Color.BEIGE, Boolean.FALSE);
     }
     
     private static void renderPoints(GraphicsContext context, List<Vector2D> points, Paint color){
