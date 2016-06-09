@@ -13,7 +13,7 @@ import java.util.List;
 import javaslang.collection.Array;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.jumpaku.curves.domain.ClosedDomain;
+import org.jumpaku.curves.domain.Closed;
 import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.utils.GeomUtils;
 import org.apache.commons.math3.geometry.Vector;
@@ -35,7 +35,7 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     
     private final Array<V> controlPoints;
     
-    private static final Domain DOMAIN = new ClosedDomain(0.0, 1.0);
+    private static final Closed DOMAIN = new Closed(0.0, 1.0);
     
     public AbstractBezierCurve(Array<V> cp) {
         if(cp.isEmpty())
@@ -191,7 +191,7 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     }
     
     @Override
-    public final Domain getDomain() {
+    public final Closed getDomain() {
         return DOMAIN;
     }
     

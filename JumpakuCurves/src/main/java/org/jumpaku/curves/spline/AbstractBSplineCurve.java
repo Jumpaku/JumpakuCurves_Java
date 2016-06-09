@@ -5,12 +5,12 @@
  */
 package org.jumpaku.curves.spline;
 
-import java.util.LinkedList;
 import javaslang.collection.List;
 import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
-import org.jumpaku.curves.domain.ClosedDomain;
+import org.jumpaku.curves.domain.Closed;
+import org.jumpaku.curves.domain.Interval;
 
 /**
  *
@@ -20,7 +20,7 @@ import org.jumpaku.curves.domain.ClosedDomain;
  */
 public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>> implements SplineCurve<S, V> {
         
-    private final ClosedDomain domain;
+    private final Interval domain;
     private final Array<Double> knots;
     private final Array<V> controlPoints;
     private final Integer degree;
@@ -49,11 +49,11 @@ public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>>
         this.knots = knots;
         this.controlPoints = controlPoints;
         this.degree = degree;
-        this.domain = new ClosedDomain(knots.get(degree), knots.get(knots.size() - degree - 1));  
+        this.domain = new Closed(knots.get(degree), knots.get(knots.size() - degree - 1));  
     }
     
     @Override
-    public final ClosedDomain getDomain() {
+    public Interval getDomain() {
         return domain;
     }
 

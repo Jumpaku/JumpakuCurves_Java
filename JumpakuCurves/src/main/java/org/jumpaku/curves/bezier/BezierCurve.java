@@ -11,6 +11,7 @@ import org.jumpaku.curves.Curve;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.transform.Transform;
 import org.apache.commons.math3.geometry.Space;
+import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.utils.GeomUtils;
 
 /**
@@ -89,7 +90,7 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
      * 定義域を取得する Returns domain
      * @return 定義域 domain
      */
-    Domain getDomain();
+    Interval getDomain();
     
     /**
      * 不変な制御点リストを返します Returns unmodifiable list of control points.

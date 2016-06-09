@@ -34,7 +34,7 @@ public class FXMLController implements Initializable {
     private Canvas canvas;
     
     private List<Vector2D> controlPoints = new LinkedList<>();
-    private BezierCurve<Euclidean2D, Vector2D> curve = null;
+    private SplineCurve<Euclidean2D, Vector2D> curve = null;
     
     @FXML
     private synchronized void onClick(MouseEvent e){
@@ -45,24 +45,24 @@ public class FXMLController implements Initializable {
     
     @FXML
     private synchronized void onCompute(ActionEvent e){
-        curve = BezierCurve2D.create(Array.ofAll(controlPoints));
-        //curve = new BSplineCurveDeBoor<>(Stream.rangeClosed(0, controlPoints.size() + 3).map(i -> Double.valueOf(i)).toArray(), Array.ofAll(controlPoints), 3);
+        //curve = BezierCurve2D.create(Array.ofAll(controlPoints));
+        curve = new BSplineCurveDeBoor<>(Stream.rangeClosed(0, controlPoints.size() + 3).map(i -> Double.valueOf(i)).toArray(), Array.ofAll(controlPoints), 3);
         render();
     }
     
     @FXML
     private synchronized void onElevate(ActionEvent e){
-        curve = curve.elevate();
-        controlPoints = curve.getControlPoints().toJavaList();
-        //curve = curve.insertKnot(new MersenneTwister().nextDouble()*(curve.getDomain().getTo()-curve.getDomain().getFrom()) + curve.getDomain().getFrom());
+        //curve = curve.elevate();
         //controlPoints = curve.getControlPoints().toJavaList();
+        curve = curve.insertKnot(new MersenneTwister().nextDouble()*(curve.getDomain().getTo()-curve.getDomain().getFrom()) + curve.getDomain().getFrom());
+        controlPoints = curve.getControlPoints().toJavaList();
         render();
     }
     
     @FXML
     private synchronized void onReduce(ActionEvent e){
-        curve = curve.reduce();
-        controlPoints = curve.getControlPoints().toJavaList();
+        //curve = curve.reduce();
+        //controlPoints = curve.getControlPoints().toJavaList();
         render();
     }
     
@@ -100,10 +100,11 @@ public class FXMLController implements Initializable {
         renderPolyline(context, controlPoints, Color.GOLD, false);
     }
     
-    private static void renderCurve(GraphicsContext context, BezierCurve<Euclidean2D, Vector2D> curve, Paint color){
+    private static void renderCurve(GraphicsContext context, /*BezierCurve*/SplineCurve<Euclidean2D, Vector2D> curve, Paint color){
         final Double d = Math.pow(2, -5);
-        List<Vector2D> points = Stream.gen(0.0/*curve.getDomain().getFrom()*/, t -> t + d)
-                .takeWhile(t -> t <= 1.0)//curve.getDomain().getTo())
+        List<Vector2D> points = Stream.gen(/*0.0*/curve.getKnots().head(), t -> t + d)
+                .takeWhile(t -> t <= curve.getKnots().last())
+                .filter(t -> curve.getDomain().isIn(t))
                 .map(curve::evaluate)
                 .toJavaList();
         renderPolyline(context, points, color, Boolean.FALSE);

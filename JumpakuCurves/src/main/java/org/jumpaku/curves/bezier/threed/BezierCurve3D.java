@@ -11,6 +11,8 @@ import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.transform.Transform;
 import org.apache.commons.math3.geometry.euclidean.threed.Euclidean3D;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.jumpaku.curves.domain.Closed;
+import org.jumpaku.curves.domain.Interval;
 
 /**
  *
@@ -33,7 +35,7 @@ public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
     }
     
     @Override
-    public final Domain getDomain() {
+    public final Interval getDomain() {
         return curve.getDomain();
     }
 

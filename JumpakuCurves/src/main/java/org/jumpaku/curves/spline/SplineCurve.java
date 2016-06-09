@@ -9,7 +9,8 @@ import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.Curve;
-import org.jumpaku.curves.domain.ClosedDomain;
+import org.jumpaku.curves.domain.Closed;
+import org.jumpaku.curves.domain.Interval;
 
 /**
  * <p>Spline曲線のインターフェイス Interface of Spline Curve.</p>
@@ -24,7 +25,7 @@ public interface SplineCurve<S extends Space, V extends Vector<S>>extends Curve<
      *
      * @return
      */
-    ClosedDomain getDomain();
+    Interval getDomain();
     
     /**
      * 
