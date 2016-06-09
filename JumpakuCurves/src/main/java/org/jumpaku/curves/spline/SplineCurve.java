@@ -10,7 +10,6 @@ import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.Curve;
 import org.jumpaku.curves.domain.ClosedDomain;
-import org.jumpaku.curves.domain.Domain;
 
 /**
  * <p>Spline曲線のインターフェイス Interface of Spline Curve.</p>
@@ -32,6 +31,8 @@ public interface SplineCurve<S extends Space, V extends Vector<S>>extends Curve<
     List<Double> getKnots();
     
     Integer getDegree();
+    
+    SplineCurve<S, V> insertKnot(Double u);
     
     @Override
     V evaluate(Double t);

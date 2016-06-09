@@ -151,7 +151,7 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
         }
         
         @Override
-        public BezierCurve<S, V> reduce(){
+        public final BezierCurve<S, V> reduce(){
             return elevated >= 1 ? reduced : BezierCurve.create(createReducedControlPonts(getControlPoints()));
         }
     }

@@ -17,6 +17,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.StrokeLineCap;
 import javaslang.collection.Stream;
 import javax.imageio.ImageIO;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
@@ -99,19 +100,20 @@ public class FXMLController implements Initializable {
     private static void renderCurve(GraphicsContext context, SplineCurve<Euclidean2D, Vector2D> curve, Paint color){
         context.setStroke(color);
         final Double d = Math.pow(2, -5);
+        context.setLineCap(StrokeLineCap.ROUND);
         List<Vector2D> points = Stream.gen(curve.getDomain().getFrom(), t -> t + d)
                 .takeWhile(t -> t < curve.getDomain().getTo())
                 .map(curve::evaluate)
                 .toJavaList();
-        context.setLineWidth(3);
+        context.setLineWidth(7);
         renderPolyline(context, points, color, Boolean.FALSE);
         SplineCurve<Euclidean2D, Vector2D> c = new BSplineCurveReduction<>(curve.getKnots(), curve.getControlPoints(), 3);
         List<Vector2D> points_ = Stream.gen(c.getDomain().getFrom(), t -> t + d)
                 .takeWhile(t -> t < c.getDomain().getTo())
                 .map(c::evaluate)
                 .toJavaList();
-        context.setLineWidth(1);
-        renderPolyline(context, points_, Color.BEIGE, Boolean.FALSE);
+        context.setLineWidth(2);
+        renderPolyline(context, points_, Color.GREENYELLOW, Boolean.FALSE);
     }
     
     private static void renderPoints(GraphicsContext context, List<Vector2D> points, Paint color){
