@@ -26,14 +26,36 @@ public interface SplineCurve<S extends Space, V extends Vector<S>>extends Curve<
      */
     ClosedDomain getDomain();
     
+    /**
+     * 
+     * @return 
+     */
     List<V> getControlPoints();
     
+    /**
+     * 
+     * @return 
+     */
     List<Double> getKnots();
     
+    /**
+     * 
+     * @return 
+     */
     Integer getDegree();
     
+    /**
+     * 
+     * @param u
+     * @return 
+     */
     SplineCurve<S, V> insertKnot(Double u);
     
+    /**
+     * 
+     * @param t
+     * @return 
+     */
     @Override
     V evaluate(Double t);
 }

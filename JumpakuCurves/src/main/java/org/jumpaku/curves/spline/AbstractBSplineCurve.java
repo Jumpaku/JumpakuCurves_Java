@@ -84,29 +84,28 @@ public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>>
 
         Integer p = getDegree();
         
-        List<V> ncps = new LinkedList<>();  
         List<V> ocps = getControlPoints();
-        ncps.addAll(ocps.subList(0, k-1));
         List<V> tmp = new LinkedList<>();
         for(int i = k-p+1; i <= k; ++i){
             Double a = (u - nknots.get(i)) / (nknots.get(i+p) - nknots.get(i));
             tmp.add((V)ocps.get(i - 1).scalarMultiply(1.0 - a).add(ocps.get(i).scalarMultiply(a)));
         }
+
+        List<V> ncps = new LinkedList<>();  
+        ncps.addAll(ocps.subList(0, k-p + 1));
         ncps.addAll(tmp);
-        ncps.addAll(ocps.subList(k, ocps.size()-1));
+        ncps.addAll(ocps.subList(k, ocps.size()));
 
         nknots.add(u);
         Collections.sort(nknots);
         
-        final SplineCurve<S, V> original = this;
-        
+        final SplineCurve<S, V> original = this;        
         return new AbstractBSplineCurve<S, V>(nknots, ncps, p) {
             @Override
             public V evaluate(Double t) {
                 return original.evaluate(t);
             }
         };
-        
     }
     
     @Override

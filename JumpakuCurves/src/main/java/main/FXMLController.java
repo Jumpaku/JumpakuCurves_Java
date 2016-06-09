@@ -22,6 +22,7 @@ import javaslang.collection.Stream;
 import javax.imageio.ImageIO;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.commons.math3.random.MersenneTwister;
 import org.jumpaku.curves.bezier.twod.BezierCurve2D;
 import org.jumpaku.curves.spline.BSplineCurveDeBoor;
 import org.jumpaku.curves.spline.BSplineCurveReduction;
@@ -52,7 +53,8 @@ public class FXMLController implements Initializable {
     @FXML
     private synchronized void onElevate(ActionEvent e){
         //curve = curve.elevate();
-        controlPoints = curve.getControlPoints();
+        //controlPoints = curve.getControlPoints();
+        curve = curve.insertKnot(new MersenneTwister().nextDouble()*(curve.getDomain().getTo()-curve.getDomain().getFrom()) + curve.getDomain().getFrom());
         render();
     }
     
@@ -100,20 +102,12 @@ public class FXMLController implements Initializable {
     private static void renderCurve(GraphicsContext context, SplineCurve<Euclidean2D, Vector2D> curve, Paint color){
         context.setStroke(color);
         final Double d = Math.pow(2, -5);
-        context.setLineCap(StrokeLineCap.ROUND);
         List<Vector2D> points = Stream.gen(curve.getDomain().getFrom(), t -> t + d)
                 .takeWhile(t -> t < curve.getDomain().getTo())
                 .map(curve::evaluate)
                 .toJavaList();
-        context.setLineWidth(7);
-        renderPolyline(context, points, color, Boolean.FALSE);
-        SplineCurve<Euclidean2D, Vector2D> c = new BSplineCurveReduction<>(curve.getKnots(), curve.getControlPoints(), 3);
-        List<Vector2D> points_ = Stream.gen(c.getDomain().getFrom(), t -> t + d)
-                .takeWhile(t -> t < c.getDomain().getTo())
-                .map(c::evaluate)
-                .toJavaList();
-        context.setLineWidth(2);
-        renderPolyline(context, points_, Color.GREENYELLOW, Boolean.FALSE);
+        renderPolyline(context, points, Color.GREENYELLOW, Boolean.FALSE);
+        curve.getKnots().forEach(k -> System.out.println(k + " "));
     }
     
     private static void renderPoints(GraphicsContext context, List<Vector2D> points, Paint color){
