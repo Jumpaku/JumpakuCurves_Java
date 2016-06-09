@@ -18,7 +18,7 @@ import org.jumpaku.curves.utils.GeomUtils;
 
 /**
  *
- * @author ito tomohiko
+ * @author Jumpaku
  */
 public class TimeMeasurement {
     static final int n = 2;

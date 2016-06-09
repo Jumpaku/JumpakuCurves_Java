@@ -13,7 +13,7 @@ import org.apache.commons.math3.geometry.Vector;
 
 /**
  *
- * @author jumpaku
+ * @author Jumpaku
  * @param <S>
  */
 public interface Vec<S extends Space> extends Vector<S>{

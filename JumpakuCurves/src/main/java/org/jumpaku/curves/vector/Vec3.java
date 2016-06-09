@@ -10,7 +10,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 /**
  *
- * @author ito tomohiko
+ * @author Jumpaku
  */
 public class Vec3 extends Vector3D implements Vec<Euclidean3D>{
     

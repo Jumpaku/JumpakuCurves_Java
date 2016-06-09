@@ -6,8 +6,8 @@
 package org.jumpaku.curves.domain;
 
 /**
- *
- * @author ito tomohiko
+ * <p>区間を表します Represents interval.</p>
+ * @author Jumpaku
  */
 public abstract class Interval implements Domain{
     private final Double from;

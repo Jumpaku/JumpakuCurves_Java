@@ -14,7 +14,7 @@ import org.jumpaku.curves.domain.Interval;
 
 /**
  *
- * @author ito tomohiko
+ * @author Jumpaku
  * @param <S>
  * @param <V>
  */

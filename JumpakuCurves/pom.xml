@@ -40,28 +40,6 @@
         </plugins>
     </build>
     <dependencies>
-        <!--Functional Java-->
-        <!--<dependency>
-            <groupId>org.functionaljava</groupId>
-            <artifactId>functionaljava</artifactId>
-            <version>4.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.functionaljava</groupId>
-            <artifactId>functionaljava-java8</artifactId>
-            <version>4.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.functionaljava</groupId>
-            <artifactId>functionaljava-quickcheck</artifactId>
-            <version>4.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.functionaljava</groupId>
-            <artifactId>functionaljava-java-core</artifactId>
-            <version>4.5</version>
-        </dependency>-->
-        <!--Javaslang-->
         <!-- http://mvnrepository.com/artifact/com.javaslang/javaslang -->
         <dependency>
             <groupId>com.javaslang</groupId>

@@ -10,7 +10,7 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 /**
  *
- * @author ito tomohiko
+ * @author Jumpaku
  */
 public class Vec2 extends Vector2D implements Vec<Euclidean2D> {
     

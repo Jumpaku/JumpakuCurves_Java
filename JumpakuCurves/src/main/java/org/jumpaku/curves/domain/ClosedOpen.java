@@ -6,8 +6,8 @@
 package org.jumpaku.curves.domain;
 
 /**
- *
- * @author ito tomohiko
+ * <p>左閉右開区間を表します Represents left-closed, right-open interval.</p>
+ * @author Jumpaku
  */
 public class ClosedOpen extends Interval{
     /**
