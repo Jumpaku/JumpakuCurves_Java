@@ -25,7 +25,7 @@ import org.apache.commons.math3.geometry.Space;
  * <p>
  * {@link AbstractBezierCurve#evaluate(java.lang.Double) }をオーバーライドしてください.</p>
  * <p>
- * Override {@link AbstractBezierCurve#evaluate(java.lang.Double) }.
+ * Override {@link AbstractBezierCurve#evaluate(java.lang.Double) }.</p>
  * @author Jumpaku
  * @param <S> 座標空間の種類  Type of the space. 
  * @param <V> {@link AbstractBezierCurve#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link AbstractBezierCurve#evaluate(java.lang.Double)}.
