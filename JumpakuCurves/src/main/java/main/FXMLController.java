@@ -29,9 +29,9 @@ import org.jumpaku.curves.Curve;
 import org.jumpaku.curves.bezier.BezierCurve;
 import org.jumpaku.curves.bezier.twod.BezierCurve2D;
 import org.jumpaku.curves.interpolation.BSplineInterpolater;
-import org.jumpaku.curves.interpolation.Interoprater;
 import org.jumpaku.curves.spline.BSplineCurveDeBoor;
 import org.jumpaku.curves.spline.SplineCurve;
+import org.jumpaku.curves.interpolation.Interpolater;
 
 public class FXMLController implements Initializable {
     
@@ -55,10 +55,9 @@ public class FXMLController implements Initializable {
         //curve = BezierCurve2D.create(Array.ofAll(controlPoints));
         Array<Double> knots = Stream.rangeClosed(0, dataPoint.size() + 3).map(i -> Double.valueOf(i)).toArray();
         Double d = (knots.get(4) - knots.get(3)) / (double)(dataPoint.size()-1);
-        Array<Interoprater.Data<Euclidean2D, Vector2D>> data = Stream.from(0).map(i -> d*i + knots.get(3))
+        Array<Interpolater.Data<Euclidean2D, Vector2D>> data = Stream.from(0).map(i -> d*i + knots.get(3))
                 .zip(dataPoint)
-                .map(tmp -> tmp.transform(
-                (t, p) -> new Interoprater.Data<>(p, t))).toArray();
+                .map(tmp -> tmp.transform((t, p) -> new Interpolater.Data<>(p, t))).toArray();
         curve = BSplineInterpolater.builder(data)
                 .degree(3)
                 .knots(knots)

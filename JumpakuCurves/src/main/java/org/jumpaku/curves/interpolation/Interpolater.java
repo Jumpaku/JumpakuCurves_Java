@@ -16,7 +16,7 @@ import org.jumpaku.curves.Curve;
  * @param <V>
  * @param <C>
  */
-public interface Interoprater<S extends Space, V extends Vector<S>, C extends Curve<S, V>> {
+public interface Interpolater<S extends Space, V extends Vector<S>, C extends Curve<S, V>> {
     public static final class Data<S extends Space, V extends Vector<S>>{
 
         public Data(V point, Double param) {

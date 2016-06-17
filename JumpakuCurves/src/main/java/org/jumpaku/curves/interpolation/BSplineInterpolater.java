@@ -20,7 +20,7 @@ import org.jumpaku.curves.utils.MathUtils;
  *
  * @author ito tomohiko
  */
-public class BSplineInterpolater implements Interoprater<Euclidean2D, Vector2D, BSplineCurveDeBoor<Euclidean2D, Vector2D>>{
+public class BSplineInterpolater implements Interpolater<Euclidean2D, Vector2D, BSplineCurveDeBoor<Euclidean2D, Vector2D>>{
     public static class Builder{
         private Integer degree;
         private final Array<Data<Euclidean2D, Vector2D>> data;
