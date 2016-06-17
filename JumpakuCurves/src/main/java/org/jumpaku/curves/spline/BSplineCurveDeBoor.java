@@ -9,7 +9,6 @@ import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
-import org.jumpaku.curves.domain.Closed;
 import org.jumpaku.curves.domain.ClosedOpen;
 import org.jumpaku.curves.domain.Interval;
 
