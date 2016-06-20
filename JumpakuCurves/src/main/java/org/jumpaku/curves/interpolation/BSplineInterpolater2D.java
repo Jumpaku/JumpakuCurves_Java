@@ -50,6 +50,9 @@ public class BSplineInterpolater2D implements Interpolater<Euclidean2D, Vector2D
         }
         
         public BSplineInterpolater2D build(){
+            if(data.size() != knots.size() - degree - 1)
+                throw new IllegalStateException("wrong data size, cannot solve");
+            
             return new BSplineInterpolater2D(data.toArray(), knots, degree);
         }
     }
@@ -73,23 +76,23 @@ public class BSplineInterpolater2D implements Interpolater<Euclidean2D, Vector2D
     @Override
     public SplineCurve<Euclidean2D, Vector2D> interpolate() {
         
-        RealMatrix m = new Array2DRowRealMatrix(degree+1, degree+1);
-        for(int i = 0; i <= degree; ++i){
-            for(int j = 0; j <= degree; ++j){
+        RealMatrix m = new Array2DRowRealMatrix(data.size(), data.size());
+        for(int i = 0; i < data.size(); ++i){
+            for(int j = 0; j < data.size(); ++j){
                 m.setEntry(i, j, BSplineCurve.bSplineBasis(degree, j, data.get(i).getParam(), knots));
             }
         }
         m = MatrixUtils.inverse(m);
         
-        RealMatrix dataPoint = new Array2DRowRealMatrix(degree+1, 2);    
-        for(int i = 0; i <= degree; ++i){
-            dataPoint.setEntry(i, 0, data.get(i).getPoint().getX());
-            dataPoint.setEntry(i, 1, data.get(i).getPoint().getY());
+        RealMatrix dataPoints = new Array2DRowRealMatrix(data.size(), 2);    
+        for(int i = 0; i < data.size(); ++i){
+            dataPoints.setEntry(i, 0, data.get(i).getPoint().getX());
+            dataPoints.setEntry(i, 1, data.get(i).getPoint().getY());
         }
         
-        RealMatrix tmp = m.multiply(dataPoint);
+        RealMatrix tmp = m.multiply(dataPoints);
         List<Vector2D> cp = new LinkedList<>();        
-        for(int i = 0; i <= degree; ++i){
+        for(int i = 0; i < data.size(); ++i){
             cp.add(new Vector2D(tmp.getEntry(i, 0), tmp.getEntry(i, 1)));
         }
         

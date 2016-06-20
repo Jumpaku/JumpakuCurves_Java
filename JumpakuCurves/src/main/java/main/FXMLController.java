@@ -32,6 +32,7 @@ import org.jumpaku.curves.interpolation.BSplineInterpolater2D;
 import org.jumpaku.curves.spline.BSplineCurveDeBoor;
 import org.jumpaku.curves.spline.SplineCurve;
 import org.jumpaku.curves.interpolation.Interpolater;
+import org.jumpaku.curves.spline.BSplineCurve2D;
 import org.jumpaku.curves.spline.BSplineCurveReduction;
 
 public class FXMLController implements Initializable {
@@ -55,7 +56,7 @@ public class FXMLController implements Initializable {
     private synchronized void onCompute(ActionEvent e){
         //curve = BezierCurve2D.create(Array.ofAll(controlPoints));
         Array<Double> knots = Stream.rangeClosed(0, dataPoint.size() + 3).map(i -> Double.valueOf(i)).toArray();
-        Double d = (knots.get(4) - knots.get(3)) / (double)(dataPoint.size()-1);
+        Double d = (knots.get(knots.size()-4) - knots.get(3)) / (double)(dataPoint.size()-1);
         Array<Interpolater.Data<Euclidean2D, Vector2D>> data = Stream.from(0).map(i -> d*i + knots.get(3))
                 .zip(dataPoint)
                 .map(tmp -> tmp.transform((t, p) -> new Interpolater.Data<>(p, t))).toArray();
@@ -120,8 +121,8 @@ public class FXMLController implements Initializable {
             renderPoints(context, curve.getControlPoints().toJavaList(), Color.BLUE);
             renderPolyline(context, curve.getControlPoints().toJavaList(), Color.BLUE, false);
     
-            BSplineCurveReduction<Euclidean2D, Vector2D> compared = 
-                    new BSplineCurveReduction<>(curve.getKnots(), curve.getControlPoints(), curve.getDegree());
+            BSplineCurve2D compared = 
+                    BSplineCurve2D.create(curve.getKnots(), curve.getControlPoints(), curve.getDegree());
          
             renderCurve(context, compared, Color.RED);
             renderPoints(context, compared.getControlPoints().toJavaList(), Color.RED);
