@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
@@ -16,8 +12,7 @@ import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.utils.GeomUtils;
 
 /**
- * <p>
- * Bezier曲線のインターフェイス Interface of Bezier Curve.</p>
+ * <p>Bezier曲線のインターフェイス Interface of Bezier Curve.</p>
  * <p>
  * Bezier曲線の様々な演算のインターフェースを定義します.</p> * 
  * <p>
@@ -30,15 +25,21 @@ import org.jumpaku.curves.utils.GeomUtils;
 public abstract interface BezierCurve<S extends Space, V extends Vector<S>> extends Curve<S, V>{
     
     /**
-     * Bezier曲線オブジェクトを生成する Creates Bezier Curve.
+     * <p>Bezier曲線オブジェクトを生成します Creates Bezier Curve.</p>
      * <p>
-     * 引数のcontrolPointsはnullであってはいけない. またnullを含んでもいけない. さらに空であってもいけない.</p>
+     * 制御点が1個の場合0次のBezier曲線を生成します.この曲線の評価点は常に制御点と一致します.<br>
+     * 制御点が2個の場合1次のBezier曲線を生成します.この曲線の評価点は2つの制御点の内分点となります<br>
+     * 制御点が3個または4個の場合それぞれ2次,3次のBezier曲線を生成します.これらの曲線の評価点は展開された式で評価されます.<br>
+     * 制御点がn個場合(n&gt;4)n+1次のBezier曲線を生成します.この曲線の評価点は</p>
+     * <p>
+     * 引数のcontrolPointsはnullであってはいけない.またnullを含んでもいけない.さらに空であってもいけない.</p>
      * <p>
      * The argument controlPoints cannot be null, contain null, and be empty.</p>
-     * @param <S> 座標空間の種類  Type of the space. 
-     * @param <V> {@link Curve#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link Curve#evaluate(java.lang.Double)}.
-     * @param controlPoints 制御点リスト
-     * @return 引数の制御点リストで定義されるBezier曲線. Bezier curve defined given control points.
+     * @param <S> 座標空間の種類  Type of the space
+     * @param <V> ベクトルの型 Type of vector
+     * @param controlPoints 制御点列 control points
+     * @return 引数の制御点リストで定義されるBezier曲線. Bezier curve defined given control points
+     * @throws IllegalArgumentException controlPointsが{@code null}の時, {@code null}を含んでいる時, または空である時 When controlPoints is {@code null}, contains {@code null}, or is empty.
      */
     public static <S extends Space, V extends Vector<S>> BezierCurve<S, V> create(Array<V> controlPoints){
         if(controlPoints == null)

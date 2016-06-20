@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the edJumpakur.
- */
+
 package org.jumpaku.curves.bezier;
 
 import java.util.LinkedList;
@@ -21,9 +17,10 @@ import org.apache.commons.math3.geometry.Space;
  * {@link AbstractBezierCurve#evaluate(java.lang.Double) }をオーバーライドしてください.</p>
  * <p>
  * Override {@link AbstractBezierCurve#evaluate(java.lang.Double) }.</p>
+ * 
  * @author Jumpaku
- * @param <S> 座標空間の種類  Type of the space. 
- * @param <V> {@link AbstractBezierCurve#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link AbstractBezierCurve#evaluate(java.lang.Double)}.
+ * @param <S> 座標空間の種類 Type of the space. 
+ * @param <V> ベクトルの型 Type of vector
  */
 public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> implements BezierCurve<S, V>{
     
@@ -31,40 +28,28 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     
     private static final Closed DOMAIN = new Closed(0.0, 1.0);
     
-    public AbstractBezierCurve(Array<V> cp) {
-        if(cp.isEmpty())
+    /**
+     * <p>指定された制御点からBezie曲線を構築します Constructs Bezier Curve with specified control points.</p>
+     * <p>
+     * 制御点列をベクトルのArrayとして制御点を渡します.<br>
+     * 制御点列は{@code null}であってはいけません.<br>
+     * また{@code null}を含んだり, 空であってもいけません.</p>
+     * <p>
+     * Give control points as Array of vector<br>
+     * controlPoints munt be not {@code null}, not contain {@code null}, not be empty.</p>
+     * @param controlPoints 制御点 control points
+     * @throws IllegalArgumentException controlPointsが{@code null}の時, {@code null}を含んでいる時, または空である時 When controlPoints is {@code null}, contains {@code null}, or is empty.
+     */
+    public AbstractBezierCurve(Array<V> controlPoints) {
+        if(controlPoints.isEmpty())
             throw new IllegalArgumentException("Control points is empty.");
         
-        if(cp.exists(p -> p == null))
+        if(controlPoints.exists(p -> p == null))
             throw new IllegalArgumentException("Control points contains null.");
 
-        controlPoints = cp;
+        this.controlPoints = controlPoints;
     }
-    
-    public AbstractBezierCurve(V... cp) {
-        this(Array.of(cp));
-    }
-    
-    private static <S extends Space, V extends Vector<S>> Array<Array<V>> createDividedControlPoints(Object[] cp, Double t){
-        if(!DOMAIN.isIn(t))
-            throw new IllegalArgumentException("The parameter t isout of domain [0,1], t = " + t);
         
-        LinkedList<V> first = new LinkedList<>();
-        LinkedList<V> second = new LinkedList<>();
-        int n = cp.length - 1;
-        first.addLast((V)cp[0]);
-        second.addFirst((V)cp[n]);
-        while(n > 0){
-            for(int i = 0; i < n; ++i){
-                cp[i] = GeomUtils.internallyDivide(t, (Vector<S>)cp[i], (Vector<S>)cp[i+1]);
-            }
-            first.addLast((V)cp[0]);
-            second.addFirst((V)cp[--n]);
-        }
-        
-        return Array.of(Array.ofAll(first), Array.ofAll(second));
-    }
-    
     private static <S extends Space, V extends Vector<S>> Array<V> createElevatedControlPonts(Array<? extends V> controlPoints){
         Integer n = controlPoints.size() - 1;
         List<V> result = new LinkedList<>();
@@ -148,6 +133,26 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
         }
     }
     
+    private static <S extends Space, V extends Vector<S>> Array<Array<V>> createDividedControlPoints(Object[] cp, Double t){
+        if(!DOMAIN.isIn(t))
+            throw new IllegalArgumentException("The parameter t is out of domain [0,1], t = " + t);
+        
+        LinkedList<V> first = new LinkedList<>();
+        LinkedList<V> second = new LinkedList<>();
+        int n = cp.length - 1;
+        first.addLast((V)cp[0]);
+        second.addFirst((V)cp[n]);
+        while(n > 0){
+            for(int i = 0; i < n; ++i){
+                cp[i] = GeomUtils.internallyDivide(t, (Vector<S>)cp[i], (Vector<S>)cp[i+1]);
+            }
+            first.addLast((V)cp[0]);
+            second.addFirst((V)cp[--n]);
+        }
+        
+        return Array.of(Array.ofAll(first), Array.ofAll(second));
+    }
+    
     private static <S extends Space, V extends Vector<S>> Array<BezierCurve<S, V>> divide(Double t, Array<V> controlPoints, Function<Double, V> evaluator){
         Array<Array<V>> cps = createDividedControlPoints(controlPoints.toJavaArray(), t);
         return Array.of(new AbstractBezierCurve<S, V>(cps.get(0)){
@@ -160,7 +165,6 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
                 return evaluator.apply(t + s*(1-t));
             }
         });
-        //return Collections.unmodifiableList(result);
     }
     
     private static <S extends Space, V extends Vector<S>> BezierCurve<S, V> transform(Transform<S, V> transform, Array<V> controlPoints, Function<Double, V> evaluator){
@@ -184,46 +188,68 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
         };
     }
     
+    /**{@inheritDoc}*/
     @Override
     public final Closed getDomain() {
         return DOMAIN;
     }
     
+    /**{@inheritDoc}*/
     @Override
     public final Array<V> getControlPoints() {
         return controlPoints;
     }
     
+    /**{@inheritDoc}*/
     @Override
     public final Integer getDegree(){
         return controlPoints.size() - 1;
     }
 
+    /**{@inheritDoc}*/
     @Override
     public BezierCurve<S, V> elevate(){
         return new DegreeElevated<>(1, createElevatedControlPonts(getControlPoints()), this);
     }
     
+    /**{@inheritDoc}*/
     @Override
     public BezierCurve<S, V> reduce(){
+        if(getDegree() < 1)
+            throw new IllegalArgumentException("degree is too small");
+        
         return BezierCurve.create(createReducedControlPonts(getControlPoints()));
     }
     
+    /**
+     * {@inheritDoc}
+     * @throws IllegalArgumentException パラメータtが[0,1]に含まれない時 When t is not in [0,1]
+     */
     @Override
     public final Array<BezierCurve<S, V>> divide(Double t){
+        if(!DOMAIN.isIn(t))
+            throw new IllegalArgumentException("The parameter t is out of domain [0,1], t = " + t);
+        
         return divide(t, getControlPoints(), this::evaluate);
     }
     
+    /**{@inheritDoc}*/
     @Override
     public final BezierCurve<S, V> transform(Transform<S, V> transform){
         return transform(transform, getControlPoints(), this::evaluate);
     }
     
+    /**{@inheritDoc}*/
     @Override
     public final BezierCurve<S, V> reverse(){
         return reverse(getControlPoints(), this::evaluate);
     }
     
+    /**
+     * {@inheritDoc}
+     * @throws IllegalArgumentException tが[0,1]に含まれていない時 When t is not in [0,1]
+     * @throws IllegalStateException 次数が0の時 When degree is 0
+     */
     @Override
     public final V computeTangent(Double t){
         if(!DOMAIN.isIn(t))
