@@ -5,12 +5,13 @@
  */
 package org.jumpaku.curves.bezier;
 
-import org.jumpaku.curves.domain.Domain;
 import javaslang.collection.Array;
+import javaslang.collection.Stream;
 import org.jumpaku.curves.Curve;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.transform.Transform;
 import org.apache.commons.math3.geometry.Space;
+import org.apache.commons.math3.util.CombinatoricsUtils;
 import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.utils.GeomUtils;
 
@@ -87,7 +88,21 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
     }
     
     /**
-     * 定義域を取得する Returns domain
+     * <p>組み合わせnCiを計算します Computes combinations nCi.</p>
+     * <p>
+     * 0からnまでのiに対して組み合わせnCiを計算して結果を配列にして返します.</p>
+     * <p>
+     * For all i in {0, 1, ..., n}, computes combinations nCi, and returns the result as an array.</p> 
+     * @param n iの最大値 maximum value of i
+     * @return 組み合わせの配列 array of combinations 
+     */
+    public static Array<Double> combinations(Integer n){
+        return Stream.rangeClosed(0, n).map(i -> CombinatoricsUtils.binomialCoefficientDouble(n, i)).toArray();
+    }
+    
+    
+    /**
+     * 定義域を取得します Returns domain
      * @return 定義域 domain
      */
     Interval getDomain();
@@ -99,7 +114,7 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
     Array<V> getControlPoints();
     
     /**
-     * 次数を取得する Returns degree.
+     * 次数を取得します Returns degree.
      * @return 次数degree
      */
     Integer getDegree();

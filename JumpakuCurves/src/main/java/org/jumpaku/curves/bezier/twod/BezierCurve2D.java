@@ -7,7 +7,6 @@ package org.jumpaku.curves.bezier.twod;
 
 import javaslang.collection.Array;
 import org.jumpaku.curves.bezier.BezierCurve;
-import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.transform.Transform;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
@@ -21,7 +20,7 @@ public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
 
     private final BezierCurve<Euclidean2D, Vector2D> curve;
     
-    private BezierCurve2D(BezierCurve<Euclidean2D, Vector2D> curve) {
+    public BezierCurve2D(BezierCurve<Euclidean2D, Vector2D> curve) {
         this.curve = curve;
     }
     
