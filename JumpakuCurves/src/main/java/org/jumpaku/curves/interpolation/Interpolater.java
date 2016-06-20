@@ -11,20 +11,23 @@ import org.jumpaku.curves.Curve;
 
 /**
  *
- * @author ito tomohiko
+ * @author Jumpaku
  * @param <S>
  * @param <V>
  * @param <C>
  */
 public interface Interpolater<S extends Space, V extends Vector<S>, C extends Curve<S, V>> {
-    public static final class Data<S extends Space, V extends Vector<S>>{
+    
+    public static class Data<S extends Space, V extends Vector<S>>{
 
         public Data(V point, Double param) {
             this.point = point;
             this.param = param;
         }
-        private V point;
-        private Double param;
+    
+        private final V point;
+        
+        private final Double param;
 
         public V getPoint() {
             return point;

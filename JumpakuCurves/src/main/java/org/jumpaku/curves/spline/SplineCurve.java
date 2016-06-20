@@ -9,7 +9,6 @@ import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.Curve;
-import org.jumpaku.curves.domain.Closed;
 import org.jumpaku.curves.domain.Interval;
 
 /**
@@ -20,7 +19,7 @@ import org.jumpaku.curves.domain.Interval;
  * @param <V>
  */
 public interface SplineCurve<S extends Space, V extends Vector<S>>extends Curve<S, V>{
-
+   
     /**
      *
      * @return
@@ -44,13 +43,6 @@ public interface SplineCurve<S extends Space, V extends Vector<S>>extends Curve<
      * @return 
      */
     Integer getDegree();
-    
-    /**
-     * 
-     * @param u
-     * @return 
-     */
-    SplineCurve<S, V> insertKnot(Double u);
     
     /**
      * 

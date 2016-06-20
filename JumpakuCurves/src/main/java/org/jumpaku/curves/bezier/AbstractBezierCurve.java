@@ -5,20 +5,14 @@
  */
 package org.jumpaku.curves.bezier;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import javaslang.collection.Array;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import org.jumpaku.curves.domain.Closed;
-import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.utils.GeomUtils;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.transform.Transform;
-import org.jumpaku.curves.utils.MathUtils;
 import org.apache.commons.math3.geometry.Space;
 
 /**
@@ -234,14 +228,22 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     public final V computeTangent(Double t){
         if(!DOMAIN.isIn(t))
             throw new IllegalArgumentException("t must be in [0, 1]");
+        
         Integer n = getDegree();
+        if(n == 0)
+            throw new IllegalStateException("degree is 0");
+        
         Array<V> cp = getControlPoints();
-        Object[] combinations = MathUtils.combinations(n-1).toArray();
+        Array<Double> combinations = BezierCurve.combinations(n-1);
         Vector<S> result = (Vector<S>)cp.get(0).getZero();
+        
+        Double c = Math.pow(1.0-t, n-1);
         for(int i = 0; i < n; ++i){
-            Vector<S> delta = (cp.get(i+1).subtract(cp.get(i))).scalarMultiply((Double)combinations[i] * Math.pow(t, i) * Math.pow(1-t, n-1-i));
+            Vector<S> delta = (cp.get(i+1).subtract(cp.get(i))).scalarMultiply(combinations.get(i) * c);
+            c *= t/(1.0-t);
             result = result.add(delta);
         }
+        
         return (V)result.scalarMultiply(n);
     }
     

@@ -18,7 +18,7 @@ import org.jumpaku.curves.domain.Interval;
  * @param <S>
  * @param <V>
  */
-public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>> implements SplineCurve<S, V> {
+public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>> implements BSplineCurve<S, V> {
         
     private final Interval domain;
     private final Array<Double> knots;
@@ -73,7 +73,7 @@ public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>>
     }
 
     @Override
-    public final SplineCurve<S, V> insertKnot(Double u){
+    public final BSplineCurve<S, V> insertKnot(Double u){
         if(!getDomain().isIn(u))
             throw new IllegalArgumentException("New knot to add is out of domain.");
         

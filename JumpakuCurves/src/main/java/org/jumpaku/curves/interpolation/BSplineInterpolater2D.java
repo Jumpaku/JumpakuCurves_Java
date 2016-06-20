@@ -8,26 +8,35 @@ package org.jumpaku.curves.interpolation;
 import java.util.LinkedList;
 import java.util.List;
 import javaslang.collection.Array;
+import javaslang.collection.Stream;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
+import org.jumpaku.curves.spline.BSplineCurve;
 import org.jumpaku.curves.spline.BSplineCurveDeBoor;
-import org.jumpaku.curves.utils.MathUtils;
+import org.jumpaku.curves.spline.SplineCurve;
 
 /**
  *
- * @author ito tomohiko
+ * @author Jumpaku
  */
-public class BSplineInterpolater implements Interpolater<Euclidean2D, Vector2D, BSplineCurveDeBoor<Euclidean2D, Vector2D>>{
+public class BSplineInterpolater2D implements Interpolater<Euclidean2D, Vector2D, SplineCurve<Euclidean2D, Vector2D>>{
+    
     public static class Builder{
         private Integer degree;
-        private final Array<Data<Euclidean2D, Vector2D>> data;
+        private Stream<Data<Euclidean2D, Vector2D>> data = Stream.empty();
         private Array<Double> knots;
+
+        public Builder addAllData(Iterable<Data<Euclidean2D, Vector2D>> data){
+            this.data = this.data.appendAll(data);
+            return this;
+        }
         
-        public Builder(Array<Data<Euclidean2D, Vector2D>> data){
-            this.data = data;
+        public Builder addData(Vector2D p, Double param){
+            data = data.append(new Data<>(p, param));
+            return this;
         }
         
         public Builder degree(Integer degree){
@@ -40,25 +49,13 @@ public class BSplineInterpolater implements Interpolater<Euclidean2D, Vector2D, 
             return this;
         }
         
-        public BSplineInterpolater build(){
-            return new BSplineInterpolater(data, knots, degree);
-        }
-
-        public Integer getDegree() {
-            return degree;
-        }
-
-        public Array<Data<Euclidean2D, Vector2D>> getData() {
-            return data;
-        }
-
-        public Array<Double> getKnots() {
-            return knots;
+        public BSplineInterpolater2D build(){
+            return new BSplineInterpolater2D(data.toArray(), knots, degree);
         }
     }
     
-    public static Builder builder(Array<Data<Euclidean2D, Vector2D>> data){
-        return new Builder(data);
+    public static Builder builder(){
+        return new Builder();
     }
     
     private final Array<Data<Euclidean2D, Vector2D>> data;
@@ -67,22 +64,21 @@ public class BSplineInterpolater implements Interpolater<Euclidean2D, Vector2D, 
     
     private final Integer degree;
 
-    public BSplineInterpolater(Array<Data<Euclidean2D, Vector2D>> data, Array<Double> knots, Integer degree) {
+    public BSplineInterpolater2D(Array<Data<Euclidean2D, Vector2D>> data, Array<Double> knots, Integer degree) {
         this.data = data;
         this.knots = knots;
         this.degree = degree;
     }
     
     @Override
-    public BSplineCurveDeBoor<Euclidean2D, Vector2D> interpolate() {
+    public SplineCurve<Euclidean2D, Vector2D> interpolate() {
         
         RealMatrix m = new Array2DRowRealMatrix(degree+1, degree+1);
         for(int i = 0; i <= degree; ++i){
             for(int j = 0; j <= degree; ++j){
-                m.setEntry(i, j, MathUtils.bSplineBasis(degree, j, data.get(i).getParam(), knots));
+                m.setEntry(i, j, BSplineCurve.bSplineBasis(degree, j, data.get(i).getParam(), knots));
             }
         }
-        System.out.println(m);
         m = MatrixUtils.inverse(m);
         
         RealMatrix dataPoint = new Array2DRowRealMatrix(degree+1, 2);    

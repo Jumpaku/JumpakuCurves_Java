@@ -7,11 +7,9 @@ package org.jumpaku.curves.bezier.threed;
 
 import javaslang.collection.Array;
 import org.jumpaku.curves.bezier.BezierCurve;
-import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.transform.Transform;
 import org.apache.commons.math3.geometry.euclidean.threed.Euclidean3D;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.jumpaku.curves.domain.Closed;
 import org.jumpaku.curves.domain.Interval;
 
 /**
@@ -22,7 +20,7 @@ public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
 
     private final BezierCurve<Euclidean3D, Vector3D> curve;
     
-    private BezierCurve3D(BezierCurve<Euclidean3D, Vector3D> curve) {
+    public BezierCurve3D(BezierCurve<Euclidean3D, Vector3D> curve) {
         this.curve = curve;
     }
     
