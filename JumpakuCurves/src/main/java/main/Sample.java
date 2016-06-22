@@ -8,6 +8,8 @@ package main;
 import java.util.Arrays;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
+import org.apache.commons.math3.util.Pair;
+import org.jumpaku.curves.utils.GoldenSectionSearch;
 
 /**
  *
@@ -15,10 +17,7 @@ import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
  */
 public class Sample {
     public static void main(String[] args) {
-        PolynomialSplineFunction s = new SplineInterpolator().interpolate(new double[]{1.0,2.0,3.0,4.0}, new double[]{3.0,4.0,2.0,1.0});
-        Arrays.stream(s.getKnots())
-                .forEach(System.out::println);
-        
-        System.out.println(s.value(0.0));
+        Double p = GoldenSectionSearch.whereMaximum(x -> -(x-1)*(x-1) + 3, 0.0, 10.0);
+        System.out.println(p);
     }
 }
