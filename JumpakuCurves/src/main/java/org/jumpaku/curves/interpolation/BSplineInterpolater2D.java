@@ -53,10 +53,6 @@ public class BSplineInterpolater2D implements Interpolater<Euclidean2D, Vector2D
             if(data.size() != knots.size() - degree - 1)
                 throw new IllegalStateException("wrong data size, cannot solve");
             
-            /*if(knots == null){
-                Stream.repeat(data.head().getParam())
-                        .appendAll(Stream.range(0, data.size()).map(i -> ))
-                        }*/
             return new BSplineInterpolater2D(data.toArray(), knots, degree);
         }
     }

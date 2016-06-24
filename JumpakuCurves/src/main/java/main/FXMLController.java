@@ -22,12 +22,9 @@ import javaslang.collection.Stream;
 import javax.imageio.ImageIO;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.apache.commons.math3.random.MersenneTwister;
-import org.jumpaku.curves.bezier.twod.BezierCurve2D;
 import org.jumpaku.curves.interpolation.BSplineInterpolater2D;
-import org.jumpaku.curves.spline.BSplineCurveDeBoor;
+import org.jumpaku.curves.interpolation.Data;
 import org.jumpaku.curves.spline.SplineCurve;
-import org.jumpaku.curves.interpolation.Interpolater;
 import org.jumpaku.curves.spline.BSplineCurve2D;
 
 public class FXMLController implements Initializable {
@@ -52,9 +49,9 @@ public class FXMLController implements Initializable {
         //curve = BezierCurve2D.create(Array.ofAll(controlPoints));
         Array<Double> knots = Stream.rangeClosed(0, dataPoint.size() + 3).map(i -> Double.valueOf(i)).toArray();
         Double d = (knots.get(knots.size()-4) - knots.get(3)) / (double)(dataPoint.size()-1);
-        Array<Interpolater.Data<Euclidean2D, Vector2D>> data = Stream.from(0).map(i -> d*i + knots.get(3))
+        Array<Data<Euclidean2D, Vector2D>> data = Stream.from(0).map(i -> d*i + knots.get(3))
                 .zip(dataPoint)
-                .map(tmp -> tmp.transform((t, p) -> new Interpolater.Data<>(p, t))).toArray();
+                .map(tmp -> tmp.transform((t, p) -> new Data<>(p, t))).toArray();
         curve = BSplineInterpolater2D.builder()
                 .addAllData(data)
                 .degree(3)

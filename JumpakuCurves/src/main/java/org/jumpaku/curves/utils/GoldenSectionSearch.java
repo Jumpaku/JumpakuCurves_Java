@@ -16,19 +16,21 @@ import org.jumpaku.curves.domain.Closed;
 public class GoldenSectionSearch {
     private static final Double GOLD_INVERSE = 1.0/1.6180339887498948482045868343656381177203;
 
-    private static final Integer MAX_ULP = 1;
-    
     public static Double whereMinimum(UnaryOperator<Double> f, Closed interval){
         Double a = interval.getFrom();
         Double d = interval.getTo();
         Double b = d - (d - a)*GOLD_INVERSE;
         Double c = a + (d - a)*GOLD_INVERSE;
-        while(!Precision.equals(a, d, MAX_ULP)){
-            if(f.apply(b) < f.apply(c)){
+        while(!Precision.equals(a, d, 2)){
+            if(Precision.compareTo(f.apply(b), f.apply(c), 1) < 0){
                 d = c;
+            }
+            else if(Precision.compareTo(f.apply(b), f.apply(c), 1) > 0){
+                a = b;
             }
             else{
                 a = b;
+                d = c;
             }
             b = d - (d - a)*GOLD_INVERSE;
             c = a + (d - a)*GOLD_INVERSE;
@@ -36,7 +38,7 @@ public class GoldenSectionSearch {
         return (a+d)/2;
     }
     
-    public static Double wherehMinimum(UnaryOperator<Double> f, Double from, Double to){
+    public static Double whereMinimum(UnaryOperator<Double> f, Double from, Double to){
         return whereMinimum(f, new Closed(from, to));
     } 
     

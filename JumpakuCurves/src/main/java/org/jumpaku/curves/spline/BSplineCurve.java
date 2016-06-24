@@ -40,14 +40,14 @@ public interface BSplineCurve<S extends Space, V extends Vector<S>> extends Spli
         }
         return left + right;
     }
+    
     static Double bSplineBasisHelper(Double a, Double b, Double c, Double d){
-        return Double.isFinite(c-d) ? (a-b)/(c-d) : 0.0;
+        return Double.isFinite((a-b)/(c-d)) ? (a-b)/(c-d) : 0.0;
     }
     
     public static <S extends Space, V extends Vector<S>> BSplineCurve<S, V> create(Array<Double> knots, Array<V> controlPoints, Integer degree){
         return new BSplineCurveDeBoor(knots, controlPoints, degree);
     }
     
-    BSplineCurve<S, V> insertKnot(Double u);
-    
+    BSplineCurve<S, V> insertKnot(Double u);    
 }

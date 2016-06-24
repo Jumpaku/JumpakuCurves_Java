@@ -7,15 +7,29 @@ package org.jumpaku.curves.interpolation;
 
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
-import org.jumpaku.curves.Curve;
 
 /**
  *
  * @author Jumpaku
  * @param <S>
  * @param <V>
- * @param <C>
  */
-public interface Interpolater<S extends Space, V extends Vector<S>, C extends Curve<S, V>> {
-    C interpolate();
+public class Data<S extends Space, V extends Vector<S>> {
+    public Data(V point, Double param) {
+        this.point = point;
+        this.param = param;
+    }
+
+    private final V point;
+
+    private final Double param;
+
+    public V getPoint() {
+        return point;
+    }
+
+    public Double getParam() {
+        return param;
+    }
 }
+
