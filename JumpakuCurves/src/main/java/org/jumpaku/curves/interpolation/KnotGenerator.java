@@ -14,5 +14,5 @@ import org.apache.commons.math3.geometry.Vector;
  * @author Jumpaku
  */
 public interface KnotGenerator {
-    <S extends Space, V extends Vector<S>> Array<Double> generate(Array<Data<S, V>> data);
+    <S extends Space, V extends Vector<S>> Array<Double> generate(Integer degree, Array<Data<S, V>> data);
 }

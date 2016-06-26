@@ -29,7 +29,7 @@ public class Universal implements Parameterizer{
     public <S extends Space, V extends Vector<S>> Array<Data<S, V>> parameterize(Array<V> points, Double a, Double b) {
         Double d = (b-a)/(points.size() - degree);
         Array<Double> knots = Stream.fill(degree + 1, () -> a)
-                .appendAll(Stream.rangeClosed(1, points.size() - degree - 1).map(i -> a + i*d))
+                .appendAll(Stream.range(1, points.size() - degree).map(i -> a + i*d))
                 .appendAll(Stream.fill(degree + 1, () -> b))
                 .toArray();
         

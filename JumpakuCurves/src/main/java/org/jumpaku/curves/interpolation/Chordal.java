@@ -18,15 +18,18 @@ public class Chordal implements Parameterizer{
 
     @Override
     public <S extends Space, V extends Vector<S>> Array<Data<S, V>> parameterize(Array<V> points, final Double a, final Double b) {
-        Stream<Double> distances = Stream.empty();
+        Stream<Double> distances = Stream.of(a);
         double tmp = 0.0;
-        for(int i = 0; i < points.size() - 1; ++i){
+        for(int i = 1; i < points.size(); ++i){
             distances = distances.append(tmp += points.get(i).distance(points.get(i-1)));
         }        
         final Double total = tmp;
         
-        return points.zip(distances.map(d -> a + (b-a)*d/total))
-                .map(pt -> pt.transform((p, t) -> new Data<>(p, t)));
+        return distances.map(d -> a + (b-a)*d/total).zip(points)
+                .map(tp -> tp.transform((t, p) -> new Data<>(p, t)))
+                .toArray();
     }
+    
+    
     
 }
