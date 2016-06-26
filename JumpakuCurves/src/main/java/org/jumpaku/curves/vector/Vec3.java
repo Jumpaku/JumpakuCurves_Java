@@ -65,7 +65,7 @@ public class Vec3 implements Vec{
         return getVector3d().dotProduct(new Vector3D(v.get(0), v.get(1), v.get(2)));
     }
 
-    public Vector3D getVector3d() {
+    private Vector3D getVector3d() {
         return vector3d;
     }
     

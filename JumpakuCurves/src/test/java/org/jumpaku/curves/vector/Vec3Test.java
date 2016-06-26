@@ -5,7 +5,6 @@
  */
 package org.jumpaku.curves.vector;
 
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.util.Precision;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -15,18 +14,6 @@ import static org.junit.Assert.*;
  * @author ito tomohiko
  */
 public class Vec3Test {
-    
-    /**
-     * Test of getVector1d method, of class Vec3.
-     */
-    @Test
-    public void testGetVector3d() {
-        System.out.println("getVector3d");
-        Vec3 instance = new Vec3(2.8, 4.8, -3.8);
-        Vector3D expResult = new Vector3D(2.8, 4.8, -3.8);
-        Vector3D result = instance.getVector3d();
-        assertTrue(checkEqualsDouble(result.getX(), expResult.getX()) && checkEqualsDouble(result.getY(), expResult.getY()));
-    }
 
     /**
      * Test of add method, of class Vec3.

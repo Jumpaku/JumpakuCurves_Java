@@ -5,7 +5,6 @@
  */
 package org.jumpaku.curves.vector;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.util.Precision;
 import org.junit.Test;
 import static org.junit.Assert.*;
