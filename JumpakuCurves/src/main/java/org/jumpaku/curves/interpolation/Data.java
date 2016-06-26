@@ -5,16 +5,14 @@
  */
 package org.jumpaku.curves.interpolation;
 
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  *
  * @author Jumpaku
- * @param <S>
  * @param <V>
  */
-public class Data<S extends Space, V extends Vector<S>> {
+public class Data<V extends Vec> {
     public Data(V point, Double param) {
         this.point = point;
         this.param = param;

@@ -9,6 +9,7 @@ import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  *
@@ -16,7 +17,7 @@ import org.apache.commons.math3.geometry.Vector;
  */
 public class Average implements KnotGenerator{
 
-    static private <S extends Space, V extends Vector<S>> Double average(int i, int degree, Array<Data<S, V>> data){
+    static private <V extends Vec> Double average(int i, int degree, Array<Data<V>> data){
         Double sum = 0.0;
         for(int j = i; j < i + degree; ++j){
             sum += data.get(j).getParam();
@@ -25,7 +26,7 @@ public class Average implements KnotGenerator{
     }
     
     @Override
-    public <S extends Space, V extends Vector<S>> Array<Double> generate(Integer degree, Array<Data<S, V>> data) {
+    public <V extends Vec> Array<Double> generate(Integer degree, Array<Data<V>> data) {
         return Stream.fill(degree + 1, () -> data.head().getParam())
                 .appendAll(Stream.range(1, data.size() - degree).map(i -> average(i, degree, data)))
                 .appendAll(Stream.fill(degree + 1, () -> data.last().getParam()))

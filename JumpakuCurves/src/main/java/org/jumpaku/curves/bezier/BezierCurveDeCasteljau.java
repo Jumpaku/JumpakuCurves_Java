@@ -6,17 +6,14 @@
 package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
-import org.jumpaku.curves.utils.GeomUtils;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  *
  * @author Jumpaku
- * @param <S> 座標空間の種類  Type of the space. 
  * @param <V> {@link BezierCurveDeCasteljau#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link BezierCurveDeCasteljau#evaluate(java.lang.Double)}.
  */
-public class BezierCurveDeCasteljau<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
+public class BezierCurveDeCasteljau <V extends Vec> extends AbstractBezierCurve<V> {
     public BezierCurveDeCasteljau(Array<V> cp) {
         super(cp);
     }
@@ -33,7 +30,7 @@ public class BezierCurveDeCasteljau<S extends Space, V extends Vector<S>> extend
         Object[] cp = getControlPoints().toJavaArray();
         for(int n = getDegree(); n > 0; --n){
             for(int i = 0; i < n; ++i){
-                cp[i] = (V)GeomUtils.internallyDivide(t, (V)cp[i], (V)cp[i+1]);
+                cp[i] = (V)(((V)cp[i]).scale(1-t).add(t, (V)cp[i+1]));
             }
         }
         return (V)cp[0];

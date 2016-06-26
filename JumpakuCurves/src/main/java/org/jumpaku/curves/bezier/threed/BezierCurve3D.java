@@ -7,28 +7,26 @@ package org.jumpaku.curves.bezier.threed;
 
 import javaslang.collection.Array;
 import org.jumpaku.curves.bezier.BezierCurve;
-import org.jumpaku.curves.transform.Transform;
-import org.apache.commons.math3.geometry.euclidean.threed.Euclidean3D;
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.curves.vector.Vec3;
 
 /**
  *
  * @author Jumpaku
  */
-public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
+public class BezierCurve3D implements BezierCurve<Vec3>{
 
-    private final BezierCurve<Euclidean3D, Vector3D> curve;
+    private final BezierCurve<Vec3> curve;
     
-    public BezierCurve3D(BezierCurve<Euclidean3D, Vector3D> curve) {
+    public BezierCurve3D(BezierCurve<Vec3> curve) {
         this.curve = curve;
     }
     
-    public static BezierCurve3D create(Array<Vector3D> cp){
-        return new BezierCurve3D(BezierCurve.<Euclidean3D, Vector3D>create(cp));
+    public static BezierCurve3D create(Array<Vec3> cp){
+        return new BezierCurve3D(BezierCurve.<Vec3>create(cp));
     }
     
-    public static BezierCurve3D create(Vector3D... cps){
+    public static BezierCurve3D create(Vec3... cps){
         return BezierCurve3D.create(Array.of(cps));
     }
     
@@ -38,7 +36,7 @@ public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
     }
 
     @Override
-    public final Array<Vector3D> getControlPoints() {
+    public final Array<Vec3> getControlPoints() {
         return curve.getControlPoints();
     }
 
@@ -53,7 +51,7 @@ public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
     }
 
     @Override
-    public final BezierCurve<Euclidean3D, Vector3D> reduce() {
+    public final BezierCurve<Vec3> reduce() {
         return new BezierCurve3D(curve.reduce());
     }
     
@@ -63,10 +61,10 @@ public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
                 new BezierCurve3D(curve.divide(t).get(1)));
     }
 
-    @Override
+    /*@Override
     public final BezierCurve3D transform(Transform<Euclidean3D, Vector3D> transform) {
         return new BezierCurve3D(curve.transform(transform));
-    }
+    }*/
 
     @Override
     public final BezierCurve3D reverse() {
@@ -74,12 +72,12 @@ public class BezierCurve3D implements BezierCurve<Euclidean3D, Vector3D>{
     }
 
     @Override
-    public final Vector3D computeTangent(Double t) {
+    public final Vec3 computeTangent(Double t) {
         return curve.computeTangent(t);
     }
 
     @Override
-    public final Vector3D evaluate(Double t) {
+    public final Vec3 evaluate(Double t) {
         return curve.evaluate(t);
     }
 }

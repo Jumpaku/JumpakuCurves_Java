@@ -9,32 +9,31 @@ import java.util.LinkedList;
 import java.util.List;
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
-import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.jumpaku.curves.spline.BSplineCurve;
 import org.jumpaku.curves.spline.BSplineCurveDeBoor;
 import org.jumpaku.curves.spline.SplineCurve;
+import org.jumpaku.curves.vector.Vec2;
 
 /**
  *
  * @author Jumpaku
  */
-public class BSplineInterpolater2D implements Interpolater<Euclidean2D, Vector2D, SplineCurve<Euclidean2D, Vector2D>>{
+public class BSplineInterpolater2D implements Interpolater<Vec2, SplineCurve<Vec2>> {
     
     public static class Builder{
         private Integer degree;
-        private Stream<Data<Euclidean2D, Vector2D>> data = Stream.empty();
+        private Stream<Data<Vec2>> data = Stream.empty();
         private Array<Double> knots;
 
-        public Builder addAllData(Iterable<Data<Euclidean2D, Vector2D>> data){
+        public Builder addAllData(Iterable<Data<Vec2>> data){
             this.data = this.data.appendAll(data);
             return this;
         }
         
-        public Builder addData(Vector2D p, Double param){
+        public Builder addData(Vec2 p, Double param){
             data = data.append(new Data<>(p, param));
             return this;
         }
@@ -61,20 +60,20 @@ public class BSplineInterpolater2D implements Interpolater<Euclidean2D, Vector2D
         return new Builder();
     }
     
-    private final Array<Data<Euclidean2D, Vector2D>> data;
+    private final Array<Data<Vec2>> data;
     
     private final Array<Double> knots;
     
     private final Integer degree;
 
-    public BSplineInterpolater2D(Array<Data<Euclidean2D, Vector2D>> data, Array<Double> knots, Integer degree) {
+    public BSplineInterpolater2D(Array<Data<Vec2>> data, Array<Double> knots, Integer degree) {
         this.data = data;
         this.knots = knots;
         this.degree = degree;
     }
     
     @Override
-    public SplineCurve<Euclidean2D, Vector2D> interpolate() {
+    public SplineCurve<Vec2> interpolate() {
         
         RealMatrix m = new Array2DRowRealMatrix(data.size(), data.size());
         for(int i = 0; i < data.size(); ++i){
@@ -91,9 +90,9 @@ public class BSplineInterpolater2D implements Interpolater<Euclidean2D, Vector2D
         }
         
         RealMatrix tmp = m.multiply(dataPoints);
-        List<Vector2D> cp = new LinkedList<>();        
+        List<Vec2> cp = new LinkedList<>();        
         for(int i = 0; i < data.size(); ++i){
-            cp.add(new Vector2D(tmp.getEntry(i, 0), tmp.getEntry(i, 1)));
+            cp.add(new Vec2(tmp.getEntry(i, 0), tmp.getEntry(i, 1)));
         }
         
         return new BSplineCurveDeBoor<>(knots, Array.ofAll(cp), degree);

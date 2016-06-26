@@ -57,4 +57,12 @@ public interface Point {
 
         return difference(p).square();
     }
+    
+    default Boolean equals(Point p, Double eps){
+        return getVector().equals(p.getVector(), eps);
+    }
+    
+    default Boolean equals(Point p, Integer ulp){
+        return getVector().equals(p.getVector(), ulp);
+    }
 }

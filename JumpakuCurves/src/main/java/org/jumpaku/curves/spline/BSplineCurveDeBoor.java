@@ -11,6 +11,7 @@ import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.domain.ClosedOpen;
 import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  *
@@ -18,7 +19,7 @@ import org.jumpaku.curves.domain.Interval;
  * @param <S>
  * @param <V>
  */
-public final class BSplineCurveDeBoor<S extends Space, V extends Vector<S>> extends AbstractBSplineCurve<S, V> {
+public final class BSplineCurveDeBoor<V extends Vec> extends AbstractBSplineCurve<V> {
     
     private final Interval domain;
     public BSplineCurveDeBoor(Array<Double> knots, Array<V> controlPoints, Integer degree) {
@@ -49,7 +50,7 @@ public final class BSplineCurveDeBoor<S extends Space, V extends Vector<S>> exte
         for(int k = 1; k <= n; ++k){
             for(int i = l; i >= l-n+k; --i){
                 Double aki = (t - knots.get(i)) / (knots.get(i+n+1-k) - knots.get(i));
-                V cp = (V)((V)result[i-1]).scalarMultiply(1.0-aki).add(((V)result[i]).scalarMultiply(aki));
+                V cp = (V)((V)result[i-1]).scale(1.0-aki).add(((V)result[i]).scale(aki));
                 result[i] = cp;
             }
         }

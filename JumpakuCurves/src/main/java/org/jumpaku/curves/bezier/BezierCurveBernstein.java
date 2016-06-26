@@ -6,16 +6,14 @@
 package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  *
  * @author Jumpaku
- * @param <S> 座標空間の種類  Type of the space. 
  * @param <V> {@link BezierCurveBernstein#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link BezierCurveBernstein#evaluate(java.lang.Double)}.
  */
-public class BezierCurveBernstein<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
+public class BezierCurveBernstein<V extends Vec> extends AbstractBezierCurve<V> {
     
     private final Array<Double> combinations;
     
@@ -41,10 +39,10 @@ public class BezierCurveBernstein<S extends Space, V extends Vector<S>> extends 
         }
         
         Double ct = Math.pow(1-t, degree);
-        Vector<S> result = cps.get(0).getZero();
+        Vec result = Vec.zero(cps.get(0).getDimention());
         
         for(int i = 0; i <= degree; ++i){
-            result = result.add(cps.get(i).scalarMultiply(combinations.get(i)*ct));
+            result = result.add(cps.get(i).scale(combinations.get(i)*ct));
             ct *= (t / (1 - t));
         }
         

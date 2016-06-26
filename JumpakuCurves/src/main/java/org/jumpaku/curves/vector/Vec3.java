@@ -9,6 +9,7 @@ import java.util.Objects;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.apache.commons.math3.util.Precision;
 
 /**
  *
@@ -25,10 +26,11 @@ public class Vec3 implements Vec{
         this.vector3d = v;
     }
 
-    @Override
+    /*@Override
     public Vector<? extends Space> getVector(){
         return getVector3d();
-    }
+    }*/
+    
     @Override
     public Vec add(Vec v) {
         if(!Objects.equals(getDimention(), v.getDimention()))
@@ -77,5 +79,28 @@ public class Vec3 implements Vec{
     
     public Double getZ(){
         return getVector3d().getZ();
+    }
+
+    @Override
+    public Boolean equals(Vec v, Double eps) {
+        if(v == null)
+            return false;
+        
+        if(3 != v.getDimention())
+            return false;
+        
+        return Precision.equals(getX(), v.get(0), eps) && Precision.equals(getY(), v.get(1), eps) && Precision.equals(getZ(), v.get(2), eps);
+    }
+
+    @Override
+    public Boolean equals(Vec v, Integer ulp) {
+        if(v == null)
+            return false;
+        
+        if(! (v instanceof Vec3))
+            return false;
+        
+        Vec3 v3 = (Vec3)v;
+        return Precision.equals(getX(), v3.getX(), ulp) && Precision.equals(getY(), v3.getY(), ulp) && Precision.equals(getZ(), v3.getZ(), ulp);
     }
 }

@@ -11,6 +11,7 @@ import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.domain.Closed;
 import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  *
@@ -18,7 +19,7 @@ import org.jumpaku.curves.domain.Interval;
  * @param <S>
  * @param <V>
  */
-public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>> implements BSplineCurve<S, V> {
+public abstract class AbstractBSplineCurve<V extends Vec> implements BSplineCurve<V> {
         
     private final Interval domain;
     private final Array<Double> knots;
@@ -73,7 +74,7 @@ public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>>
     }
 
     @Override
-    public final BSplineCurve<S, V> insertKnot(Double u){
+    public final BSplineCurve<V> insertKnot(Double u){
         if(!getDomain().isIn(u))
             throw new IllegalArgumentException("New knot to add is out of domain.");
         
@@ -85,14 +86,14 @@ public abstract class AbstractBSplineCurve<S extends Space, V extends Vector<S>>
         List<V> tmp = List.empty();
         for(int i = k; i >= k-n+1; --i){
             Double a = (u - oknots.get(i)) / (oknots.get(i+n) - oknots.get(i));
-            tmp = tmp.prepend((V)ocps.get(i - 1).scalarMultiply(1.0 - a).add(ocps.get(i).scalarMultiply(a)));
+            tmp = tmp.prepend((V)ocps.get(i - 1).scale(1.0 - a).add(ocps.get(i).scale(a)));
         }
         
         Array<V> ncps = Array.ofAll(ocps.subSequence(k, ocps.size()).prependAll(tmp).prependAll(ocps.subSequence(0, k-n + 1)));
         Array<Double> nknots = oknots.insert(k + 1, u);
         
-        final SplineCurve<S, V> original = this;        
-        return new AbstractBSplineCurve<S, V>(nknots, ncps, n) {
+        final SplineCurve<V> original = this;        
+        return new AbstractBSplineCurve<V>(nknots, ncps, n) {
             @Override
             public V evaluate(Double t) {
                 return original.evaluate(t);

@@ -7,16 +7,14 @@ package org.jumpaku.curves.spline;
 
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  *
  * @author jumpaku
- * @param <S>
  * @param <V>
  */
-public final class BSplineCurveReduction<S extends Space, V extends Vector<S>> extends AbstractBSplineCurve<S, V>{
+public final class BSplineCurveReduction<V extends Vec> extends AbstractBSplineCurve<V>{
 
     public BSplineCurveReduction(Array<Double> knots, Array<V> controlPoints, Integer degree) {
         super(knots, controlPoints, degree);
@@ -28,7 +26,7 @@ public final class BSplineCurveReduction<S extends Space, V extends Vector<S>> e
             throw new IllegalArgumentException("t is out of domain");
         
         return (V) Stream.ofAll(getControlPoints()).zipWithIndex().map(cpi -> cpi.transform(
-                        (cp, i) -> cp.scalarMultiply(BSplineCurve.bSplineBasis(getDegree(), i.intValue(), t, getKnots()))))
+                        (cp, i) -> cp.scale(BSplineCurve.bSplineBasis(getDegree(), i.intValue(), t, getKnots()))))
                 .reduce((v1, v2) -> v1.add(v2));
     }
 }

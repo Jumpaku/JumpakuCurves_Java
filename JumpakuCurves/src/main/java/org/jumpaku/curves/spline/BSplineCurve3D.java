@@ -9,29 +9,30 @@ import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.euclidean.threed.Euclidean3D;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.curves.vector.Vec3;
 
 /**
  *
  * @author Jumpaku
  */
-public class BSplineCurve3D implements BSplineCurve<Euclidean3D, Vector3D>{
+public class BSplineCurve3D implements BSplineCurve<Vec3>{
 
-    BSplineCurve<Euclidean3D, Vector3D> curve;
+    BSplineCurve<Vec3> curve;
     
-    public static BSplineCurve3D create(Array<Double> knots, Array<Vector3D> controlPoints, Integer degree){
+    public static BSplineCurve3D create(Array<Double> knots, Array<Vec3> controlPoints, Integer degree){
         return new BSplineCurve3D(new BSplineCurveDeBoor<>(knots, controlPoints, degree));
     }
 
-    private BSplineCurve3D(BSplineCurveDeBoor<Euclidean3D, Vector3D> curve) {
+    private BSplineCurve3D(BSplineCurveDeBoor<Vec3> curve) {
         this.curve = curve;
     }
 
-    private BSplineCurve3D(BSplineCurve<Euclidean3D, Vector3D> curve) {
+    private BSplineCurve3D(BSplineCurve<Vec3> curve) {
         this.curve = curve;
     }
 
     @Override
-    public Vector3D evaluate(Double t) {
+    public Vec3 evaluate(Double t) {
         return curve.evaluate(t);
     }
 
@@ -41,7 +42,7 @@ public class BSplineCurve3D implements BSplineCurve<Euclidean3D, Vector3D>{
     }
 
     @Override
-    public Array<Vector3D> getControlPoints() {
+    public Array<Vec3> getControlPoints() {
         return curve.getControlPoints();
     }
 
