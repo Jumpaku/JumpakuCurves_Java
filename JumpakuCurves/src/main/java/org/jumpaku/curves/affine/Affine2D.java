@@ -195,6 +195,23 @@ public interface Affine2D extends Affine<Point2D>{
     }
     
     /**
+     * <p>平行移動変換 Translation.</p>
+     * <p>
+     * このAffine変換に更に平行移動変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される平行移動変換は指定された位置ベクトルの差ベクトルの分だけ平行移動します.</p>
+     * <p>
+     * This method concatenates translation transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Movement vector begins at given initial, and ends at given terminal.</p>
+     * @param initial 始点 initial point
+     * @param terminal 終点 terminal point
+     * @return 平行移動変換を追加したアフィン変換 Affin concatenated Transfomation
+     */
+    default Affine2D translate(Point2D initial, Point2D terminal){
+        return translate(new Vec2(terminal.difference(initial)));
+    }
+    /**
      * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
      * <p>
      * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
