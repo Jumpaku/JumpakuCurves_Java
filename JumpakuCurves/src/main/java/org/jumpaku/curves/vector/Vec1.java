@@ -8,31 +8,31 @@ package org.jumpaku.curves.vector;
 import java.util.Objects;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.commons.math3.geometry.euclidean.oned.Vector1D;
 
 /**
  *
  * @author Jumpaku
  */
-public class Vec2 implements Vec{
+public class Vec1 implements Vec{
     
-    private final Vector2D vector2d;
+    private final Vector1D vector1d;
     
-    public Vector2D getVector2d(){
-        return vector2d;
+    public Vector1D getVector1d(){
+        return vector1d;
     }
     
     @Override
     public Vector<? extends Space> getVector(){
-        return getVector2d();
+        return getVector1d();
     }
     
-    public Vec2(double x, double y) {
-        this(new Vector2D(x, y));
+    public Vec1(double x) {
+        this(new Vector1D(x));
     }
     
-    public Vec2(Vector2D v){
-        this.vector2d = v;
+    public Vec1(Vector1D v){
+        this.vector1d = v;
     }
 
     @Override
@@ -40,12 +40,12 @@ public class Vec2 implements Vec{
         if(!Objects.equals(getDimention(), v.getDimention()))
             throw new IllegalArgumentException("dimention miss match");
         
-        return new Vec2(getVector2d().add(((Vec2)v).getVector2d()));
+        return new Vec1(getVector1d().add(((Vec1)v).getVector1d()));
     }
 
     @Override
     public Vec scale(Double a) {
-        return new Vec2(getVector2d().scalarMultiply(a));
+        return new Vec1(getVector1d().scalarMultiply(a));
     }
 
     @Override
@@ -55,10 +55,10 @@ public class Vec2 implements Vec{
 
     @Override
     public Double get(Integer i) {
-        if(i < 0 && 2 <= i)
+        if(i < 0 && 1 <= i)
             throw new IllegalArgumentException("index is out of bounds");
         
-        return i == 0 ? getX() : getY();
+        return getX();
     }
 
     @Override
@@ -66,14 +66,10 @@ public class Vec2 implements Vec{
         if(!Objects.equals(getDimention(), v.getDimention()))
             throw new IllegalArgumentException("dimention miss match");
         
-        return getVector2d().dotProduct(((Vec2)v).getVector2d());
+        return getVector1d().dotProduct(((Vec1)v).getVector1d());
     }
 
     private Double getX() {
-        return getVector2d().getX();
-    }
-
-    private Double getY() {
-        return getVector2d().getY();
+        return getVector1d().getX();
     }
 }

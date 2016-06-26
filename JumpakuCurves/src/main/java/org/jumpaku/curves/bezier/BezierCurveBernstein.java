@@ -8,7 +8,6 @@ package org.jumpaku.curves.bezier;
 import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
-import static org.apache.commons.math3.util.CombinatoricsUtils.binomialCoefficientDouble;
 
 /**
  *
@@ -23,8 +22,7 @@ public class BezierCurveBernstein<S extends Space, V extends Vector<S>> extends 
     public BezierCurveBernstein(Array<V> cp) {
         super(cp);
         final Integer degree = cp.size() - 1;
-        combinations = javaslang.collection.Array.rangeClosed(0, degree)
-                .map(i -> binomialCoefficientDouble(degree, i));
+        combinations = BezierCurve.combinations(degree);
     }
     
     @Override
