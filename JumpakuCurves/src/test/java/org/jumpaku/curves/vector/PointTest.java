@@ -5,6 +5,7 @@
  */
 package org.jumpaku.curves.vector;
 
+import java.util.Arrays;
 import org.apache.commons.math3.util.Precision;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -18,6 +19,44 @@ public class PointTest {
     public PointTest() {
     }
 
+    
+    /**
+     * Test of getDimention method, of class Point.
+     */
+    @Test
+    public void testGetDimention() {
+        System.out.println("getDimention");
+        Point instance = new PointImpl(1,2,3,4);
+        Integer expResult = 4;
+        Integer result = instance.getDimention();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of create method, of class Point.
+     */
+    @Test
+    public void testCreate() {
+        System.out.println("create");
+        Vec v = new VecImpl(1,2,3,4);
+        Point expResult = new PointImpl(1,2,3,4);
+        Point result = Point.create(v);
+        assertTrue(checkEquals(expResult, result));
+    }
+
+    /**
+     * Test of affineCombination method, of class Point.
+     */
+    @Test
+    public void testAffineCombination() {
+        System.out.println("affineCombination");
+        Iterable<Double> cofficients = Arrays.asList(0.25,0.25,0.5);
+        Iterable<Point> points = Arrays.asList(new PointImpl(1,2,3,4), new PointImpl(-3,-4,-5,-6), new PointImpl(10, 5, 0, -5));
+        Point expResult = new PointImpl(4.5, 2, -0.5, -3);
+        Point result = Point.affineCombination(cofficients, points);
+        assertTrue(checkEquals(expResult, result));
+    }
+    
     /**
      * Test of origin method, of class Point.
      */
@@ -70,14 +109,14 @@ public class PointTest {
     }
 
     /**
-     * Test of dimention method, of class Point.
+     * Test of getDimention method, of class Point.
      */
     @Test
     public void testDimention() {
         System.out.println("dimention");
         Point instance = new PointImpl(3,4,5,-0);
         Integer expResult = 4;
-        Integer result = instance.dimention();
+        Integer result = instance.getDimention();
         assertEquals(expResult, result);
     }
 
@@ -248,15 +287,5 @@ public class PointTest {
         public Vec getVector() {
             return v;
         }
-
-        public Point move(Vec u) {
-            return new PointImpl(v.get(0)+u.get(0), v.get(1)+u.get(1), v.get(2)+u.get(2), v.get(3)+u.get(3));
-        }
-
-        public Point divide(Double t, Point p) {
-            Vec res = v.scale(1-t).add(t, p.getVector());
-            return new PointImpl(res.get(0), res.get(1), res.get(2), res.get(3));
-        }
     }
-    
 }

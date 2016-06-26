@@ -7,26 +7,25 @@ package org.jumpaku.curves.spline;
 
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
-import org.jumpaku.curves.vector.Vec;
+import org.jumpaku.curves.vector.Point;
 
 /**
  *
- * @author jumpaku
- * @param <V>
+ * @author Jumpaku
  */
-public final class BSplineCurveReduction<V extends Vec> extends AbstractBSplineCurve<V>{
+public final class BSplineCurveReduction extends AbstractBSplineCurve{
 
-    public BSplineCurveReduction(Array<Double> knots, Array<V> controlPoints, Integer degree) {
-        super(knots, controlPoints, degree);
+    public BSplineCurveReduction(Array<Double> knots, Array<Point> controlPoints, Integer degree, Integer dimention) {
+        super(knots, controlPoints, degree, dimention);
     }
     
     @Override
-    public V evaluate(Double t) {
+    public Point evaluate(Double t) {
         if(!getDomain().isIn(t))
             throw new IllegalArgumentException("t is out of domain");
         
-        return (V) Stream.ofAll(getControlPoints()).zipWithIndex().map(cpi -> cpi.transform(
-                        (cp, i) -> cp.scale(BSplineCurve.bSplineBasis(getDegree(), i.intValue(), t, getKnots()))))
-                .reduce((v1, v2) -> v1.add(v2));
+        return Point.create(Stream.ofAll(getControlPoints()).zipWithIndex().map(cpi -> cpi.transform(
+                        (cp, i) -> cp.getVector().scale(BSplineCurve.bSplineBasis(getDegree(), i.intValue(), t, getKnots()))))
+                .reduce((v1, v2) -> v1.add(v2)));
     }
 }

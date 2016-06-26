@@ -9,10 +9,10 @@ package org.jumpaku.curves.vector;
  *
  * @author Jumpaku
  */
-public class Point1D extends AbstractPoint{
+public class Point1D implements Point{
 
-    private Vec1 vector; 
-
+    private final Vec vector;
+    
     public Point1D(Double x){
         this(new Vec1(x));
     }
@@ -20,17 +20,9 @@ public class Point1D extends AbstractPoint{
     public Point1D(Vec1 vector) {
         this.vector = vector;
     }
-    
+
     @Override
     public Vec getVector() {
         return vector;
-    }
-
-    @Override
-    public Point toPoint(Vec v) {
-        if(v.getDimention() != 1)
-            throw new IllegalArgumentException("dimention miss match");
-        
-        return new Point1D((Vec1)v);
     }
 }

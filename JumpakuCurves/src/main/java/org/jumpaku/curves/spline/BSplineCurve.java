@@ -6,16 +6,13 @@
 package org.jumpaku.curves.spline;
 
 import javaslang.collection.Array;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
-import org.jumpaku.curves.vector.Vec;
+import org.jumpaku.curves.vector.Point;
 
 /**
  *
- * @author ito tomohiko
- * @param <V>
+ * @author Jumpaku
  */
-public interface BSplineCurve<V extends Vec> extends SplineCurve<V>{
+public interface BSplineCurve extends SplineCurve{
     
     /**
      * 
@@ -45,9 +42,9 @@ public interface BSplineCurve<V extends Vec> extends SplineCurve<V>{
         return Double.isFinite((a-b)/(c-d)) ? (a-b)/(c-d) : 0.0;
     }
     
-    public static <V extends Vec> BSplineCurve<V> create(Array<Double> knots, Array<V> controlPoints, Integer degree){
-        return new BSplineCurveDeBoor(knots, controlPoints, degree);
+    public static BSplineCurve create(Array<Double> knots, Array<Point> controlPoints, Integer degree, Integer dimention){
+        return new BSplineCurveDeBoor(knots, controlPoints, degree, dimention);
     }
     
-    BSplineCurve<V> insertKnot(Double u);    
+    BSplineCurve insertKnot(Double u);    
 }

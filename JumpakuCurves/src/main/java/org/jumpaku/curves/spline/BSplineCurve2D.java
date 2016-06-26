@@ -6,30 +6,30 @@
 package org.jumpaku.curves.spline;
 
 import javaslang.collection.Array;
-import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.jumpaku.curves.domain.Interval;
-import org.jumpaku.curves.vector.Vec2;
+import org.jumpaku.curves.vector.Point;
+import org.jumpaku.curves.vector.Point2D;
 
 /**
  *
  * @author ito tomohiko
  */
-public class BSplineCurve2D implements BSplineCurve<Vec2>{
+public class BSplineCurve2D implements BSplineCurve{
 
-    BSplineCurve<Vec2> curve;
+    BSplineCurve curve;
     
-    public static BSplineCurve2D create(Array<Double> knots, Array<Vec2> controlPoints, Integer degree){
-        return new BSplineCurve2D(new BSplineCurveDeBoor<>(knots, controlPoints, degree));
+    public static BSplineCurve2D create(Array<Double> knots, Array<Point2D> controlPoints, Integer degree){
+        return new BSplineCurve2D(new BSplineCurveDeBoor(knots, controlPoints.map(p2 -> p2), degree, 2));
     }
 
-    private BSplineCurve2D(BSplineCurve<Vec2> curve) {
+    private BSplineCurve2D(BSplineCurve curve) {
         this.curve = curve;
     }
 
     @Override
-    public Vec2 evaluate(Double t) {
-        return curve.evaluate(t);
+    public Point2D evaluate(Double t) {
+        Point p = curve.evaluate(t);
+        return new Point2D(p.get(0), p.get(1));
     }
 
     @Override
@@ -38,8 +38,8 @@ public class BSplineCurve2D implements BSplineCurve<Vec2>{
     }
 
     @Override
-    public Array<Vec2> getControlPoints() {
-        return curve.getControlPoints();
+    public Array<Point2D> getControlPoints() {
+        return curve.getControlPoints().map(p -> new Point2D(p.get(0), p.get(1)));
     }
 
     @Override
@@ -55,6 +55,11 @@ public class BSplineCurve2D implements BSplineCurve<Vec2>{
     @Override
     public BSplineCurve2D insertKnot(Double u) {
         return new BSplineCurve2D(curve.insertKnot(u));
+    }
+
+    @Override
+    public Integer getDimention() {
+        return 2;
     }
     
 }

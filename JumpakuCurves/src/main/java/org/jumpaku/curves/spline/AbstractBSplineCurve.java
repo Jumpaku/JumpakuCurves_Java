@@ -7,26 +7,23 @@ package org.jumpaku.curves.spline;
 
 import javaslang.collection.List;
 import javaslang.collection.Array;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.domain.Closed;
 import org.jumpaku.curves.domain.Interval;
-import org.jumpaku.curves.vector.Vec;
+import org.jumpaku.curves.vector.Point;
 
 /**
  *
  * @author Jumpaku
- * @param <S>
- * @param <V>
  */
-public abstract class AbstractBSplineCurve<V extends Vec> implements BSplineCurve<V> {
+public abstract class AbstractBSplineCurve implements BSplineCurve {
         
     private final Interval domain;
     private final Array<Double> knots;
-    private final Array<V> controlPoints;
+    private final Array<Point> controlPoints;
     private final Integer degree;
+    private final Integer dimention;
 
-    public AbstractBSplineCurve(Array<Double> knots, Array<V> controlPoints, Integer degree) {
+    public AbstractBSplineCurve(Array<Double> knots, Array<Point> controlPoints, Integer degree, Integer dimention) {
         if(knots.exists(k -> k == null))
             throw new IllegalArgumentException("knots contain null");
         
@@ -47,10 +44,19 @@ public abstract class AbstractBSplineCurve<V extends Vec> implements BSplineCurv
         if(controlPoints.size() != knots.size() - degree - 1)
             throw new IllegalArgumentException("control points and knots are wrong");
         
+        if(controlPoints.exists(p -> p.getDimention() != dimention))
+            throw new IllegalArgumentException("control points have defferent dimention");
+        
         this.knots = knots;
         this.controlPoints = controlPoints;
         this.degree = degree;
-        this.domain = new Closed(knots.get(degree), knots.get(knots.size() - degree - 1));  
+        this.domain = new Closed(knots.get(degree), knots.get(knots.size() - degree - 1));
+        this.dimention = dimention;
+    }
+
+    @Override
+    public Integer getDimention() {
+        return dimention;
     }
     
     @Override
@@ -59,7 +65,7 @@ public abstract class AbstractBSplineCurve<V extends Vec> implements BSplineCurv
     }
 
     @Override
-    public final Array<V> getControlPoints() {
+    public final Array<Point> getControlPoints() {
         return controlPoints;
     }
 
@@ -74,7 +80,7 @@ public abstract class AbstractBSplineCurve<V extends Vec> implements BSplineCurv
     }
 
     @Override
-    public final BSplineCurve<V> insertKnot(Double u){
+    public final BSplineCurve insertKnot(Double u){
         if(!getDomain().isIn(u))
             throw new IllegalArgumentException("New knot to add is out of domain.");
         
@@ -82,25 +88,25 @@ public abstract class AbstractBSplineCurve<V extends Vec> implements BSplineCurv
         final Integer k = oknots.lastIndexWhere(knot -> knot <= u);
         final Integer n = getDegree();
         
-        final List<V> ocps = getControlPoints().toList();
-        List<V> tmp = List.empty();
+        final List<Point> ocps = getControlPoints().toList();
+        List<Point> tmp = List.empty();
         for(int i = k; i >= k-n+1; --i){
             Double a = (u - oknots.get(i)) / (oknots.get(i+n) - oknots.get(i));
-            tmp = tmp.prepend((V)ocps.get(i - 1).scale(1.0 - a).add(ocps.get(i).scale(a)));
+            tmp = tmp.prepend(Point.create(ocps.get(i - 1).getVector().scale(1.0 - a).add(ocps.get(i).getVector().scale(a))));
         }
         
-        Array<V> ncps = Array.ofAll(ocps.subSequence(k, ocps.size()).prependAll(tmp).prependAll(ocps.subSequence(0, k-n + 1)));
+        Array<Point> ncps = Array.ofAll(ocps.subSequence(k, ocps.size()).prependAll(tmp).prependAll(ocps.subSequence(0, k-n + 1)));
         Array<Double> nknots = oknots.insert(k + 1, u);
         
-        final SplineCurve<V> original = this;        
-        return new AbstractBSplineCurve<V>(nknots, ncps, n) {
+        final SplineCurve original = this;        
+        return new AbstractBSplineCurve(nknots, ncps, n, getDimention()) {
             @Override
-            public V evaluate(Double t) {
+            public Point evaluate(Double t) {
                 return original.evaluate(t);
             }
         };
     }
     
     @Override
-    public abstract V evaluate(Double t);
+    public abstract Point evaluate(Double t);
 }

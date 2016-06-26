@@ -18,6 +18,9 @@ public interface Vec{
         return new Vec(){
             @Override
             public Vec add(Vec v) {
+                if(getDimention() != v.getDimention())
+                    throw new IllegalArgumentException("dimention miss match");
+        
                 return v;
             }
 
@@ -33,11 +36,17 @@ public interface Vec{
 
             @Override
             public Double get(Integer i) {
+                if(i < 0 || dimention <= i)
+                    throw new IllegalArgumentException("index is out of bounds");
+                
                 return 0.0;
             }
 
             @Override
             public Double dot(Vec v) {
+                if(getDimention() != v.getDimention())
+                    throw new IllegalArgumentException("dimention miss match");
+        
                 return 0.0;
             }            
 
@@ -51,7 +60,7 @@ public interface Vec{
 
             @Override
             public Boolean equals(Vec v, Double eps) {
-                if(Objects.equals(dimention, v.getDimention())){
+                if(dimention == v.getDimention()){
                     for(int i = 0; i < dimention; ++i){
                         if(!Precision.equals(0.0, v.get(i), eps))
                             return false;
@@ -63,7 +72,7 @@ public interface Vec{
 
             @Override
             public Boolean equals(Vec v, Integer ulp) {
-                if(Objects.equals(dimention, v.getDimention())){
+                if(dimention == v.getDimention()){
                     for(int i = 0; i < dimention; ++i){
                         if(!Precision.equals(0.0, v.get(i), ulp))
                             return false;
@@ -75,7 +84,10 @@ public interface Vec{
         };
     }
     
-    static Vec add(Double a, Vec v1, Double b, Vec v2){
+    public static Vec add(Double a, Vec v1, Double b, Vec v2){
+        if(v1.getDimention() != v2.getDimention())
+            throw new IllegalArgumentException("dimention miss match");
+        
         return v1.scale(a).add(b, v2);
     }
     
@@ -89,14 +101,12 @@ public interface Vec{
     
     Double dot(Vec v);
     
-    //Vector<? extends Space> getVector();
-    
     Boolean equals(Vec v, Double eps);
     
     Boolean equals(Vec v, Integer ulp);
     
     default Vec sub(Vec v){
-        if(!Objects.equals(getDimention(), v.getDimention()))
+        if(getDimention() != v.getDimention())
             throw new IllegalArgumentException("dimention miss match");
         
         return add(v.negate());
@@ -111,7 +121,7 @@ public interface Vec{
     }
     
     default Vec add(Double a, Vec v){
-        if(!Objects.equals(getDimention(), v.getDimention()))
+        if(getDimention() != v.getDimention())
             throw new IllegalArgumentException("dimention miss match");
         
         return add(v.scale(a));

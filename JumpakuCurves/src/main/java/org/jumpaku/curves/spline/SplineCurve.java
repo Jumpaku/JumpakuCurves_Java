@@ -6,32 +6,33 @@
 package org.jumpaku.curves.spline;
 
 import javaslang.collection.Array;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.Curve;
 import org.jumpaku.curves.domain.Interval;
-import org.jumpaku.curves.vector.Vec;
+import org.jumpaku.curves.vector.Point;
 
 /**
  * <p>Spline曲線のインターフェイス Interface of Spline Curve.</p>
  * 
  * @author Jumpaku
- * @param <S>
- * @param <V>
  */
-public interface SplineCurve<V extends Vec> extends Curve<V>{
+public interface SplineCurve extends Curve{
    
     /**
-     *
+     * {@inheritDoc }
      * @return
      */
+    @Override
     Interval getDomain();
+
+    /**{@inheritDoc }*/
+    @Override
+    public Integer getDimention();
     
     /**
      * 
      * @return 
      */
-    Array<V> getControlPoints();
+    Array<? extends Point> getControlPoints();
     
     /**
      * 
@@ -51,5 +52,5 @@ public interface SplineCurve<V extends Vec> extends Curve<V>{
      * @return 
      */
     @Override
-    V evaluate(Double t);
+    Point evaluate(Double t);
 }

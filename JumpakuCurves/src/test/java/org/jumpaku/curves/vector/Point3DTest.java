@@ -18,31 +18,6 @@ public class Point3DTest {
     public Point3DTest() {
     }
 
-    /**
-     * Test of toPoint method, of class Point3D.
-     */
-    @Test
-    public void testToPoint() {
-        System.out.println("toPoint");
-        Vec v = new Vec3(1.0, -0.0, 1000.0);
-        Point3D instance = new Point3D(4.2, 9.0, 4.9);
-        Point expResult = new Point3D(1.0, -0.0, 1000.0);
-        Point result = instance.toPoint(v);
-        assertTrue(checkEquals(expResult, result));
-    }
-
-    /**
-     * Test of getVector method, of class Point3D.
-     */
-    @Test
-    public void testGetVector() {
-        System.out.println("getVector");
-        Point3D instance = new Point3D(2.8, -0.0001, 10000000.2);
-        Vec expResult = new Vec3(2.8, -0.0001, 10000000.2);
-        Vec result = instance.getVector();
-        assert(checkEquals(expResult, result));
-    }
- 
     private static boolean checkEquals(Point p1, Point p2){
         return checkEqualsDouble(p1.get(0), p2.get(0)) && checkEqualsDouble(p1.get(1), p2.get(1)) && checkEqualsDouble(p1.get(2), p2.get(2));
     }
@@ -53,5 +28,17 @@ public class Point3DTest {
         
     private static boolean checkEqualsDouble(Double a, Double b){
         return Precision.equals(a, b, 1.0e-10);
+    }
+
+    /**
+     * Test of getVector method, of class Point3D.
+     */
+    @Test
+    public void testGetVector() {
+        System.out.println("getVector");
+        Point3D instance = new Point3D(2.3,-0.009,0.9991);
+        Vec expResult = new Vec3(2.3, -0.009, 0.9991);
+        Vec result = instance.getVector();
+        assertTrue(checkEquals(expResult, result));
     }
 }

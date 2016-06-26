@@ -8,25 +8,28 @@ package org.jumpaku.curves.bezier.threed;
 import javaslang.collection.Array;
 import org.jumpaku.curves.bezier.BezierCurve;
 import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.curves.vector.Point;
+import org.jumpaku.curves.vector.Point3D;
+import org.jumpaku.curves.vector.Vec;
 import org.jumpaku.curves.vector.Vec3;
 
 /**
  *
  * @author Jumpaku
  */
-public class BezierCurve3D implements BezierCurve<Vec3>{
+public class BezierCurve3D implements BezierCurve{
 
-    private final BezierCurve<Vec3> curve;
+    private final BezierCurve curve;
     
-    public BezierCurve3D(BezierCurve<Vec3> curve) {
+    public BezierCurve3D(BezierCurve curve) {
         this.curve = curve;
     }
     
-    public static BezierCurve3D create(Array<Vec3> cp){
-        return new BezierCurve3D(BezierCurve.<Vec3>create(cp));
+    public static BezierCurve3D create(Array<Point3D> cp){
+        return new BezierCurve3D(BezierCurve.create(cp.map(p3 -> p3), 3));
     }
     
-    public static BezierCurve3D create(Vec3... cps){
+    public static BezierCurve3D create(Point3D... cps){
         return BezierCurve3D.create(Array.of(cps));
     }
     
@@ -36,8 +39,8 @@ public class BezierCurve3D implements BezierCurve<Vec3>{
     }
 
     @Override
-    public final Array<Vec3> getControlPoints() {
-        return curve.getControlPoints();
+    public final Array<Point3D> getControlPoints() {
+        return curve.getControlPoints().map(p -> new Point3D(p.get(0), p.get(1), p.get(2)));
     }
 
     @Override
@@ -51,7 +54,7 @@ public class BezierCurve3D implements BezierCurve<Vec3>{
     }
 
     @Override
-    public final BezierCurve<Vec3> reduce() {
+    public final BezierCurve reduce() {
         return new BezierCurve3D(curve.reduce());
     }
     
@@ -73,11 +76,18 @@ public class BezierCurve3D implements BezierCurve<Vec3>{
 
     @Override
     public final Vec3 computeTangent(Double t) {
-        return curve.computeTangent(t);
+        Vec tangent = curve.computeTangent(t);
+        return new Vec3(tangent.get(0), tangent.get(1), tangent.get(2));
     }
 
     @Override
-    public final Vec3 evaluate(Double t) {
-        return curve.evaluate(t);
+    public final Point3D evaluate(Double t) {
+        Point p = curve.evaluate(t);
+        return new Point3D(p.get(0), p.get(1), p.get(2));
+    }
+
+    @Override
+    public Integer getDimention() {
+        return 3;
     }
 }
