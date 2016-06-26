@@ -5,9 +5,6 @@
  */
 package org.jumpaku.curves.vector;
 
-import java.util.Objects;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.util.Precision;
 
@@ -19,14 +16,9 @@ public class Vec2 implements Vec{
     
     private final Vector2D vector2d;
     
-    public Vector2D getVector2d(){
+    private Vector2D getVector2d(){
         return vector2d;
     }
-    
-    /*@Override
-    public Vector<? extends Space> getVector(){
-        return getVector2d();
-    }*/
     
     public Vec2(double x, double y) {
         this(new Vector2D(x, y));
@@ -35,13 +27,20 @@ public class Vec2 implements Vec{
     public Vec2(Vector2D v){
         this.vector2d = v;
     }
+    
+    public Vec2(Vec v){
+        if(2 != v.getDimention())
+            throw new IllegalArgumentException("dimention miss match");
+            
+        vector2d = new Vector2D(v.get(0), v.get(1));
+    }
 
     @Override
     public Vec add(Vec v) {
-        if(!Objects.equals(getDimention(), v.getDimention()))
+        if(2 != v.getDimention())
             throw new IllegalArgumentException("dimention miss match");
         
-        return new Vec2(getVector2d().add(((Vec2)v).getVector2d()));
+        return new Vec2(getVector2d().add(new Vector2D(v.get(0), v.get(1))));
     }
 
     @Override
@@ -64,10 +63,10 @@ public class Vec2 implements Vec{
 
     @Override
     public Double dot(Vec v) {
-        if(!Objects.equals(getDimention(), v.getDimention()))
+        if(2 != v.getDimention())
             throw new IllegalArgumentException("dimention miss match");
         
-        return getVector2d().dotProduct(((Vec2)v).getVector2d());
+        return getVector2d().dotProduct(new Vector2D(v.get(0), v.get(1)));
     }
 
     public Double getX() {

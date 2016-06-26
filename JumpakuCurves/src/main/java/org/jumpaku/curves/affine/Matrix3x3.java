@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curves.transform;
+package org.jumpaku.curves.affine;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
+import org.jumpaku.curves.vector.Point2D;
+import org.jumpaku.curves.vector.Vec2;
 
 /**
  *
@@ -25,14 +26,14 @@ public class Matrix3x3 implements Affine2D {
         this.matrix = matrix.copy();
     }
     
-    protected static Vector2D convert(RealVector v){
-        return new Vector2D(v.getEntry(0), v.getEntry(1));
+    protected static Point2D convert(RealVector v){
+        return new Point2D(v.getEntry(0), v.getEntry(1));
     }
-    protected static RealVector convert(Vector2D v){
+    protected static RealVector convert(Vec2 v){
         return new ArrayRealVector(new double[]{v.getX(), v.getY(), 1});
     }
-    protected static Vector2D multiply(RealMatrix m, Vector2D v){
-        return convert(m.operate(convert(v)));
+    protected static Point2D transform(RealMatrix m, Point2D v){
+        return convert(m.operate(convert(new Vec2(v.getVector()))));
     }
     
     public static Affine2D createScaling(Double x, Double y){
@@ -49,7 +50,7 @@ public class Matrix3x3 implements Affine2D {
             {0, 0, 1}
         }));
     }
-    public static Affine2D createTranslation(Vector2D move){
+    public static Affine2D createTranslation(Vec2 move){
         return new Matrix3x3(MatrixUtils.createRealMatrix(new double[][]{
             { 1, 0, move.getX() },
             { 0, 1, move.getY() },
@@ -68,28 +69,28 @@ public class Matrix3x3 implements Affine2D {
     public static Affine2D createScaling(Double scalar){
         return createScaling(scalar, scalar);
     }
-    public static Affine2D createScalingAt(Vector2D center, Double scalar){
+    public static Affine2D createScalingAt(Point2D center, Double scalar){
         return createScalingAt(center, scalar, scalar);
     }
-    public static Affine2D createScalingAt(Vector2D center, Double x, Double y){
-        return createTranslation(center.negate()).scale(x, y).translate(center);
+    public static Affine2D createScalingAt(Point2D center, Double x, Double y){
+        return createTranslation(new Vec2(center.getVector().negate())).scale(x, y).translate(new Vec2(center.getVector()));
     }
-    public static Affine2D createRotationAt(Vector2D center, Double radian){
-        return createTranslation(center.negate()).rotate(radian).translate(center);
+    public static Affine2D createRotationAt(Point2D center, Double radian){
+        return createTranslation(new Vec2(center.getVector().negate())).rotate(radian).translate(new Vec2(center.getVector()));
     }
-    public static Affine2D createShearingAt(Vector2D pivot, Double x, Double y){
-        return createTranslation(pivot.negate()).shear(x, y).translate(pivot);
+    public static Affine2D createShearingAt(Point2D pivot, Double x, Double y){
+        return createTranslation(new Vec2(pivot.getVector().negate())).shear(x, y).translate(new Vec2(pivot.getVector()));
     }
     public static Affine2D createShearingX(Double x){
         return createShearing(x, 0.0);
     }    
-    public static Affine2D createShearingY(Vector2D pivot, Double x, Double y){
+    public static Affine2D createShearingY(Double x, Double y){
         return createShearing(0.0, y);
     }
-    public static Affine2D createShearingXAt(Vector2D v, Double x){
+    public static Affine2D createShearingXAt(Point2D v, Double x){
         return createShearingAt(v, x, 0.0);
     }
-    public static Affine2D createShearingYAt(Vector2D v, Double y){
+    public static Affine2D createShearingYAt(Point2D v, Double y){
         return createShearingAt(v, 0.0, y);
     }
     public static Affine2D createSqueeze(Double k){
@@ -122,7 +123,7 @@ public class Matrix3x3 implements Affine2D {
         return concatenate(createRotation(radian));
     }
     @Override
-    public final Affine2D translate(Vector2D v) {
+    public final Affine2D translate(Vec2 v) {
         return concatenate(createTranslation(v));
     }
     @Override
@@ -131,8 +132,8 @@ public class Matrix3x3 implements Affine2D {
     }
 
     @Override
-    public final Vector2D apply(Vector2D v) {
-        return multiply(matrix, v);
+    public final Point2D apply(Point2D v) {
+        return transform(matrix, v);
     }
 
     @Override
@@ -157,7 +158,7 @@ public class Matrix3x3 implements Affine2D {
                     }
 
                     @Override
-                    protected Affine2D createTranslation(Vector2D v) {
+                    protected Affine2D createTranslation(Vec2 v) {
                         return Matrix3x3.createTranslation(v);
                     }
 
@@ -167,7 +168,7 @@ public class Matrix3x3 implements Affine2D {
                     }
 
                     @Override
-                    public Vector2D apply(Vector2D v) {
+                    public Point2D apply(Point2D v) {
                         return t.apply(original.apply(v));
                     }
 
@@ -176,5 +177,10 @@ public class Matrix3x3 implements Affine2D {
                         return t.invert().concatenate(original.invert());
                     }
                 };
+    }
+
+    @Override
+    public Integer getDimention() {
+        return 2;
     }
 }

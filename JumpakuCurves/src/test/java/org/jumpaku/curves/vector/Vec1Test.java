@@ -20,18 +20,6 @@ public class Vec1Test {
     }
 
     /**
-     * Test of getVector1d method, of class Vec1.
-     */
-    @Test
-    public void testGetVector1d() {
-        System.out.println("getVector1d");
-        Vec1 instance = new Vec1(2.8);
-        Vector1D expResult = new Vector1D(2.8);
-        Vector1D result = instance.getVector1d();
-        assertTrue(checkEqualsDouble(result.getX(), expResult.getX()));
-    }
-
-    /**
      * Test of add method, of class Vec1.
      */
     @Test

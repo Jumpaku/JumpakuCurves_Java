@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curves.transform;
+package org.jumpaku.curves.affine;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.jumpaku.curves.vector.Point2D;
+import org.jumpaku.curves.vector.Vec2;
 
 /**
  *
@@ -17,7 +18,7 @@ public abstract class AbstractAffine2D implements Affine2D {
     
     protected abstract Affine2D createRotation(Double radian);
     
-    protected abstract Affine2D createTranslation(Vector2D v);
+    protected abstract Affine2D createTranslation(Vec2 v);
     
     protected abstract Affine2D createShearing(Double x, Double y);
     
@@ -29,7 +30,7 @@ public abstract class AbstractAffine2D implements Affine2D {
             }
 
             @Override
-            public Vector2D apply(Vector2D v) {
+            public Point2D apply(Point2D v) {
                 return second.apply(first.apply(v));
             }
             @Override
@@ -43,7 +44,7 @@ public abstract class AbstractAffine2D implements Affine2D {
             }
 
             @Override
-            protected Affine2D createTranslation(Vector2D v) {
+            protected Affine2D createTranslation(Vec2 v) {
                 return first.createTranslation(v);
             }
 
@@ -63,7 +64,7 @@ public abstract class AbstractAffine2D implements Affine2D {
         return concatenate(createRotation(radian));
     }
     @Override
-    public Affine2D translate(Vector2D v){
+    public Affine2D translate(Vec2 v){
         return concatenate(createTranslation(v));
     }
     @Override

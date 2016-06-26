@@ -9,8 +9,8 @@ import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.domain.Interval;
-import org.jumpaku.curves.transform.Transform;
 import org.jumpaku.curves.vector.WeightedPoint;
+import org.jumpaku.curves.affine.Affine;
 
 /**
  *
@@ -68,7 +68,7 @@ public class RationalBezierCurveBernstein<S extends Space, V extends Vector<S>> 
     }
 
     @Override
-    public BezierCurve<S, V> transform(Transform<S, V> transform) {
+    public BezierCurve<S, V> transform(Affine<S, V> transform) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
