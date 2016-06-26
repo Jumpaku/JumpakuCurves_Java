@@ -9,25 +9,26 @@ import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.curves.vector.Vec2;
 
 /**
  *
  * @author ito tomohiko
  */
-public class BSplineCurve2D implements BSplineCurve<Euclidean2D, Vector2D>{
+public class BSplineCurve2D implements BSplineCurve<Vec2>{
 
-    BSplineCurve<Euclidean2D, Vector2D> curve;
+    BSplineCurve<Vec2> curve;
     
-    public static BSplineCurve2D create(Array<Double> knots, Array<Vector2D> controlPoints, Integer degree){
+    public static BSplineCurve2D create(Array<Double> knots, Array<Vec2> controlPoints, Integer degree){
         return new BSplineCurve2D(new BSplineCurveDeBoor<>(knots, controlPoints, degree));
     }
 
-    private BSplineCurve2D(BSplineCurve<Euclidean2D, Vector2D> curve) {
+    private BSplineCurve2D(BSplineCurve<Vec2> curve) {
         this.curve = curve;
     }
 
     @Override
-    public Vector2D evaluate(Double t) {
+    public Vec2 evaluate(Double t) {
         return curve.evaluate(t);
     }
 
@@ -37,7 +38,7 @@ public class BSplineCurve2D implements BSplineCurve<Euclidean2D, Vector2D>{
     }
 
     @Override
-    public Array<Vector2D> getControlPoints() {
+    public Array<Vec2> getControlPoints() {
         return curve.getControlPoints();
     }
 

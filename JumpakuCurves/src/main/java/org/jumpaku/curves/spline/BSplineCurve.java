@@ -8,14 +8,14 @@ package org.jumpaku.curves.spline;
 import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  *
  * @author ito tomohiko
- * @param <S>
  * @param <V>
  */
-public interface BSplineCurve<S extends Space, V extends Vector<S>> extends SplineCurve<S, V>{
+public interface BSplineCurve<V extends Vec> extends SplineCurve<V>{
     
     /**
      * 
@@ -45,9 +45,9 @@ public interface BSplineCurve<S extends Space, V extends Vector<S>> extends Spli
         return Double.isFinite((a-b)/(c-d)) ? (a-b)/(c-d) : 0.0;
     }
     
-    public static <S extends Space, V extends Vector<S>> BSplineCurve<S, V> create(Array<Double> knots, Array<V> controlPoints, Integer degree){
+    public static <V extends Vec> BSplineCurve<V> create(Array<Double> knots, Array<V> controlPoints, Integer degree){
         return new BSplineCurveDeBoor(knots, controlPoints, degree);
     }
     
-    BSplineCurve<S, V> insertKnot(Double u);    
+    BSplineCurve<V> insertKnot(Double u);    
 }

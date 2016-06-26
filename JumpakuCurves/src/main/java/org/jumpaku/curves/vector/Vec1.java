@@ -6,9 +6,8 @@
 package org.jumpaku.curves.vector;
 
 import java.util.Objects;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
 import org.apache.commons.math3.geometry.euclidean.oned.Vector1D;
+import org.apache.commons.math3.util.Precision;
 
 /**
  *
@@ -22,12 +21,12 @@ public class Vec1 implements Vec{
         return vector1d;
     }
     
-    @Override
+    /*@Override
     public Vector<? extends Space> getVector(){
         return getVector1d();
-    }
+    }*/
     
-    public Vec1(double x) {
+    public Vec1(Double x) {
         this(new Vector1D(x));
     }
     
@@ -50,13 +49,13 @@ public class Vec1 implements Vec{
 
     @Override
     public Integer getDimention() {
-        return 2;
+        return 1;
     }
 
     @Override
     public Double get(Integer i) {
-        if(i < 0 && 1 <= i)
-            throw new IllegalArgumentException("index is out of bounds");
+        if(0 != i)
+            throw new IllegalArgumentException("index is not 0");
         
         return getX();
     }
@@ -69,7 +68,29 @@ public class Vec1 implements Vec{
         return getVector1d().dotProduct(((Vec1)v).getVector1d());
     }
 
-    private Double getX() {
+    public Double getX() {
         return getVector1d().getX();
+    }
+
+    @Override
+    public Boolean equals(Vec v, Double eps) {
+        if(v == null)
+            return false;
+        
+        if(1 != v.getDimention())
+            return false;
+        
+        return Precision.equals(getX(), ((Vec1)v).getX(), eps);
+    }
+
+    @Override
+    public Boolean equals(Vec v, Integer ulp) {
+        if(v == null)
+            return false;
+        
+        if(1 != v.getDimention())
+            return false;
+        
+        return Precision.equals(getX(), v.get(0), ulp);
     }
 }

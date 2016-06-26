@@ -10,6 +10,7 @@ import org.jumpaku.curves.utils.GeomUtils;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.transform.Transform;
 import org.apache.commons.math3.geometry.Space;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  * <p>Bezier曲線の基底クラス Basic class of Bezier Curve.</p>
@@ -19,10 +20,9 @@ import org.apache.commons.math3.geometry.Space;
  * Override {@link AbstractBezierCurve#evaluate(java.lang.Double) }.</p>
  * 
  * @author Jumpaku
- * @param <S> 座標空間の種類 Type of the space. 
  * @param <V> ベクトルの型 Type of vector
  */
-public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> implements BezierCurve<S, V>{
+public abstract class AbstractBezierCurve<V extends Vec> implements BezierCurve<V>{
     
     private final Array<V> controlPoints;
     
@@ -50,20 +50,20 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
         this.controlPoints = controlPoints;
     }
         
-    private static <S extends Space, V extends Vector<S>> Array<V> createElevatedControlPonts(Array<? extends V> controlPoints){
+    private static <V extends Vec> Array<V> createElevatedControlPonts(Array<? extends V> controlPoints){
         Integer n = controlPoints.size() - 1;
         List<V> result = new LinkedList<>();
         result.add(controlPoints.get(0));        
         for(int i = 1; i <= n; ++i){
             Double a = i/(double)(n+1);
             Double b = 1-a;
-            result.add(GeomUtils.scalingAdd(b, controlPoints.get(i), a, controlPoints.get(i-1)));
+            result.add((V)Vec.add(b, controlPoints.get(i), a, controlPoints.get(i-1)));
         }
         result.add(controlPoints.get(n));
         return Array.ofAll(result);
     }
     
-    private static <S extends Space, V extends Vector<S>> Array<V> createReducedControlPonts(Array<? extends V> originalcps){
+    private static <V extends Vec> Array<V> createReducedControlPonts(Array<? extends V> originalcps){
         Integer n = originalcps.size() - 1;
         Integer m = n + 1;
         if(m < 2)
@@ -71,47 +71,47 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
             
         Object[] cps = new Object[n];
         if(m == 2){
-            cps[0] = originalcps.get(0).add(originalcps.get(1)).scalarMultiply(0.5);
+            cps[0] = originalcps.get(0).add(originalcps.get(1)).scale(0.5);
         }
         else if(m%2==0){
             Integer r = (m-2)/2;
             cps[0] = originalcps.get(0);
             for(int i = 1; i <= r-1; ++i){
                 Double a = i/(m-1.0);
-                cps[i] = originalcps.get(i).add(-a, (Vector<S>)cps[i-1]).scalarMultiply(1.0/(1.0-a));
+                cps[i] = originalcps.get(i).add(-a, (Vec)cps[i-1]).scale(1.0/(1.0-a));
             }
             cps[n-1] = originalcps.get(n);
             for(int i = m-3; i >= r+1; --i){
                 Double a = (i+1.0)/(m-1.0);
-                cps[i] = originalcps.get(i+1).add(-1.0+a, (Vector<S>)cps[i+1]).scalarMultiply(1.0/a);
+                cps[i] = originalcps.get(i+1).add(-1.0+a, (Vec)cps[i+1]).scale(1.0/a);
             }
             Double al = r/(m-1.0);
             Double ar = (r+1)/(m-1.0);
-            Vector<S> left = originalcps.get(r).add(-al, (Vector<S>)cps[r-1]).scalarMultiply(1.0/(1.0-al));
-            Vector<S> right = originalcps.get(r+1).add(-1.0+ar, (Vector<S>)cps[r+1]).scalarMultiply(1.0/ar);
-            cps[r] = left.add(right).scalarMultiply(0.5);
+            Vec left = originalcps.get(r).add(-al, (Vec)cps[r-1]).scale(1.0/(1.0-al));
+            Vec right = originalcps.get(r+1).add(-1.0+ar, (Vec)cps[r+1]).scale(1.0/ar);
+            cps[r] = left.add(right).scale(0.5);
         }
         else{
             cps[0] = originalcps.get(0);
             Integer r = (m-3)/2;
             for(int i = 1; i <= r; ++i){
                 Double a = i/(m-1.0);
-                cps[i] = originalcps.get(i).add(-a, (Vector<S>)cps[i-1]).scalarMultiply(1.0/(1.0-a));
+                cps[i] = originalcps.get(i).add(-a, (Vec)cps[i-1]).scale(1.0/(1.0-a));
             }
             cps[n-1] = originalcps.get(n);
             for(int i = m - 3; i >= r+1; --i){
                 Double a = (i+1.0)/(m-1.0);
-                cps[i] = originalcps.get(i+1).add(-1.0+a, (Vector<S>)cps[i+1]).scalarMultiply(1.0/a);
+                cps[i] = originalcps.get(i+1).add(-1.0+a, (Vec)cps[i+1]).scale(1.0/a);
             }
         }
         
         return Array.of(cps).map(o -> (V)o);//.collect(Collectors.toList());
     }
     
-    private static class DegreeElevated<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V>{
+    private static class DegreeElevated<V extends Vec> extends AbstractBezierCurve<V>{
         private final Integer elevated;
-        private final AbstractBezierCurve<S, V> reduced;
-        public DegreeElevated(Integer elevated, Array<V> cps, AbstractBezierCurve<S, V> reduced) {
+        private final AbstractBezierCurve<V> reduced;
+        public DegreeElevated(Integer elevated, Array<V> cps, AbstractBezierCurve<V> reduced) {
             super(cps);
             this.elevated = elevated;
             this.reduced = reduced;
@@ -123,17 +123,17 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
         }
         
         @Override
-        public final BezierCurve<S, V> elevate(){
+        public final BezierCurve<V> elevate(){
             return new DegreeElevated<>(elevated+1, createElevatedControlPonts(getControlPoints()), this);
         }
         
         @Override
-        public final BezierCurve<S, V> reduce(){
+        public final BezierCurve<V> reduce(){
             return elevated >= 1 ? reduced : BezierCurve.create(createReducedControlPonts(getControlPoints()));
         }
     }
     
-    private static <S extends Space, V extends Vector<S>> Array<Array<V>> createDividedControlPoints(Object[] cp, Double t){
+    private static <V extends Vec> Array<Array<V>> createDividedControlPoints(Object[] cp, Double t){
         if(!DOMAIN.isIn(t))
             throw new IllegalArgumentException("The parameter t is out of domain [0,1], t = " + t);
         
@@ -144,7 +144,7 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
         second.addFirst((V)cp[n]);
         while(n > 0){
             for(int i = 0; i < n; ++i){
-                cp[i] = GeomUtils.internallyDivide(t, (Vector<S>)cp[i], (Vector<S>)cp[i+1]);
+                cp[i] = ((Vec)cp[i]).scale(1-t).add(t, ((Vec)cp[i+1]));
             }
             first.addLast((V)cp[0]);
             second.addFirst((V)cp[--n]);
@@ -153,34 +153,34 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
         return Array.of(Array.ofAll(first), Array.ofAll(second));
     }
     
-    private static <S extends Space, V extends Vector<S>> Array<BezierCurve<S, V>> divide(Double t, Array<V> controlPoints, Function<Double, V> evaluator){
+    private static <V extends Vec> Array<BezierCurve<V>> divide(Double t, Array<V> controlPoints, Function<Double, V> evaluator){
         Array<Array<V>> cps = createDividedControlPoints(controlPoints.toJavaArray(), t);
-        return Array.of(new AbstractBezierCurve<S, V>(cps.get(0)){
+        return Array.of(new AbstractBezierCurve<V>(cps.get(0)){
             @Override public V evaluate(Double s) {
                 return evaluator.apply(s*t);
             }            
         },
-        new AbstractBezierCurve<S, V>(cps.get(1)){
+        new AbstractBezierCurve<V>(cps.get(1)){
             @Override public V evaluate(Double s) {
                 return evaluator.apply(t + s*(1-t));
             }
         });
     }
     
-    private static <S extends Space, V extends Vector<S>> BezierCurve<S, V> transform(Transform<S, V> transform, Array<V> controlPoints, Function<Double, V> evaluator){
+    /*private static <V extends Vec> BezierCurve<V> transform(Transform<V> transform, Array<V> controlPoints, Function<Double, V> evaluator){
         Array<V> transformedControlPoints = controlPoints
                 .map(cp -> transform.apply(cp));
                 //collect(Collectors.toList());
-        return new AbstractBezierCurve<S, V>(transformedControlPoints) {
+        return new AbstractBezierCurve<V>(transformedControlPoints) {
             @Override
             public V evaluate(Double t) {
                 return transform.apply(evaluator.apply(t));
             }
         };
-    }
+    }*/
     
-    private static <S extends Space, V extends Vector<S>> BezierCurve<S, V> reverse(Array<V> controlPoints, Function<Double, V> evaluator){
-        return new AbstractBezierCurve<S, V>(controlPoints.reverse()) {
+    private static <V extends Vec> BezierCurve<V> reverse(Array<V> controlPoints, Function<Double, V> evaluator){
+        return new AbstractBezierCurve<V>(controlPoints.reverse()) {
             @Override
             public V evaluate(Double t) {
                 return evaluator.apply(1-t);
@@ -208,13 +208,13 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
 
     /**{@inheritDoc}*/
     @Override
-    public BezierCurve<S, V> elevate(){
+    public BezierCurve<V> elevate(){
         return new DegreeElevated<>(1, createElevatedControlPonts(getControlPoints()), this);
     }
     
     /**{@inheritDoc}*/
     @Override
-    public BezierCurve<S, V> reduce(){
+    public BezierCurve<V> reduce(){
         if(getDegree() < 1)
             throw new IllegalArgumentException("degree is too small");
         
@@ -226,7 +226,7 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
      * @throws IllegalArgumentException パラメータtが[0,1]に含まれない時 When t is not in [0,1]
      */
     @Override
-    public final Array<BezierCurve<S, V>> divide(Double t){
+    public final Array<BezierCurve<V>> divide(Double t){
         if(!DOMAIN.isIn(t))
             throw new IllegalArgumentException("The parameter t is out of domain [0,1], t = " + t);
         
@@ -234,14 +234,14 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
     }
     
     /**{@inheritDoc}*/
-    @Override
-    public final BezierCurve<S, V> transform(Transform<S, V> transform){
+    /*@Override
+    public final BezierCurve<V> transform(Transform<V> transform){
         return transform(transform, getControlPoints(), this::evaluate);
-    }
+    }*/
     
     /**{@inheritDoc}*/
     @Override
-    public final BezierCurve<S, V> reverse(){
+    public final BezierCurve<V> reverse(){
         return reverse(getControlPoints(), this::evaluate);
     }
     
@@ -261,16 +261,16 @@ public abstract class AbstractBezierCurve<S extends Space, V extends Vector<S>> 
         
         Array<V> cp = getControlPoints();
         Array<Double> combinations = BezierCurve.combinations(n-1);
-        Vector<S> result = (Vector<S>)cp.get(0).getZero();
+        Vec result = Vec.zero(cp.get(0).getDimention());
         
         Double c = Math.pow(1.0-t, n-1);
         for(int i = 0; i < n; ++i){
-            Vector<S> delta = (cp.get(i+1).subtract(cp.get(i))).scalarMultiply(combinations.get(i) * c);
+            Vec delta = (cp.get(i+1).sub(cp.get(i))).scale(combinations.get(i) * c);
             c *= t/(1.0-t);
             result = result.add(delta);
         }
         
-        return (V)result.scalarMultiply(n);
+        return (V)result.scale(n.doubleValue());
     }
     
     /**

@@ -6,11 +6,7 @@
 package org.jumpaku.curves.vector;
 
 import java.util.Objects;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
-import org.apache.commons.math3.geometry.euclidean.oned.Vector1D;
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.commons.math3.util.Precision;
 
 /**
  *
@@ -45,12 +41,36 @@ public interface Vec{
                 return 0.0;
             }            
 
-            @Override
+            /*@Override
             public Vector<? extends Space> getVector() {
                 if(dimention <= 0 || 3 < dimention)
                     throw new IllegalStateException("dimention of this must be 1, 2, or 3");
                 
                 return dimention == 1 ? Vector1D.ZERO : dimention == 2 ? Vector2D.ZERO : Vector3D.ZERO;
+            }*/
+
+            @Override
+            public Boolean equals(Vec v, Double eps) {
+                if(Objects.equals(dimention, v.getDimention())){
+                    for(int i = 0; i < dimention; ++i){
+                        if(!Precision.equals(0.0, v.get(i), eps))
+                            return false;
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public Boolean equals(Vec v, Integer ulp) {
+                if(Objects.equals(dimention, v.getDimention())){
+                    for(int i = 0; i < dimention; ++i){
+                        if(!Precision.equals(0.0, v.get(i), ulp))
+                            return false;
+                    }
+                    return true;
+                }
+                return false;
             }
         };
     }
@@ -69,7 +89,11 @@ public interface Vec{
     
     Double dot(Vec v);
     
-    Vector<? extends Space> getVector();
+    //Vector<? extends Space> getVector();
+    
+    Boolean equals(Vec v, Double eps);
+    
+    Boolean equals(Vec v, Integer ulp);
     
     default Vec sub(Vec v){
         if(!Objects.equals(getDimention(), v.getDimention()))

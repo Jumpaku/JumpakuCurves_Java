@@ -7,28 +7,26 @@ package org.jumpaku.curves.bezier.twod;
 
 import javaslang.collection.Array;
 import org.jumpaku.curves.bezier.BezierCurve;
-import org.jumpaku.curves.transform.Transform;
-import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.curves.vector.Vec2;
 
 /**
  *
  * @author Jumpaku
  */
-public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
+public class BezierCurve2D implements BezierCurve<Vec2>{
 
-    private final BezierCurve<Euclidean2D, Vector2D> curve;
+    private final BezierCurve<Vec2> curve;
     
-    public BezierCurve2D(BezierCurve<Euclidean2D, Vector2D> curve) {
+    public BezierCurve2D(BezierCurve<Vec2> curve) {
         this.curve = curve;
     }
     
-    public static BezierCurve2D create(Array<Vector2D> cp){
+    public static BezierCurve2D create(Array<Vec2> cp){
         return new BezierCurve2D(BezierCurve.create(cp));
     }
     
-    public static BezierCurve2D create(Vector2D... cps){
+    public static BezierCurve2D create(Vec2... cps){
         return BezierCurve2D.create(Array.of(cps));
     }
     
@@ -38,7 +36,7 @@ public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
     }
 
     @Override
-    public final Array<Vector2D> getControlPoints() {
+    public final Array<Vec2> getControlPoints() {
         return curve.getControlPoints();
     }
 
@@ -62,10 +60,10 @@ public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
         return Array.of(new BezierCurve2D(curve.divide(t).get(0)), new BezierCurve2D(curve.divide(t).get(1)));
     }
 
-    @Override
+    /*@Override
     public final BezierCurve2D transform(Transform<Euclidean2D, Vector2D> transform) {
         return new BezierCurve2D(curve.transform(transform));
-    }
+    }*/
 
     @Override
     public final BezierCurve2D reverse() {
@@ -73,12 +71,12 @@ public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
     }
 
     @Override
-    public final Vector2D computeTangent(Double t) {
+    public final Vec2 computeTangent(Double t) {
         return curve.computeTangent(t);
     }
 
     @Override
-    public final Vector2D evaluate(Double t) {
+    public final Vec2 evaluate(Double t) {
         return curve.evaluate(t);
     }
 }

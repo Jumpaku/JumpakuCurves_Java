@@ -23,7 +23,7 @@ public abstract class AbstractPoint implements Point{
 
     @Override
     public Point divide(Double t, Point p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return toPoint(Vec.add(1-t, getVector(), t, p.getVector()));
     }
 
 

@@ -10,6 +10,7 @@ import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.Curve;
 import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  * <p>Spline曲線のインターフェイス Interface of Spline Curve.</p>
@@ -18,7 +19,7 @@ import org.jumpaku.curves.domain.Interval;
  * @param <S>
  * @param <V>
  */
-public interface SplineCurve<S extends Space, V extends Vector<S>>extends Curve<S, V>{
+public interface SplineCurve<V extends Vec> extends Curve<V>{
    
     /**
      *

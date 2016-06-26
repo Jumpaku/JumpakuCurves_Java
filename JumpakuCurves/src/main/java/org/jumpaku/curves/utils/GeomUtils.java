@@ -33,6 +33,6 @@ public class GeomUtils {
     }
     
     public static List<Vector2D> createConvexHull(BezierCurve2D bezierCurve){
-        return Arrays.asList(new MonotoneChain().generate(bezierCurve.getControlPoints().toJavaList()).getVertices());
+        return Arrays.asList(new MonotoneChain().generate(bezierCurve.getControlPoints().map(p -> p.getVector2d()).toJavaList()).getVertices());
     }
 }

@@ -9,6 +9,7 @@ import java.util.Objects;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.commons.math3.util.Precision;
 
 /**
  *
@@ -22,10 +23,10 @@ public class Vec2 implements Vec{
         return vector2d;
     }
     
-    @Override
+    /*@Override
     public Vector<? extends Space> getVector(){
         return getVector2d();
-    }
+    }*/
     
     public Vec2(double x, double y) {
         this(new Vector2D(x, y));
@@ -69,11 +70,33 @@ public class Vec2 implements Vec{
         return getVector2d().dotProduct(((Vec2)v).getVector2d());
     }
 
-    private Double getX() {
+    public Double getX() {
         return getVector2d().getX();
     }
 
-    private Double getY() {
+    public Double getY() {
         return getVector2d().getY();
+    }
+
+    @Override
+    public Boolean equals(Vec v, Double eps) {
+        if(v == null)
+            return false;
+        
+        if(2 != v.getDimention())
+            return false;
+        
+        return Precision.equals(getX(), v.get(0), eps) && Precision.equals(getY(), v.get(1), eps);
+    }
+
+    @Override
+    public Boolean equals(Vec v, Integer ulp) {
+        if(v == null)
+            return false;
+        
+        if(2 != v.getDimention())
+            return false;
+        
+        return Precision.equals(getX(), v.get(0), ulp) && Precision.equals(getY(), v.get(1), ulp);
     }
 }
