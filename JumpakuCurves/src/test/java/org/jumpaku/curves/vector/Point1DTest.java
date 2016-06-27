@@ -32,14 +32,14 @@ public class Point1DTest {
     }    
 
     /**
-     * Test of getVector method, of class Point1D.
+     * Test of getVec method, of class Point1D.
      */
     @Test
     public void testGetVector() {
         System.out.println("getVector");
         Point1D instance = new Point1D(2.9);
         Vec expResult = new Vec1(2.9);
-        Vec result = instance.getVector();
+        Vec result = instance.getVec();
         assertTrue(checkEquals(expResult, result));
     }
 }

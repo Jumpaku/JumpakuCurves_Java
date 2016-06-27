@@ -11,18 +11,33 @@ package org.jumpaku.curves.vector;
  */
 public class Point1D implements Point{
 
-    private final Vec vector;
+    private final Vec1 vec;
     
     public Point1D(Double x){
         this(new Vec1(x));
     }
     
     public Point1D(Vec1 vector) {
-        this.vector = vector;
+        this.vec = vector;
     }
+    
+    public Point1D(Point p){
+        if(1 != p.getDimention())
+            throw new IllegalArgumentException("dimention miss match");
 
+        this.vec = new Vec1(p.getVec());
+    }
+    
     @Override
-    public Vec getVector() {
-        return vector;
+    public Vec getVec() {
+        return vec;
+    }
+    
+    public Vec1 getVec1(){
+        return vec;
+    }
+    
+    public Double getX(){
+        return get(0);
     }
 }

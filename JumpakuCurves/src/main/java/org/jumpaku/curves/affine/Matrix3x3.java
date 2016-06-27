@@ -33,7 +33,7 @@ public class Matrix3x3 implements Affine2D {
         return new ArrayRealVector(new double[]{v.getX(), v.getY(), 1});
     }
     protected static Point2D transform(RealMatrix m, Point2D v){
-        return convert(m.operate(convert(new Vec2(v.getVector()))));
+        return convert(m.operate(convert(new Vec2(v.getVec()))));
     }
     
     public static Affine2D createScaling(Double x, Double y){
@@ -73,13 +73,13 @@ public class Matrix3x3 implements Affine2D {
         return createScalingAt(center, scalar, scalar);
     }
     public static Affine2D createScalingAt(Point2D center, Double x, Double y){
-        return createTranslation(new Vec2(center.getVector().negate())).scale(x, y).translate(new Vec2(center.getVector()));
+        return createTranslation(new Vec2(center.getVec().negate())).scale(x, y).translate(new Vec2(center.getVec()));
     }
     public static Affine2D createRotationAt(Point2D center, Double radian){
-        return createTranslation(new Vec2(center.getVector().negate())).rotate(radian).translate(new Vec2(center.getVector()));
+        return createTranslation(new Vec2(center.getVec().negate())).rotate(radian).translate(new Vec2(center.getVec()));
     }
     public static Affine2D createShearingAt(Point2D pivot, Double x, Double y){
-        return createTranslation(new Vec2(pivot.getVector().negate())).shear(x, y).translate(new Vec2(pivot.getVector()));
+        return createTranslation(new Vec2(pivot.getVec().negate())).shear(x, y).translate(new Vec2(pivot.getVec()));
     }
     public static Affine2D createShearingX(Double x){
         return createShearing(x, 0.0);

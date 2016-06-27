@@ -92,7 +92,7 @@ public abstract class AbstractBSplineCurve implements BSplineCurve {
         List<Point> tmp = List.empty();
         for(int i = k; i >= k-n+1; --i){
             Double a = (u - oknots.get(i)) / (oknots.get(i+n) - oknots.get(i));
-            tmp = tmp.prepend(Point.create(ocps.get(i - 1).getVector().scale(1.0 - a).add(ocps.get(i).getVector().scale(a))));
+            tmp = tmp.prepend(Point.create(ocps.get(i - 1).getVec().scale(1.0 - a).add(ocps.get(i).getVec().scale(a))));
         }
         
         Array<Point> ncps = Array.ofAll(ocps.subSequence(k, ocps.size()).prependAll(tmp).prependAll(ocps.subSequence(0, k-n + 1)));

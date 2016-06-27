@@ -110,8 +110,8 @@ public interface Affine2D extends Affine<Point2D>{
      * @return 拡大縮小変換を追加したアフィン変換 Affine concatenated Scaling
      */
     default Affine2D scaleAt(Point2D center, Double x, Double y){
-        Vec toCenter = center.getVector().negate();
-        Vec fromCenter = center.getVector();
+        Vec toCenter = center.getVec().negate();
+        Vec fromCenter = center.getVec();
         return translate(new Vec2(toCenter.get(0), toCenter.get(1))).scale(x, y).translate(new Vec2(fromCenter.get(0), fromCenter.get(1)));
     }
     
@@ -148,7 +148,7 @@ public interface Affine2D extends Affine<Point2D>{
      * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
      */
     default Affine2D rotateAt(Point2D axis, Double radian){
-        return translate(new Vec2(axis.getVector().negate())).rotate(radian).translate(new Vec2(axis.getVector()));
+        return translate(new Vec2(axis.getVec().negate())).rotate(radian).translate(new Vec2(axis.getVec()));
     }
     
     /**
@@ -261,7 +261,7 @@ public interface Affine2D extends Affine<Point2D>{
      * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
      */
     default Affine2D shearAt(Point2D pivot, Double x, Double y){
-        return translate(new Vec2(pivot.getVector().negate())).shear(x, y).translate(new Vec2(pivot.getVector()));
+        return translate(new Vec2(pivot.getVec().negate())).shear(x, y).translate(new Vec2(pivot.getVec()));
     }
     
     /**
@@ -334,7 +334,7 @@ public interface Affine2D extends Affine<Point2D>{
      * @return スクイーズ変換を追加したアフィン変換 Affine concatenated squeezing
      */
     default Affine2D squeezeAt(Point2D center, Double k){
-        return translate(new Vec2(center.getVector().negate())).squeeze(k).translate(new Vec2(center.getVector()));
+        return translate(new Vec2(center.getVec().negate())).squeeze(k).translate(new Vec2(center.getVec()));
     }
     
     /**

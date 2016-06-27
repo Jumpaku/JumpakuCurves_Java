@@ -6,85 +6,58 @@
 package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.vector.WeightedPoint;
-import org.jumpaku.curves.affine.Affine;
+import org.jumpaku.curves.vector.Point;
+import org.jumpaku.curves.vector.Point1D;
 
 /**
  *
  * @author Jumpaku
- * @param <S>
- * @param <V>
  */
-public class RationalBezierCurveBernstein<S extends Space, V extends Vector<S>> implements RationalBezierCurve<S, V>{
+public class RationalBezierCurveBernstein implements RationalBezierCurve {
 
-    private final Array<Double> weights;
-    private final BezierCurve<S, V> bezier;
-    public RationalBezierCurveBernstein(Array<V> cp, Array<Double> weights) {
-        bezier = BezierCurve.create(cp);
-        this.weights = weights;
+    private final Array<WeightedPoint> weightedPoints;
+    private final BezierCurve pointBezier;
+    private final BezierCurve1D weightBezier;
+    public RationalBezierCurveBernstein(Array<WeightedPoint> wcps, Integer dimention) {
+        pointBezier = BezierCurve.create(wcps.map(wcp -> wcp.getPoint()), dimention);
+        weightBezier = BezierCurve1D.create(wcps.map(wcp -> new Point1D(wcp.getWeight())));
+        this.weightedPoints = wcps;
     }
 
     @Override
     public Array<Double> getWeights() {
-        return weights;
+        return weightedPoints.map(wp -> wp.getWeight());
     }
 
     @Override
     public Array<WeightedPoint> getWeightedPoints() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return weightedPoints;
     }
 
     @Override
     public Interval getDomain() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return pointBezier.getDomain();
     }
 
     @Override
-    public Array<V> getControlPoints() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Array<Point> getControlPoints() {
+        return weightedPoints.map(wp -> wp.getPoint());
     }
 
     @Override
     public Integer getDegree() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return weightedPoints.size() - 1;
     }
 
     @Override
-    public BezierCurve<S, V> elevate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Point evaluate(Double t) {
+        return Point.create(pointBezier.evaluate(t).getVec().scale(1.0/weightBezier.evaluate(t).getX()));
     }
 
     @Override
-    public BezierCurve<S, V> reduce() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Integer getDimention() {
+        return pointBezier.getDimention();
     }
-
-    @Override
-    public Array<? extends BezierCurve<S, V>> divide(Double t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public BezierCurve<S, V> transform(Affine<S, V> transform) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public BezierCurve<S, V> reverse() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public V computeTangent(Double t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public V evaluate(Double t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

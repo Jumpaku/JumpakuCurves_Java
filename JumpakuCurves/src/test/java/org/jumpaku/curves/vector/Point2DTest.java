@@ -31,14 +31,14 @@ public class Point2DTest {
     }   
 
     /**
-     * Test of getVector method, of class Point2D.
+     * Test of getVec method, of class Point2D.
      */
     @Test
     public void testGetVector() {
         System.out.println("getVector");
         Point2D instance = new Point2D(2.4, 0.09);
         Vec expResult = new Vec2(2.4, 0.09);
-        Vec result = instance.getVector();
+        Vec result = instance.getVec();
         assertTrue(checkEquals(expResult, result));
     }
 }

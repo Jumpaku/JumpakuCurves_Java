@@ -60,7 +60,7 @@ public abstract class AbstractBezierCurve implements BezierCurve{
         for(int i = 1; i <= n; ++i){
             Double a = i/(double)(n+1);
             Double b = 1-a;
-            result.add(Point.create(Vec.add(b, controlPoints.get(i).getVector(), a, controlPoints.get(i-1).getVector())));
+            result.add(Point.create(Vec.add(b, controlPoints.get(i).getVec(), a, controlPoints.get(i-1).getVec())));
         }
         result.add(controlPoints.get(n));
         return Array.ofAll(result);
@@ -81,30 +81,30 @@ public abstract class AbstractBezierCurve implements BezierCurve{
             cps[0] = originalcps.get(0);
             for(int i = 1; i <= r-1; ++i){
                 Double a = i/(m-1.0);
-                cps[i] = Point.create(originalcps.get(i).getVector().add(-a, cps[i-1].getVector()).scale(1.0/(1.0-a)));
+                cps[i] = Point.create(originalcps.get(i).getVec().add(-a, cps[i-1].getVec()).scale(1.0/(1.0-a)));
             }
             cps[n-1] = originalcps.get(n);
             for(int i = m-3; i >= r+1; --i){
                 Double a = (i+1.0)/(m-1.0);
-                cps[i] = Point.create(originalcps.get(i+1).getVector().add(-1.0+a, cps[i+1].getVector()).scale(1.0/a));
+                cps[i] = Point.create(originalcps.get(i+1).getVec().add(-1.0+a, cps[i+1].getVec()).scale(1.0/a));
             }
             Double al = r/(m-1.0);
             Double ar = (r+1)/(m-1.0);
-            Point left = Point.create(originalcps.get(r).getVector().add(-al, cps[r-1].getVector()).scale(1.0/(1.0-al)));
-            Point right = Point.create(originalcps.get(r+1).getVector().add(-1.0+ar, cps[r+1].getVector()).scale(1.0/ar));
-            cps[r] = Point.create(left.getVector().add(right.getVector()).scale(0.5));
+            Point left = Point.create(originalcps.get(r).getVec().add(-al, cps[r-1].getVec()).scale(1.0/(1.0-al)));
+            Point right = Point.create(originalcps.get(r+1).getVec().add(-1.0+ar, cps[r+1].getVec()).scale(1.0/ar));
+            cps[r] = Point.create(left.getVec().add(right.getVec()).scale(0.5));
         }
         else{
             cps[0] = originalcps.get(0);
             Integer r = (m-3)/2;
             for(int i = 1; i <= r; ++i){
                 Double a = i/(m-1.0);
-                cps[i] = Point.create(originalcps.get(i).getVector().add(-a, cps[i-1].getVector()).scale(1.0/(1.0-a)));
+                cps[i] = Point.create(originalcps.get(i).getVec().add(-a, cps[i-1].getVec()).scale(1.0/(1.0-a)));
             }
             cps[n-1] = originalcps.get(n);
             for(int i = m - 3; i >= r+1; --i){
                 Double a = (i+1.0)/(m-1.0);
-                cps[i] = Point.create(originalcps.get(i+1).getVector().add(-1.0+a, cps[i+1].getVector()).scale(1.0/a));
+                cps[i] = Point.create(originalcps.get(i+1).getVec().add(-1.0+a, cps[i+1].getVec()).scale(1.0/a));
             }
         }
         
@@ -147,7 +147,7 @@ public abstract class AbstractBezierCurve implements BezierCurve{
         second.addFirst((Point)cp[n]);
         while(n > 0){
             for(int i = 0; i < n; ++i){
-                cp[i] = Point.create(((Point)cp[i]).getVector().scale(1-t).add(t, ((Point)cp[i+1]).getVector()));
+                cp[i] = Point.create(((Point)cp[i]).getVec().scale(1-t).add(t, ((Point)cp[i+1]).getVec()));
             }
             first.addLast((Point)cp[0]);
             second.addFirst((Point)cp[--n]);
@@ -274,7 +274,7 @@ public abstract class AbstractBezierCurve implements BezierCurve{
         
         Double c = Math.pow(1.0-t, n-1);
         for(int i = 0; i < n; ++i){
-            Vec delta = (cp.get(i+1).getVector().sub(cp.get(i).getVector())).scale(combinations.get(i) * c);
+            Vec delta = (cp.get(i+1).getVec().sub(cp.get(i).getVec())).scale(combinations.get(i) * c);
             c *= t/(1.0-t);
             result = result.add(delta);
         }

@@ -46,7 +46,7 @@ public final class BSplineCurveDeBoor extends AbstractBSplineCurve {
         for(int k = 1; k <= n; ++k){
             for(int i = l; i >= l-n+k; --i){
                 Double aki = (t - knots.get(i)) / (knots.get(i+n+1-k) - knots.get(i));
-                Point cp = Point.create(result[i-1].getVector().scale(1.0-aki).add(result[i].getVector().scale(aki)));
+                Point cp = Point.create(result[i-1].getVec().scale(1.0-aki).add(result[i].getVec().scale(aki)));
                 result[i] = cp;
             }
         }

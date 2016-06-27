@@ -70,14 +70,14 @@ public class PointTest {
     }
 
     /**
-     * Test of getVector method, of class Point.
+     * Test of getVec method, of class Point.
      */
     @Test
     public void testGetVector() {
         System.out.println("getVector");
         Point instance = new PointImpl(1,2,3,-4);
         Vec expResult = new VecImpl(1,2,3,-4);
-        Vec result = instance.getVector();
+        Vec result = instance.getVec();
         assertTrue(checkEquals(expResult, result));
     }
 
@@ -284,7 +284,7 @@ public class PointTest {
             v = new VecImpl(x, y, z, w);
         }
         
-        public Vec getVector() {
+        public Vec getVec() {
             return v;
         }
     }

@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curves.bezier.threed;
+package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
-import org.jumpaku.curves.bezier.BezierCurve;
 import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.vector.Point;
 import org.jumpaku.curves.vector.Point3D;
@@ -40,7 +39,7 @@ public class BezierCurve3D implements BezierCurve{
 
     @Override
     public final Array<Point3D> getControlPoints() {
-        return curve.getControlPoints().map(p -> new Point3D(p.get(0), p.get(1), p.get(2)));
+        return curve.getControlPoints().map(Point3D::new);
     }
 
     @Override
@@ -60,8 +59,8 @@ public class BezierCurve3D implements BezierCurve{
     
     @Override
     public final Array<BezierCurve3D> divide(Double t) {
-        return Array.of(new BezierCurve3D(curve.divide(t).get(0)),
-                new BezierCurve3D(curve.divide(t).get(1)));
+        return Array.of(new BezierCurve3D(curve.divide(t).head()),
+                new BezierCurve3D(curve.divide(t).last()));
     }
 
     /*@Override
@@ -76,14 +75,12 @@ public class BezierCurve3D implements BezierCurve{
 
     @Override
     public final Vec3 computeTangent(Double t) {
-        Vec tangent = curve.computeTangent(t);
-        return new Vec3(tangent.get(0), tangent.get(1), tangent.get(2));
+        return new Vec3(curve.computeTangent(t));
     }
 
     @Override
     public final Point3D evaluate(Double t) {
-        Point p = curve.evaluate(t);
-        return new Point3D(p.get(0), p.get(1), p.get(2));
+        return new Point3D(curve.evaluate(t));
     }
 
     @Override

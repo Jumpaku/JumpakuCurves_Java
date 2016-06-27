@@ -22,7 +22,7 @@ public interface Point {
     public static Point create(Vec v){
         return new Point() {
             @Override
-            public Vec getVector() {
+            public Vec getVec() {
                 return v;
             }
         };
@@ -35,42 +35,42 @@ public interface Point {
         Integer d = points.iterator().next().getDimention();
         return Stream.ofAll(cofficients)
                 .zip(points).map(t -> t.transform(
-                        (c, p) -> p.getVector().scale(c)))
+                        (c, p) -> p.getVec().scale(c)))
                 .foldLeft(origin(d), (p, v) -> p.move(v));
     }
     
-    Vec getVector();
+    Vec getVec();
     
     default Point move(Vec v) {
         if(getDimention() !=  v.getDimention())
             throw new IllegalArgumentException("dimention miss match");
 
-        return create(getVector().add(v));
+        return create(getVec().add(v));
     }
     
     default Point divide(Double t, Point p){
         if(getDimention() !=  p.getDimention())
             throw new IllegalArgumentException("dimention miss match");
 
-        return create(Vec.add(1-t, getVector(), t, p.getVector()));
+        return create(Vec.add(1-t, getVec(), t, p.getVec()));
     }
 
     default Integer getDimention(){
-        return getVector().getDimention();
+        return getVec().getDimention();
     }
     
     default Double get(Integer i){
         if(i < 0 && getDimention() <= i)
             throw new IllegalArgumentException("index is out of bounds");
         
-        return getVector().get(i);
+        return getVec().get(i);
     }
 
     default Vec difference(Point p){
         if(!Objects.equals(getDimention(), p.getDimention()))
             throw new IllegalArgumentException("dimention miss match");
         
-        return getVector().sub(p.getVector());
+        return getVec().sub(p.getVec());
     }
     
     default Double distance(Point p){
@@ -88,10 +88,10 @@ public interface Point {
     }
     
     default Boolean equals(Point p, Double eps){
-        return getVector().equals(p.getVector(), eps);
+        return getVec().equals(p.getVec(), eps);
     }
     
     default Boolean equals(Point p, Integer ulp){
-        return getVector().equals(p.getVector(), ulp);
+        return getVec().equals(p.getVec(), ulp);
     }
 }

@@ -3,14 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curves.bezier.twod;
+package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
-import org.jumpaku.curves.bezier.BezierCurve;
 import org.jumpaku.curves.domain.Interval;
-import org.jumpaku.curves.vector.Point;
 import org.jumpaku.curves.vector.Point2D;
-import org.jumpaku.curves.vector.Vec;
 import org.jumpaku.curves.vector.Vec2;
 
 /**
@@ -40,7 +37,7 @@ public class BezierCurve2D implements BezierCurve{
 
     @Override
     public final Array<Point2D> getControlPoints() {
-        return curve.getControlPoints().map(p -> new Point2D(p.get(0), p.get(1)));
+        return curve.getControlPoints().map(Point2D::new);
     }
 
     @Override
@@ -60,7 +57,7 @@ public class BezierCurve2D implements BezierCurve{
     
     @Override
     public final Array<BezierCurve2D> divide(Double t) {
-        return Array.of(new BezierCurve2D(curve.divide(t).get(0)), new BezierCurve2D(curve.divide(t).get(1)));
+        return Array.of(new BezierCurve2D(curve.divide(t).head()), new BezierCurve2D(curve.divide(t).last()));
     }
 
     /*@Override
@@ -75,14 +72,12 @@ public class BezierCurve2D implements BezierCurve{
 
     @Override
     public final Vec2 computeTangent(Double t) {
-        Vec tangent = curve.computeTangent(t);
-        return new Vec2(tangent.get(0), tangent.get(1));
+        return new Vec2(curve.computeTangent(t));
     }
 
     @Override
     public final Point2D evaluate(Double t) {
-        Point p = curve.evaluate(t);
-        return new Point2D(p.get(0), p.get(1));
+        return new Point2D(curve.evaluate(t));
     }
 
     @Override
