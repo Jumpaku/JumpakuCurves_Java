@@ -9,6 +9,9 @@ package org.jumpaku.curves.vector;
  *
  * @author Jumpaku
  */
-public interface WeightedPoint extends Point{
+public interface WeightedPoint {
+    
     Double getWeight();
+
+    Point getPoint();
 }

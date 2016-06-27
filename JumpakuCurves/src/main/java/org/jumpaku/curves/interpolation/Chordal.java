@@ -7,8 +7,7 @@ package org.jumpaku.curves.interpolation;
 
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
+import org.jumpaku.curves.vector.Point;
 
 /**
  *
@@ -17,7 +16,7 @@ import org.apache.commons.math3.geometry.Vector;
 public class Chordal implements Parameterizer{
 
     @Override
-    public <S extends Space, V extends Vector<S>> Array<Data<S, V>> parameterize(Array<V> points, final Double a, final Double b) {
+    public <P extends Point> Array<Data<P>> parameterize(Array<P> points, Double a, Double b) {
         Stream<Double> distances = Stream.of(a);
         double tmp = 0.0;
         for(int i = 1; i < points.size(); ++i){

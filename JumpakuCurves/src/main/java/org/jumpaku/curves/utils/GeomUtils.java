@@ -10,7 +10,7 @@ import java.util.List;
 import org.apache.commons.math3.geometry.Vector;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.geometry.euclidean.twod.hull.MonotoneChain;
-import org.jumpaku.curves.bezier.twod.BezierCurve2D;
+import org.jumpaku.curves.bezier.BezierCurve2D;
 
 /**
  *
@@ -33,6 +33,6 @@ public class GeomUtils {
     }
     
     public static List<Vector2D> createConvexHull(BezierCurve2D bezierCurve){
-        return Arrays.asList(new MonotoneChain().generate(bezierCurve.getControlPoints().toJavaList()).getVertices());
+        return Arrays.asList(new MonotoneChain().generate(bezierCurve.getControlPoints().map(p -> new Vector2D(p.getX(), p.getY())).toJavaList()).getVertices());
     }
 }

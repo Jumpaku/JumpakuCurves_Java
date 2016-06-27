@@ -11,6 +11,8 @@ import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.spline.BSplineCurve;
 import org.jumpaku.curves.utils.GoldenSectionSearch;
+import org.jumpaku.curves.vector.Point;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  *
@@ -26,7 +28,7 @@ public class Universal implements Parameterizer{
     
     
     @Override
-    public <S extends Space, V extends Vector<S>> Array<Data<S, V>> parameterize(Array<V> points, Double a, Double b) {
+    public <P extends Point> Array<Data<P>> parameterize(Array<P> points, Double a, Double b) {
         Double d = (b-a)/(points.size() - degree);
         Array<Double> knots = Stream.fill(degree + 1, () -> a)
                 .appendAll(Stream.range(1, points.size() - degree).map(i -> a + i*d))

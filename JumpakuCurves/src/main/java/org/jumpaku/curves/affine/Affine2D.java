@@ -3,16 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curves.transform;
+package org.jumpaku.curves.affine;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.jumpaku.curves.vector.Point2D;
+import org.jumpaku.curves.vector.Vec;
+import org.jumpaku.curves.vector.Vec2;
 
 /**
  * <p>2次元ベクトルのアフィン変換のインターフェイスを定義します Defines interface of affine transformation for 2D vector.</p>
  * @author Jumpaku
  */
-public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
+public interface Affine2D extends Affine<Point2D>{
     /**
      * <p>拡大縮小変換 Scaling.</p>
      * <p>
@@ -57,7 +59,7 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * @param v 平行移動ベクトル translation vector
      * @return 平行移動変換を追加したアフィン変換 Affin concatenated Transfomation
      */
-    Affine2D translate(Vector2D v);
+    Affine2D translate(Vec2 v);
     
     /**
      * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
@@ -107,8 +109,10 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * @param y y-軸方向の拡大率(0であってはいけない) scaling rate for y-axis(not 0)
      * @return 拡大縮小変換を追加したアフィン変換 Affine concatenated Scaling
      */
-    default Affine2D scaleAt(Vector2D center, Double x, Double y){
-        return translate(center.negate()).scale(x, y).translate(center);
+    default Affine2D scaleAt(Point2D center, Double x, Double y){
+        Vec toCenter = center.getVec().negate();
+        Vec fromCenter = center.getVec();
+        return translate(new Vec2(toCenter.get(0), toCenter.get(1))).scale(x, y).translate(new Vec2(fromCenter.get(0), fromCenter.get(1)));
     }
     
     /**
@@ -125,7 +129,7 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * @param scale 拡大率(0であってはいけない) magnification rate
      * @return 拡大縮小変換を追加したアフィン変換 Affine concatenated Scaling
      */
-    default Affine2D scaleAt(Vector2D center, Double scale){
+    default Affine2D scaleAt(Point2D center, Double scale){
         return scaleAt(center, scale, scale);
     }
     
@@ -143,8 +147,8 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * @param radian 回転角 angle
      * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
      */
-    default Affine2D rotateAt(Vector2D axis, Double radian){
-        return translate(axis.negate()).rotate(radian).translate(axis);
+    default Affine2D rotateAt(Point2D axis, Double radian){
+        return translate(new Vec2(axis.getVec().negate())).rotate(radian).translate(new Vec2(axis.getVec()));
     }
     
     /**
@@ -162,8 +166,8 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * @param to 2つ目のベクトル second vector
      * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
      */
-    default Affine2D rotate(Vector2D from, Vector2D to){
-        return rotateAt(Vector2D.ZERO, from, to);
+    default Affine2D rotate(Vec2 from, Vec2 to){
+        return rotateAt(new Point2D(new Vec2(Vec.zero(2))), from, to);
     }
     
     /**
@@ -181,12 +185,32 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * @param to second vector
      * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
      */
-    default Affine2D rotateAt(Vector2D axis, Vector2D from, Vector2D to){
-        Double cross = to.crossProduct(axis, from);
-        Double radian = Vector2D.angle(from, to);
+    default Affine2D rotateAt(Point2D axis, Vec2 from, Vec2 to){
+        Vector2D a = new Vector2D(axis.get(0), axis.get(1));
+        Vector2D f = new Vector2D(from.get(0), from.get(1));
+        Vector2D t = new Vector2D(to.get(0), to.get(1));
+        Double cross = t.crossProduct(a, f);
+        Double radian = Vector2D.angle(f, t);
         return rotateAt(axis, cross > 0 ? radian : -radian);
     }
     
+    /**
+     * <p>平行移動変換 Translation.</p>
+     * <p>
+     * このAffine変換に更に平行移動変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される平行移動変換は指定された位置ベクトルの差ベクトルの分だけ平行移動します.</p>
+     * <p>
+     * This method concatenates translation transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Movement vector begins at given initial, and ends at given terminal.</p>
+     * @param initial 始点 initial point
+     * @param terminal 終点 terminal point
+     * @return 平行移動変換を追加したアフィン変換 Affin concatenated Transfomation
+     */
+    default Affine2D translate(Point2D initial, Point2D terminal){
+        return translate(new Vec2(terminal.difference(initial)));
+    }
     /**
      * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
      * <p>
@@ -236,8 +260,8 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * @param y y軸方向のパラメータ parameter for y-axis
      * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
      */
-    default Affine2D shearAt(Vector2D pivot, Double x, Double y){
-        return translate(pivot.negate()).shear(x, y).translate(pivot);
+    default Affine2D shearAt(Point2D pivot, Double x, Double y){
+        return translate(new Vec2(pivot.getVec().negate())).shear(x, y).translate(new Vec2(pivot.getVec()));
     }
     
     /**
@@ -254,7 +278,7 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * @param x x軸方向のパラメータ parameter for x-axis
      * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
      */
-    default Affine2D shearXAt(Vector2D pivot, Double x){
+    default Affine2D shearXAt(Point2D pivot, Double x){
         return shearAt(pivot, x, 0.0);
     }
     
@@ -272,7 +296,7 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * @param y y軸方向のパラメータ parameter for y-axis
      * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
      */
-    default Affine2D shearYAt(Vector2D pivot, Double y){
+    default Affine2D shearYAt(Point2D pivot, Double y){
         return shearAt(pivot, 0.0, y);
     }
     
@@ -309,8 +333,8 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * @param k パラメータ parameter
      * @return スクイーズ変換を追加したアフィン変換 Affine concatenated squeezing
      */
-    default Affine2D squeezeAt(Vector2D center, Double k){
-        return translate(center.negate()).squeeze(k).translate(center);
+    default Affine2D squeezeAt(Point2D center, Double k){
+        return translate(new Vec2(center.getVec().negate())).squeeze(k).translate(new Vec2(center.getVec()));
     }
     
     /**
@@ -342,7 +366,7 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
      * @param center 点対称の中心 center of refrection
      * @return 鏡映変換を追加したアフィン変換 Affine concatenated refrection
      */
-    default Affine2D refrectAt(Vector2D center){
+    default Affine2D refrectAt(Point2D center){
         return scaleAt(center, -1.0);
     }
     
@@ -379,6 +403,15 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
     }
     
     /**
+     * 
+     * @return 
+     */
+    @Override
+    default Integer getDimention(){
+        return 2;
+    }
+    
+    /**
      * <p>逆変換 Inversion.</p>
      * @return 元の変換の逆変換 Inverted affine
      */
@@ -393,9 +426,9 @@ public interface Affine2D extends Transform<Euclidean2D, Vector2D>{
     
     /**
      * <p>ベクトルの変換 Apply transform to a vector.</p>
-     * @param v 変換されるベクトル vector to be transformed
+     * @param p 変換されるベクトル vector to be transformed
      * @return 変換されたベクトル transformed vector 
      */
     @Override
-    Vector2D apply(Vector2D v);
+    Point2D apply(Point2D p);
 }

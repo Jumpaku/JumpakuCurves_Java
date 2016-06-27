@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curves.transform;
+package org.jumpaku.curves.affine;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.jumpaku.curves.vector.Point;
+import org.jumpaku.curves.vector.Point2D;
+import org.jumpaku.curves.vector.Vec2;
 
 /**
  *
@@ -29,8 +31,8 @@ public abstract class Affine2DChain extends AbstractAffine2D{
         }
 
         @Override
-        public Vector2D apply(Vector2D v) {
-            return new Vector2D(v.getX()*x, v.getY()*y);
+        public Point2D apply(Point2D v) {
+            return new Point2D(v.get(0)*x, v.get(1)*y);
         }        
     }
     public static class Rotation extends Affine2DChain{
@@ -49,25 +51,26 @@ public abstract class Affine2DChain extends AbstractAffine2D{
         }
 
         @Override
-        public Vector2D apply(Vector2D v) {
-            return new Vector2D(cos*v.getX() - sin*v.getY(), sin*v.getX() + cos*v.getY());
+        public Point2D apply(Point2D v) {
+            return new Point2D(cos*v.get(0) - sin*v.get(1), sin*v.get(0) + cos*v.get(1));
         }        
     }    
     public static class Translation extends Affine2DChain{
-        private final Vector2D v;
+        private final Vec2 v;
 
-        public Translation(Vector2D v) {
+        public Translation(Vec2 v) {
             this.v = v;
         }
         
         @Override
         public Affine2D invert() {
-            return new Translation(v.negate());
+            return new Translation(new Vec2(v.negate()));
         }
 
         @Override
-        public Vector2D apply(Vector2D v) {
-            return v.add(this.v);
+        public Point2D apply(Point2D p) {
+            Point tmp = p.move(v);
+            return new Point2D(tmp.get(0), tmp.get(1));
         }        
     }
     public static class Shearing extends Affine2DChain{
@@ -87,8 +90,8 @@ public abstract class Affine2DChain extends AbstractAffine2D{
         }
 
         @Override
-        public Vector2D apply(Vector2D v) {
-            return new Vector2D(v.getX()+v.getY()*x, v.getX()*y+v.getY());
+        public Point2D apply(Point2D p) {
+            return new Point2D(p.get(0)+p.get(1)*x, p.get(0)*y+p.get(1));
         }
         
     }
@@ -99,8 +102,8 @@ public abstract class Affine2DChain extends AbstractAffine2D{
         }
 
         @Override
-        public Vector2D apply(Vector2D v) {
-            return v;
+        public Point2D apply(Point2D p) {
+            return p;
         }
         
         @Override
@@ -122,7 +125,7 @@ public abstract class Affine2DChain extends AbstractAffine2D{
     }
 
     @Override
-    protected Affine2D createTranslation(Vector2D v) {
+    protected Affine2D createTranslation(Vec2 v) {
         return new Translation(v);
     }
 

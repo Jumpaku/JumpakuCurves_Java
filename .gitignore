@@ -13,4 +13,6 @@ hs_err_pid*
 /JumpakuCurves/target/
 *._.DS_Store
 *._.gitignore
-project.properties
+
+JumpakuCurves/nbproject
+/JumpakuCurves/nbproject/

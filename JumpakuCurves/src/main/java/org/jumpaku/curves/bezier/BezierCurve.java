@@ -4,12 +4,10 @@ package org.jumpaku.curves.bezier;
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import org.jumpaku.curves.Curve;
-import org.apache.commons.math3.geometry.Vector;
-import org.jumpaku.curves.transform.Transform;
-import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.util.CombinatoricsUtils;
 import org.jumpaku.curves.domain.Interval;
-import org.jumpaku.curves.utils.GeomUtils;
+import org.jumpaku.curves.vector.Point;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  * <p>Bezier曲線のインターフェイス Interface of Bezier Curve.</p>
@@ -19,10 +17,8 @@ import org.jumpaku.curves.utils.GeomUtils;
  * Defines interface of operations for Bezier Curve.</p>
  * 
  * @author Jumpaku
- * @param <S> 座標空間の種類  Type of the space. 
- * @param <V> {@link BezierCurve#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link BezierCurve#evaluate(java.lang.Double)}.
  */
-public abstract interface BezierCurve<S extends Space, V extends Vector<S>> extends Curve<S, V>{
+public abstract interface BezierCurve extends Curve{
     
     /**
      * <p>Bezier曲線オブジェクトを生成します Creates Bezier Curve.</p>
@@ -35,13 +31,11 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
      * 引数のcontrolPointsはnullであってはいけない.またnullを含んでもいけない.さらに空であってもいけない.</p>
      * <p>
      * The argument controlPoints cannot be null, contain null, and be empty.</p>
-     * @param <S> 座標空間の種類  Type of the space
-     * @param <V> ベクトルの型 Type of vector
      * @param controlPoints 制御点列 control points
      * @return 引数の制御点リストで定義されるBezier曲線. Bezier curve defined given control points
      * @throws IllegalArgumentException controlPointsが{@code null}の時, {@code null}を含んでいる時, または空である時 When controlPoints is {@code null}, contains {@code null}, or is empty.
      */
-    public static <S extends Space, V extends Vector<S>> BezierCurve<S, V> create(Array<V> controlPoints){
+    public static BezierCurve create(Array<Point> controlPoints, Integer dimention){
         if(controlPoints == null)
             throw new IllegalArgumentException("control points are null");
         
@@ -51,40 +45,43 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
         if(controlPoints.exists(p -> p == null))
             throw new IllegalArgumentException("control points contain null");
         
+        if(controlPoints.exists(p -> p.getDimention() != dimention))
+            throw new IllegalArgumentException("control points have different dimention");
+        
         switch (controlPoints.size()) {
             case 1:
-                return new AbstractBezierCurve<S, V>(controlPoints) {
+                return new AbstractBezierCurve(controlPoints, dimention) {
                     @Override
-                    public V evaluate(Double t) {
+                    public Point evaluate(Double t) {
                         return getControlPoints().get(0);
                     }
                 };
             case 2:
-                return new AbstractBezierCurve<S, V>(controlPoints) {
+                return new AbstractBezierCurve(controlPoints, dimention) {
                     @Override
-                    public V evaluate(Double t) {
-                        Array<V> cp = getControlPoints();
-                        return GeomUtils.internallyDivide(t, cp.get(0), cp.get(1));
+                    public Point evaluate(Double t) {
+                        Array<Point> cp = getControlPoints();
+                        return cp.get(0).divide(t, cp.get(1));
                     }
                 };
             case 3:
-                return new AbstractBezierCurve<S, V>(controlPoints) {
+                return new AbstractBezierCurve(controlPoints, dimention) {
                     @Override
-                    public V evaluate(Double t) {
-                        Array<V> cp = getControlPoints();
-                        return (V) cp.get(0).scalarMultiply((1-t)*(1-t)).add(2*t*(1-t), cp.get(1)).add(t*t, cp.get(2));
+                    public Point evaluate(Double t) {
+                        Array<Vec> cp = getControlPoints().map(p -> p.getVec());
+                        return Point.create(cp.get(0).scale((1-t)*(1-t)).add(2*t*(1-t), cp.get(1)).add(t*t, cp.get(2)));
                     }
                 };
             case 4:
-                return new AbstractBezierCurve<S, V>(controlPoints) {
+                return new AbstractBezierCurve(controlPoints, dimention) {
                     @Override
-                    public V evaluate(Double t) {
-                        Array<V> cp = getControlPoints();
-                        return (V) cp.get(0).scalarMultiply((1-t)*(1-t)*(1-t)).add(3*t*(1-t)*(1-t), cp.get(1)).add(3*t*t*(1-t), cp.get(2)).add(t*t*t, cp.get(3));
+                    public Point evaluate(Double t) {
+                        Array<Vec> cp = getControlPoints().map(p -> p.getVec());
+                        return Point.create(cp.get(0).scale((1-t)*(1-t)*(1-t)).add(3*t*(1-t)*(1-t), cp.get(1)).add(3*t*t*(1-t), cp.get(2)).add(t*t*t, cp.get(3)));
                     }
                 };
             default:
-                return new BezierCurveBernstein<>(controlPoints);
+                return new BezierCurveBernstein(controlPoints, dimention);
         }
     }
     
@@ -100,19 +97,23 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
     public static Array<Double> combinations(Integer n){
         return Stream.rangeClosed(0, n).map(i -> CombinatoricsUtils.binomialCoefficientDouble(n, i)).toArray();
     }
-    
+
+    /**{@inheritDoc }*/
+    @Override
+    public Integer getDimention();
     
     /**
      * 定義域を取得します Returns domain
      * @return 定義域 domain
      */
+    @Override
     Interval getDomain();
     
     /**
      * 不変な制御点リストを返します Returns unmodifiable list of control points.
      * @return 制御点リスト list of control points
      */
-    Array<V> getControlPoints();
+    Array<? extends Point> getControlPoints();
     
     /**
      * 次数を取得します Returns degree.
@@ -128,7 +129,7 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
      * Shape of elevated Bezier Curve is same as original Bezier Cueve.</p> 
      * @return 次数が1高いBezier曲線 Elevated Bezier Curve
      */
-    BezierCurve<S, V> elevate();
+    BezierCurve elevate();
     
     /**
      * 次数の1つ低いBezier曲線を生成して返します Creates degree reduced bezier curve.
@@ -144,7 +145,7 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
      * Otherwise, reduced Bezier Curve becomes approximate curve of original.</p>
      * @return 次数が1低いBezier曲線, またはその近似曲線. Reduced Bezier curve, or approximate curve of original.
      */
-    BezierCurve<S, V> reduce();
+    BezierCurve reduce();
     
     /**
      * Bezier曲線を分割して2つのBezier曲線を返します Creates divided 2 Bezier Curves.
@@ -158,14 +159,14 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
      * @param t 分割地点のパラメータ where curve is divided
      * @return 分割された2曲線を要素とするリスト list contains 2 divided curves
      */
-    Array<? extends BezierCurve<S, V>> divide(Double t);
+    Array<? extends BezierCurve> divide(Double t);
     
     /**
      * 指定された変換を適用したBezier曲線を返す Creates Bezier Curve applied specified transfomation.
      * @param transform 変換 Transform
      * @return 変換されたBezier曲線 transformed Bezier Curve
      */
-    BezierCurve<S, V> transform(Transform<S, V> transform);
+    //BezierCurve<V> transform(Transform<V> transform);
     
     /**
      * Bezier曲線を反転して返す Creates reversed Bezier Curve.
@@ -175,14 +176,14 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
      * When order of control points the shape of the curve is not changed, but evaluated point traces reversed path.</p>
      * @return 反転したBezier曲線 Reversed Bezier Curve.
      */
-    BezierCurve<S, V> reverse();
+    BezierCurve reverse();
     
     /**
      * Bezier曲線の接線を計算します Computes tangent vector at specified parameter.
      * @param t パラメータ parameter
      * @return 接線ベクトル tangent vector
      */
-    V computeTangent(Double t);
+    Vec computeTangent(Double t);
     
     /**
      * Bezier曲線の評価点を計算します Evaluates Bezier Curve point for the parameter.
@@ -194,5 +195,5 @@ public abstract interface BezierCurve<S extends Space, V extends Vector<S>> exte
      * @return 評価点 evaluated point
      */
     @Override
-    V evaluate(Double t);
+    Point evaluate(Double t);
 }

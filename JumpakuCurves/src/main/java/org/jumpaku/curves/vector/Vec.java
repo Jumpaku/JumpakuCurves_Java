@@ -6,11 +6,7 @@
 package org.jumpaku.curves.vector;
 
 import java.util.Objects;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
-import org.apache.commons.math3.geometry.euclidean.oned.Vector1D;
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.commons.math3.util.Precision;
 
 /**
  *
@@ -22,6 +18,9 @@ public interface Vec{
         return new Vec(){
             @Override
             public Vec add(Vec v) {
+                if(getDimention() != v.getDimention())
+                    throw new IllegalArgumentException("dimention miss match");
+        
                 return v;
             }
 
@@ -37,25 +36,58 @@ public interface Vec{
 
             @Override
             public Double get(Integer i) {
+                if(i < 0 || dimention <= i)
+                    throw new IllegalArgumentException("index is out of bounds");
+                
                 return 0.0;
             }
 
             @Override
             public Double dot(Vec v) {
+                if(getDimention() != v.getDimention())
+                    throw new IllegalArgumentException("dimention miss match");
+        
                 return 0.0;
             }            
 
-            @Override
+            /*@Override
             public Vector<? extends Space> getVector() {
                 if(dimention <= 0 || 3 < dimention)
                     throw new IllegalStateException("dimention of this must be 1, 2, or 3");
                 
                 return dimention == 1 ? Vector1D.ZERO : dimention == 2 ? Vector2D.ZERO : Vector3D.ZERO;
+            }*/
+
+            @Override
+            public Boolean equals(Vec v, Double eps) {
+                if(dimention == v.getDimention()){
+                    for(int i = 0; i < dimention; ++i){
+                        if(!Precision.equals(0.0, v.get(i), eps))
+                            return false;
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public Boolean equals(Vec v, Integer ulp) {
+                if(dimention == v.getDimention()){
+                    for(int i = 0; i < dimention; ++i){
+                        if(!Precision.equals(0.0, v.get(i), ulp))
+                            return false;
+                    }
+                    return true;
+                }
+                return false;
             }
         };
     }
     
-    static Vec add(Double a, Vec v1, Double b, Vec v2){
+    public static Vec add(Double a, Vec v1, Double b, Vec v2){
+        if(v1.getDimention() != v2.getDimention())
+            throw new IllegalArgumentException("dimention miss match");
+        
         return v1.scale(a).add(b, v2);
     }
     
@@ -69,10 +101,12 @@ public interface Vec{
     
     Double dot(Vec v);
     
-    Vector<? extends Space> getVector();
+    Boolean equals(Vec v, Double eps);
+    
+    Boolean equals(Vec v, Integer ulp);
     
     default Vec sub(Vec v){
-        if(!Objects.equals(getDimention(), v.getDimention()))
+        if(getDimention() != v.getDimention())
             throw new IllegalArgumentException("dimention miss match");
         
         return add(v.negate());
@@ -87,7 +121,7 @@ public interface Vec{
     }
     
     default Vec add(Double a, Vec v){
-        if(!Objects.equals(getDimention(), v.getDimention()))
+        if(getDimention() != v.getDimention())
             throw new IllegalArgumentException("dimention miss match");
         
         return add(v.scale(a));

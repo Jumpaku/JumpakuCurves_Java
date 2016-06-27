@@ -6,85 +6,95 @@
 package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
+import org.jumpaku.curves.domain.Closed;
+import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.domain.Interval;
-import org.jumpaku.curves.transform.Transform;
 import org.jumpaku.curves.vector.WeightedPoint;
+import org.jumpaku.curves.vector.Point;
+import org.jumpaku.curves.vector.Point1D;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  *
  * @author Jumpaku
- * @param <S>
- * @param <V>
  */
-public class RationalBezierCurveBernstein<S extends Space, V extends Vector<S>> implements RationalBezierCurve<S, V>{
+public class RationalBezierCurveBernstein implements RationalBezierCurve {
 
-    private final Array<Double> weights;
-    private final BezierCurve<S, V> bezier;
-    public RationalBezierCurveBernstein(Array<V> cp, Array<Double> weights) {
-        bezier = BezierCurve.create(cp);
-        this.weights = weights;
+    private final Array<WeightedPoint> weightedPoints;
+    
+    private final Array<Double> cofficients;
+    
+    private final BezierCurve1D weightBezier;
+    
+    private final Integer dimention;
+    
+    private final Integer degree;
+    
+    private static final Interval domain = new Closed(0.0, 1.0);
+    
+    public RationalBezierCurveBernstein(Array<WeightedPoint> wcps, Integer dimention) {
+        this.dimention = dimention;
+        this.degree = wcps.size() - 1;
+        this.weightedPoints = wcps;
+        this.cofficients = BezierCurve.combinations(degree).toStream()
+                .zip(wcps.toStream().map(wcp -> wcp.getWeight()))
+                .map(bw -> bw.transform((b, w) -> b*w))
+                .toArray();
+        this.weightBezier = BezierCurve1D.create(wcps.map(wcp -> new Point1D(wcp.getWeight())));
     }
 
     @Override
     public Array<Double> getWeights() {
-        return weights;
+        return weightedPoints.map(wp -> wp.getWeight());
     }
 
     @Override
     public Array<WeightedPoint> getWeightedPoints() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return weightedPoints;
     }
 
     @Override
     public Interval getDomain() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return domain;
     }
 
     @Override
-    public Array<V> getControlPoints() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Array<Point> getControlPoints() {
+        return weightedPoints.map(wp -> wp.getPoint());
     }
 
     @Override
     public Integer getDegree() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return weightedPoints.size() - 1;
     }
 
     @Override
-    public BezierCurve<S, V> elevate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Point evaluate(Double t) {
+        if(!getDomain().isIn(t))
+            throw new IllegalArgumentException("Parameter t out of domain [0,1]");
+        
+        Array<Point> cps = getControlPoints();
+
+        if(!Double.isFinite(1.0/(1.0-t))){
+            return cps.get(degree);
+        }
+        if(!Double.isFinite(1.0/t)){
+            return cps.get(0);
+        }
+        
+        Double ct = Math.pow(1-t, degree);
+        Vec v = Vec.zero(getDimention());
+        
+        for(int i = 0; i <= degree; ++i){
+            v = v.add(cps.get(i).getVec().scale(cofficients.get(i)*ct));
+            ct *= (t / (1 - t));
+        }
+        
+        return Point.create(v.scale(1.0/weightBezier.evaluate(t).getX()));
     }
 
     @Override
-    public BezierCurve<S, V> reduce() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Integer getDimention() {
+        return dimention;
     }
-
-    @Override
-    public Array<? extends BezierCurve<S, V>> divide(Double t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public BezierCurve<S, V> transform(Transform<S, V> transform) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public BezierCurve<S, V> reverse() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public V computeTangent(Double t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public V evaluate(Double t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

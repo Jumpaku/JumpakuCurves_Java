@@ -6,36 +6,29 @@
 package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
-import org.jumpaku.curves.utils.GeomUtils;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
+import org.jumpaku.curves.vector.Point;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  *
  * @author Jumpaku
- * @param <S> 座標空間の種類  Type of the space. 
- * @param <V> {@link BezierCurveDeCasteljau#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link BezierCurveDeCasteljau#evaluate(java.lang.Double)}.
  */
-public class BezierCurveDeCasteljau<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
-    public BezierCurveDeCasteljau(Array<V> cp) {
-        super(cp);
-    }
-    
-    public BezierCurveDeCasteljau(V... cp) {
-        this(Array.of(cp));
+public class BezierCurveDeCasteljau extends AbstractBezierCurve {
+    public BezierCurveDeCasteljau(Array<Point> cp, Integer dimention) {
+        super(cp, dimention);
     }
     
     @Override
-    final public V evaluate(Double t) {
+    final public Point evaluate(Double t) {
         if(!getDomain().isIn(t))
             throw new IllegalArgumentException("t must be in domain [0,1], but t = " + t);
         
         Object[] cp = getControlPoints().toJavaArray();
         for(int n = getDegree(); n > 0; --n){
             for(int i = 0; i < n; ++i){
-                cp[i] = (V)GeomUtils.internallyDivide(t, (V)cp[i], (V)cp[i+1]);
+                cp[i] = Point.create(((Point)cp[i]).getVec().scale(1-t).add(t, ((Point)cp[i+1]).getVec()));
             }
         }
-        return (V)cp[0];
+        return (Point)cp[0];
     }
 }

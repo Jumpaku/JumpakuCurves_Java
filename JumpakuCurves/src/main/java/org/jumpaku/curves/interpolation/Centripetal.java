@@ -5,11 +5,10 @@
  */
 package org.jumpaku.curves.interpolation;
 
-import java.util.function.BiFunction;
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
+import org.jumpaku.curves.vector.Point;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  *
@@ -24,11 +23,11 @@ public class Centripetal implements Parameterizer{
     }
 
     @Override
-    public <S extends Space, V extends Vector<S>> Array<Data<S, V>> parameterize(Array<V> points, Double a, Double b) {
+    public <P extends Point> Array<Data<P>> parameterize(Array<P> points, Double a, Double b) {
         Stream<Double> distances = Stream.of(a);
         double tmp = 0.0;
         for(int i = 1; i < points.size(); ++i){
-            distances = distances.append(tmp += Math.pow(points.get(i).distanceSq(points.get(i-1)), alpha/2));
+            distances = distances.append(tmp += Math.pow(points.get(i).distanceSquare(points.get(i-1)), alpha/2));
         }        
         final Double total = tmp;
         

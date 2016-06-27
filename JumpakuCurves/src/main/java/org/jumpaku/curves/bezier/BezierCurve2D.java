@@ -3,32 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curves.bezier.twod;
+package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
-import org.jumpaku.curves.bezier.BezierCurve;
-import org.jumpaku.curves.transform.Transform;
-import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.curves.vector.Point2D;
+import org.jumpaku.curves.vector.Vec2;
 
 /**
  *
  * @author Jumpaku
  */
-public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
+public class BezierCurve2D implements BezierCurve{
 
-    private final BezierCurve<Euclidean2D, Vector2D> curve;
+    private final BezierCurve curve;
     
-    public BezierCurve2D(BezierCurve<Euclidean2D, Vector2D> curve) {
+    public BezierCurve2D(BezierCurve curve) {
         this.curve = curve;
     }
     
-    public static BezierCurve2D create(Array<Vector2D> cp){
-        return new BezierCurve2D(BezierCurve.create(cp));
+    public static BezierCurve2D create(Array<Point2D> cp){
+        return new BezierCurve2D(BezierCurve.create(cp.map(p2 -> p2), 2));
     }
     
-    public static BezierCurve2D create(Vector2D... cps){
+    public static BezierCurve2D create(Point2D... cps){
         return BezierCurve2D.create(Array.of(cps));
     }
     
@@ -38,8 +36,8 @@ public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
     }
 
     @Override
-    public final Array<Vector2D> getControlPoints() {
-        return curve.getControlPoints();
+    public final Array<Point2D> getControlPoints() {
+        return curve.getControlPoints().map(Point2D::new);
     }
 
     @Override
@@ -59,13 +57,13 @@ public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
     
     @Override
     public final Array<BezierCurve2D> divide(Double t) {
-        return Array.of(new BezierCurve2D(curve.divide(t).get(0)), new BezierCurve2D(curve.divide(t).get(1)));
+        return Array.of(new BezierCurve2D(curve.divide(t).head()), new BezierCurve2D(curve.divide(t).last()));
     }
 
-    @Override
+    /*@Override
     public final BezierCurve2D transform(Transform<Euclidean2D, Vector2D> transform) {
         return new BezierCurve2D(curve.transform(transform));
-    }
+    }*/
 
     @Override
     public final BezierCurve2D reverse() {
@@ -73,12 +71,17 @@ public class BezierCurve2D implements BezierCurve<Euclidean2D, Vector2D>{
     }
 
     @Override
-    public final Vector2D computeTangent(Double t) {
-        return curve.computeTangent(t);
+    public final Vec2 computeTangent(Double t) {
+        return new Vec2(curve.computeTangent(t));
     }
 
     @Override
-    public final Vector2D evaluate(Double t) {
-        return curve.evaluate(t);
+    public final Point2D evaluate(Double t) {
+        return new Point2D(curve.evaluate(t));
+    }
+
+    @Override
+    public Integer getDimention() {
+        return 2;
     }
 }

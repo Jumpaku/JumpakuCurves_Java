@@ -9,28 +9,28 @@ package org.jumpaku.curves.vector;
  *
  * @author Jumpaku
  */
-public class WeightedPoint3D implements WeightedPoint{
-    
+public class WeightedPoint1D implements WeightedPoint{
+
     private final Double weight;
     
-    private final Point3D point;
+    private final Point1D point;
     
-    public WeightedPoint3D(Double x, Double y, Double z, Double w) {
-        this(new Point3D(x, y, z), w);
+    public WeightedPoint1D(Double x, Double w){
+        this(new Point1D(x), w);
     }
     
-    public WeightedPoint3D(Point3D p, Double w){
+    public WeightedPoint1D(Point1D p, Double w) {
         point = p;
-        weight = w;
+        this.weight = w;
     }
-
+    
     @Override
     public Double getWeight() {
         return weight;
     }
 
     @Override
-    public Point getPoint() {
+    public Point1D getPoint() {
         return point;
     }
 }

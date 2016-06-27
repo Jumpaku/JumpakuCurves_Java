@@ -6,48 +6,45 @@
 package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
+import org.jumpaku.curves.vector.Point;
 
 /**
  *
  * @author Jumpaku
- * @param <S> 座標空間の種類  Type of the space. 
- * @param <V> {@link BezierCurveBernstein#evaluate(java.lang.Double)} の返り値の型. Type of returned value of {@link BezierCurveBernstein#evaluate(java.lang.Double)}.
  */
-public class BezierCurveBernstein<S extends Space, V extends Vector<S>> extends AbstractBezierCurve<S, V> {
+public class BezierCurveBernstein extends AbstractBezierCurve {
     
     private final Array<Double> combinations;
     
-    public BezierCurveBernstein(Array<V> cp) {
-        super(cp);
+    public BezierCurveBernstein(Array<Point> cp, Integer dimention) {
+        super(cp, dimention);
         final Integer degree = cp.size() - 1;
         combinations = BezierCurve.combinations(degree);
     }
     
     @Override
-    public final V evaluate(Double t) {
+    public final Point evaluate(Double t) {
         if(!getDomain().isIn(t))
             throw new IllegalArgumentException("Parameter t out of domain [0,1]");
         
-        Array<V> cps = getControlPoints();
+        Array<Point> cps = getControlPoints();
         Integer degree = getDegree();
 
-        if(t.compareTo(0.0) == 0){
-            return cps.get(0);
-        }
-        if(t.compareTo(1.0) == 0){
+        if(!Double.isFinite(1.0/(1.0-t))){
             return cps.get(degree);
+        }
+        if(!Double.isFinite(1.0/t)){
+            return cps.get(0);
         }
         
         Double ct = Math.pow(1-t, degree);
-        Vector<S> result = cps.get(0).getZero();
+        Point result = Point.origin(cps.get(0).getDimention());
         
         for(int i = 0; i <= degree; ++i){
-            result = result.add(cps.get(i).scalarMultiply(combinations.get(i)*ct));
+            result = Point.create(result.getVec().add(cps.get(i).getVec().scale(combinations.get(i)*ct)));
             ct *= (t / (1 - t));
         }
         
-        return (V)result;
+        return result;
     }
 }

@@ -7,22 +7,19 @@ package org.jumpaku.curves.spline;
 
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
 import org.jumpaku.curves.domain.ClosedOpen;
 import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.curves.vector.Point;
 
 /**
  *
  * @author Jumpaku
- * @param <S>
- * @param <V>
  */
-public final class BSplineCurveDeBoor<S extends Space, V extends Vector<S>> extends AbstractBSplineCurve<S, V> {
+public final class BSplineCurveDeBoor extends AbstractBSplineCurve {
     
     private final Interval domain;
-    public BSplineCurveDeBoor(Array<Double> knots, Array<V> controlPoints, Integer degree) {
-        super(knots, controlPoints, degree);
+    public BSplineCurveDeBoor(Array<Double> knots, Array<Point> controlPoints, Integer degree, Integer dimemtion) {
+        super(knots, controlPoints, degree, dimemtion);
         domain = new ClosedOpen(super.getDomain().getFrom(), super.getDomain().getTo());
     }
 
@@ -32,13 +29,13 @@ public final class BSplineCurveDeBoor<S extends Space, V extends Vector<S>> exte
     }
     
     @Override
-    public V evaluate(Double t) {
+    public Point evaluate(Double t) {
         if(!getDomain().isIn(t))
             throw new IllegalArgumentException("t is out of domain, t = " + t);
                 
         Integer l = Stream.ofAll(getKnots()).lastIndexWhere(knot -> knot <= t);
         
-        Object[] result = new Object[getControlPoints().size()];
+        Point[] result = new Point[getControlPoints().size()];
         for(int i = 0; i < getControlPoints().size(); ++i){
             result[i] = getControlPoints().get(i);
         }
@@ -49,11 +46,11 @@ public final class BSplineCurveDeBoor<S extends Space, V extends Vector<S>> exte
         for(int k = 1; k <= n; ++k){
             for(int i = l; i >= l-n+k; --i){
                 Double aki = (t - knots.get(i)) / (knots.get(i+n+1-k) - knots.get(i));
-                V cp = (V)((V)result[i-1]).scalarMultiply(1.0-aki).add(((V)result[i]).scalarMultiply(aki));
+                Point cp = Point.create(result[i-1].getVec().scale(1.0-aki).add(result[i].getVec().scale(aki)));
                 result[i] = cp;
             }
         }
         
-        return (V)result[l];
+        return result[l];
     }
 }

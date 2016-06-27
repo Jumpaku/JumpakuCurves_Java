@@ -6,20 +6,31 @@
 package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
-import org.apache.commons.math3.geometry.Space;
-import org.apache.commons.math3.geometry.Vector;
+import org.jumpaku.curves.Curve;
+import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.curves.vector.Point;
 import org.jumpaku.curves.vector.WeightedPoint;
 
 /**
  *
  * @author Jumpaku
- * @param <S>
- * @param <V>
  */
-public interface RationalBezierCurve<S extends Space, V extends Vector<S>> extends BezierCurve<S, V>{
+public interface RationalBezierCurve extends Curve {
     
     Array<Double> getWeights();
     
     Array<WeightedPoint> getWeightedPoints();
-    
+
+    public Array<? extends Point> getControlPoints();
+
+    public Integer getDegree();
+
+    @Override
+    public Integer getDimention();
+
+    @Override
+    public Interval getDomain();
+
+    @Override
+    public Point evaluate(Double t);
 }
