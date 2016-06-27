@@ -13,27 +13,27 @@ import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.jumpaku.curves.spline.BSplineCurve;
-import org.jumpaku.curves.spline.BSplineCurveDeBoor;
+import org.jumpaku.curves.spline.BSplineCurve2D;
 import org.jumpaku.curves.spline.SplineCurve;
-import org.jumpaku.curves.vector.Vec2;
+import org.jumpaku.curves.vector.Point2D;
 
 /**
  *
  * @author Jumpaku
  */
-public class BSplineInterpolater2D implements Interpolater<Vec2, SplineCurve<Vec2>> {
+public class BSplineInterpolater2D implements Interpolater<Point2D, SplineCurve> {
     
     public static class Builder{
         private Integer degree;
-        private Stream<Data<Vec2>> data = Stream.empty();
+        private Stream<Data<Point2D>> data = Stream.empty();
         private Array<Double> knots;
 
-        public Builder addAllData(Iterable<Data<Vec2>> data){
+        public Builder addAllData(Iterable<Data<Point2D>> data){
             this.data = this.data.appendAll(data);
             return this;
         }
         
-        public Builder addData(Vec2 p, Double param){
+        public Builder addData(Point2D p, Double param){
             data = data.append(new Data<>(p, param));
             return this;
         }
@@ -60,20 +60,20 @@ public class BSplineInterpolater2D implements Interpolater<Vec2, SplineCurve<Vec
         return new Builder();
     }
     
-    private final Array<Data<Vec2>> data;
+    private final Array<Data<Point2D>> data;
     
     private final Array<Double> knots;
     
     private final Integer degree;
 
-    public BSplineInterpolater2D(Array<Data<Vec2>> data, Array<Double> knots, Integer degree) {
+    public BSplineInterpolater2D(Array<Data<Point2D>> data, Array<Double> knots, Integer degree) {
         this.data = data;
         this.knots = knots;
         this.degree = degree;
     }
     
     @Override
-    public SplineCurve<Vec2> interpolate() {
+    public BSplineCurve2D interpolate() {
         
         RealMatrix m = new Array2DRowRealMatrix(data.size(), data.size());
         for(int i = 0; i < data.size(); ++i){
@@ -90,12 +90,12 @@ public class BSplineInterpolater2D implements Interpolater<Vec2, SplineCurve<Vec
         }
         
         RealMatrix tmp = m.multiply(dataPoints);
-        List<Vec2> cp = new LinkedList<>();        
+        List<Point2D> cp = new LinkedList<>();        
         for(int i = 0; i < data.size(); ++i){
-            cp.add(new Vec2(tmp.getEntry(i, 0), tmp.getEntry(i, 1)));
+            cp.add(new Point2D(tmp.getEntry(i, 0), tmp.getEntry(i, 1)));
         }
         
-        return new BSplineCurveDeBoor<>(knots, Array.ofAll(cp), degree);
+        return BSplineCurve2D.create(knots, Array.ofAll(cp), degree);
     }
     
 }

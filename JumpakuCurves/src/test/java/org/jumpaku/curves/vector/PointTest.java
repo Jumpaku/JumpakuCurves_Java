@@ -168,15 +168,15 @@ public class PointTest {
     }
 
     /**
-     * Test of deistanceSquare method, of class Point.
+     * Test of distanceSquare method, of class Point.
      */
     @Test
-    public void testDeistanceSquare() {
+    public void testDistanceSquare() {
         System.out.println("deistanceSquare");
         Point p = new PointImpl(0.1,0.2,0.3,-0.4);
         Point instance = new PointImpl(-0.2,-0.4,-0.6,0.1);
         Double expResult = 0.09+0.36+0.81+0.25;
-        Double result = instance.deistanceSquare(p);
+        Double result = instance.distanceSquare(p);
         assertTrue(checkEqualsDouble(result, expResult));
     }
 

@@ -80,7 +80,7 @@ public interface Point {
         return difference(p).length();
     }
     
-    default Double deistanceSquare(Point p){
+    default Double distanceSquare(Point p){
         if(!Objects.equals(getDimention(), p.getDimention()))
             throw new IllegalArgumentException("dimention miss match");
 

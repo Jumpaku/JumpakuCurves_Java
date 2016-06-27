@@ -33,7 +33,7 @@ public class BezierCurveBernstein extends AbstractBezierCurve {
         if(!Double.isFinite(1.0/(1.0-t))){
             return cps.get(degree);
         }
-        if(Double.isFinite(1.0/t)){
+        if(!Double.isFinite(1.0/t)){
             return cps.get(0);
         }
         

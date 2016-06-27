@@ -6,12 +6,12 @@
 package org.jumpaku.curves.interpolation;
 
 import javaslang.collection.Array;
-import org.jumpaku.curves.vector.Vec;
+import org.jumpaku.curves.vector.Point;
 
 /**
  *
  * @author Jumpaku
  */
 public interface KnotGenerator {
-    <V extends Vec> Array<Double> generate(Integer degree, Array<Data<V>> data);
+    <P extends Point> Array<Double> generate(Integer degree, Array<Data<P>> data);
 }

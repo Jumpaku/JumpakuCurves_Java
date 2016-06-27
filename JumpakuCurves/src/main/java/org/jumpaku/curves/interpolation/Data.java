@@ -5,24 +5,24 @@
  */
 package org.jumpaku.curves.interpolation;
 
-import org.jumpaku.curves.vector.Vec;
+import org.jumpaku.curves.vector.Point;
 
 /**
  *
  * @author Jumpaku
- * @param <V>
+ * @param <P>
  */
-public class Data<V extends Vec> {
-    public Data(V point, Double param) {
+public class Data<P extends Point> {
+    public Data(P point, Double param) {
         this.point = point;
         this.param = param;
     }
 
-    private final V point;
+    private final P point;
 
     private final Double param;
 
-    public V getPoint() {
+    public P getPoint() {
         return point;
     }
 

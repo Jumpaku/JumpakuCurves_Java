@@ -6,14 +6,14 @@
 package org.jumpaku.curves.interpolation;
 
 import org.jumpaku.curves.Curve;
-import org.jumpaku.curves.vector.Vec;
+import org.jumpaku.curves.vector.Point;
 
 /**
  *
  * @author Jumpaku
- * @param <V>
+ * @param <P>
  * @param <C>
  */
-public interface Interpolater<V extends Vec, C extends Curve<V>> {
+public interface Interpolater<P extends Point, C extends Curve> {
     C interpolate();
 }

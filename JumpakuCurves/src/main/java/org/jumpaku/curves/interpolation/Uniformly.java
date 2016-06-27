@@ -7,7 +7,7 @@ package org.jumpaku.curves.interpolation;
 
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
-import org.jumpaku.curves.vector.Vec;
+import org.jumpaku.curves.vector.Point;
 
 /**
  *
@@ -16,7 +16,7 @@ import org.jumpaku.curves.vector.Vec;
 public class Uniformly implements Parameterizer{
 
     @Override
-    public <V extends Vec> Array<Data<V>> parameterize(Array<V> points, Double a, Double b) {
+    public <P extends Point> Array<Data<P>> parameterize(Array<P> points, Double a, Double b) {
         Double d = (b - a) / (points.size() - 1.0);
         return Stream.ofAll(points).zipWithIndex().map(t -> t.transform(
                 (p, i) -> new Data<>(p, a + i*d)))

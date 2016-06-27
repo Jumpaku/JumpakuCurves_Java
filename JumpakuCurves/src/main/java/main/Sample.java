@@ -6,8 +6,6 @@
 package main;
 
 import javaslang.collection.Array;
-import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.jumpaku.curves.interpolation.Average;
 import org.jumpaku.curves.interpolation.Centripetal;
 import org.jumpaku.curves.interpolation.Chordal;
@@ -15,6 +13,7 @@ import org.jumpaku.curves.interpolation.Data;
 import org.jumpaku.curves.interpolation.Uniformly;
 import org.jumpaku.curves.interpolation.UniformlySpaced;
 import org.jumpaku.curves.interpolation.Universal;
+import org.jumpaku.curves.vector.Point2D;
 
 /**
  *
@@ -22,8 +21,8 @@ import org.jumpaku.curves.interpolation.Universal;
  */
 public class Sample {
     public static void main(String[] args) {
-        Array<Vector2D> ps = Array.of(new Vector2D(0,0), new Vector2D(1,2), new Vector2D(2, 3), new Vector2D(3, 3), new Vector2D(4,2),new Vector2D(5,0));
-        Array<Data<Euclidean2D, Vector2D>> data = new Uniformly().parameterize(ps);
+        Array<Point2D> ps = Array.of(new Point2D(0.0,0.0), new Point2D(1.0,2.0), new Point2D(2.0, 3.0), new Point2D(3.0, 3.0), new Point2D(4.0,2.0),new Point2D(5.0,0.0));
+        Array<Data<Point2D>> data = new Uniformly().parameterize(ps);
         new UniformlySpaced().generate(3, data)
                 .forEach(k -> System.out.print(k + " "));
         System.out.println();
