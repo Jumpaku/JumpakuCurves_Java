@@ -35,35 +35,12 @@ public class Point1DTest {
      * Test of getVec method, of class Point1D.
      */
     @Test
-    public void testGetVector() {
-        System.out.println("getVector");
-
-    }
-
-    /**
-     * Test of getVec method, of class Point1D.
-     */
-    @Test
     public void testGetVec() {
         System.out.println("getVec");
         Point1D instance = new Point1D(2.9);
         Vec expResult = new Vec1(2.9);
         Vec result = instance.getVec();
         assertTrue(checkEquals(expResult, result));
-    }
-
-    /**
-     * Test of getVec1 method, of class Point1D.
-     */
-    @Test
-    public void testGetVec1() {
-        System.out.println("getVec1");
-        Point1D instance = null;
-        Vec1 expResult = null;
-        Vec1 result = instance.getVec1();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**

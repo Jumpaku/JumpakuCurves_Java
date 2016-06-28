@@ -141,9 +141,4 @@ public class Matrix3x3 implements Affine2D {
                     }
                 };
     }
-
-    @Override
-    public Integer getDimention() {
-        return 2;
-    }
 }

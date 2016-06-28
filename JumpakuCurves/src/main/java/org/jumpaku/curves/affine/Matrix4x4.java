@@ -57,6 +57,7 @@ public class Matrix4x4 implements Affine3D{
         return new Matrix4x4(MatrixUtils.createRealDiagonalMatrix(new double[]{x, y, z, 1}));
     }
     public static Affine3D rotation(Vec3 axis, Double radian){
+        axis = axis.normalize();
         Double x = axis.getX();
         Double y = axis.getY();
         Double z = axis.getZ();

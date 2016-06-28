@@ -19,10 +19,4 @@ public interface Affine <P extends Point> {
      * @return 
      */
     P apply(P p);
-    
-    /**
-     * 
-     * @return 
-     */
-    Integer getDimention();
 }

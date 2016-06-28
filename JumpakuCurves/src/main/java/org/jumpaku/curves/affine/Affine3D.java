@@ -252,15 +252,6 @@ public interface Affine3D extends Affine<Point3D>{
     }
 
     /**
-     * 
-     * @return 
-     */
-    @Override
-    public default Integer getDimention() {
-        return 3;
-    }
-    
-    /**
      * <p>逆変換 Inversion.</p>
      * @return 元の変換の逆変換 Inverted affine
      */

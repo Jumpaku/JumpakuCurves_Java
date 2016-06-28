@@ -416,15 +416,6 @@ public interface Affine2D extends Affine<Point2D>{
     }
 
     /**
-     * 
-     * @return 
-     */
-    @Override
-    default Integer getDimention(){
-        return 2;
-    }
-    
-    /**
      * <p>逆変換 Inversion.</p>
      * @return 元の変換の逆変換 Inverted affine
      */
