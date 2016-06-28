@@ -6,6 +6,7 @@
 package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
+import org.jumpaku.curves.affine.Affine2D;
 import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.vector.Point2D;
 import org.jumpaku.curves.vector.Vec2;
@@ -57,13 +58,13 @@ public class BezierCurve2D implements BezierCurve{
     
     @Override
     public final Array<BezierCurve2D> divide(Double t) {
-        return Array.of(new BezierCurve2D(curve.divide(t).head()), new BezierCurve2D(curve.divide(t).last()));
+        Array<? extends BezierCurve> divided = curve.divide(t);
+        return Array.of(new BezierCurve2D(divided.head()), new BezierCurve2D(divided.last()));
     }
 
-    /*@Override
-    public final BezierCurve2D transform(Transform<Euclidean2D, Vector2D> transform) {
-        return new BezierCurve2D(curve.transform(transform));
-    }*/
+    public final BezierCurve2D transform(Affine2D a) {
+        return new BezierCurve2D(BezierCurve.create(getControlPoints().map(p -> a.apply(p)), 2));
+    }
 
     @Override
     public final BezierCurve2D reverse() {

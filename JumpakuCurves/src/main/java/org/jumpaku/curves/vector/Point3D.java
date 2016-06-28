@@ -29,11 +29,22 @@ public class Point3D implements Point{
     }
 
     @Override
-    public Vec getVec() {
-        return vec;
+    public Vec3 difference(Point p) {
+        return new Vec3(Point.super.difference(p));
     }
-    
-    public Vec3 getVec3(){
+
+    @Override
+    public Point3D divide(Double t, Point p) {
+        return new Point3D(Point.super.divide(t, p));
+    }
+
+    @Override
+    public Point3D move(Vec v) {
+        return new Point3D(Point.super.move(v));
+    }
+
+    @Override
+    public Vec3 getVec() {
         return vec;
     }
     

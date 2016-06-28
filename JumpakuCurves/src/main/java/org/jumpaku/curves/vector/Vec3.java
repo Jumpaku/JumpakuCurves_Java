@@ -45,6 +45,39 @@ public class Vec3 implements Vec{
     }
 
     @Override
+    public Vec3 add(Double a, Vec v) {
+        return new Vec3(Vec.super.add(a, v));
+    }
+
+    @Override
+    public Vec3 negate() {
+        return new Vec3(Vec.super.negate());
+    }
+
+    @Override
+    public Vec3 normalize() {
+        return new Vec3(Vec.super.normalize());
+    }
+
+    @Override
+    public Vec3 sub(Vec v) {
+        return new Vec3(Vec.super.sub(v));
+    }
+
+    @Override
+    public Vec3 sub(Double a, Vec v) {
+        return new Vec3(Vec.super.sub(a, v));
+    }
+
+    public Vec3 cross(Vec3 v){
+        return new Vec3(getVector3d().crossProduct(v.getVector3d()));
+    }
+    
+    public Double angle(Vec3 v){
+        return Vector3D.angle(getVector3d(), v.getVector3d());
+    }
+    
+    @Override
     public Integer getDimention() {
         return 3;
     }

@@ -5,13 +5,12 @@
  */
 package org.jumpaku.curves.affine;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.jumpaku.curves.vector.Point2D;
 import org.jumpaku.curves.vector.Vec;
 import org.jumpaku.curves.vector.Vec2;
 
 /**
- * <p>2次元ベクトルのアフィン変換のインターフェイスを定義します Defines interface of affine transformation for 2D vector.</p>
+ * <p>2次のアフィン変換のインターフェイスを定義します Defines interface of affine transformation in 2D plane.</p>
  * @author Jumpaku
  */
 public interface Affine2D extends Affine<Point2D>{
@@ -30,53 +29,7 @@ public interface Affine2D extends Affine<Point2D>{
      * @return 拡大縮小変換を追加したアフィン変換 Affine concatenated Scaling
      */
     Affine2D scale(Double x, Double y);
-    
-    /**
-     * <p>回転変換 Rotation.</p>
-     * <p>
-     * このAffine変換に更に回転変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
-     * このオブジェクト自体は変更されません.<br>
-     * 追加される回転変換は原点を軸にして, 指定された角度で回転します.</p>
-     * <p>
-     * This method concatenates rotation transformation to this, and returns concatenated object.<br>
-     * This method doesn't change original object.<br>
-     * Axis of rotation is the origin, angle is given.</p>
-     * @param radian 角度 angle
-     * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
-     */
-    Affine2D rotate(Double radian);
-    
-    /**
-     * <p>平行移動変換 Translation.</p>
-     * <p>
-     * このAffine変換に更に平行移動変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
-     * このオブジェクト自体は変更されません.<br>
-     * 追加される平行移動変換は指定されたベクトルの分だけ平行移動します.</p>
-     * <p>
-     * This method concatenates translation transformation to this, and returns concatenated object.<br>
-     * This method doesn't change original object.<br>
-     * Movement vector is given.</p>
-     * @param v 平行移動ベクトル translation vector
-     * @return 平行移動変換を追加したアフィン変換 Affin concatenated Transfomation
-     */
-    Affine2D translate(Vec2 v);
-    
-    /**
-     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
-     * <p>
-     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
-     * このオブジェクト自体は変更されません.<br>
-     * 追加される剪断変換(シャーリング)は原点を軸にして, x軸方向, y軸方向にそれぞれ指定されたパラメータで変換します.</p>
-     * <p>
-     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
-     * This method doesn't change original object.<br>
-     * Pivot of shearing is the origin, parameters for x-axis and y-axis are given.</p>
-     * @param x x-軸方向の剪断パラメータ parameter for x-axis
-     * @param y y-軸方向の剪断パラメータ parameter for y-axis
-     * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
-     */
-    Affine2D shear(Double x, Double y);
-    
+   
     /**
      * <p>拡大縮小変換 Scaling.</p>
      * <p>
@@ -110,9 +63,7 @@ public interface Affine2D extends Affine<Point2D>{
      * @return 拡大縮小変換を追加したアフィン変換 Affine concatenated Scaling
      */
     default Affine2D scaleAt(Point2D center, Double x, Double y){
-        Vec toCenter = center.getVec().negate();
-        Vec fromCenter = center.getVec();
-        return translate(new Vec2(toCenter.get(0), toCenter.get(1))).scale(x, y).translate(new Vec2(fromCenter.get(0), fromCenter.get(1)));
+        return translate(center.getVec().negate()).scale(x, y).translate(center.getVec());
     }
     
     /**
@@ -133,172 +84,6 @@ public interface Affine2D extends Affine<Point2D>{
         return scaleAt(center, scale, scale);
     }
     
-    /**
-     * <p>回転変換 Rotation.</p>
-     * <p>
-     * このAffine変換に更に回転変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
-     * このオブジェクト自体は変更されません.<br>
-     * 追加される回転変換は指定された点を軸にして, 指定された角度で回転します.</p>
-     * <p>
-     * This method concatenates rotation transformation to this, and returns concatenated object.<br>
-     * This method doesn't change original object.<br>
-     * Axis of rotation and angle are given.</p>
-     * @param axis 回転軸 point of axis
-     * @param radian 回転角 angle
-     * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
-     */
-    default Affine2D rotateAt(Point2D axis, Double radian){
-        return translate(new Vec2(axis.getVec().negate())).rotate(radian).translate(new Vec2(axis.getVec()));
-    }
-    
-    /**
-     * <p>回転変換 Rotation.</p>
-     * <p>
-     * このAffine変換に更に回転変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
-     * このオブジェクト自体は変更されません.<br>
-     * 追加される回転変換は原点を軸にして1つ目のベクトルと2つ目のベクトルの間の角度だけ回転します.<br>
-     * </p>
-     * <p>
-     * This method concatenates rotation transformation to this, and returns concatenated object.<br>
-     * This method doesn't change original object.<br>
-     * Axis of rotation is the origin, angle of rotation is between first vector and second vector.</p>
-     * @param from 1つ目のベクトル first vector
-     * @param to 2つ目のベクトル second vector
-     * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
-     */
-    default Affine2D rotate(Vec2 from, Vec2 to){
-        return rotateAt(new Point2D(new Vec2(Vec.zero(2))), from, to);
-    }
-    
-    /**
-     * <p>回転変換 Rotation.</p>
-     * <p>
-     * このAffine変換に更に回転変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
-     * このオブジェクト自体は変更されません.<br>
-     * 追加される回転変換は指定された点を軸にして1つ目のベクトルと2つ目のベクトルの間の角度だけ回転します.</p>
-     * <p>
-     * This method concatenates rotation transformation to this, and returns concatenated object.<br>
-     * This method doesn't change original object.<br>
-     * Axis of rotation is specified, angle of rotation is between first vector and second vector.</p>
-     * @param axis 回転軸 axis
-     * @param from first vector
-     * @param to second vector
-     * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
-     */
-    default Affine2D rotateAt(Point2D axis, Vec2 from, Vec2 to){
-        Vector2D a = new Vector2D(axis.get(0), axis.get(1));
-        Vector2D f = new Vector2D(from.get(0), from.get(1));
-        Vector2D t = new Vector2D(to.get(0), to.get(1));
-        Double cross = t.crossProduct(a, f);
-        Double radian = Vector2D.angle(f, t);
-        return rotateAt(axis, cross > 0 ? radian : -radian);
-    }
-    
-    /**
-     * <p>平行移動変換 Translation.</p>
-     * <p>
-     * このAffine変換に更に平行移動変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
-     * このオブジェクト自体は変更されません.<br>
-     * 追加される平行移動変換は指定された位置ベクトルの差ベクトルの分だけ平行移動します.</p>
-     * <p>
-     * This method concatenates translation transformation to this, and returns concatenated object.<br>
-     * This method doesn't change original object.<br>
-     * Movement vector begins at given initial, and ends at given terminal.</p>
-     * @param initial 始点 initial point
-     * @param terminal 終点 terminal point
-     * @return 平行移動変換を追加したアフィン変換 Affin concatenated Transfomation
-     */
-    default Affine2D translate(Point2D initial, Point2D terminal){
-        return translate(new Vec2(terminal.difference(initial)));
-    }
-    /**
-     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
-     * <p>
-     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
-     * このオブジェクト自体は変更されません.<br>
-     * 追加される剪断変換(シャーリング)は原点を軸にして, x軸方向に指定されたパラメータで変換します.</p>
-     * <p>
-     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
-     * This method doesn't change original object.<br>
-     * Pivot of shearing is the origin, parameter for x-axis is given.</p>
-     * @param x x軸方向のパラメータ parameter for x-axis
-     * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
-     */
-    default Affine2D shearX(Double x){
-        return shear(x, 0.0);
-    }
-    
-    /**
-     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
-     * <p>
-     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
-     * このオブジェクト自体は変更されません.<br>
-     * 追加される剪断変換(シャーリング)は原点を軸にして, y軸方向に指定されたパラメータで変換します.</p>
-     * <p>
-     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
-     * This method doesn't change original object.<br>
-     * Pivot of shearing is the origin, parameter for y-axis is given.</p>
-     * @param y y軸方向のパラメータ parameter for y-axis
-     * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
-     */
-    default Affine2D shearY(Double y){
-        return shear(0.0, y);
-    }
-    
-    /**
-     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
-     * <p>
-     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
-     * このオブジェクト自体は変更されません.<br>
-     * 追加される剪断変換(シャーリング)は指定された点を軸にして, x軸方向, y軸方向にそれぞれ指定されたパラメータで変換します.</p>
-     * <p>
-     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
-     * This method doesn't change original object.<br>
-     * Pivot of shearing and parameters for x-axis and y-axis are given.</p>
-     * @param pivot
-     * @param x x軸方向のパラメータ parameter for x-axis
-     * @param y y軸方向のパラメータ parameter for y-axis
-     * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
-     */
-    default Affine2D shearAt(Point2D pivot, Double x, Double y){
-        return translate(new Vec2(pivot.getVec().negate())).shear(x, y).translate(new Vec2(pivot.getVec()));
-    }
-    
-    /**
-     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
-     * <p>
-     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
-     * このオブジェクト自体は変更されません.<br>
-     * 追加される剪断変換(シャーリング)は指定された点を軸にして, x軸方向の指定されたパラメータで変換します.</p>
-     * <p>
-     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
-     * This method doesn't change original object.<br>
-     * Pivot of shearing and parameter for x-axis are given.</p>
-     * @param pivot 剪断変換(シャーリング)の軸 pivot of shearing
-     * @param x x軸方向のパラメータ parameter for x-axis
-     * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
-     */
-    default Affine2D shearXAt(Point2D pivot, Double x){
-        return shearAt(pivot, x, 0.0);
-    }
-    
-    /**
-     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
-     * <p>
-     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
-     * このオブジェクト自体は変更されません.<br>
-     * 追加される剪断変換(シャーリング)は指定された点を軸にして, y軸方向の指定されたパラメータで変換します.</p>
-     * <p>
-     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
-     * This method doesn't change original object.<br>
-     * Pivot of shearing and parameter for y-axis are given.</p>
-     * @param pivot 剪断変換(シャーリング)の軸 pivot of shearing
-     * @param y y軸方向のパラメータ parameter for y-axis
-     * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
-     */
-    default Affine2D shearYAt(Point2D pivot, Double y){
-        return shearAt(pivot, 0.0, y);
-    }
     
     /**
      * <p>スクイーズ変換 Squeezing.</p>
@@ -334,7 +119,7 @@ public interface Affine2D extends Affine<Point2D>{
      * @return スクイーズ変換を追加したアフィン変換 Affine concatenated squeezing
      */
     default Affine2D squeezeAt(Point2D center, Double k){
-        return translate(new Vec2(center.getVec().negate())).squeeze(k).translate(new Vec2(center.getVec()));
+        return translate(center.getVec().negate()).squeeze(k).translate(center.getVec());
     }
     
     /**
@@ -402,6 +187,234 @@ public interface Affine2D extends Affine<Point2D>{
         return scale(-1.0, 1.0);
     }
     
+    /**
+     * <p>回転変換 Rotation.</p>
+     * <p>
+     * このAffine変換に更に回転変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される回転変換は原点を軸にして, 指定された角度で回転します.</p>
+     * <p>
+     * This method concatenates rotation transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Axis of rotation is the origin, angle is given.</p>
+     * @param radian 角度 angle
+     * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
+     */
+    Affine2D rotate(Double radian);
+    
+    
+    /**
+     * <p>回転変換 Rotation.</p>
+     * <p>
+     * このAffine変換に更に回転変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される回転変換は指定された点を軸にして, 指定された角度で回転します.</p>
+     * <p>
+     * This method concatenates rotation transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Axis of rotation and angle are given.</p>
+     * @param axis 回転軸 point of axis
+     * @param radian 回転角 angle
+     * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
+     */
+    default Affine2D rotateAt(Point2D axis, Double radian){
+        return translate(axis.getVec().negate()).rotate(radian).translate(axis.getVec());
+    }
+    
+    /**
+     * <p>回転変換 Rotation.</p>
+     * <p>
+     * このAffine変換に更に回転変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される回転変換は原点を軸にして1つ目のベクトルと2つ目のベクトルの間の角度だけ回転します.<br>
+     * </p>
+     * <p>
+     * This method concatenates rotation transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Axis of rotation is the origin, angle of rotation is between first vector and second vector.</p>
+     * @param from 1つ目のベクトル first vector
+     * @param to 2つ目のベクトル second vector
+     * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
+     */
+    default Affine2D rotate(Vec2 from, Vec2 to){
+        return rotateAt(new Point2D(new Vec2(Vec.zero(2))), from, to);
+    }
+    
+    /**
+     * <p>回転変換 Rotation.</p>
+     * <p>
+     * このAffine変換に更に回転変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される回転変換は指定された点を軸にして1つ目のベクトルと2つ目のベクトルの間の角度だけ回転します.</p>
+     * <p>
+     * This method concatenates rotation transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Axis of rotation is specified, angle of rotation is between first vector and second vector.</p>
+     * @param axis 回転軸 axis
+     * @param from first vector
+     * @param to second vector
+     * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
+     */
+    default Affine2D rotateAt(Point2D axis, Vec2 from, Vec2 to){
+        return rotateAt(axis, Vec2.angle(from, to));
+    }
+    
+    /**
+     * <p>平行移動変換 Translation.</p>
+     * <p>
+     * このAffine変換に更に平行移動変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される平行移動変換は指定されたベクトルの分だけ平行移動します.</p>
+     * <p>
+     * This method concatenates translation transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Movement vector is given.</p>
+     * @param v 平行移動ベクトル translation vector
+     * @return 平行移動変換を追加したアフィン変換 Affin concatenated Transfomation
+     */
+    Affine2D translate(Vec2 v);
+
+    /**
+     * <p>平行移動変換 Translation.</p>
+     * <p>
+     * このAffine変換に更に平行移動変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される平行移動変換は指定された位置ベクトルの差ベクトルの分だけ平行移動します.</p>
+     * <p>
+     * This method concatenates translation transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Movement vector is (x, y).</p>
+     * @param x
+     * @param y
+     * @return 平行移動変換を追加したアフィン変換 Affin concatenated Transfomation
+     */
+    default Affine2D translate(Double x, Double y){
+        return translate(new Vec2(x, y));
+    }
+    
+    /**
+     * <p>平行移動変換 Translation.</p>
+     * <p>
+     * このAffine変換に更に平行移動変換を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される平行移動変換は指定された位置ベクトルの差ベクトルの分だけ平行移動します.</p>
+     * <p>
+     * This method concatenates translation transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Movement vector begins at given initial, and ends at given terminal.</p>
+     * @param initial 始点 initial point
+     * @param terminal 終点 terminal point
+     * @return 平行移動変換を追加したアフィン変換 Affin concatenated Transfomation
+     */
+    default Affine2D translate(Point2D initial, Point2D terminal){
+        return translate(terminal.difference(initial));
+    }
+    
+    /**
+     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
+     * <p>
+     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される剪断変換(シャーリング)は原点を軸にして, x軸方向, y軸方向にそれぞれ指定されたパラメータで変換します.</p>
+     * <p>
+     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Pivot of shearing is the origin, parameters for x-axis and y-axis are given.</p>
+     * @param x x-軸方向の剪断パラメータ parameter for x-axis
+     * @param y y-軸方向の剪断パラメータ parameter for y-axis
+     * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
+     */
+    Affine2D shear(Double x, Double y);
+    
+    /**
+     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
+     * <p>
+     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される剪断変換(シャーリング)は原点を軸にして, x軸方向に指定されたパラメータで変換します.</p>
+     * <p>
+     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Pivot of shearing is the origin, parameter for x-axis is given.</p>
+     * @param x x軸方向のパラメータ parameter for x-axis
+     * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
+     */
+    default Affine2D shearX(Double x){
+        return shear(x, 0.0);
+    }
+    
+    /**
+     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
+     * <p>
+     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される剪断変換(シャーリング)は原点を軸にして, y軸方向に指定されたパラメータで変換します.</p>
+     * <p>
+     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Pivot of shearing is the origin, parameter for y-axis is given.</p>
+     * @param y y軸方向のパラメータ parameter for y-axis
+     * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
+     */
+    default Affine2D shearY(Double y){
+        return shear(0.0, y);
+    }
+    
+    /**
+     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
+     * <p>
+     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される剪断変換(シャーリング)は指定された点を軸にして, x軸方向, y軸方向にそれぞれ指定されたパラメータで変換します.</p>
+     * <p>
+     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Pivot of shearing and parameters for x-axis and y-axis are given.</p>
+     * @param pivot
+     * @param x x軸方向のパラメータ parameter for x-axis
+     * @param y y軸方向のパラメータ parameter for y-axis
+     * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
+     */
+    default Affine2D shearAt(Point2D pivot, Double x, Double y){
+        return translate(pivot.getVec().negate()).shear(x, y).translate(pivot.getVec());
+    }
+    
+    /**
+     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
+     * <p>
+     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される剪断変換(シャーリング)は指定された点を軸にして, x軸方向の指定されたパラメータで変換します.</p>
+     * <p>
+     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Pivot of shearing and parameter for x-axis are given.</p>
+     * @param pivot 剪断変換(シャーリング)の軸 pivot of shearing
+     * @param x x軸方向のパラメータ parameter for x-axis
+     * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
+     */
+    default Affine2D shearXAt(Point2D pivot, Double x){
+        return shearAt(pivot, x, 0.0);
+    }
+    
+    /**
+     * <p>剪断変換(シャーリング) Shearing(Skewing).</p>
+     * <p>
+     * このAffine変換に更に剪断変換(シャーリング)を追加してできる新たなAffine変換オブジェクトを返します.<br>
+     * このオブジェクト自体は変更されません.<br>
+     * 追加される剪断変換(シャーリング)は指定された点を軸にして, y軸方向の指定されたパラメータで変換します.</p>
+     * <p>
+     * This method concatenates shearing transformation to this, and returns concatenated object.<br>
+     * This method doesn't change original object.<br>
+     * Pivot of shearing and parameter for y-axis are given.</p>
+     * @param pivot 剪断変換(シャーリング)の軸 pivot of shearing
+     * @param y y軸方向のパラメータ parameter for y-axis
+     * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
+     */
+    default Affine2D shearYAt(Point2D pivot, Double y){
+        return shearAt(pivot, 0.0, y);
+    }
+
     /**
      * 
      * @return 

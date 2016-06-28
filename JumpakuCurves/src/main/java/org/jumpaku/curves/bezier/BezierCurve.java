@@ -32,6 +32,7 @@ public abstract interface BezierCurve extends Curve{
      * <p>
      * The argument controlPoints cannot be null, contain null, and be empty.</p>
      * @param controlPoints 制御点列 control points
+     * @param dimention
      * @return 引数の制御点リストで定義されるBezier曲線. Bezier curve defined given control points
      * @throws IllegalArgumentException controlPointsが{@code null}の時, {@code null}を含んでいる時, または空である時 When controlPoints is {@code null}, contains {@code null}, or is empty.
      */

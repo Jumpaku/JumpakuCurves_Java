@@ -13,14 +13,15 @@ import org.jumpaku.curves.vector.Point;
  * <p>
  * 
  * @author jumpaku
+ * @param <P>
  */
-public interface Curve{
+public interface Curve <P extends Point>{
     /**
      * <p>パラメータtに対応する評価点の位置ベクトルを返します Evaluates point corresponding t.</p>
      * @param t パラメータ parameter
      * @return 評価点 Evaluated point
      */
-    Point evaluate(Double t);
+    P evaluate(Double t);
     
     /**
      * <p>曲線が写像される平面や空間の次元を返します Returns dimention of this curve.</p>

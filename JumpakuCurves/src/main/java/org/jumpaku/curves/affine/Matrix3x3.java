@@ -23,41 +23,51 @@ public class Matrix3x3 implements Affine2D {
     private static final Matrix3x3 IDENTITY = new Matrix3x3(MatrixUtils.createRealIdentityMatrix(3));
 
     protected Matrix3x3(RealMatrix matrix){
+        if(matrix.getRowDimension() != 3 || matrix.getColumnDimension() != 3)
+            throw new IllegalArgumentException("dimention is not 3x3");
+                
         this.matrix = matrix.copy();
+    }
+    
+    public static Affine2D identity(){
+        return IDENTITY;
     }
     
     protected static Point2D convert(RealVector v){
         return new Point2D(v.getEntry(0), v.getEntry(1));
     }
+
     protected static RealVector convert(Vec2 v){
         return new ArrayRealVector(new double[]{v.getX(), v.getY(), 1});
     }
+
     protected static Point2D transform(RealMatrix m, Point2D v){
         return convert(m.operate(convert(new Vec2(v.getVec()))));
     }
-    
-    public static Affine2D createScaling(Double x, Double y){
-        if(x.compareTo(0.0) == 0)
+
+    public static Affine2D scaling(Double x, Double y){
+        if(!Double.isFinite(1/x))
             throw new IllegalArgumentException("x must be not 0");
-        if(y.compareTo(0.0) == 0)
+        if(!Double.isFinite(1/y))
             throw new IllegalArgumentException("y must be not 0");
+        
         return new Matrix3x3(MatrixUtils.createRealDiagonalMatrix(new double[]{x, y, 1}));
     }
-    public static Affine2D createRotation(Double radian){
+    public static Affine2D rotation(Double radian){
         return new Matrix3x3(MatrixUtils.createRealMatrix(new double[][]{
             { Math.cos(radian), -Math.sin(radian), 0 },
             { Math.sin(radian), Math.cos(radian), 0},
             {0, 0, 1}
         }));
     }
-    public static Affine2D createTranslation(Vec2 move){
+    public static Affine2D translation(Vec2 move){
         return new Matrix3x3(MatrixUtils.createRealMatrix(new double[][]{
             { 1, 0, move.getX() },
             { 0, 1, move.getY() },
             { 0, 0, 1 }
         }));
     }
-    public static Affine2D createShearing(Double x, Double y){
+    public static Affine2D shearing(Double x, Double y){
         if(Double.compare(x*y, 1.0) == 0)
             throw new IllegalArgumentException("x*y must be not 1");
         return new Matrix3x3(MatrixUtils.createRealMatrix(new double[][]{
@@ -66,69 +76,22 @@ public class Matrix3x3 implements Affine2D {
             { 0, 0, 1 }
         }));
     }
-    public static Affine2D createScaling(Double scalar){
-        return createScaling(scalar, scalar);
-    }
-    public static Affine2D createScalingAt(Point2D center, Double scalar){
-        return createScalingAt(center, scalar, scalar);
-    }
-    public static Affine2D createScalingAt(Point2D center, Double x, Double y){
-        return createTranslation(new Vec2(center.getVec().negate())).scale(x, y).translate(new Vec2(center.getVec()));
-    }
-    public static Affine2D createRotationAt(Point2D center, Double radian){
-        return createTranslation(new Vec2(center.getVec().negate())).rotate(radian).translate(new Vec2(center.getVec()));
-    }
-    public static Affine2D createShearingAt(Point2D pivot, Double x, Double y){
-        return createTranslation(new Vec2(pivot.getVec().negate())).shear(x, y).translate(new Vec2(pivot.getVec()));
-    }
-    public static Affine2D createShearingX(Double x){
-        return createShearing(x, 0.0);
-    }    
-    public static Affine2D createShearingY(Double x, Double y){
-        return createShearing(0.0, y);
-    }
-    public static Affine2D createShearingXAt(Point2D v, Double x){
-        return createShearingAt(v, x, 0.0);
-    }
-    public static Affine2D createShearingYAt(Point2D v, Double y){
-        return createShearingAt(v, 0.0, y);
-    }
-    public static Affine2D createSqueeze(Double k){
-        return createScaling(k, 1/k);
-    }
-    public static Affine2D createRefrectOrigin(){
-        return createScaling(-1.0);
-    }
-    public static Affine2D createRefrectXAxis(){
-        return createScaling(1.0, -1.0);
-    }
-    public static Affine2D createRefrectYAxis(){
-        return createScaling(-1.0, 1.0);
-    }
-    
-    public static Affine2D identity(){
-        return IDENTITY;
-    }
-    
-    protected final Double get(Integer i, Integer j){
-        return matrix.getEntry(i, j);
-    }
-    
+        
     @Override
     public final Affine2D scale(Double x, Double y) {
-        return concatenate(createScaling(x, y));
+        return concatenate(scaling(x, y));
     }
     @Override
     public final Affine2D rotate(Double radian) {
-        return concatenate(createRotation(radian));
+        return concatenate(rotation(radian));
     }
     @Override
     public final Affine2D translate(Vec2 v) {
-        return concatenate(createTranslation(v));
+        return concatenate(translation(v));
     }
     @Override
     public final Affine2D shear(Double x, Double y) {
-        return concatenate(createShearing(x, y));
+        return concatenate(shearing(x, y));
     }
 
     @Override
@@ -149,22 +112,22 @@ public class Matrix3x3 implements Affine2D {
                 new AbstractAffine2D(){
                     @Override
                     protected Affine2D createScaling(Double x, Double y) {
-                        return Matrix3x3.createScaling(x, y);
+                        return Matrix3x3.scaling(x, y);
                     }
 
                     @Override
                     protected Affine2D createRotation(Double radian) {
-                        return Matrix3x3.createRotation(radian);
+                        return Matrix3x3.rotation(radian);
                     }
 
                     @Override
                     protected Affine2D createTranslation(Vec2 v) {
-                        return Matrix3x3.createTranslation(v);
+                        return Matrix3x3.translation(v);
                     }
 
                     @Override
                     protected Affine2D createShearing(Double x, Double y) {
-                        return Matrix3x3.createShearing(x, y);
+                        return Matrix3x3.shearing(x, y);
                     }
 
                     @Override

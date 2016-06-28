@@ -22,35 +22,35 @@ public abstract class AbstractAffine2D implements Affine2D {
     
     protected abstract Affine2D createShearing(Double x, Double y);
     
-    private static Affine2D concatenate(AbstractAffine2D first, Affine2D second){        
+    private static Affine2D concatenate(AbstractAffine2D self, Affine2D second){        
         return new AbstractAffine2D() {
             @Override
             public Affine2D invert() {
-                return second.invert().concatenate(first.invert());
+                return second.invert().concatenate(self.invert());
             }
 
             @Override
             public Point2D apply(Point2D v) {
-                return second.apply(first.apply(v));
+                return second.apply(self.apply(v));
             }
             @Override
             protected Affine2D createScaling(Double x, Double y) {
-                return first.createScaling(x, y);
+                return self.createScaling(x, y);
             }
 
             @Override
             protected Affine2D createRotation(Double radian) {
-                return first.createRotation(radian);
+                return self.createRotation(radian);
             }
 
             @Override
             protected Affine2D createTranslation(Vec2 v) {
-                return first.createTranslation(v);
+                return self.createTranslation(v);
             }
 
             @Override
             protected Affine2D createShearing(Double x, Double y) {
-                return first.createShearing(x, y);
+                return self.createShearing(x, y);
             }
         };
     }

@@ -36,7 +36,7 @@ public class Vec1 implements Vec{
     }
     
     @Override
-    public Vec add(Vec v) {
+    public Vec1 add(Vec v) {
         if(1 != v.getDimention())
             throw new IllegalArgumentException("dimention miss match");
         
@@ -44,7 +44,32 @@ public class Vec1 implements Vec{
     }
 
     @Override
-    public Vec scale(Double a) {
+    public Vec1 add(Double a, Vec v) {
+        return new Vec1(Vec.super.add(a, v));
+    }
+
+    @Override
+    public Vec1 negate() {
+        return new Vec1(Vec.super.negate());
+    }
+
+    @Override
+    public Vec1 normalize() {
+        return new Vec1(Vec.super.normalize());
+    }
+
+    @Override
+    public Vec1 sub(Vec v) {
+        return new Vec1(Vec.super.sub(v));
+    }
+
+    @Override
+    public Vec1 sub(Double a, Vec v) {
+        return new Vec1(Vec.super.sub(a, v));
+    }
+    
+    @Override
+    public Vec1 scale(Double a) {
         return new Vec1(getVector1d().scalarMultiply(a));
     }
 

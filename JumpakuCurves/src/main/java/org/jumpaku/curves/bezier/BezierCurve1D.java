@@ -57,8 +57,8 @@ public class BezierCurve1D implements BezierCurve{
     
     @Override
     public final Array<BezierCurve1D> divide(Double t) {
-        return Array.of(new BezierCurve1D(curve.divide(t).head()),
-                new BezierCurve1D(curve.divide(t).last()));
+        Array<? extends BezierCurve> divided = curve.divide(t);
+        return Array.of(new BezierCurve1D(divided.head()), new BezierCurve1D(divided.last()));
     }
 
     /*@Override

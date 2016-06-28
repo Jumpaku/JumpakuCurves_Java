@@ -112,6 +112,13 @@ public interface Vec{
         return add(v.negate());
     }
     
+    default Vec sub(Double a, Vec v){
+        if(getDimention() != v.getDimention())
+            throw new IllegalArgumentException("dimention miss match");
+
+        return sub(v.scale(a));
+    }
+    
     default Double square(){
         return dot(this);
     }

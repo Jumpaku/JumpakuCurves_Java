@@ -36,7 +36,7 @@ public class Vec2 implements Vec{
     }
 
     @Override
-    public Vec add(Vec v) {
+    public Vec2 add(Vec v) {
         if(2 != v.getDimention())
             throw new IllegalArgumentException("dimention miss match");
         
@@ -44,8 +44,33 @@ public class Vec2 implements Vec{
     }
 
     @Override
-    public Vec scale(Double a) {
+    public Vec2 scale(Double a) {
         return new Vec2(getVector2d().scalarMultiply(a));
+    }
+
+    @Override
+    public Vec2 add(Double a, Vec v) {
+        return new Vec2(Vec.super.add(a, v));
+    }
+
+    @Override
+    public Vec2 negate() {
+        return new Vec2(Vec.super.negate());
+    }
+
+    @Override
+    public Vec2 normalize() {
+        return new Vec2(Vec.super.normalize());
+    }
+
+    @Override
+    public Vec2 sub(Vec v) {
+        return new Vec2(Vec.super.sub(v));
+    }
+
+    @Override
+    public Vec2 sub(Double a, Vec v) {
+        return new Vec2(Vec.super.sub(a, v));
     }
 
     @Override
@@ -67,6 +92,18 @@ public class Vec2 implements Vec{
             throw new IllegalArgumentException("dimention miss match");
         
         return getVector2d().dotProduct(new Vector2D(v.get(0), v.get(1)));
+    }
+    
+    public Double cross(Vec2 v) {
+        return getVector2d().crossProduct(Vector2D.ZERO, v.getVector2d());
+    }
+    
+    public Double angle(Vec2 v){
+        return Vector2D.angle(getVector2d(), v.getVector2d());
+    }
+    
+    public static Double angle(Vec2 from, Vec2 to){
+        return from.cross(to) > 0 ? from.angle(to) : -from.angle(to);
     }
 
     public Double getX() {

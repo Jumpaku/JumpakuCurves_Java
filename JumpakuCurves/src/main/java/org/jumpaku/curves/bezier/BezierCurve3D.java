@@ -6,10 +6,9 @@
 package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
+import org.jumpaku.curves.affine.Affine3D;
 import org.jumpaku.curves.domain.Interval;
-import org.jumpaku.curves.vector.Point;
 import org.jumpaku.curves.vector.Point3D;
-import org.jumpaku.curves.vector.Vec;
 import org.jumpaku.curves.vector.Vec3;
 
 /**
@@ -63,10 +62,9 @@ public class BezierCurve3D implements BezierCurve{
                 new BezierCurve3D(curve.divide(t).last()));
     }
 
-    /*@Override
-    public final BezierCurve3D transform(Transform<Euclidean3D, Vector3D> transform) {
-        return new BezierCurve3D(curve.transform(transform));
-    }*/
+    public final BezierCurve3D transform(Affine3D a) {
+        return new BezierCurve3D(BezierCurve.create(getControlPoints().map(p -> a.apply(p)), 3));
+    }
 
     @Override
     public final BezierCurve3D reverse() {
