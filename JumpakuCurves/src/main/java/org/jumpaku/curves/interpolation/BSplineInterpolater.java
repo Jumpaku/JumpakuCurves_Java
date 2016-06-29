@@ -35,8 +35,6 @@ public class BSplineInterpolater implements Interpolater<SplineCurve> {
             this.dimention = dimention;
         }
         
-        
-
         public Builder addAllData(Iterable<Data<Point>> data){
             this.data = this.data.appendAll(data);
             return this;
