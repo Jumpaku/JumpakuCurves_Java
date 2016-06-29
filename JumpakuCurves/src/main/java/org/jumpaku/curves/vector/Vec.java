@@ -5,7 +5,7 @@
  */
 package org.jumpaku.curves.vector;
 
-import java.util.Objects;
+import java.util.Arrays;
 import org.apache.commons.math3.util.Precision;
 
 /**
@@ -14,54 +14,58 @@ import org.apache.commons.math3.util.Precision;
  */
 public interface Vec{
 
-    public static Vec zero(Integer dimention){
+    public static Vec make(Double... elements){
         return new Vec(){
             @Override
             public Vec add(Vec v) {
                 if(getDimention() != v.getDimention())
                     throw new IllegalArgumentException("dimention miss match");
-        
-                return v;
+                
+                Double[] result = new Double[getDimention()];
+                for(int i = 0; i < getDimention(); ++i){
+                    result[i] = get(i) + v.get(i);
+                }
+                return make(result);
             }
 
             @Override
             public Vec scale(Double a) {
-                return this;
+                Double[] result = new Double[getDimention()];
+                for(int i = 0; i < getDimention(); ++i){
+                    result[i] = get(i)*a;
+                }
+                return make(result);
             }
 
             @Override
             public Integer getDimention() {
-                return dimention;
+                return elements.length;
             }
 
             @Override
             public Double get(Integer i) {
-                if(i < 0 || dimention <= i)
+                if(i < 0 || getDimention() <= i)
                     throw new IllegalArgumentException("index is out of bounds");
                 
-                return 0.0;
+                return elements[i];
             }
 
             @Override
             public Double dot(Vec v) {
                 if(getDimention() != v.getDimention())
                     throw new IllegalArgumentException("dimention miss match");
-        
-                return 0.0;
-            }            
-
-            /*@Override
-            public Vector<? extends Space> getVector() {
-                if(dimention <= 0 || 3 < dimention)
-                    throw new IllegalStateException("dimention of this must be 1, 2, or 3");
                 
-                return dimention == 1 ? Vector1D.ZERO : dimention == 2 ? Vector2D.ZERO : Vector3D.ZERO;
-            }*/
+                Double result = 0.0;
+                for(int i = 0; i < getDimention(); ++i){
+                    result += get(i)*v.get(i);
+                }
+                return result;
+            }            
 
             @Override
             public Boolean equals(Vec v, Double eps) {
-                if(dimention == v.getDimention()){
-                    for(int i = 0; i < dimention; ++i){
+                if(getDimention() == v.getDimention()){
+                    for(int i = 0; i < getDimention(); ++i){
                         if(!Precision.equals(0.0, v.get(i), eps))
                             return false;
                     }
@@ -72,8 +76,8 @@ public interface Vec{
 
             @Override
             public Boolean equals(Vec v, Integer ulp) {
-                if(dimention == v.getDimention()){
-                    for(int i = 0; i < dimention; ++i){
+                if(getDimention() == v.getDimention()){
+                    for(int i = 0; i < getDimention(); ++i){
                         if(!Precision.equals(0.0, v.get(i), ulp))
                             return false;
                     }
@@ -82,6 +86,11 @@ public interface Vec{
                 return false;
             }
         };
+    }
+    public static Vec zero(Integer dimention){
+        Double[] z = new Double[dimention];
+        Arrays.fill(z, 0.0);
+        return make(z);
     }
     
     public static Vec add(Double a, Vec v1, Double b, Vec v2){

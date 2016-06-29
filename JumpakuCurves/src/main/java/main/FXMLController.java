@@ -24,7 +24,7 @@ import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.jumpaku.curves.bezier.RationalBezierCurve;
 import org.jumpaku.curves.bezier.RationalBezierCurveBernstein;
-import org.jumpaku.curves.interpolation.BSplineInterpolater2D;
+import org.jumpaku.curves.interpolation.BSplineInterpolater;
 import org.jumpaku.curves.interpolation.Data;
 import org.jumpaku.curves.spline.SplineCurve;
 import org.jumpaku.curves.spline.BSplineCurve2D;
