@@ -17,18 +17,23 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javaslang.Tuple2;
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import javax.imageio.ImageIO;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.jumpaku.curves.bezier.BezierCurve2D;
 import org.jumpaku.curves.bezier.RationalBezierCurve;
 import org.jumpaku.curves.bezier.RationalBezierCurveBernstein;
+import org.jumpaku.curves.interpolation.Average;
 import org.jumpaku.curves.interpolation.BSplineInterpolater;
 import org.jumpaku.curves.interpolation.Data;
+import org.jumpaku.curves.interpolation.KnotGenerator;
 import org.jumpaku.curves.spline.SplineCurve;
 import org.jumpaku.curves.spline.BSplineCurve2D;
 import org.jumpaku.curves.vector.Point2D;
+import org.jumpaku.curves.vector.Vec2;
 import org.jumpaku.curves.vector.WeightedPoint2D;
 
 public class FXMLController implements Initializable {
@@ -36,13 +41,12 @@ public class FXMLController implements Initializable {
     @FXML
     private Canvas canvas;
     
-    //private List<Vector2D> controlPoints = new LinkedList<>();
-    private RationalBezierCurve curve = null;
-    private List<Point2D> dataPoint = new LinkedList<>();
+    private List<Point2D> controlPoints = new LinkedList<>();
+    private BezierCurve2D curve = null;
     
     @FXML
     private synchronized void onClick(MouseEvent e){
-        //controlPoints.add(new Vector2D(e.getX(), e.getY()));
+        controlPoints.add(new Point2D(e.getX(), e.getY()));
         //dataPoint.add(new Point2D(e.getX(), e.getY()));
         
         render();
@@ -50,8 +54,8 @@ public class FXMLController implements Initializable {
     
     @FXML
     private synchronized void onCompute(ActionEvent e){
-        //curve = BezierCurve2D.create(Array.ofAll(controlPoints));
-       
+        //curve = BSplineCurve2D.create(Array.rangeBy(0, controlPoints.size() + 3 + 1.0, 1.0), Array.ofAll(controlPoints), 3);
+        curve = BezierCurve2D.create(Array.ofAll(controlPoints));
         //Array<Double> knots = Stream.rangeClosed(0, dataPoint.size() + 3).map(i -> Double.valueOf(i)).toArray();
         //Double d = (knots.get(knots.size()-4) - knots.get(3)) / (double)(dataPoint.size()-1);
         //Array<Data<Point2D>> data = Stream.from(0).map(i -> d*i + knots.get(3))
@@ -88,8 +92,8 @@ public class FXMLController implements Initializable {
     @FXML
     private synchronized void onClear(ActionEvent e){
         curve = null;
-        //controlPoints = new LinkedList<>();
-        dataPoint = new LinkedList<>();
+        controlPoints = new LinkedList<>();
+        //dataPoint = new LinkedList<>();
         GraphicsContext context = canvas.getGraphicsContext2D();
         context.clearRect(0, 0, 640, 430);
     }
@@ -115,7 +119,7 @@ public class FXMLController implements Initializable {
         context.setLineWidth(1);
         if(curve != null){
             renderCurve(context, curve, Color.BLUE);
-            renderPoints(context, curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE);
+            //renderPoints(context, curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE);
             renderPolyline(context, curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE, false);
     
             /*BSplineCurve2D compared = 
@@ -125,22 +129,34 @@ public class FXMLController implements Initializable {
             renderPoints(context, compared.getControlPoints().toJavaList(), Color.RED);
             renderPolyline(context, compared.getControlPoints().toJavaList(), Color.RED, false);*/
         }
-        //renderPoints(context, dataPoint, Color.GREEN);
+        renderPoints(context, controlPoints, Color.GREEN);
     }
     
-    private static void renderCurve(GraphicsContext context, /*BezierCurve*/RationalBezierCurve curve, Paint color){
-        final Double d = Math.pow(2, -7);
-        List<Point2D> points = Stream.gen(0.0/*curve.getKnots().head()*/, t -> t + d)
-                .takeWhile(t -> t <= 1.0)//curve.getKnots().last())
-                .map(curve::evaluate).map(p -> new Point2D(p))
+    private static void renderCurve(GraphicsContext context, BezierCurve2D curve, Paint color){
+        final Double d = Math.pow(2, -5);
+
+        context.setStroke(Color.RED);
+        Stream.gen(curve.getDomain().getFrom(), t -> t + d)
+                .takeWhile(t -> t < curve.getDomain().getTo())
+                .map(t -> new Tuple2<Point2D, Point2D>(curve.evaluate(t), curve.evaluate(t).move(curve.computeTangent(t))))
+                .forEach(t -> context.strokeLine(t._1().getX(), t._1().getY(), t._2().getX(), t._2().getY()));
+        
+        context.setStroke(Color.BLUE);
+
+        List<Point2D> points = Stream.gen(curve.getDomain().getFrom(), t -> t + d)
+                .takeWhile(t -> t < curve.getDomain().getTo())
+                .map(curve::evaluate)
                 .toJavaList();
         renderPolyline(context, points, color, Boolean.FALSE);
         
+
     }
     
     private static void renderPoints(GraphicsContext context, List<Point2D> points, Paint color){
         if(points.isEmpty())
-            return;        context.setFill(color);
+            return;
+
+        context.setFill(color);
         points.forEach(p -> context.fillOval(p.getX()-4, p.getY()-4, 8, 8));
 
         context.setFill(Color.BLACK);
@@ -165,7 +181,7 @@ public class FXMLController implements Initializable {
         canvas.getGraphicsContext2D().clearRect(0, 0, 640, 430);
         canvas.getGraphicsContext2D().setLineWidth(1);
         
-        curve = new RationalBezierCurveBernstein(Array.of(
+        /*curve = new RationalBezierCurveBernstein(Array.of(
                 new WeightedPoint2D(200+150.0, 200+0.0, 1.0),
                 new WeightedPoint2D(200+150.0, 200+50.0, 0.0),
                 new WeightedPoint2D(200+0.0, 200+50.0, 1.0)), 2);
@@ -192,6 +208,6 @@ public class FXMLController implements Initializable {
                 new WeightedPoint2D(200+150.0, 200+0.0, 1.0)), 2);
         renderCurve(canvas.getGraphicsContext2D(), curve, Color.RED);
         renderPoints(canvas.getGraphicsContext2D(), curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE);
-        renderPolyline(canvas.getGraphicsContext2D(), curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE, false);
+        renderPolyline(canvas.getGraphicsContext2D(), curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE, false);*/
     }    
 }

@@ -5,11 +5,14 @@
  */
 package org.jumpaku.curves.spline;
 
+import java.util.ArrayList;
 import javaslang.collection.List;
 import javaslang.collection.Array;
+import javaslang.collection.Stream;
 import org.jumpaku.curves.domain.Closed;
 import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.vector.Point;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  *
@@ -106,6 +109,21 @@ public abstract class AbstractBSplineCurve implements BSplineCurve {
             }
         };
     }
+
+    @Override
+    public Vec computeTangent(Double t) {
+        Array<Point> cp = getControlPoints();
+        Integer size = cp.size() - 1;
+        java.util.List<Vec> terms = new ArrayList<>(size);
+        Integer p = getDegree() - 1;
+        for(int i = 1; i <= size; ++i){
+            terms.add(cp.get(i).difference(cp.get(i-1)).scale(BSplineCurve.bSplineBasis(p, i, t, getKnots())));
+        }
+        
+        return Stream.ofAll(terms).reduce((v1, v2) -> v1.add(v2));
+    }
+    
+    
     
     @Override
     public abstract Point evaluate(Double t);

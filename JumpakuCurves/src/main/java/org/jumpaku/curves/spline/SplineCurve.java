@@ -9,6 +9,7 @@ import javaslang.collection.Array;
 import org.jumpaku.curves.Curve;
 import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.vector.Point;
+import org.jumpaku.curves.vector.Vec;
 
 /**
  * <p>Spline曲線のインターフェイス Interface of Spline Curve.</p>
@@ -45,6 +46,13 @@ public interface SplineCurve extends Curve{
      * @return 
      */
     Integer getDegree();
+    
+    /**
+     * 
+     * @param t
+     * @return 
+     */
+    public Vec computeTangent(Double t); 
     
     /**
      * 

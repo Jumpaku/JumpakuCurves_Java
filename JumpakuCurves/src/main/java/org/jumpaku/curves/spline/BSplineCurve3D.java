@@ -9,6 +9,7 @@ import javaslang.collection.Array;
 import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.vector.Point;
 import org.jumpaku.curves.vector.Point3D;
+import org.jumpaku.curves.vector.Vec3;
 
 /**
  *
@@ -64,6 +65,11 @@ public class BSplineCurve3D implements BSplineCurve{
     @Override
     public Integer getDimention() {
         return 3;
+    }
+
+    @Override
+    public Vec3 computeTangent(Double t) {
+        return new Vec3(curve.computeTangent(t));
     }
     
 }

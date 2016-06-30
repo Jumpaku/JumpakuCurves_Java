@@ -246,7 +246,7 @@ public abstract class AbstractBezierCurve implements BezierCurve{
         
         Double c = Math.pow(1.0-t, n-1);
         for(int i = 0; i < n; ++i){
-            Vec delta = (cp.get(i+1).getVec().sub(cp.get(i).getVec())).scale(combinations.get(i) * c);
+            Vec delta = cp.get(i+1).difference(cp.get(i)).scale(combinations.get(i) * c);
             c *= t/(1.0-t);
             result = result.add(delta);
         }
