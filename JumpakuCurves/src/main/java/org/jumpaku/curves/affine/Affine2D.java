@@ -307,7 +307,7 @@ public interface Affine2D extends Affine<Point2D>{
      * @return 平行移動変換を追加したアフィン変換 Affin concatenated Transfomation
      */
     default Affine2D translate(Point2D initial, Point2D terminal){
-        return translate(terminal.difference(initial));
+        return translate(terminal.differenceFrom(initial));
     }
     
     /**

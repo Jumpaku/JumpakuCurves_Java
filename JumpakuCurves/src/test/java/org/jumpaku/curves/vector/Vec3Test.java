@@ -5,8 +5,8 @@
  */
 package org.jumpaku.curves.vector;
 
-import org.apache.commons.math3.util.Precision;
 import org.junit.Test;
+import static org.jumpaku.curves.vector.TestUtils.*;
 import static org.junit.Assert.*;
 
 /**
@@ -14,18 +14,86 @@ import static org.junit.Assert.*;
  * @author ito tomohiko
  */
 public class Vec3Test {
+    
+    public Vec3Test() {
+    }
 
     /**
      * Test of add method, of class Vec3.
      */
     @Test
-    public void testAdd() {
+    public void testAdd_Vec() {
         System.out.println("add");
-        Vec v = new Vec3(3.5, -3.4, -4.2);
-        Vec3 instance = new Vec3(-0.5, 3.5, -9.2);
-        Vec3 expResult = new Vec3(3.0, 0.1, -13.4);
-        Vec3 result = (Vec3)instance.add(v);
-        assertTrue(chechEquals(result, expResult));
+        Vec v = new Vec3(1.0, -0.5, 3.5);
+        Vec3 instance = new Vec3(2.0, 3.8, 2.1);
+        Vec3 expResult = new Vec3(3.0, 3.3, 5.6);
+        Vec3 result = instance.add(v);
+        assertTrue(equalsVec3(result, expResult));
+    }
+
+    /**
+     * Test of add method, of class Vec3.
+     */
+    @Test
+    public void testAdd_Double_Vec() {
+        System.out.println("add");
+        Double a = -0.5;
+        Vec v = new Vec3(4.3, -0.2, 0.2);
+        Vec3 instance = new Vec3(4.2, 0.1, 4.2);
+        Vec3 expResult = new Vec3(2.05, 0.2, 4.1);
+        Vec3 result = instance.add(a, v);
+        assertTrue(equalsVec3(expResult, result));
+    }
+
+    /**
+     * Test of negate method, of class Vec3.
+     */
+    @Test
+    public void testNegate() {
+        System.out.println("negate");
+        Vec3 instance = new Vec3(-3.2, 5.3, -3.2);
+        Vec3 expResult = new Vec3(3.2, -5.3, 3.2);
+        Vec3 result = instance.negate();
+        assertTrue(equalsVec3(expResult, result));
+    }
+
+    /**
+     * Test of normalize method, of class Vec3.
+     */
+    @Test
+    public void testNormalize() {
+        System.out.println("normalize");
+        Vec3 instance = new Vec3(-2.0, -4.0, 4.0);
+        Vec3 expResult = new Vec3(-2.0/6, -4.0/6, 4.0/6);
+        Vec3 result = instance.normalize();
+        assertTrue(equalsVec3(expResult, result));
+    }
+
+    /**
+     * Test of sub method, of class Vec3.
+     */
+    @Test
+    public void testSub_Vec() {
+        System.out.println("sub");
+        Vec v = new Vec3(2.8, 4.6, 5.3);
+        Vec3 instance = new Vec3(3.2, -6.2, 2.3);
+        Vec3 expResult = new Vec3(0.4, -10.8, -3.0);
+        Vec3 result = instance.sub(v);
+        assertTrue(equalsVec3(expResult, result));
+    }
+
+    /**
+     * Test of sub method, of class Vec3.
+     */
+    @Test
+    public void testSub_Double_Vec() {
+        System.out.println("sub");
+        Double a = -0.5;
+        Vec v = new Vec3(4.2, -2.0, 3.2);
+        Vec3 instance = new Vec3(5.0, 3.0, 3.4);
+        Vec3 expResult = new Vec3(7.1, 2.0, 5.0);
+        Vec3 result = instance.sub(a, v);
+        assertTrue(equalsVec3(expResult, result));
     }
 
     /**
@@ -34,11 +102,12 @@ public class Vec3Test {
     @Test
     public void testScale() {
         System.out.println("scale");
-        Double a = 0.2;
-        Vec3 instance = new Vec3(0.3, -0.09, 3.5);
-        Vec expResult = new Vec3(0.06, -0.018, 0.7);
-        Vec result = instance.scale(a);
-        assertTrue(chechEquals(result, expResult));
+        Double a = -300.0;
+        Vec3 instance = new Vec3(0.4, -0.5, 4.0);
+        Vec3 expResult = new Vec3(-120.0, 150.0, -1200.0);
+        Vec3 result = instance.scale(a);
+        assertTrue(equalsVec3(expResult, result));
+
     }
 
     /**
@@ -47,7 +116,7 @@ public class Vec3Test {
     @Test
     public void testGetDimention() {
         System.out.println("getDimention");
-        Vec3 instance = new Vec3(3.0, 4.2, 3.0);
+        Vec3 instance = new Vec3(4.2, 5.4, 4.2);
         Integer expResult = 3;
         Integer result = instance.getDimention();
         assertEquals(expResult, result);
@@ -59,19 +128,17 @@ public class Vec3Test {
     @Test
     public void testGet() {
         System.out.println("get");
-        Integer i0 = 0;
-        Integer i1 = 1;
-        Integer i2 = 2;
-        Vec3 instance = new Vec3(5.9, 4.3, -0.0);
-        Double expResult0 = 5.9;
+        Integer i1 = 0, i2 = 1, i3 = 2;
+        Vec3 instance = new Vec3(4.3, 5.43, 4.32);
         Double expResult1 = 4.3;
-        Double expResult2 = -0.0;
-        Double result0 = instance.get(i0);
+        Double expResult2 = 5.43;
+        Double expResult3 = 4.32;
         Double result1 = instance.get(i1);
         Double result2 = instance.get(i2);
-        assertTrue(checkEqualsDouble(result0, expResult0));
-        assertTrue(checkEqualsDouble(result1, expResult1));
-        assertTrue(checkEqualsDouble(result2, expResult2));
+        Double result3 = instance.get(i3);
+        assertTrue(equalsDouble(expResult1, result1));
+        assertTrue(equalsDouble(expResult2, result2));
+        assertTrue(equalsDouble(expResult3, result3));
     }
 
     /**
@@ -80,11 +147,11 @@ public class Vec3Test {
     @Test
     public void testDot() {
         System.out.println("dot");
-        Vec v = new Vec3(3.0, -2.8, -0.003);
-        Vec3 instance = new Vec3(-0.3, 0.5, 10000.9);
-        Double expResult = -0.9 + -1.4 + -30.0027;
+        Vec v = new Vec3(3.2, -4.2, 3.2);
+        Vec3 instance = new Vec3(-0.5, 0.1, -3.0);
+        Double expResult = -2.02-9.6;
         Double result = instance.dot(v);
-        assertTrue(checkEqualsDouble(result, expResult));
+        assertTrue(equalsDouble(expResult, result));
     }
 
     /**
@@ -93,34 +160,34 @@ public class Vec3Test {
     @Test
     public void testGetX() {
         System.out.println("getX");
-        Vec3 instance = new Vec3(6.8, 4.4, 3.2);
-        Double expResult = 6.8;
+        Vec3 instance = new Vec3(2.3, -3.2, 4.3);
+        Double expResult = 2.3;
         Double result = instance.getX();
-        assertTrue(checkEqualsDouble(result, expResult));
+        assertTrue(equalsDouble(expResult, result));
     }
-    
+
     /**
-     * Test of getX method, of class Vec3.
+     * Test of getZ method, of class Vec3.
      */
     @Test
     public void testGetY() {
         System.out.println("getY");
-        Vec3 instance = new Vec3(6.8, 4.4, 3.2);
-        Double expResult = 4.4;
+        Vec3 instance = new Vec3(2.3, -3.2, 4.3);
+        Double expResult = -3.2;
         Double result = instance.getY();
-        assertTrue(checkEqualsDouble(result, expResult));
+        assertTrue(equalsDouble(expResult, result));
     }
 
     /**
-     * Test of getX method, of class Vec3.
+     * Test of getZ method, of class Vec3.
      */
     @Test
     public void testGetZ() {
-        System.out.println("getZ");
-        Vec3 instance = new Vec3(6.8, 4.4, 3.2);
-        Double expResult = 3.2;
+        System.out.println("getY");
+        Vec3 instance = new Vec3(2.3, -3.2, 4.3);
+        Double expResult = 4.3;
         Double result = instance.getZ();
-        assertTrue(checkEqualsDouble(result, expResult));
+        assertTrue(equalsDouble(expResult, result));
     }
     
     /**
@@ -129,9 +196,9 @@ public class Vec3Test {
     @Test
     public void testEquals_Vec_Double() {
         System.out.println("equals");
-        Vec v = new Vec3(1.0, 1000000000000.0, 0.0000000000100001);
+        Vec v = new Vec3(2.3, 0.0, 111222333.000000100003);
         Double eps = 1.0e-10;
-        Vec3 instance = new Vec3(1.00000000001, 1000000000000.0, 0.00000000001);
+        Vec3 instance = new Vec3(2.3, -0.0, 111222333.000000100004);
         Boolean expResult = true;
         Boolean result = instance.equals(v, eps);
         assertEquals(expResult, result);
@@ -143,110 +210,18 @@ public class Vec3Test {
     @Test
     public void testEquals_Vec_Integer() {
         System.out.println("equals");
-        Vec v = new Vec3(0.0, 1000000000.0001, 0.0000000000100001);
-        Integer ulp = 40000;
-        Vec3 instance = new Vec3(-0.0, 1000000000.0, 0.00000000001);
-        Boolean expResult = false;
+        Vec v = new Vec3(1000000.3, 403.2, 1.2345678910e-12);
+        Integer ulp = 500000;
+        Vec3 instance = new Vec3(1000000.3, 403.2, 1.2345678911e-12);
+        Boolean expResult = true;
         Boolean result = instance.equals(v, ulp);
         assertEquals(expResult, result);
-    }
- 
-    private static boolean chechEquals(Vec v1, Vec v2){
-        return checkEqualsDouble(v1.get(0), v1.get(0)) && checkEqualsDouble(v1.get(1), v2.get(1)) && checkEqualsDouble(v1.get(2), v2.get(2));
-    }
-    private static boolean checkEqualsDouble(Double a, Double b){
-        return Precision.equals(a, b, 1.0e-10);
-    }
-
-    /**
-     * Test of add method, of class Vec3.
-     */
-    @Test
-    public void testAdd_Vec() {
-        System.out.println("add");
-        Vec v = null;
-        Vec3 instance = null;
-        Vec expResult = null;
-        Vec result = instance.add(v);
+        
+        ulp = 5000;
+        expResult = false;
+        result = instance.equals(v, ulp);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of add method, of class Vec3.
-     */
-    @Test
-    public void testAdd_Double_Vec() {
-        System.out.println("add");
-        Double a = null;
-        Vec v = null;
-        Vec3 instance = null;
-        Vec3 expResult = null;
-        Vec3 result = instance.add(a, v);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of negate method, of class Vec3.
-     */
-    @Test
-    public void testNegate() {
-        System.out.println("negate");
-        Vec3 instance = null;
-        Vec3 expResult = null;
-        Vec3 result = instance.negate();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of normalize method, of class Vec3.
-     */
-    @Test
-    public void testNormalize() {
-        System.out.println("normalize");
-        Vec3 instance = null;
-        Vec3 expResult = null;
-        Vec3 result = instance.normalize();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of sub method, of class Vec3.
-     */
-    @Test
-    public void testSub_Vec() {
-        System.out.println("sub");
-        Vec v = null;
-        Vec3 instance = null;
-        Vec3 expResult = null;
-        Vec3 result = instance.sub(v);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of sub method, of class Vec3.
-     */
-    @Test
-    public void testSub_Double_Vec() {
-        System.out.println("sub");
-        Double a = null;
-        Vec v = null;
-        Vec3 instance = null;
-        Vec3 expResult = null;
-        Vec3 result = instance.sub(a, v);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    }    
 
     /**
      * Test of cross method, of class Vec3.
@@ -254,13 +229,11 @@ public class Vec3Test {
     @Test
     public void testCross() {
         System.out.println("cross");
-        Vec3 v = null;
-        Vec3 instance = null;
-        Vec3 expResult = null;
+        Vec3 v = new Vec3(3.0, 1.0, 2.0);
+        Vec3 instance = new Vec3(4.0, -1.0, 3.0);
+        Vec3 expResult = new Vec3(-5.0, 1.0, 7.0);
         Vec3 result = instance.cross(v);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(equalsVec3(expResult, result));
     }
 
     /**
@@ -269,13 +242,10 @@ public class Vec3Test {
     @Test
     public void testAngle() {
         System.out.println("angle");
-        Vec3 v = null;
-        Vec3 instance = null;
-        Double expResult = null;
+        Vec3 v = new Vec3(1.0, 0.0, 1.0);
+        Vec3 instance = new Vec3(1.0, 0.0, -1.0);
+        Double expResult = Math.PI/2;
         Double result = instance.angle(v);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(equalsDouble(expResult, result));
     }
-    
 }

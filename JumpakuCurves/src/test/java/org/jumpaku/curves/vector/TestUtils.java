@@ -27,4 +27,10 @@ public class TestUtils {
         return equalsDouble(a.getX(), b.getX()) &&
                 equalsDouble(a.getY(), b.getY());
     }
+
+    static Boolean equalsVec3(Vec3 a, Vec3 b){
+        return equalsDouble(a.getX(), b.getX()) &&
+                equalsDouble(a.getY(), b.getY()) && 
+                equalsDouble(a.getZ(), b.getZ());
+    }
 }

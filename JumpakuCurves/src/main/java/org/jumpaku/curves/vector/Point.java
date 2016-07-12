@@ -28,6 +28,10 @@ public interface Point {
         };
     }
     
+    public static Point of(Double... elements){
+        return of(Vec.of(elements));
+    }
+    
     public static Point affineCombination(Iterable<Double> cofficients, Iterable<Point> points){
         if(!Precision.equals(Stream.ofAll(cofficients).reduce(Double::sum), 1.0, 2.0e-10))
             throw new IllegalArgumentException("sum of cofficients must be 1.0");
@@ -66,7 +70,7 @@ public interface Point {
         return getVec().get(i);
     }
 
-    default Vec difference(Point p){
+    default Vec differenceFrom(Point p){
         if(!Objects.equals(getDimention(), p.getDimention()))
             throw new IllegalArgumentException("dimention miss match");
         
@@ -77,14 +81,14 @@ public interface Point {
         if(!Objects.equals(getDimention(), p.getDimention()))
             throw new IllegalArgumentException("dimention miss match");
 
-        return difference(p).length();
+        return differenceFrom(p).length();
     }
     
     default Double distanceSquare(Point p){
         if(!Objects.equals(getDimention(), p.getDimention()))
             throw new IllegalArgumentException("dimention miss match");
 
-        return difference(p).square();
+        return differenceFrom(p).square();
     }
     
     default Boolean equals(Point p, Double eps){

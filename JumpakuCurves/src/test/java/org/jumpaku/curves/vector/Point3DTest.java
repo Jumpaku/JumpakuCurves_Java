@@ -5,7 +5,7 @@
  */
 package org.jumpaku.curves.vector;
 
-import org.apache.commons.math3.util.Precision;
+import static org.jumpaku.curves.vector.TestUtils.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -17,28 +17,106 @@ public class Point3DTest {
     
     public Point3DTest() {
     }
-
-    private static boolean checkEquals(Point p1, Point p2){
-        return checkEqualsDouble(p1.get(0), p2.get(0)) && checkEqualsDouble(p1.get(1), p2.get(1)) && checkEqualsDouble(p1.get(2), p2.get(2));
-    }
     
-    private static boolean checkEquals(Vec v1, Vec v2){
-        return checkEqualsDouble(v1.get(0), v2.get(0)) && checkEqualsDouble(v1.get(0), v2.get(0)) && checkEqualsDouble(v1.get(2), v2.get(2));
-    }
-        
-    private static boolean checkEqualsDouble(Double a, Double b){
-        return Precision.equals(a, b, 1.0e-10);
-    }
-
     /**
      * Test of getVec method, of class Point3D.
      */
     @Test
-    public void testGetVector() {
-        System.out.println("getVector");
-        Point3D instance = new Point3D(2.3,-0.009,0.9991);
-        Vec expResult = new Vec3(2.3, -0.009, 0.9991);
-        Vec result = instance.getVec();
-        assertTrue(checkEquals(expResult, result));
+    public void testGetVec() {
+        System.out.println("getVec");
+        Point3D instance = new Point3D(2.9, -3.1, 3.2);
+        Vec3 expResult = new Vec3(2.9, -3.1, 3.2);
+        Vec3 result = instance.getVec();
+        assertTrue(equalsVec3(expResult, result));
+    }
+
+    /**
+     * Test of getX method, of class Point3D.
+     */
+    @Test
+    public void testGetX() {
+        System.out.println("getX");
+        Point3D instance = new Point3D(3.0, -3.2, 3.2);
+        Double expResult = 3.0;
+        Double result = instance.getX();
+        assertTrue(equalsDouble(expResult, result));
+    }
+
+    /**
+     * Test of getY method, of class Point3D.
+     */
+    @Test
+    public void testGetY() {
+        System.out.println("getY");
+        Point3D instance = new Point3D(3.0, -3.2, 3.4);
+        Double expResult = -3.2;
+        Double result = instance.getY();
+        assertTrue(equalsDouble(expResult, result));
+    }
+
+    /**
+     * Test of getY method, of class Point3D.
+     */
+    @Test
+    public void testGetZ() {
+        System.out.println("getZ");
+        Point3D instance = new Point3D(3.0, -3.2, 3.2);
+        Double expResult = 3.2;
+        Double result = instance.getZ();
+        assertTrue(equalsDouble(expResult, result));
+    }
+
+    /**
+     * Test of differenceFrom method, of class Point3D.
+     */
+    @Test
+    public void testDifferenceFrom() {
+        System.out.println("differenceFrom");
+        Point p = new Point3D(1.2, -0.2, 0.5);
+        Point3D instance = new Point3D(-3.2, -3.2, 3.5);
+        Vec3 expResult = new Vec3(-4.4, -3.0, 3.0);
+        Vec3 result = instance.differenceFrom(p);
+        assertTrue(equalsVec3(expResult, result));
+    }
+
+    /**
+     * Test of divide method, of class Point3D.
+     */
+    @Test
+    public void testDivide() {
+        System.out.println("divide");
+        Double t = 0.25;
+        Point p = new Point3D(2.4, 3.2, 1.0);
+        Point3D instance = new Point3D(3.2, 2.4, 0.0);
+        Point3D expResult = new Point3D(3.0, 2.6, 0.25);
+        Point3D result = instance.divide(t, p);
+        assertTrue(equalsVec3(expResult.getVec(), result.getVec()));
+    }
+
+    /**
+     * Test of move method, of class Point3D.
+     */
+    @Test
+    public void testMove() {
+        System.out.println("move");
+        Vec v = Vec.of(3.2, -4.2, 3.5);
+        Point3D instance = new Point3D(-0.2, -0.8, -0.5);
+        Point3D expResult = new Point3D(3.0, -5.0, 3.0);
+        Point3D result = instance.move(v);
+        assertTrue(equalsVec3(expResult.getVec(), result.getVec()));
+    }
+
+    /**
+     * Test of normal method, of class Point3D.
+     */
+    @Test
+    public void testNormal() {
+        System.out.println("normal");
+        Point3D p1 = new Point3D(1.0, 1.3, 2.4);
+        Point3D p2 = new Point3D(1.0, 1.4, -3.2);
+        Point3D p3 = new Point3D(1.0, -3.2, -2.1);
+        Vec3 expResult = new Vec3(-1.0, 0.0, 0.0);
+        Vec3 result = Point3D.normal(p1, p2, p3);
+        assertTrue(equalsVec3(expResult, result));
     }
 }

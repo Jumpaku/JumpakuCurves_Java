@@ -5,7 +5,7 @@
  */
 package org.jumpaku.curves.vector;
 
-import org.apache.commons.math3.util.Precision;
+import static org.jumpaku.curves.vector.TestUtils.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -17,20 +17,7 @@ public class Point1DTest {
     
     public Point1DTest() {
     }
-
- 
-    private static boolean checkEquals(Point p1, Point p2){
-        return checkEqualsDouble(p1.get(0), p2.get(0));
-    }
     
-    private static boolean checkEquals(Vec v1, Vec v2){
-        return checkEqualsDouble(v1.get(0), v2.get(0));
-    }
-        
-    private static boolean checkEqualsDouble(Double a, Double b){
-        return Precision.equals(a, b, 1.0e-10);
-    }    
-
     /**
      * Test of getVec method, of class Point1D.
      */
@@ -38,9 +25,9 @@ public class Point1DTest {
     public void testGetVec() {
         System.out.println("getVec");
         Point1D instance = new Point1D(2.9);
-        Vec expResult = new Vec1(2.9);
-        Vec result = instance.getVec();
-        assertTrue(checkEquals(expResult, result));
+        Vec1 expResult = new Vec1(2.9);
+        Vec1 result = instance.getVec();
+        assertTrue(equalsVec1(expResult, result));
     }
 
     /**
@@ -49,11 +36,49 @@ public class Point1DTest {
     @Test
     public void testGetX() {
         System.out.println("getX");
-        Point1D instance = null;
-        Double expResult = null;
+        Point1D instance = new Point1D(3.0);
+        Double expResult = 3.0;
         Double result = instance.getX();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(equalsDouble(expResult, result));
+    }
+
+    /**
+     * Test of differenceFrom method, of class Point1D.
+     */
+    @Test
+    public void testDifferenceFrom() {
+        System.out.println("differenceFrom");
+        Point p = new Point1D(1.2);
+        Point1D instance = new Point1D(-3.2);
+        Vec1 expResult = new Vec1(-4.4);
+        Vec1 result = instance.differenceFrom(p);
+        assertTrue(equalsVec1(expResult, result));
+    }
+
+    /**
+     * Test of divide method, of class Point1D.
+     */
+    @Test
+    public void testDivide() {
+        System.out.println("divide");
+        Double t = 0.25;
+        Point p = new Point1D(2.4);
+        Point1D instance = new Point1D(3.2);
+        Point1D expResult = new Point1D(3.0);
+        Point1D result = instance.divide(t, p);
+        assertTrue(equalsVec1(expResult.getVec(), result.getVec()));
+    }
+
+    /**
+     * Test of move method, of class Point1D.
+     */
+    @Test
+    public void testMove() {
+        System.out.println("move");
+        Vec v = Vec.of(3.2);
+        Point1D instance = new Point1D(-0.2);
+        Point1D expResult = new Point1D(3.0);
+        Point1D result = instance.move(v);
+        assertTrue(equalsVec1(expResult.getVec(), result.getVec()));
     }
 }

@@ -29,8 +29,8 @@ public class Point1D implements Point{
     }
 
     @Override
-    public Vec1 difference(Point p) {
-        return new Vec1(Point.super.difference(p));
+    public Vec1 differenceFrom(Point p) {
+        return new Vec1(Point.super.differenceFrom(p));
     }
 
     @Override

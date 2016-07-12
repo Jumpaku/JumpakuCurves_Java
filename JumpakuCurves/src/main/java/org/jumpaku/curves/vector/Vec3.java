@@ -32,7 +32,7 @@ public class Vec3 implements Vec{
     }
 
     @Override
-    public Vec add(Vec v) {
+    public Vec3 add(Vec v) {
         if(3 != v.getDimention())
             throw new IllegalArgumentException("dimention miss match");
         
@@ -40,7 +40,7 @@ public class Vec3 implements Vec{
     }
 
     @Override
-    public Vec scale(Double a) {
+    public Vec3 scale(Double a) {
         return new Vec3(getVector3d().scalarMultiply(a));
     }
 
