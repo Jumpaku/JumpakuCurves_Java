@@ -90,7 +90,7 @@ public class RationalBezierCurveBernstein implements RationalBezierCurve {
             ct *= (t / (1 - t));
         }
         
-        return Point.create(v.scale(1.0/weightBezier.evaluate(t).getX()));
+        return Point.of(v.scale(1.0/weightBezier.evaluate(t).getX()));
     }
 
     @Override

@@ -41,7 +41,7 @@ public class BezierCurveBernstein extends AbstractBezierCurve {
         Point result = Point.origin(cps.get(0).getDimention());
         
         for(int i = 0; i <= degree; ++i){
-            result = Point.create(result.getVec().add(cps.get(i).getVec().scale(combinations.get(i)*ct)));
+            result = Point.of(result.getVec().add(cps.get(i).getVec().scale(combinations.get(i)*ct)));
             ct *= (t / (1 - t));
         }
         

@@ -157,5 +157,125 @@ public class Vec3Test {
     private static boolean checkEqualsDouble(Double a, Double b){
         return Precision.equals(a, b, 1.0e-10);
     }
+
+    /**
+     * Test of add method, of class Vec3.
+     */
+    @Test
+    public void testAdd_Vec() {
+        System.out.println("add");
+        Vec v = null;
+        Vec3 instance = null;
+        Vec expResult = null;
+        Vec result = instance.add(v);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of add method, of class Vec3.
+     */
+    @Test
+    public void testAdd_Double_Vec() {
+        System.out.println("add");
+        Double a = null;
+        Vec v = null;
+        Vec3 instance = null;
+        Vec3 expResult = null;
+        Vec3 result = instance.add(a, v);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of negate method, of class Vec3.
+     */
+    @Test
+    public void testNegate() {
+        System.out.println("negate");
+        Vec3 instance = null;
+        Vec3 expResult = null;
+        Vec3 result = instance.negate();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of normalize method, of class Vec3.
+     */
+    @Test
+    public void testNormalize() {
+        System.out.println("normalize");
+        Vec3 instance = null;
+        Vec3 expResult = null;
+        Vec3 result = instance.normalize();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of sub method, of class Vec3.
+     */
+    @Test
+    public void testSub_Vec() {
+        System.out.println("sub");
+        Vec v = null;
+        Vec3 instance = null;
+        Vec3 expResult = null;
+        Vec3 result = instance.sub(v);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of sub method, of class Vec3.
+     */
+    @Test
+    public void testSub_Double_Vec() {
+        System.out.println("sub");
+        Double a = null;
+        Vec v = null;
+        Vec3 instance = null;
+        Vec3 expResult = null;
+        Vec3 result = instance.sub(a, v);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of cross method, of class Vec3.
+     */
+    @Test
+    public void testCross() {
+        System.out.println("cross");
+        Vec3 v = null;
+        Vec3 instance = null;
+        Vec3 expResult = null;
+        Vec3 result = instance.cross(v);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of angle method, of class Vec3.
+     */
+    @Test
+    public void testAngle() {
+        System.out.println("angle");
+        Vec3 v = null;
+        Vec3 instance = null;
+        Double expResult = null;
+        Double result = instance.angle(v);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
     
 }

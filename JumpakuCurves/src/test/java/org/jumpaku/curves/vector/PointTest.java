@@ -33,14 +33,14 @@ public class PointTest {
     }
     
     /**
-     * Test of create method, of class Point.
+     * Test of of method, of class Point.
      */
     @Test
-    public void testCreate() {
+    public void testOf() {
         System.out.println("create");
         Vec v = new VecImpl(1,2,3,4);
         Point expResult = new PointImpl(1,2,3,4);
-        Point result = Point.create(v);
+        Point result = Point.of(v);
         assertTrue(checkEquals(expResult, result));
     }
 

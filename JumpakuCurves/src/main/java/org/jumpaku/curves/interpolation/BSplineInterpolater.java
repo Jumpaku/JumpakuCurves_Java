@@ -115,7 +115,7 @@ public class BSplineInterpolater implements Interpolater<SplineCurve> {
         RealMatrix tmp = m.multiply(dataPoints);
         List<Point> cp = new LinkedList<>();        
         for(int i = 0; i < data.size(); ++i){
-            cp.add(Point.create(Vec.make(Arrays.stream(tmp.getColumn(i)).boxed().toArray(Double[]::new))));
+            cp.add(Point.of(Vec.of(Arrays.stream(tmp.getColumn(i)).boxed().toArray(Double[]::new))));
         }
         
         return BSplineCurve.create(knots, Array.ofAll(cp), degree, dimention);

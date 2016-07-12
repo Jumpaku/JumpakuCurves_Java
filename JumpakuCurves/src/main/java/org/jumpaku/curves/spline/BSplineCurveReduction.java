@@ -24,7 +24,7 @@ public final class BSplineCurveReduction extends AbstractBSplineCurve{
         if(!getDomain().isIn(t))
             throw new IllegalArgumentException("t is out of domain");
         
-        return Point.create(Stream.ofAll(getControlPoints()).zipWithIndex().map(cpi -> cpi.transform(
+        return Point.of(Stream.ofAll(getControlPoints()).zipWithIndex().map(cpi -> cpi.transform(
                         (cp, i) -> cp.getVec().scale(BSplineCurve.bSplineBasis(getDegree(), i.intValue(), t, getKnots()))))
                 .reduce((v1, v2) -> v1.add(v2)));
     }

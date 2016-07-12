@@ -70,7 +70,7 @@ public abstract interface BezierCurve extends Curve{
                     @Override
                     public Point evaluate(Double t) {
                         Array<Vec> cp = getControlPoints().map(p -> p.getVec());
-                        return Point.create(cp.get(0).scale((1-t)*(1-t)).add(2*t*(1-t), cp.get(1)).add(t*t, cp.get(2)));
+                        return Point.of(cp.get(0).scale((1-t)*(1-t)).add(2*t*(1-t), cp.get(1)).add(t*t, cp.get(2)));
                     }
                 };
             case 4:
@@ -78,7 +78,7 @@ public abstract interface BezierCurve extends Curve{
                     @Override
                     public Point evaluate(Double t) {
                         Array<Vec> cp = getControlPoints().map(p -> p.getVec());
-                        return Point.create(cp.get(0).scale((1-t)*(1-t)*(1-t)).add(3*t*(1-t)*(1-t), cp.get(1)).add(3*t*t*(1-t), cp.get(2)).add(t*t*t, cp.get(3)));
+                        return Point.of(cp.get(0).scale((1-t)*(1-t)*(1-t)).add(3*t*(1-t)*(1-t), cp.get(1)).add(3*t*t*(1-t), cp.get(2)).add(t*t*t, cp.get(3)));
                     }
                 };
             default:

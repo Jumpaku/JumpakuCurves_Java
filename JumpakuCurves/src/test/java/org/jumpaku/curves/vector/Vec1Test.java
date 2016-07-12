@@ -5,8 +5,8 @@
  */
 package org.jumpaku.curves.vector;
 
-import org.apache.commons.math3.util.Precision;
 import org.junit.Test;
+import static org.jumpaku.curves.vector.TestUtils.*;
 import static org.junit.Assert.*;
 
 /**
@@ -22,13 +22,78 @@ public class Vec1Test {
      * Test of add method, of class Vec1.
      */
     @Test
-    public void testAdd() {
+    public void testAdd_Vec() {
         System.out.println("add");
-        Vec v = new Vec1(3.5);
-        Vec1 instance = new Vec1(-0.5);
+        Vec v = new Vec1(1.0);
+        Vec1 instance = new Vec1(2.0);
         Vec1 expResult = new Vec1(3.0);
-        Vec1 result = (Vec1)instance.add(v);
-        assertTrue(chechEquals(result, expResult));
+        Vec1 result = instance.add(v);
+        assertTrue(equalsVec1(result, expResult));
+    }
+
+    /**
+     * Test of add method, of class Vec1.
+     */
+    @Test
+    public void testAdd_Double_Vec() {
+        System.out.println("add");
+        Double a = -0.5;
+        Vec v = new Vec1(4.3);
+        Vec1 instance = new Vec1(4.2);
+        Vec1 expResult = new Vec1(2.05);
+        Vec1 result = instance.add(a, v);
+        assertTrue(equalsVec1(expResult, result));
+    }
+
+    /**
+     * Test of negate method, of class Vec1.
+     */
+    @Test
+    public void testNegate() {
+        System.out.println("negate");
+        Vec1 instance = new Vec1(-3.2);
+        Vec1 expResult = new Vec1(3.2);
+        Vec1 result = instance.negate();
+        assertTrue(equalsVec1(expResult, result));
+    }
+
+    /**
+     * Test of normalize method, of class Vec1.
+     */
+    @Test
+    public void testNormalize() {
+        System.out.println("normalize");
+        Vec1 instance = new Vec1(-1.5);
+        Vec1 expResult = new Vec1(-1.0);
+        Vec1 result = instance.normalize();
+        assertTrue(equalsVec1(expResult, result));
+    }
+
+    /**
+     * Test of sub method, of class Vec1.
+     */
+    @Test
+    public void testSub_Vec() {
+        System.out.println("sub");
+        Vec v = new Vec1(2.8);
+        Vec1 instance = new Vec1(3.2);
+        Vec1 expResult = new Vec1(0.4);
+        Vec1 result = instance.sub(v);
+        assertTrue(equalsVec1(expResult, result));
+    }
+
+    /**
+     * Test of sub method, of class Vec1.
+     */
+    @Test
+    public void testSub_Double_Vec() {
+        System.out.println("sub");
+        Double a = -0.5;
+        Vec v = new Vec1(4.2);
+        Vec1 instance = new Vec1(5.0);
+        Vec1 expResult = new Vec1(7.1);
+        Vec1 result = instance.sub(a, v);
+        assertTrue(equalsVec1(expResult, result));
     }
 
     /**
@@ -37,11 +102,12 @@ public class Vec1Test {
     @Test
     public void testScale() {
         System.out.println("scale");
-        Double a = 0.2;
-        Vec1 instance = new Vec1(0.3);
-        Vec expResult = new Vec1(0.06);
-        Vec result = instance.scale(a);
-        assertTrue(chechEquals(result, expResult));
+        Double a = -300.0;
+        Vec1 instance = new Vec1(0.4);
+        Vec1 expResult = new Vec1(-120.0);
+        Vec1 result = instance.scale(a);
+        assertTrue(equalsVec1(expResult, result));
+
     }
 
     /**
@@ -50,7 +116,7 @@ public class Vec1Test {
     @Test
     public void testGetDimention() {
         System.out.println("getDimention");
-        Vec1 instance = new Vec1(3.0);
+        Vec1 instance = new Vec1(4.2);
         Integer expResult = 1;
         Integer result = instance.getDimention();
         assertEquals(expResult, result);
@@ -63,10 +129,10 @@ public class Vec1Test {
     public void testGet() {
         System.out.println("get");
         Integer i = 0;
-        Vec1 instance = new Vec1(5.9);
-        Double expResult = 5.9;
+        Vec1 instance = new Vec1(4.3);
+        Double expResult = 4.3;
         Double result = instance.get(i);
-        assertTrue(checkEqualsDouble(result, expResult));
+        assertTrue(equalsDouble(expResult, result));
     }
 
     /**
@@ -75,11 +141,11 @@ public class Vec1Test {
     @Test
     public void testDot() {
         System.out.println("dot");
-        Vec v = new Vec1(3.0);
-        Vec1 instance = new Vec1(-0.3);
-        Double expResult = -0.9;
+        Vec v = new Vec1(3.2);
+        Vec1 instance = new Vec1(-0.5);
+        Double expResult = -1.6;
         Double result = instance.dot(v);
-        assertTrue(checkEqualsDouble(result, expResult));
+        assertTrue(equalsDouble(expResult, result));
     }
 
     /**
@@ -88,10 +154,10 @@ public class Vec1Test {
     @Test
     public void testGetX() {
         System.out.println("getX");
-        Vec1 instance = new Vec1(6.8);
-        Double expResult = 6.8;
+        Vec1 instance = new Vec1(2.3);
+        Double expResult = 2.3;
         Double result = instance.getX();
-        assertTrue(checkEqualsDouble(result, expResult));
+        assertTrue(equalsDouble(expResult, result));
     }
 
     /**
@@ -100,9 +166,9 @@ public class Vec1Test {
     @Test
     public void testEquals_Vec_Double() {
         System.out.println("equals");
-        Vec v = new Vec1(1.0);
+        Vec v = new Vec1(111222333.000000100003);
         Double eps = 1.0e-10;
-        Vec1 instance = new Vec1(1.00000000001);
+        Vec1 instance = new Vec1(111222333.000000100004);
         Boolean expResult = true;
         Boolean result = instance.equals(v, eps);
         assertEquals(expResult, result);
@@ -114,18 +180,15 @@ public class Vec1Test {
     @Test
     public void testEquals_Vec_Integer() {
         System.out.println("equals");
-        Vec v = new Vec1(-0.0);
-        Integer ulp = 2;
-        Vec1 instance = new Vec1(0.0);
+        Vec v = new Vec1(1.2345678910e-12);
+        Integer ulp = 500000;
+        Vec1 instance = new Vec1(1.2345678911e-12);
         Boolean expResult = true;
         Boolean result = instance.equals(v, ulp);
         assertEquals(expResult, result);
-    }
- 
-    private static boolean chechEquals(Vec v1, Vec v2){
-        return checkEqualsDouble(v1.get(0), v1.get(0));
-    }
-    private static boolean checkEqualsDouble(Double a, Double b){
-        return Precision.equals(a, b, 1.0e-10);
-    }
+        ulp = 5000;
+        expResult = false;
+        result = instance.equals(v, ulp);
+        assertEquals(expResult, result);
+    }    
 }

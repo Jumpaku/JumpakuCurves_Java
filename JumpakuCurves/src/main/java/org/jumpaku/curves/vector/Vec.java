@@ -14,7 +14,7 @@ import org.apache.commons.math3.util.Precision;
  */
 public interface Vec{
 
-    public static Vec make(Double... elements){
+    public static Vec of(Double... elements){
         return new Vec(){
             @Override
             public Vec add(Vec v) {
@@ -25,7 +25,7 @@ public interface Vec{
                 for(int i = 0; i < getDimention(); ++i){
                     result[i] = get(i) + v.get(i);
                 }
-                return make(result);
+                return of(result);
             }
 
             @Override
@@ -34,7 +34,7 @@ public interface Vec{
                 for(int i = 0; i < getDimention(); ++i){
                     result[i] = get(i)*a;
                 }
-                return make(result);
+                return of(result);
             }
 
             @Override
@@ -66,7 +66,7 @@ public interface Vec{
             public Boolean equals(Vec v, Double eps) {
                 if(getDimention() == v.getDimention()){
                     for(int i = 0; i < getDimention(); ++i){
-                        if(!Precision.equals(0.0, v.get(i), eps))
+                        if(!Precision.equals(get(i), v.get(i), eps))
                             return false;
                     }
                     return true;
@@ -78,7 +78,7 @@ public interface Vec{
             public Boolean equals(Vec v, Integer ulp) {
                 if(getDimention() == v.getDimention()){
                     for(int i = 0; i < getDimention(); ++i){
-                        if(!Precision.equals(0.0, v.get(i), ulp))
+                        if(!Precision.equals(get(i), v.get(i), ulp))
                             return false;
                     }
                     return true;
@@ -90,7 +90,7 @@ public interface Vec{
     public static Vec zero(Integer dimention){
         Double[] z = new Double[dimention];
         Arrays.fill(z, 0.0);
-        return make(z);
+        return of(z);
     }
     
     public static Vec add(Double a, Vec v1, Double b, Vec v2){

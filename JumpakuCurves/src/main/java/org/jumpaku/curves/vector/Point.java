@@ -16,10 +16,10 @@ import org.apache.commons.math3.util.Precision;
 public interface Point {
     
     public static Point origin(Integer dimention){        
-        return create(Vec.zero(dimention));
+        return of(Vec.zero(dimention));
     }
     
-    public static Point create(Vec v){
+    public static Point of(Vec v){
         return new Point() {
             @Override
             public Vec getVec() {
@@ -45,14 +45,14 @@ public interface Point {
         if(getDimention() !=  v.getDimention())
             throw new IllegalArgumentException("dimention miss match");
 
-        return create(getVec().add(v));
+        return of(getVec().add(v));
     }
     
     default Point divide(Double t, Point p){
         if(getDimention() !=  p.getDimention())
             throw new IllegalArgumentException("dimention miss match");
 
-        return create(Vec.add(1-t, getVec(), t, p.getVec()));
+        return of(Vec.add(1-t, getVec(), t, p.getVec()));
     }
 
     default Integer getDimention(){

@@ -26,7 +26,7 @@ public class BezierCurveDeCasteljau extends AbstractBezierCurve {
         Object[] cp = getControlPoints().toJavaArray();
         for(int n = getDegree(); n > 0; --n){
             for(int i = 0; i < n; ++i){
-                cp[i] = Point.create(((Point)cp[i]).getVec().scale(1-t).add(t, ((Point)cp[i+1]).getVec()));
+                cp[i] = Point.of(((Point)cp[i]).getVec().scale(1-t).add(t, ((Point)cp[i+1]).getVec()));
             }
         }
         return (Point)cp[0];

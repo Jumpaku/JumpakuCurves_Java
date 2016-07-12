@@ -95,7 +95,7 @@ public class Vec2 implements Vec{
     }
     
     public Double cross(Vec2 v) {
-        return getVector2d().crossProduct(Vector2D.ZERO, v.getVector2d());
+        return v.getVector2d().crossProduct(Vector2D.ZERO, getVector2d());
     }
     
     public Double angle(Vec2 v){
