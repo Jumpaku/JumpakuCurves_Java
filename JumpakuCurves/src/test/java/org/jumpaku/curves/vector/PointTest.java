@@ -41,9 +41,7 @@ public class PointTest {
         Vec v = new Vec3(2.3, 4.5, 6.7);
         Point expResult = new Point3D(2.3, 4.5, 6.7);
         Point result = Point.of(v);
-        for(int i = 0; i < 3; ++i){
-            assertTrue(equalsDouble(expResult.get(i), result.get(i)));
-        }
+        assertTrue(equalsVec(expResult.getVec(), result.getVec()));
     }
 
     /**
@@ -55,9 +53,7 @@ public class PointTest {
         Double[] elements = new Double[]{2.3, 4.5, 6.7};
         Point expResult = new Point3D(2.3, 4.5, 6.7);
         Point result = Point.of(elements);
-        for(int i = 0; i < 3; ++i){
-            assertTrue(equalsDouble(expResult.get(i), result.get(i))); 
-        }
+        assertTrue(equalsVec(expResult.getVec(), result.getVec())); 
     }
 
     /**
@@ -82,9 +78,7 @@ public class PointTest {
         Point instance = Point.of(1.2, 3.4, -4.5, -5.6);
         Vec expResult = Vec.of(1.2, 3.4, -4.5, -5.6);
         Vec result = instance.getVec();
-        for(int i = 0; i < 4; ++i){
-            assertTrue(equalsDouble(expResult.get(i), result.get(i)));
-        }
+        assertTrue(equalsVec(expResult, result));
     }
 
     /**
@@ -93,13 +87,11 @@ public class PointTest {
     @Test
     public void testMove() {
         System.out.println("move");
-        Vec v = null;
-        Point instance = new PointImpl();
-        Point expResult = null;
+        Vec v = Vec.of(2.1, 3.2);
+        Point instance = Point.of(-2.3, 7.4);
+        Point expResult = Point.of(-0.2, 10.6);
         Point result = instance.move(v);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(equalsVec(expResult.getVec(), result.getVec()));
     }
 
     /**
@@ -108,14 +100,12 @@ public class PointTest {
     @Test
     public void testDivide() {
         System.out.println("divide");
-        Double t = null;
-        Point p = null;
-        Point instance = new PointImpl();
-        Point expResult = null;
+        Double t = 0.333333333333333333333;
+        Point p = Point.of(1.0, 2.0, 3.0, 4.0);
+        Point instance = Point.of(5.0, 4.0, 3.0, 2.0);
+        Point expResult = Point.of(11.0/3, 10.0/3, 3.0, 8.0/3);
         Point result = instance.divide(t, p);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(equalsVec(expResult.getVec(), result.getVec()));
     }
 
     /**
@@ -124,12 +114,10 @@ public class PointTest {
     @Test
     public void testGetDimention() {
         System.out.println("getDimention");
-        Point instance = new PointImpl();
-        Integer expResult = null;
+        Point instance = Point.of(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
+        Integer expResult = 9;
         Integer result = instance.getDimention();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -138,28 +126,25 @@ public class PointTest {
     @Test
     public void testGet() {
         System.out.println("get");
-        Integer i = null;
-        Point instance = new PointImpl();
-        Double expResult = null;
-        Double result = instance.get(i);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Point instance = Point.of(0.0, 1.0, 2.0, 3.0, 4.0, 5.0);
+        for(Integer i = 0; i < 6; ++i){
+            Double expResult = i.doubleValue();
+            Double result = instance.get(i);
+            assertTrue(equalsDouble(expResult, result));
+        }
     }
-
+    
     /**
      * Test of differenceFrom method, of class Point.
      */
     @Test
     public void testDifferenceFrom() {
         System.out.println("differenceFrom");
-        Point p = null;
-        Point instance = new PointImpl();
-        Vec expResult = null;
+        Point p = Point.of(1.2, 3.4, 5.4, 6.5);
+        Point instance = Point.of(1.0, 2.0, 3.0, 4.0);
+        Vec expResult = Vec.of(-0.2, -1.4, -2.4, -2.5);
         Vec result = instance.differenceFrom(p);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(equalsVec(expResult, result));
     }
 
     /**
@@ -168,13 +153,11 @@ public class PointTest {
     @Test
     public void testDistance() {
         System.out.println("distance");
-        Point p = null;
-        Point instance = new PointImpl();
-        Double expResult = null;
+        Point p = Point.origin(3);
+        Point instance = Point.of(2.0, 2.0, 2.0);
+        Double expResult = Math.sqrt(3.0)*2;
         Double result = instance.distance(p);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(equalsDouble(expResult, result));
     }
 
     /**
@@ -183,13 +166,12 @@ public class PointTest {
     @Test
     public void testDistanceSquare() {
         System.out.println("distanceSquare");
-        Point p = null;
-        Point instance = new PointImpl();
-        Double expResult = null;
+        Point p = Point.origin(3);
+        Point instance = Point.of(2.0, 2.0, 2.0);
+        Double expResult = 12.0;
         Double result = instance.distanceSquare(p);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        System.out.println(result);
+        assertTrue(equalsDouble(expResult, result));
     }
 
     /**
@@ -198,14 +180,12 @@ public class PointTest {
     @Test
     public void testEquals_Point_Double() {
         System.out.println("equals");
-        Point p = null;
-        Double eps = null;
-        Point instance = new PointImpl();
-        Boolean expResult = null;
+        Point p = Point.of(0.12345678901, 3.4, 5.6, 0.98765432101);
+        Double eps = 1.0e-10;
+        Point instance = Point.of(0.123456789, 3.4, 5.6, 0.987654321);
+        Boolean expResult = true;
         Boolean result = instance.equals(p, eps);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -214,13 +194,11 @@ public class PointTest {
     @Test
     public void testEquals_Point_Integer() {
         System.out.println("equals");
-        Point p = null;
-        Integer ulp = null;
-        Point instance = new PointImpl();
-        Boolean expResult = null;
+        Point p = Point.of(0.1234567890001, 3.4, 5.6, 987654321000.1);
+        Integer ulp = 8000;
+        Point instance = Point.of(0.123456789, 3.4, 5.6, 987654321000.0);
+        Boolean expResult = true;
         Boolean result = instance.equals(p, ulp);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 }

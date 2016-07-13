@@ -5,14 +5,15 @@
  */
 package org.jumpaku.curves.bezier;
 
+import java.util.LinkedList;
 import javaslang.collection.Array;
 import org.jumpaku.curves.domain.Closed;
-import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.vector.WeightedPoint;
 import org.jumpaku.curves.vector.Point;
 import org.jumpaku.curves.vector.Point1D;
 import org.jumpaku.curves.vector.Vec;
+import org.jumpaku.curves.vector.Vec1;
 
 /**
  *
@@ -20,47 +21,45 @@ import org.jumpaku.curves.vector.Vec;
  */
 public class RationalBezierCurveBernstein implements RationalBezierCurve {
 
-    private final Array<WeightedPoint> weightedPoints;
-    
-    private final Array<Double> cofficients;
+    private final Array<? extends WeightedPoint> weightedPoints;
     
     private final BezierCurve1D weightBezier;
     
+    private final BezierCurve bezier;
+    
     private final Integer dimention;
     
-    private final Integer degree;
+    private static final Interval DOMAIN = new Closed(0.0, 1.0);
     
-    private static final Interval domain = new Closed(0.0, 1.0);
-    
-    public RationalBezierCurveBernstein(Array<WeightedPoint> wcps, Integer dimention) {
+    public RationalBezierCurveBernstein(Array<? extends WeightedPoint> wcps, Integer dimention) {
         this.dimention = dimention;
-        this.degree = wcps.size() - 1;
         this.weightedPoints = wcps;
-        this.cofficients = BezierCurve.combinations(degree).toStream()
-                .zip(wcps.toStream().map(wcp -> wcp.getWeight()))
-                .map(bw -> bw.transform((b, w) -> b*w))
-                .toArray();
         this.weightBezier = BezierCurve1D.create(wcps.map(wcp -> new Point1D(wcp.getWeight())));
+        this.bezier = BezierCurve.create(wcps.map(wcp -> wcp.getProduct()), dimention);
     }
 
+    public RationalBezierCurveBernstein(Array<? extends Point> cps, Array<Double> weights, Integer dimention) {
+        this(cps.zip(weights).map(cpw -> WeightedPoint.of(cpw._1(), cpw._2())), dimention);
+    }
+    
     @Override
     public Array<Double> getWeights() {
         return weightedPoints.map(wp -> wp.getWeight());
     }
 
     @Override
-    public Array<WeightedPoint> getWeightedPoints() {
+    public Array<? extends WeightedPoint> getWeightedPoints() {
         return weightedPoints;
     }
 
     @Override
     public Interval getDomain() {
-        return domain;
+        return DOMAIN;
     }
 
     @Override
-    public Array<Point> getControlPoints() {
-        return weightedPoints.map(wp -> wp.getPoint());
+    public Array<? extends Point> getControlPoints() {
+        return weightedPoints;
     }
 
     @Override
@@ -73,28 +72,56 @@ public class RationalBezierCurveBernstein implements RationalBezierCurve {
         if(!getDomain().isIn(t))
             throw new IllegalArgumentException("Parameter t out of domain [0,1]");
         
-        Array<Point> cps = getControlPoints();
-
-        if(!Double.isFinite(1.0/(1.0-t))){
-            return cps.get(degree);
-        }
-        if(!Double.isFinite(1.0/t)){
-            return cps.get(0);
-        }
-        
-        Double ct = Math.pow(1-t, degree);
-        Vec v = Vec.zero(getDimention());
-        
-        for(int i = 0; i <= degree; ++i){
-            v = v.add(cps.get(i).getVec().scale(cofficients.get(i)*ct));
-            ct *= (t / (1 - t));
-        }
-        
-        return Point.of(v.scale(1.0/weightBezier.evaluate(t).getX()));
+        return Point.of(bezier.evaluate(t).getVec().scale(1.0/weightBezier.evaluate(t).getX()));
     }
 
     @Override
     public Integer getDimention() {
         return dimention;
+    }
+
+    @Override
+    public Vec computeTangent(Double t) {
+        return bezier.computeTangent(t).sub(weightBezier.computeTangent(t).getX(), evaluate(t).getVec()).scale(1.0/weightBezier.evaluate(t).getX());
+    }
+
+    private static Array<Array<? extends WeightedPoint>> createDividedControlPoints(Vec[] wcp, Double[] w, Double t){
+        LinkedList<WeightedPoint> wcp0 = new LinkedList<>();
+        LinkedList<WeightedPoint> wcp1 = new LinkedList<>();
+        int n = wcp.length - 1;
+        wcp0.addLast(WeightedPoint.of(Point.of(wcp[0].scale(1.0/w[0])), w[0]));
+        wcp1.addFirst(WeightedPoint.of(Point.of(wcp[n].scale(1.0/w[n])), w[n]));
+        while(n > 0){
+            for(int i = 0; i < n; ++i){
+                wcp[i] = Vec.add(1-t, wcp[i], t, wcp[i+1]);
+                w[i] = (1-t) * w[i] + t * w[i+1];
+            }
+            wcp0.addLast(WeightedPoint.of(Point.of(wcp[0].scale(1.0/w[0])), w[0]));
+            wcp1.addFirst(WeightedPoint.of(Point.of(wcp[n-1].scale(1.0/w[n-1])), w[n-1]));
+            --n;
+        }
+        
+        return Array.of(Array.ofAll(wcp0), Array.ofAll(wcp1));
+    }
+    
+    @Override
+    public Array<? extends BezierCurve> divide(Double t) {
+        Array<Array<? extends WeightedPoint> wcps = createDividedControlPoints(getWeightedPoints().map(WeightedPoint::getProduct).map(Point::getVec).toJavaArray(Vec.class), getWeights().toJavaArray(Double.class), t);
+         return Array.of(new RationalBezierCurveBernstein(, dimention))
+    }
+
+    @Override
+    public BezierCurve elevate() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BezierCurve reduce() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BezierCurve reverse() {
+        return new RationalBezierCurveBernstein(weightedPoints.reverse(), dimention);
     }
 }

@@ -9,18 +9,16 @@ package org.jumpaku.curves.vector;
  *
  * @author Jumpaku
  */
-public class WeightedPoint2D implements WeightedPoint{
+public class WeightedPoint2D extends Point2D implements WeightedPoint{
 
     private final Double weight;
-    
-    private final Point2D point;
     
     public WeightedPoint2D(Double x, Double y, Double w) {
         this(new Point2D(x, y), w);
     }
     
     public WeightedPoint2D(Point2D p, Double w){
-        point = p;
+        super(p);
         weight = w;
     }
 
@@ -30,7 +28,12 @@ public class WeightedPoint2D implements WeightedPoint{
     }
 
     @Override
-    public Point getPoint() {
-        return point;
+    public Point2D getPoint() {
+        return this;
+    }
+    
+    @Override
+    public Point2D getProduct() {
+        return new Point2D(WeightedPoint.super.getProduct());
     }
 }

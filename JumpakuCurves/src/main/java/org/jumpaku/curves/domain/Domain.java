@@ -12,7 +12,7 @@ package org.jumpaku.curves.domain;
 @FunctionalInterface
 public interface Domain {
     /**
-     * パラメータが定義域に含まれるかどうかをチェックします Checkes whether parameter t is in this domain or not.
+     * <p>パラメータが定義域に含まれるかどうかをチェックします Checkes whether parameter t is in this domain or not.</p>
      * @param t パラメータ parameter
      * @return tが定義域に含まれている場合{@code true}, そうでない場合{@code false} true if t is in this domain;otherwise {@code false}
      */

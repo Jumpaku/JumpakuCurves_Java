@@ -33,4 +33,13 @@ public class TestUtils {
                 equalsDouble(a.getY(), b.getY()) && 
                 equalsDouble(a.getZ(), b.getZ());
     }
+    
+    static Boolean equalsVec(Vec a, Vec b){
+        for(int i = 0; i < a.getDimention(); ++i){
+            if(!equalsDouble(a.get(i), b.get(i))){
+                return false;
+            }
+        }
+        return true;
+    }
 }
