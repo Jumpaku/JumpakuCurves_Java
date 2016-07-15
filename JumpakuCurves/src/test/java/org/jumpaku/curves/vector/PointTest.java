@@ -6,7 +6,7 @@
 package org.jumpaku.curves.vector;
 
 import java.util.Arrays;
-import static org.jumpaku.curves.vector.TestUtils.*;
+import static org.jumpaku.curves.test.TestUtils.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

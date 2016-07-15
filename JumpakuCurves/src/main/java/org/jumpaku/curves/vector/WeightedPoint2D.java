@@ -13,11 +13,11 @@ public class WeightedPoint2D extends Point2D implements WeightedPoint{
 
     private final Double weight;
     
-    public WeightedPoint2D(Double x, Double y, Double w) {
-        this(new Point2D(x, y), w);
+    public WeightedPoint2D(Double w, Double x, Double y) {
+        this(w, new Point2D(x, y));
     }
     
-    public WeightedPoint2D(Point2D p, Double w){
+    public WeightedPoint2D(Double w, Point2D p){
         super(p);
         weight = w;
     }
@@ -27,11 +27,6 @@ public class WeightedPoint2D extends Point2D implements WeightedPoint{
         return weight;
     }
 
-    @Override
-    public Point2D getPoint() {
-        return this;
-    }
-    
     @Override
     public Point2D getProduct() {
         return new Point2D(WeightedPoint.super.getProduct());

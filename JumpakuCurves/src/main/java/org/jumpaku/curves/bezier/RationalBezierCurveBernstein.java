@@ -39,7 +39,7 @@ public class RationalBezierCurveBernstein implements RationalBezierCurve {
     }
 
     public RationalBezierCurveBernstein(Array<? extends Point> cps, Array<Double> weights, Integer dimention) {
-        this(cps.zip(weights).map(cpw -> WeightedPoint.of(cpw._1(), cpw._2())), dimention);
+        this(cps.zip(weights).map(cpw -> WeightedPoint.of(cpw._2(), cpw._1())), dimention);
     }
     
     @Override
@@ -89,15 +89,15 @@ public class RationalBezierCurveBernstein implements RationalBezierCurve {
         LinkedList<WeightedPoint> wcp0 = new LinkedList<>();
         LinkedList<WeightedPoint> wcp1 = new LinkedList<>();
         int n = wcp.length - 1;
-        wcp0.addLast(WeightedPoint.of(Point.of(wcp[0].scale(1.0/w[0])), w[0]));
-        wcp1.addFirst(WeightedPoint.of(Point.of(wcp[n].scale(1.0/w[n])), w[n]));
+        wcp0.addLast(WeightedPoint.of(w[0], Point.of(wcp[0].scale(1.0/w[0]))));
+        wcp1.addFirst(WeightedPoint.of(w[n], Point.of(wcp[n].scale(1.0/w[n]))));
         while(n > 0){
             for(int i = 0; i < n; ++i){
                 wcp[i] = Vec.add(1-t, wcp[i], t, wcp[i+1]);
                 w[i] = (1-t) * w[i] + t * w[i+1];
             }
-            wcp0.addLast(WeightedPoint.of(Point.of(wcp[0].scale(1.0/w[0])), w[0]));
-            wcp1.addFirst(WeightedPoint.of(Point.of(wcp[n-1].scale(1.0/w[n-1])), w[n-1]));
+            wcp0.addLast(WeightedPoint.of(w[0], Point.of(wcp[0].scale(1.0/w[0]))));
+            wcp1.addFirst(WeightedPoint.of(w[n-1], Point.of(wcp[n-1].scale(1.0/w[n-1]))));
             --n;
         }
         
@@ -115,14 +115,14 @@ public class RationalBezierCurveBernstein implements RationalBezierCurve {
     @Override
     public RationalBezierCurve elevate() {
         return new RationalBezierCurveBernstein(productBezier.elevate().getControlPoints().zip(weightBezier.elevate().getControlPoints())
-                .map(wcp -> wcp.transform((cp, w) -> WeightedPoint.of(Point.of(cp.getVec().scale(1.0/w.getX())), w.getX())))
+                .map(wcp -> wcp.transform((cp, w) -> WeightedPoint.of(w.getX(), Point.of(cp.getVec().scale(1.0/w.getX())))))
                 , getDimention());
     }
 
     @Override
     public RationalBezierCurve reduce() {
         return new RationalBezierCurveBernstein(productBezier.reduce().getControlPoints().zip(weightBezier.reduce().getControlPoints())
-                .map(wcp -> wcp.transform((cp, w) -> WeightedPoint.of(Point.of(cp.getVec().scale(1.0/w.getX())), w.getX())))
+                .map(wcp -> wcp.transform((cp, w) -> WeightedPoint.of(w.getX(), Point.of(cp.getVec().scale(1.0/w.getX())))))
                 , getDimention());
     }
 

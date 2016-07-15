@@ -13,11 +13,11 @@ public class WeightedPoint1D extends Point1D implements WeightedPoint{
 
     private final Double weight;
     
-    public WeightedPoint1D(Double x, Double w){
-        this(new Point1D(x), w);
+    public WeightedPoint1D(Double w, Double x){
+        this(w, new Point1D(x));
     }
     
-    public WeightedPoint1D(Point1D p, Double w) {
+    public WeightedPoint1D(Double w, Point1D p) {
         super(p);
         this.weight = w;
     }
@@ -25,11 +25,6 @@ public class WeightedPoint1D extends Point1D implements WeightedPoint{
     @Override
     public Double getWeight() {
         return weight;
-    }
-
-    @Override
-    public Point1D getPoint() {
-        return this;
     }
 
     @Override

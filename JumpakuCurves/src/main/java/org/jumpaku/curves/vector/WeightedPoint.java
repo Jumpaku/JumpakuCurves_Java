@@ -5,13 +5,15 @@
  */
 package org.jumpaku.curves.vector;
 
+import org.apache.commons.math3.util.Precision;
+
 /**
  *
  * @author Jumpaku
  */
 public interface WeightedPoint extends Point{
     
-    public static WeightedPoint of(Point p, Double w){
+    public static WeightedPoint of(Double w, Point p){
         return new WeightedPoint() {
             @Override
             public Double getWeight() {
@@ -25,13 +27,23 @@ public interface WeightedPoint extends Point{
         };
     }
     
-    Double getWeight();
-
-    default Point getPoint(){
-        return this;
+    public static WeightedPoint of(Double w, Double... elements){
+        return WeightedPoint.of(w, Point.of(elements));
     }
     
+    Double getWeight();
+    
     default Point getProduct(){
-        return Point.of(getPoint().getVec().scale(getWeight()));
+        return Point.of(getVec().scale(getWeight()));
     }
+
+    default Boolean equals(WeightedPoint p, Double eps){
+        return Point.super.equals(p, eps) && Precision.equals(getWeight(), p.getWeight(), eps);
+    }
+    
+    default Boolean equals(WeightedPoint p, Integer ulp){
+        return Point.super.equals(p, ulp) && Precision.equals(getWeight(), p.getWeight(), ulp);
+    }
+    
+    
 }

@@ -6,6 +6,7 @@
 package org.jumpaku.curves.vector;
 
 import org.apache.commons.math3.util.Precision;
+import org.jumpaku.curves.test.TestUtils;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

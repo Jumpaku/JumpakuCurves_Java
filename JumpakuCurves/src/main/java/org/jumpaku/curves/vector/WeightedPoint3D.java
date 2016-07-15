@@ -13,11 +13,11 @@ public class WeightedPoint3D extends Point3D implements WeightedPoint{
     
     private final Double weight;
     
-    public WeightedPoint3D(Double x, Double y, Double z, Double w) {
-        this(new Point3D(x, y, z), w);
+    public WeightedPoint3D(Double w, Double x, Double y, Double z) {
+        this(w, new Point3D(x, y, z));
     }
     
-    public WeightedPoint3D(Point3D p, Double w){
+    public WeightedPoint3D(Double w, Point3D p){
         super(p);
         weight = w;
     }
@@ -25,11 +25,6 @@ public class WeightedPoint3D extends Point3D implements WeightedPoint{
     @Override
     public Double getWeight() {
         return weight;
-    }
-
-    @Override
-    public Point3D getPoint() {
-        return this;
     }
     
     @Override
