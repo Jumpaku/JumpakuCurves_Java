@@ -51,7 +51,7 @@ public class BezierCurve1D implements BezierCurve{
     }
 
     @Override
-    public final BezierCurve reduce() {
+    public final BezierCurve1D reduce() {
         return new BezierCurve1D(curve.reduce());
     }
     

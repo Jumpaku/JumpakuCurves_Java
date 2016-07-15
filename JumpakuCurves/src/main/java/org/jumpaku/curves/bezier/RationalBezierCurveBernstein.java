@@ -25,7 +25,7 @@ public class RationalBezierCurveBernstein implements RationalBezierCurve {
     
     private final BezierCurve1D weightBezier;
     
-    private final BezierCurve bezier;
+    private final BezierCurve productBezier;
     
     private final Integer dimention;
     
@@ -35,7 +35,7 @@ public class RationalBezierCurveBernstein implements RationalBezierCurve {
         this.dimention = dimention;
         this.weightedPoints = wcps;
         this.weightBezier = BezierCurve1D.create(wcps.map(wcp -> new Point1D(wcp.getWeight())));
-        this.bezier = BezierCurve.create(wcps.map(wcp -> wcp.getProduct()), dimention);
+        this.productBezier = BezierCurve.create(wcps.map(wcp -> wcp.getProduct()), dimention);
     }
 
     public RationalBezierCurveBernstein(Array<? extends Point> cps, Array<Double> weights, Integer dimention) {
@@ -72,7 +72,7 @@ public class RationalBezierCurveBernstein implements RationalBezierCurve {
         if(!getDomain().isIn(t))
             throw new IllegalArgumentException("Parameter t out of domain [0,1]");
         
-        return Point.of(bezier.evaluate(t).getVec().scale(1.0/weightBezier.evaluate(t).getX()));
+        return Point.of(productBezier.evaluate(t).getVec().scale(1.0/weightBezier.evaluate(t).getX()));
     }
 
     @Override
@@ -82,7 +82,7 @@ public class RationalBezierCurveBernstein implements RationalBezierCurve {
 
     @Override
     public Vec computeTangent(Double t) {
-        return bezier.computeTangent(t).sub(weightBezier.computeTangent(t).getX(), evaluate(t).getVec()).scale(1.0/weightBezier.evaluate(t).getX());
+        return productBezier.computeTangent(t).sub(weightBezier.computeTangent(t).getX(), evaluate(t).getVec()).scale(1.0/weightBezier.evaluate(t).getX());
     }
 
     private static Array<Array<? extends WeightedPoint>> createDividedControlPoints(Vec[] wcp, Double[] w, Double t){
@@ -105,23 +105,29 @@ public class RationalBezierCurveBernstein implements RationalBezierCurve {
     }
     
     @Override
-    public Array<? extends BezierCurve> divide(Double t) {
-        Array<Array<? extends WeightedPoint> wcps = createDividedControlPoints(getWeightedPoints().map(WeightedPoint::getProduct).map(Point::getVec).toJavaArray(Vec.class), getWeights().toJavaArray(Double.class), t);
-         return Array.of(new RationalBezierCurveBernstein(, dimention))
+    public Array<? extends RationalBezierCurve> divide(Double t) {
+        Array<Array<? extends WeightedPoint>> wcps = createDividedControlPoints(
+                getWeightedPoints().map(wp -> wp.getProduct().getVec()).toJavaArray(Vec.class),
+                getWeights().toJavaArray(Double.class), t);
+        return Array.of(new RationalBezierCurveBernstein(wcps.get(0), dimention), new RationalBezierCurveBernstein(wcps.get(1), dimention));
     }
 
     @Override
-    public BezierCurve elevate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public RationalBezierCurve elevate() {
+        return new RationalBezierCurveBernstein(productBezier.elevate().getControlPoints().zip(weightBezier.elevate().getControlPoints())
+                .map(wcp -> wcp.transform((cp, w) -> WeightedPoint.of(Point.of(cp.getVec().scale(1.0/w.getX())), w.getX())))
+                , getDimention());
     }
 
     @Override
-    public BezierCurve reduce() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public RationalBezierCurve reduce() {
+        return new RationalBezierCurveBernstein(productBezier.reduce().getControlPoints().zip(weightBezier.reduce().getControlPoints())
+                .map(wcp -> wcp.transform((cp, w) -> WeightedPoint.of(Point.of(cp.getVec().scale(1.0/w.getX())), w.getX())))
+                , getDimention());
     }
 
     @Override
-    public BezierCurve reverse() {
+    public RationalBezierCurve reverse() {
         return new RationalBezierCurveBernstein(weightedPoints.reverse(), dimention);
     }
 }
