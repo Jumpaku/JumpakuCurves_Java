@@ -23,8 +23,8 @@ public class BezierCurve2D implements BezierCurve{
         this.curve = curve;
     }
     
-    public static BezierCurve2D create(Array<Point2D> cp){
-        return new BezierCurve2D(BezierCurve.create(cp.map(p2 -> p2), 2));
+    public static BezierCurve2D create(Iterable<Point2D> cp){
+        return new BezierCurve2D(BezierCurve.create(Array.ofAll(cp), 2));
     }
     
     public static BezierCurve2D create(Point2D... cps){
@@ -84,5 +84,10 @@ public class BezierCurve2D implements BezierCurve{
     @Override
     public Integer getDimention() {
         return 2;
+    }
+
+    @Override
+    public BezierCurve2D differentiate() {
+        return new BezierCurve2D(curve.differentiate());
     }
 }

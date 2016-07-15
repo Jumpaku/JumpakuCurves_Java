@@ -6,6 +6,9 @@
 package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
+import org.jumpaku.curves.Curve;
+import org.jumpaku.curves.domain.Closed;
+import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.vector.Point;
 import org.jumpaku.curves.vector.Vec;
@@ -15,41 +18,38 @@ import org.jumpaku.curves.vector.WeightedPoint;
  *
  * @author Jumpaku
  */
-public interface RationalBezierCurve extends BezierCurve {
+public interface RationalBezierCurve extends Curve{
+    
+    Interval DOMAIN = new Closed(0.0, 1.0);
     
     Array<Double> getWeights();
     
     Array<? extends WeightedPoint> getWeightedPoints();
 
-    @Override
-    public Array<? extends Point> getControlPoints();
+    Array<? extends Point> getControlPoints();
+
+    default Integer getDegree(){
+        return getControlPoints().size() - 1;
+    }
 
     @Override
-    public Integer getDegree();
+    Integer getDimention();
 
     @Override
-    public Integer getDimention();
+    default Interval getDomain(){
+        return DOMAIN;
+    }
 
     @Override
-    public Interval getDomain();
+    Point evaluate(Double t);
 
-    @Override
-    public Point evaluate(Double t);
+    Vec computeTangent(Double t);
 
-    @Override
-    public Vec computeTangent(Double t);
+    Array<? extends RationalBezierCurve> divide(Double t);
 
-    @Override
-    public Array<? extends BezierCurve> divide(Double t);
+    RationalBezierCurve elevate();
 
-    @Override
-    public BezierCurve elevate();
+    RationalBezierCurve reduce();
 
-    @Override
-    public BezierCurve reduce();
-
-    @Override
-    public BezierCurve reverse();
-    
-    
+    RationalBezierCurve reverse();
 }

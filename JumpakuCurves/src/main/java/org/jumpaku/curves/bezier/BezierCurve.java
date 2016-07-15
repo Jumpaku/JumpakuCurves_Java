@@ -5,6 +5,7 @@ import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import org.jumpaku.curves.Curve;
 import org.apache.commons.math3.util.CombinatoricsUtils;
+import org.jumpaku.curves.domain.Closed;
 import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.vector.Point;
 import org.jumpaku.curves.vector.Vec;
@@ -19,6 +20,12 @@ import org.jumpaku.curves.vector.Vec;
  * @author Jumpaku
  */
 public abstract interface BezierCurve extends Curve{
+    
+    /**
+     * <p>Bezier曲線の定義域 Domain of Bezier Curve.</p>
+     * @return 定義域 domain
+     */
+    static Closed DOMAIN = new Closed(0.0, 1.0);
     
     /**
      * <p>Bezier曲線オブジェクトを生成します Creates Bezier Curve.</p>
@@ -36,7 +43,7 @@ public abstract interface BezierCurve extends Curve{
      * @return 引数の制御点リストで定義されるBezier曲線. Bezier curve defined given control points
      * @throws IllegalArgumentException controlPointsが{@code null}の時, {@code null}を含んでいる時, または空である時 When controlPoints is {@code null}, contains {@code null}, or is empty.
      */
-    public static BezierCurve create(Array<Point> controlPoints, Integer dimention){
+    public static BezierCurve create(Array<? extends Point> controlPoints, Integer dimention){
         if(controlPoints == null)
             throw new IllegalArgumentException("control points are null");
         
@@ -108,7 +115,9 @@ public abstract interface BezierCurve extends Curve{
      * @return 定義域 domain
      */
     @Override
-    Interval getDomain();
+    default Interval getDomain(){
+        return DOMAIN;
+    }
     
     /**
      * 不変な制御点リストを返します Returns unmodifiable list of control points.
@@ -120,7 +129,9 @@ public abstract interface BezierCurve extends Curve{
      * 次数を取得します Returns degree.
      * @return 次数degree
      */
-    Integer getDegree();
+    default Integer getDegree(){
+        return getControlPoints().size() - 1;
+    }
     
     /**
      * 次数を1つ上げたBezier曲線を生成して返します Creates degree elevated bezier curve.
@@ -185,6 +196,12 @@ public abstract interface BezierCurve extends Curve{
      * @return 接線ベクトル tangent vector
      */
     Vec computeTangent(Double t);
+    
+    /**
+     * <p>Bezier曲線を微分します differentiate Bezier Curve.</p>
+     * @return Bezier曲線の導関数 derivative of Bezier Curve 
+     */
+    BezierCurve differentiate();
     
     /**
      * Bezier曲線の評価点を計算します Evaluates Bezier Curve point for the parameter.

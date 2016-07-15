@@ -23,8 +23,8 @@ public class BezierCurve3D implements BezierCurve{
         this.curve = curve;
     }
     
-    public static BezierCurve3D create(Array<Point3D> cp){
-        return new BezierCurve3D(BezierCurve.create(cp.map(p3 -> p3), 3));
+    public static BezierCurve3D create(Iterable<Point3D> cp){
+        return new BezierCurve3D(BezierCurve.create(Array.ofAll(cp), 3));
     }
     
     public static BezierCurve3D create(Point3D... cps){
@@ -84,5 +84,10 @@ public class BezierCurve3D implements BezierCurve{
     @Override
     public Integer getDimention() {
         return 3;
+    }
+
+    @Override
+    public BezierCurve3D differentiate() {
+        return new BezierCurve3D(curve.differentiate());
     }
 }

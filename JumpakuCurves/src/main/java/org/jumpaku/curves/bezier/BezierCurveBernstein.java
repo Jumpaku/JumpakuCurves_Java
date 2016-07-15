@@ -16,7 +16,7 @@ public class BezierCurveBernstein extends AbstractBezierCurve {
     
     private final Array<Double> combinations;
     
-    public BezierCurveBernstein(Array<Point> cp, Integer dimention) {
+    public BezierCurveBernstein(Array<? extends Point> cp, Integer dimention) {
         super(cp, dimention);
         final Integer degree = cp.size() - 1;
         combinations = BezierCurve.combinations(degree);
