@@ -8,7 +8,6 @@ package org.jumpaku.curves.bezier;
 import javaslang.collection.Array;
 import org.jumpaku.curves.Curve;
 import org.jumpaku.curves.domain.Closed;
-import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.domain.Interval;
 import org.jumpaku.curves.vector.Point;
 import org.jumpaku.curves.vector.Vec;
