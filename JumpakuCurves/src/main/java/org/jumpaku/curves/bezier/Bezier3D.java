@@ -15,20 +15,22 @@ import org.jumpaku.curves.vector.Vec3;
  *
  * @author Jumpaku
  */
-public class BezierCurve3D implements BezierCurve{
+public class Bezier3D implements Bezier{
 
-    private final BezierCurve curve;
+    private final Bezier curve;
     
-    public BezierCurve3D(BezierCurve curve) {
+    public Bezier3D(Bezier curve) {
+        if(curve.getDimention() != 3)
+            throw new IllegalArgumentException("dimention is not 3");
         this.curve = curve;
     }
     
-    public static BezierCurve3D create(Iterable<Point3D> cp){
-        return new BezierCurve3D(BezierCurve.create(Array.ofAll(cp), 3));
+    public static Bezier3D create(Iterable<Point3D> cp){
+        return new Bezier3D(Bezier.create(Array.ofAll(cp), 3));
     }
     
-    public static BezierCurve3D create(Point3D... cps){
-        return BezierCurve3D.create(Array.of(cps));
+    public static Bezier3D create(Point3D... cps){
+        return Bezier3D.create(Array.of(cps));
     }
     
     @Override
@@ -47,28 +49,28 @@ public class BezierCurve3D implements BezierCurve{
     }
 
     @Override
-    public final BezierCurve3D elevate() {
-        return new BezierCurve3D(curve.elevate());
+    public final Bezier3D elevate() {
+        return new Bezier3D(curve.elevate());
     }
 
     @Override
-    public final BezierCurve reduce() {
-        return new BezierCurve3D(curve.reduce());
+    public final Bezier reduce() {
+        return new Bezier3D(curve.reduce());
     }
     
     @Override
-    public final Array<BezierCurve3D> divide(Double t) {
-        return Array.of(new BezierCurve3D(curve.divide(t).head()),
-                new BezierCurve3D(curve.divide(t).last()));
+    public final Array<Bezier3D> subdivide(Double t) {
+        return Array.of(new Bezier3D(curve.subdivide(t).head()),
+                new Bezier3D(curve.subdivide(t).last()));
     }
 
-    public final BezierCurve3D transform(Affine3D a) {
-        return new BezierCurve3D(BezierCurve.create(getControlPoints().map(p -> a.apply(p)), 3));
+    public final Bezier3D transform(Affine3D a) {
+        return new Bezier3D(Bezier.create(getControlPoints().map(p -> a.apply(p)), 3));
     }
 
     @Override
-    public final BezierCurve3D reverse() {
-        return new BezierCurve3D(curve.reverse());
+    public final Bezier3D reverse() {
+        return new Bezier3D(curve.reverse());
     }
 
     @Override
@@ -87,7 +89,7 @@ public class BezierCurve3D implements BezierCurve{
     }
 
     @Override
-    public BezierCurve3D differentiate() {
-        return new BezierCurve3D(curve.differentiate());
+    public Bezier3D differentiate() {
+        return new Bezier3D(curve.differentiate());
     }
 }

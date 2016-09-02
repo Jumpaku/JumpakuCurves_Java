@@ -18,7 +18,7 @@ public class ClosedTest {
     }
 
     /**
-     * Test of isIn method, of class Closed.
+     * Test of contains method, of class Closed.
      */
     @Test
     public void testIsIn() {
@@ -26,7 +26,7 @@ public class ClosedTest {
         Double t = 1.3;
         Closed instance = new Closed(0.3, 1.3);
         Boolean expResult = true;
-        Boolean result = instance.isIn(t);
+        Boolean result = instance.contains(t);
         assertEquals(expResult, result);
     }
     

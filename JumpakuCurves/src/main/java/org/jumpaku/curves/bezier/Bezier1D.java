@@ -14,20 +14,23 @@ import org.jumpaku.curves.vector.Vec1;
  *
  * @author Jumpaku
  */
-public class BezierCurve1D implements BezierCurve{
+public class Bezier1D implements Bezier{
 
-    private final BezierCurve curve;
+    private final Bezier curve;
     
-    public BezierCurve1D(BezierCurve curve) {
+    public Bezier1D(Bezier curve) {
+        if(curve.getDimention() != 1)
+            throw new IllegalArgumentException("dimention is not 1");
+
         this.curve = curve;
     }
     
-    public static BezierCurve1D create(Iterable<Point1D> cp){
-        return new BezierCurve1D(BezierCurve.create(Array.ofAll(cp), 1));
+    public static Bezier1D create(Iterable<Point1D> cp){
+        return new Bezier1D(Bezier.create(Array.ofAll(cp), 1));
     }
     
-    public static BezierCurve1D create(Point1D... cps){
-        return BezierCurve1D.create(Array.of(cps));
+    public static Bezier1D create(Point1D... cps){
+        return Bezier1D.create(Array.of(cps));
     }
     
     @Override
@@ -46,29 +49,29 @@ public class BezierCurve1D implements BezierCurve{
     }
 
     @Override
-    public final BezierCurve1D elevate() {
-        return new BezierCurve1D(curve.elevate());
+    public final Bezier1D elevate() {
+        return new Bezier1D(curve.elevate());
     }
 
     @Override
-    public final BezierCurve1D reduce() {
-        return new BezierCurve1D(curve.reduce());
+    public final Bezier1D reduce() {
+        return new Bezier1D(curve.reduce());
     }
     
     @Override
-    public final Array<BezierCurve1D> divide(Double t) {
-        Array<? extends BezierCurve> divided = curve.divide(t);
-        return Array.of(new BezierCurve1D(divided.head()), new BezierCurve1D(divided.last()));
+    public final Array<Bezier1D> subdivide(Double t) {
+        Array<? extends Bezier> divided = curve.subdivide(t);
+        return Array.of(new Bezier1D(divided.head()), new Bezier1D(divided.last()));
     }
 
     /*@Override
-    public final BezierCurve1D transform(Transform<Euclidean1D, Vector1D> transform) {
-        return new BezierCurve1D(curve.transform(transform));
+    public final Bezier1D transform(Transform<Euclidean1D, Vector1D> transform) {
+        return new Bezier1D(curve.transform(transform));
     }*/
 
     @Override
-    public final BezierCurve1D reverse() {
-        return new BezierCurve1D(curve.reverse());
+    public final Bezier1D reverse() {
+        return new Bezier1D(curve.reverse());
     }
 
     @Override
@@ -87,7 +90,7 @@ public class BezierCurve1D implements BezierCurve{
     }
 
     @Override
-    public BezierCurve1D differentiate() {
-        return new BezierCurve1D(curve.differentiate());
+    public Bezier1D differentiate() {
+        return new Bezier1D(curve.differentiate());
     }
 }

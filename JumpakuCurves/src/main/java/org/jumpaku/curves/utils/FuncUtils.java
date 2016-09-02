@@ -14,7 +14,8 @@ import javaslang.collection.Traversable;
  */
 public class FuncUtils {
     private FuncUtils(){}
-    public static <X, Y, Z> Traversable<Z> zipWith(BiFunction<? super X, ? super Y, ? extends Z> f, Traversable<X> xs, Iterable<Y> ys){
-        return xs.zip(ys).map(t -> f.apply(t._1(), t._2()));
+    
+    public static <T, U, R> Iterable<R> zipWith(Traversable<T> traversable, Iterable<? extends U> iterable, BiFunction<? super T, ? super U, ? extends R> combiner) {
+        return traversable.zip(iterable).map(t -> combiner.apply(t._1, t._2));
     }
 }

@@ -16,5 +16,5 @@ public interface Domain {
      * @param t パラメータ parameter
      * @return tが定義域に含まれている場合{@code true}, そうでない場合{@code false} true if t is in this domain;otherwise {@code false}
      */
-    Boolean isIn(Double t);
+    Boolean contains(Double t);
 }

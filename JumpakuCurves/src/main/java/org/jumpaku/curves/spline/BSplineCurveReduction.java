@@ -21,7 +21,7 @@ public final class BSplineCurveReduction extends AbstractBSplineCurve{
     
     @Override
     public Point evaluate(Double t) {
-        if(!getDomain().isIn(t))
+        if(!getDomain().contains(t))
             throw new IllegalArgumentException("t is out of domain");
         
         return Point.of(Stream.ofAll(getControlPoints()).zipWithIndex().map(cpi -> cpi.transform(

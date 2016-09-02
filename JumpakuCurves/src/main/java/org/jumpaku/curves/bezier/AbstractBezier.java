@@ -11,13 +11,13 @@ import org.jumpaku.curves.vector.Vec;
 /**
  * <p>Bezier曲線の基底クラス Basic class of Bezier Curve.</p>
  * <p>
- * {@link AbstractBezierCurve#evaluate(java.lang.Double) }をオーバーライドしてください.</p>
+ * {@link AbstractBezier#evaluate(java.lang.Double) }をオーバーライドしてください.</p>
  * <p>
- * Override {@link AbstractBezierCurve#evaluate(java.lang.Double) }.</p>
+ * Override {@link AbstractBezier#evaluate(java.lang.Double) }.</p>
  * 
  * @author Jumpaku
  */
-public abstract class AbstractBezierCurve implements BezierCurve{
+public abstract class AbstractBezier implements Bezier{
     
     private final Array<Point> controlPoints;
     
@@ -36,7 +36,7 @@ public abstract class AbstractBezierCurve implements BezierCurve{
      * @param dimention 空間の次元 dimention of space
      * @throws IllegalArgumentException controlPointsが{@code null}の時, {@code null}を含んでいる時, または空である時 When controlPoints is {@code null}, contains {@code null}, or is empty.
      */
-    public AbstractBezierCurve(Iterable<? extends Point> controlPoints, Integer dimention) {
+    public AbstractBezier(Iterable<? extends Point> controlPoints, Integer dimention) {
         Array<? extends Point> cps = Array.ofAll(controlPoints);
         if(cps == null)
             throw new IllegalArgumentException("control points are null");
@@ -74,8 +74,8 @@ public abstract class AbstractBezierCurve implements BezierCurve{
 
     /**{@inheritDoc}*/
     @Override
-    public BezierCurve elevate(){
-        return BezierCurve.create(createElevatedControlPoints(), getDimention());
+    public Bezier elevate(){
+        return Bezier.create(createElevatedControlPoints(), getDimention());
     }
     
     private Array<? extends Point> createElevatedControlPoints() {
@@ -91,11 +91,11 @@ public abstract class AbstractBezierCurve implements BezierCurve{
     
     /**{@inheritDoc}*/
     @Override
-    public BezierCurve reduce(){
+    public Bezier reduce(){
         if(getDegree() < 1)
             throw new IllegalArgumentException("degree is too small");
         
-        return BezierCurve.create(createReducedControlPoints(), getDimention());
+        return Bezier.create(createReducedControlPoints(), getDimention());
     }
     
     private Array<? extends Point> createReducedControlPoints() {
@@ -145,10 +145,10 @@ public abstract class AbstractBezierCurve implements BezierCurve{
 
     /**{@inheritDoc}*/
     @Override
-    public final Array<BezierCurve> divide(Double t){
+    public final Array<Bezier> subdivide(Double t){
         Array<Array<? extends Point>> cpsArray = createDividedControlPointsArray(t);
-        return Array.of(BezierCurve.create(cpsArray.get(0), getDimention()),
-                BezierCurve.create(cpsArray.get(1), getDimention()));
+        return Array.of(Bezier.create(cpsArray.get(0), getDimention()),
+                Bezier.create(cpsArray.get(1), getDimention()));
     }
     
     private Array<Array<? extends Point>> createDividedControlPointsArray(Double t) {
@@ -171,8 +171,8 @@ public abstract class AbstractBezierCurve implements BezierCurve{
     
     /**{@inheritDoc}*/
     @Override
-    public final BezierCurve reverse(){
-        return BezierCurve.create(getControlPoints().reverse(), getDimention());
+    public final Bezier reverse(){
+        return Bezier.create(getControlPoints().reverse(), getDimention());
     }
     
     /**
@@ -182,15 +182,15 @@ public abstract class AbstractBezierCurve implements BezierCurve{
      */
     @Override
     public final Vec computeTangent(Double t){
-        if(!DOMAIN.isIn(t))
+        if(!DOMAIN.contains(t))
             throw new IllegalArgumentException("t must be in [0, 1]");
         
         return differentiate().evaluate(t).getVec();
     }
 
     @Override
-    public BezierCurve differentiate() {
-        return BezierCurve.create(createControlPointsDifferences().map(Point::of), getDimention());
+    public Bezier differentiate() {
+        return Bezier.create(createControlPointsDifferences().map(Point::of), getDimention());
     }
     
     private Array<? extends Vec> createControlPointsDifferences(){

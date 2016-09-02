@@ -6,46 +6,60 @@
 package org.jumpaku.curves.bezier;
 
 import java.util.LinkedList;
+import javaslang.Tuple;
+import javaslang.Tuple2;
 import javaslang.collection.Array;
+import org.jumpaku.curves.utils.FuncUtils;
 import org.jumpaku.curves.vector.Point;
 import org.jumpaku.curves.vector.Point1D;
 import org.jumpaku.curves.vector.Vec;
-import org.jumpaku.curves.vector.WeightedPoint;
 
 /**
  *
  * @author ito tomohiko
  */
-public abstract class AbstractRationalBezierCurve implements RationalBezierCurve{
+public abstract class AbstractRationalBezier implements RationalBezier{
 
-    private final Array<? extends WeightedPoint> weightedPoints;
+    private final Array<? extends Point> controlPoints;
     
-    private final BezierCurve productBezier;
-    
-    private final BezierCurve1D weightBezier;
+    private final Array<Double> weights;
     
     private final Integer dimention;
 
-    public AbstractRationalBezierCurve(Array<? extends WeightedPoint> weightedPoints, Integer dimention) {
-        this.weightedPoints = weightedPoints;
-        this.productBezier = BezierCurve.create(weightedPoints.map(WeightedPoint::getProduct), dimention);
-        this.weightBezier = BezierCurve1D.create(weightedPoints.map(wcp -> new Point1D(wcp.getWeight())));
+    public AbstractRationalBezier(Array<? extends Point> controlPoints, Array<Double> weights, Integer dimention) {
+        this.controlPoints = controlPoints;
+        this.weights = weights;
         this.dimention = dimention;
+    }
+    
+    protected final Bezier1D getWeightBezier(){
+        return Bezier1D.create(getWeights().map(Point1D::new));
+    }
+    
+    protected final Tuple2<Array<? extends Point>, Array<Double>> getArrays(){
+        return Tuple.of(getControlPoints(), getWeights());
+    }
+    
+    protected final Array<Tuple2<? extends Point, Double>> getPairs(){
+        return Array.ofAll(getControlPoints().zip(getWeights()));
+    }
+    
+    protected final Array<? extends Point> getProducts(){
+        return getPairs().map(t -> t.transform((p, w) -> Point.of(p.getVec().scale(w))));
+    }
+    
+    protected final Bezier getProductBezier(){
+        return Bezier.create(getProducts(), dimention);
     }
     
     @Override
     public Array<Double> getWeights() {
-        return weightedPoints.map(WeightedPoint::getWeight);
-    }
-
-    @Override
-    public Array<? extends WeightedPoint> getWeightedPoints() {
-        return weightedPoints;
+        return weights;
     }
 
     @Override
     public Array<? extends Point> getControlPoints() {
-        return weightedPoints;
+        return controlPoints;
     }
 
     @Override
@@ -58,58 +72,71 @@ public abstract class AbstractRationalBezierCurve implements RationalBezierCurve
 
     @Override
     public Vec computeTangent(Double t) {
-        return productBezier.computeTangent(t)
-                .sub(weightBezier.computeTangent(t).getX(), evaluate(t).getVec())
-                .scale(1.0/weightBezier.evaluate(t).getX());
+        Bezier1D wBezier = getWeightBezier();
+        Bezier pBezier = getProductBezier();
+        return pBezier.computeTangent(t)
+                .sub(wBezier.computeTangent(t).getX(), evaluate(t).getVec())
+                .scale(1.0/wBezier.evaluate(t).getX());
     }
 
     @Override
-    public Array<? extends RationalBezierCurve> divide(Double t) {
-        Array<Array<? extends WeightedPoint>> wcps = createDividedControlPoints(t);
-        return Array.of(new RationalBezierCurveBernstein(wcps.get(0), dimention), new RationalBezierCurveBernstein(wcps.get(1), dimention));
+    public Array<? extends RationalBezier> subdivide(Double t) {
+        Array<Tuple2<Array<? extends Point>, Array<Double>>> wcps = createDividedControlPoints(t);
+        return Array.of(new RationalBezierFast(wcps.get(0)._1(), wcps.get(0)._2(), getDimention()),
+                new RationalBezierFast(wcps.get(1)._1(), wcps.get(1)._2(), getDimention()));
     }
 
-    private Array<Array<? extends WeightedPoint>> createDividedControlPoints(Double t){
-        Double[] w = getWeights().toJavaArray(Double.class);
-        Vec[] wcp = getWeightedPoints().map(x -> x.getProduct().getVec()).toJavaArray(Vec.class);
-        LinkedList<WeightedPoint> wcp0 = new LinkedList<>();
-        LinkedList<WeightedPoint> wcp1 = new LinkedList<>();
-        int n = wcp.length - 1;
-        wcp0.addLast(WeightedPoint.of(w[0], Point.of(wcp[0].scale(1.0/w[0]))));
-        wcp1.addFirst(WeightedPoint.of(w[n], Point.of(wcp[n].scale(1.0/w[n]))));
+    private Array<Tuple2<Array<? extends Point>, Array<Double>>> createDividedControlPoints(Double t){
+        Double[] ws = getWeights().toJavaArray(Double.class);
+        Vec[] cp = getControlPoints().map(Point::getVec).toJavaArray(Vec.class);
+        LinkedList<Point> cp0 = new LinkedList<>();
+        LinkedList<Double> ws0 = new LinkedList<>();
+        LinkedList<Point> cp1 = new LinkedList<>();
+        LinkedList<Double> ws1 = new LinkedList<>();
+        
+        int n = cp.length - 1;
+        cp0.addLast(Point.of(cp[0]));
+        ws0.addLast(ws[0]);
+        cp1.addFirst(Point.of(cp[n]));
+        ws1.addFirst(ws[n]);
         while(n > 0){
             for(int i = 0; i < n; ++i){
-                wcp[i] = Vec.add(1-t, wcp[i], t, wcp[i+1]);
-                w[i] = (1-t) * w[i] + t * w[i+1];
+                Double w = (1-t) * ws[i] + t * ws[i+1];
+                cp[i] = Vec.add((1-t)*ws[i]/w, cp[i], t*ws[i+1]/w, cp[i+1]);
+                ws[i] = w;
             }
-            wcp0.addLast(WeightedPoint.of(w[0], Point.of(wcp[0].scale(1.0/w[0]))));
-            wcp1.addFirst(WeightedPoint.of(w[n-1], Point.of(wcp[n-1].scale(1.0/w[n-1]))));
+            cp0.addLast(Point.of(cp[0]));
+            ws0.addLast(ws[0]);
+            cp1.addFirst(Point.of(cp[n-1]));
+            ws1.addFirst(ws[n-1]); 
             --n;
         }
         
-        return Array.of(Array.ofAll(wcp0), Array.ofAll(wcp1));
+        return Array.of(Tuple.of(Array.ofAll(cp0), Array.ofAll(ws0)), Tuple.of(Array.ofAll(cp1), Array.ofAll(ws1)));
     }
+    
     @Override
-    public RationalBezierCurve elevate() {
-        return new RationalBezierCurveBernstein(productBezier.elevate().getControlPoints().zip(weightBezier.elevate().getControlPoints())
-                .map(t -> t.transform((wp, w) -> WeightedPoint.of(w.getX(), Point.of(wp.getVec().scale(1.0/w.getX()))))), dimention);
+    public RationalBezier elevate() {
+        Array<? extends Point> elevatedCps = getProductBezier().elevate().getControlPoints();
+        Array<Double> elevatedWeights = getWeightBezier().elevate().getControlPoints().map(Point1D::getX);
+        return new RationalBezierFast(
+                Array.ofAll(FuncUtils.zipWith(elevatedCps, elevatedWeights, (p, w) -> Point.of(p.getVec().scale(1.0/w)))),
+                elevatedWeights,
+                getDimention());
     }
 
     @Override
-    public RationalBezierCurve reduce() {
-        return new RationalBezierCurveBernstein(productBezier.reduce().getControlPoints().zip(weightBezier.reduce().getControlPoints())
-                .map(t -> t.transform((wp, w) -> WeightedPoint.of(w.getX(), Point.of(wp.getVec().scale(1.0/w.getX()))))), dimention);    }
-
+    public RationalBezier reduce() {
+        Array<? extends Point> reducedCps = getProductBezier().reduce().getControlPoints();
+        Array<Double> reducedWeights = getWeightBezier().reduce().getControlPoints().map(Point1D::getX);
+        return new RationalBezierFast(
+                Array.ofAll(FuncUtils.zipWith(reducedCps, reducedWeights, (p, w) -> Point.of(p.getVec().scale(1.0/w)))),
+                reducedWeights,
+                getDimention());
+    }
+    
     @Override
-    public RationalBezierCurve reverse() {
-        return new RationalBezierCurveBernstein(getWeightedPoints().reverse(), getDimention());
-    }
-
-    protected BezierCurve getProductBezier() {
-        return productBezier;
-    }
-
-    protected BezierCurve1D getWeightBezier() {
-        return weightBezier;
+    public RationalBezier reverse() {
+        return new RationalBezierFast(getControlPoints().reverse(), getWeights().reverse(), getDimention());
     }
 }

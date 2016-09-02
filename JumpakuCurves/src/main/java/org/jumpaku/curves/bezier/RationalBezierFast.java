@@ -6,26 +6,21 @@
 package org.jumpaku.curves.bezier;
 
 import javaslang.collection.Array;
-import org.jumpaku.curves.vector.WeightedPoint;
 import org.jumpaku.curves.vector.Point;
 
 /**
  *
  * @author Jumpaku
  */
-public class RationalBezierCurveBernstein extends AbstractRationalBezierCurve {
+public class RationalBezierFast extends AbstractRationalBezier {
 
-    public RationalBezierCurveBernstein(Array<? extends WeightedPoint> wcps, Integer dimention) {
-        super(wcps, dimention);
-    }
-
-    public RationalBezierCurveBernstein(Array<? extends Point> cps, Array<Double> weights, Integer dimention) {
-        this(cps.zip(weights).map(cpw -> WeightedPoint.of(cpw._2(), cpw._1())), dimention);
+    public RationalBezierFast(Array<? extends Point> cps, Array<Double> ws, Integer dimention) {
+        super(cps, ws, dimention);
     }
     
     @Override
     public Point evaluate(Double t) {
-        if(!getDomain().isIn(t))
+        if(!getDomain().contains(t))
             throw new IllegalArgumentException("Parameter t out of domain [0,1]");
         
         return Point.of(getProductBezier().evaluate(t).getVec().scale(1.0/getWeightBezier().evaluate(t).getX()));

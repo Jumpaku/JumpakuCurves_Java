@@ -15,20 +15,23 @@ import org.jumpaku.curves.vector.Vec2;
  *
  * @author Jumpaku
  */
-public class BezierCurve2D implements BezierCurve{
+public class Bezier2D implements Bezier{
 
-    private final BezierCurve curve;
+    private final Bezier curve;
     
-    public BezierCurve2D(BezierCurve curve) {
+    public Bezier2D(Bezier curve) {
+        if(curve.getDimention() != 2)
+            throw new IllegalArgumentException("dimention is not 2");
+        
         this.curve = curve;
     }
     
-    public static BezierCurve2D create(Iterable<Point2D> cp){
-        return new BezierCurve2D(BezierCurve.create(Array.ofAll(cp), 2));
+    public static Bezier2D create(Iterable<Point2D> cp){
+        return new Bezier2D(Bezier.create(Array.ofAll(cp), 2));
     }
     
-    public static BezierCurve2D create(Point2D... cps){
-        return BezierCurve2D.create(Array.of(cps));
+    public static Bezier2D create(Point2D... cps){
+        return Bezier2D.create(Array.of(cps));
     }
     
     @Override
@@ -47,28 +50,28 @@ public class BezierCurve2D implements BezierCurve{
     }
 
     @Override
-    public final BezierCurve2D elevate() {
-        return new BezierCurve2D(curve.elevate());
+    public final Bezier2D elevate() {
+        return new Bezier2D(curve.elevate());
     }
 
     @Override
-    public final BezierCurve2D reduce() {
-        return new BezierCurve2D(curve.reduce());
+    public final Bezier2D reduce() {
+        return new Bezier2D(curve.reduce());
     }
     
     @Override
-    public final Array<BezierCurve2D> divide(Double t) {
-        Array<? extends BezierCurve> divided = curve.divide(t);
-        return Array.of(new BezierCurve2D(divided.head()), new BezierCurve2D(divided.last()));
+    public final Array<Bezier2D> subdivide(Double t) {
+        Array<? extends Bezier> divided = curve.subdivide(t);
+        return Array.of(new Bezier2D(divided.head()), new Bezier2D(divided.last()));
     }
 
-    public final BezierCurve2D transform(Affine2D a) {
-        return new BezierCurve2D(BezierCurve.create(getControlPoints().map(p -> a.apply(p)), 2));
+    public final Bezier2D transform(Affine2D a) {
+        return new Bezier2D(Bezier.create(getControlPoints().map(p -> a.apply(p)), 2));
     }
 
     @Override
-    public final BezierCurve2D reverse() {
-        return new BezierCurve2D(curve.reverse());
+    public final Bezier2D reverse() {
+        return new Bezier2D(curve.reverse());
     }
 
     @Override
@@ -87,7 +90,7 @@ public class BezierCurve2D implements BezierCurve{
     }
 
     @Override
-    public BezierCurve2D differentiate() {
-        return new BezierCurve2D(curve.differentiate());
+    public Bezier2D differentiate() {
+        return new Bezier2D(curve.differentiate());
     }
 }

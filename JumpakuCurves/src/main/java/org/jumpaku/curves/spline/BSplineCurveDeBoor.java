@@ -30,7 +30,7 @@ public final class BSplineCurveDeBoor extends AbstractBSplineCurve {
     
     @Override
     public Point evaluate(Double t) {
-        if(!getDomain().isIn(t))
+        if(!getDomain().contains(t))
             throw new IllegalArgumentException("t is out of domain, t = " + t);
                 
         Integer l = Stream.ofAll(getKnots()).lastIndexWhere(knot -> knot <= t);
