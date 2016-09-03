@@ -32,14 +32,6 @@ public abstract class AbstractRationalBezier implements RationalBezier{
         this.dimention = dimention;
     }
     
-    protected final Bezier1D getWeightBezier(){
-        return Bezier1D.create(getWeights().map(Point1D::new));
-    }
-    
-    protected final Tuple2<Array<? extends Point>, Array<Double>> getArrays(){
-        return Tuple.of(getControlPoints(), getWeights());
-    }
-    
     protected final Array<Tuple2<? extends Point, Double>> getPairs(){
         return Array.ofAll(getControlPoints().zip(getWeights()));
     }
@@ -50,6 +42,10 @@ public abstract class AbstractRationalBezier implements RationalBezier{
     
     protected final Bezier getProductBezier(){
         return Bezier.create(getProducts(), dimention);
+    }
+    
+    protected final Bezier1D getWeightBezier(){
+        return Bezier1D.create(getWeights().map(Point1D::new));
     }
     
     @Override

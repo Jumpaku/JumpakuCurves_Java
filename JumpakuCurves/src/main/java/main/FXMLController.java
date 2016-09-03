@@ -53,8 +53,16 @@ public class FXMLController implements Initializable {
     
     @FXML
     private synchronized void onCompute(ActionEvent e){
+        Point2D p0 = new Point2D(100.0, 100.0), a = new Point2D(200.0, 350.0), p2 = new Point2D(300.0, 100.0);
+        Tuple2<RationalBezier, RationalBezier> rbs = RationalBezier.circularArc(p0, a, p2);
+        /*Stream.iterate(0.0, v -> v + Math.pow(2, -8)).takeWhile(v -> v <= 1.0)
+                .map(rbs._1())
+                .forEach(p -> canvas.getGraphicsContext2D().fillOval(p.get(0)-1, p.get(1)-1, 2, 2));*/
+        Stream.iterate(0.0, v -> v + Math.pow(2, -8)).takeWhile(v -> v <= 1.0)
+                .map(rbs._2())
+                .forEach(p -> canvas.getGraphicsContext2D().fillOval(p.get(0)-1, p.get(1)-1, 2, 2));
         //curve = BSplineCurve2D.create(Array.rangeBy(0, controlPoints.size() + 3 + 1.0, 1.0), Array.ofAll(controlPoints), 3);
-        curve = Bezier2D.create(Array.ofAll(controlPoints));
+        //curve = Bezier2D.create(Array.ofAll(controlPoints));
         //Array<Double> knots = Stream.rangeClosed(0, dataPoint.size() + 3).map(i -> Double.valueOf(i)).toArray();
         //Double d = (knots.get(knots.size()-4) - knots.get(3)) / (double)(dataPoint.size()-1);
         //Array<Data<Point2D>> data = Stream.from(0).map(i -> d*i + knots.get(3))
@@ -69,7 +77,7 @@ public class FXMLController implements Initializable {
             
         //curve = new BSplineCurveDeBoor<>(knots, Array.ofAll(controlPoints), 3);
 
-        render();
+        //render();
     }
     
     @FXML
