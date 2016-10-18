@@ -117,7 +117,7 @@ public abstract class AbstractBSplineCurve implements BSplineCurve {
         java.util.List<Vec> terms = new ArrayList<>(size);
         Integer p = getDegree() - 1;
         for(int i = 1; i <= size; ++i){
-            terms.add(cp.get(i).differenceFrom(cp.get(i-1)).scale(BSplineCurve.bSplineBasis(p, i, t, getKnots())));
+            terms.add(cp.get(i).from(cp.get(i-1)).scale(BSplineCurve.bSplineBasis(p, i, t, getKnots())));
         }
         
         return Stream.ofAll(terms).reduce((v1, v2) -> v1.add(v2));

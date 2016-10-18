@@ -159,36 +159,4 @@ public class Vec1Test {
         Double result = instance.getX();
         assertTrue(equalsDouble(expResult, result));
     }
-
-    /**
-     * Test of equals method, of class Vec1.
-     */
-    @Test
-    public void testEquals_Vec_Double() {
-        System.out.println("equals");
-        Vec v = new Vec1(111222333.000000100003);
-        Double eps = 1.0e-10;
-        Vec1 instance = new Vec1(111222333.000000100004);
-        Boolean expResult = true;
-        Boolean result = instance.equals(v, eps);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of equals method, of class Vec1.
-     */
-    @Test
-    public void testEquals_Vec_Integer() {
-        System.out.println("equals");
-        Vec v = new Vec1(1.2345678910e-12);
-        Integer ulp = 500000;
-        Vec1 instance = new Vec1(1.2345678911e-12);
-        Boolean expResult = true;
-        Boolean result = instance.equals(v, ulp);
-        assertEquals(expResult, result);
-        ulp = 5000;
-        expResult = false;
-        result = instance.equals(v, ulp);
-        assertEquals(expResult, result);
-    }    
 }

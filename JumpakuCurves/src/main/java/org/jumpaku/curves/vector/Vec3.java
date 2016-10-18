@@ -113,26 +113,4 @@ public class Vec3 implements Vec{
     public Double getZ(){
         return getVector3d().getZ();
     }
-
-    @Override
-    public Boolean equals(Vec v, Double eps) {
-        if(v == null)
-            return false;
-        
-        if(3 != v.getDimention())
-            return false;
-        
-        return Precision.equals(getX(), v.get(0), eps) && Precision.equals(getY(), v.get(1), eps) && Precision.equals(getZ(), v.get(2), eps);
-    }
-
-    @Override
-    public Boolean equals(Vec v, Integer ulp) {
-        if(v == null)
-            return false;
-        
-        if(3 != v.getDimention())
-            return false;
-        
-        return Precision.equals(getX(), v.get(0), ulp) && Precision.equals(getY(), v.get(1), ulp) && Precision.equals(getZ(), v.get(2), ulp);
-    }
 }

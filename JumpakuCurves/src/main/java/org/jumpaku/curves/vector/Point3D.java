@@ -29,12 +29,17 @@ public class Point3D implements Point{
     }
 
     public static Vec3 normal(Point3D p1, Point3D p2, Point3D p3){
-        return p1.differenceFrom(p2).cross(p2.differenceFrom(p3)).normalize();
+        return p1.from(p2).cross(p2.from(p3)).normalize();
     }
     
     @Override
-    public Vec3 differenceFrom(Point p) {
-        return new Vec3(Point.super.differenceFrom(p));
+    public Vec3 from(Point p) {
+        return new Vec3(Point.super.from(p));
+    }
+
+    @Override
+    public Vec3 to(Point p) {
+        return new Vec3(Point.super.to(p)); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

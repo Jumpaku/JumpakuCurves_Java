@@ -117,7 +117,7 @@ public interface Affine3D extends Affine<Point3D>{
      * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
      */
     default Affine3D rotate(Point3D axisInitial, Point3D axisTerminal, Double radian){
-        return rotate(axisTerminal.differenceFrom(axisInitial), radian);
+        return rotate(axisTerminal.from(axisInitial), radian);
     }
     
     /**

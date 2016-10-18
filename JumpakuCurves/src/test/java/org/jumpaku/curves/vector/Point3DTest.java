@@ -67,15 +67,28 @@ public class Point3DTest {
     }
 
     /**
-     * Test of differenceFrom method, of class Point3D.
+     * Test of from method, of class Point3D.
      */
     @Test
-    public void testDifferenceFrom() {
+    public void testFrom() {
         System.out.println("differenceFrom");
         Point p = new Point3D(1.2, -0.2, 0.5);
         Point3D instance = new Point3D(-3.2, -3.2, 3.5);
         Vec3 expResult = new Vec3(-4.4, -3.0, 3.0);
-        Vec3 result = instance.differenceFrom(p);
+        Vec3 result = instance.from(p);
+        assertTrue(equalsVec3(expResult, result));
+    }
+    
+    /**
+     * Test of to method, of class Point1D.
+     */
+    @Test
+    public void testTo() {
+        System.out.println("to");
+        Point p = new Point3D(1.2, -0.2, 0.5);
+        Point3D instance = new Point3D(-3.2, -3.2, 3.5);
+        Vec3 expResult = new Vec3(4.4, 3.0, -3.0);
+        Vec3 result = instance.to(p);
         assertTrue(equalsVec3(expResult, result));
     }
 

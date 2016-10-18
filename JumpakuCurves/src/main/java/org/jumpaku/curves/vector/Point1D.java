@@ -29,8 +29,13 @@ public class Point1D implements Point{
     }
 
     @Override
-    public Vec1 differenceFrom(Point p) {
-        return new Vec1(Point.super.differenceFrom(p));
+    public Vec1 from(Point p) {
+        return new Vec1(Point.super.from(p));
+    }
+
+    @Override
+    public Vec1 to(Point p) {
+        return new Vec1(Point.super.to(p)); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

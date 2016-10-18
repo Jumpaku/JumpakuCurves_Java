@@ -55,18 +55,31 @@ public class Point2DTest {
     }
 
     /**
-     * Test of differenceFrom method, of class Point2D.
+     * Test of from method, of class Point2D.
      */
     @Test
-    public void testDifferenceFrom() {
+    public void testFrom() {
         System.out.println("differenceFrom");
         Point p = new Point2D(1.2, -0.2);
         Point2D instance = new Point2D(-3.2, -3.2);
         Vec2 expResult = new Vec2(-4.4, -3.0);
-        Vec2 result = instance.differenceFrom(p);
+        Vec2 result = instance.from(p);
         assertTrue(equalsVec2(expResult, result));
     }
-
+    
+    /**
+     * Test of to method, of class Point1D.
+     */
+    @Test
+    public void testTo() {
+        System.out.println("to");
+        Point p = new Point2D(1.2, -0.2);
+        Point2D instance = new Point2D(-3.2, -3.2);
+        Vec2 expResult = new Vec2(4.4, 3.0);
+        Vec2 result = instance.to(p);
+        assertTrue(equalsVec2(expResult, result));
+    }
+    
     /**
      * Test of divide method, of class Point2D.
      */

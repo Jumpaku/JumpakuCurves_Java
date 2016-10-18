@@ -195,7 +195,7 @@ public abstract class AbstractBezier implements Bezier{
     
     private Array<? extends Vec> createControlPointsDifferences(){
         return getControlPoints().tail().zip(getControlPoints())
-                .map(pair -> pair._1().differenceFrom(pair._2()));
+                .map(pair -> pair._1().from(pair._2()));
     }
     
     /**

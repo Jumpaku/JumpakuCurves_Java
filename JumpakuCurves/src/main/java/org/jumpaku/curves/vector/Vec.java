@@ -61,32 +61,9 @@ public interface Vec{
                 }
                 return result;
             }            
-
-            @Override
-            public Boolean equals(Vec v, Double eps) {
-                if(getDimention() == v.getDimention()){
-                    for(int i = 0; i < getDimention(); ++i){
-                        if(!Precision.equals(get(i), v.get(i), eps))
-                            return false;
-                    }
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public Boolean equals(Vec v, Integer ulp) {
-                if(getDimention() == v.getDimention()){
-                    for(int i = 0; i < getDimention(); ++i){
-                        if(!Precision.equals(get(i), v.get(i), ulp))
-                            return false;
-                    }
-                    return true;
-                }
-                return false;
-            }
         };
     }
+    
     public static Vec zero(Integer dimention){
         Double[] z = new Double[dimention];
         Arrays.fill(z, 0.0);
@@ -100,6 +77,29 @@ public interface Vec{
         return v1.scale(a).add(b, v2);
     }
     
+
+    public static Boolean equals(Vec v1, Vec v2, Double eps) {
+        if(v1.getDimention() == v2.getDimention()){
+            for(int i = 0; i < v1.getDimention(); ++i){
+                if(!Precision.equals(v1.get(i), v2.get(i), eps))
+                    return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public static Boolean equals(Vec v1, Vec v2, Integer ulp) {
+        if(v1.getDimention() == v2.getDimention()){
+            for(int i = 0; i < v1.getDimention(); ++i){
+                if(!Precision.equals(v1.get(i), v2.get(i), ulp))
+                    return false;
+            }
+            return true;
+        }
+        return false;
+    }
+    
     Vec add(Vec v);
     
     Vec scale(Double a);
@@ -109,10 +109,6 @@ public interface Vec{
     Double get(Integer i);
     
     Double dot(Vec v);
-    
-    Boolean equals(Vec v, Double eps);
-    
-    Boolean equals(Vec v, Integer ulp);
     
     default Vec sub(Vec v){
         if(getDimention() != v.getDimention())

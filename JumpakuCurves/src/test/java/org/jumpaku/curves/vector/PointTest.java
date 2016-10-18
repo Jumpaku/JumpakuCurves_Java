@@ -135,18 +135,29 @@ public class PointTest {
     }
     
     /**
-     * Test of differenceFrom method, of class Point.
+     * Test of from method, of class Point.
      */
     @Test
-    public void testDifferenceFrom() {
-        System.out.println("differenceFrom");
+    public void testFrom() {
+        System.out.println("from");
         Point p = Point.of(1.2, 3.4, 5.4, 6.5);
         Point instance = Point.of(1.0, 2.0, 3.0, 4.0);
         Vec expResult = Vec.of(-0.2, -1.4, -2.4, -2.5);
-        Vec result = instance.differenceFrom(p);
+        Vec result = instance.from(p);
         assertTrue(equalsVec(expResult, result));
     }
 
+    /** Test of from method, of class Point.
+     */
+    @Test
+    public void testTo() {
+        System.out.println("to");
+        Point p = Point.of(1.2, 3.4, 5.4, 6.5);
+        Point instance = Point.of(1.0, 2.0, 3.0, 4.0);
+        Vec expResult = Vec.of(0.2, 1.4, 2.4, 2.5);
+        Vec result = instance.to(p);
+        assertTrue(equalsVec(expResult, result));
+    }
     /**
      * Test of distance method, of class Point.
      */
@@ -170,35 +181,6 @@ public class PointTest {
         Point instance = Point.of(2.0, 2.0, 2.0);
         Double expResult = 12.0;
         Double result = instance.distanceSquare(p);
-        System.out.println(result);
         assertTrue(equalsDouble(expResult, result));
-    }
-
-    /**
-     * Test of equals method, of class Point.
-     */
-    @Test
-    public void testEquals_Point_Double() {
-        System.out.println("equals");
-        Point p = Point.of(0.12345678901, 3.4, 5.6, 0.98765432101);
-        Double eps = 1.0e-10;
-        Point instance = Point.of(0.123456789, 3.4, 5.6, 0.987654321);
-        Boolean expResult = true;
-        Boolean result = instance.equals(p, eps);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of equals method, of class Point.
-     */
-    @Test
-    public void testEquals_Point_Integer() {
-        System.out.println("equals");
-        Point p = Point.of(0.1234567890001, 3.4, 5.6, 987654321000.1);
-        Integer ulp = 8000;
-        Point instance = Point.of(0.123456789, 3.4, 5.6, 987654321000.0);
-        Boolean expResult = true;
-        Boolean result = instance.equals(p, ulp);
-        assertEquals(expResult, result);
     }
 }

@@ -113,26 +113,4 @@ public class Vec2 implements Vec{
     public Double getY() {
         return getVector2d().getY();
     }
-
-    @Override
-    public Boolean equals(Vec v, Double eps) {
-        if(v == null)
-            return false;
-        
-        if(2 != v.getDimention())
-            return false;
-        
-        return Precision.equals(getX(), v.get(0), eps) && Precision.equals(getY(), v.get(1), eps);
-    }
-
-    @Override
-    public Boolean equals(Vec v, Integer ulp) {
-        if(v == null)
-            return false;
-        
-        if(2 != v.getDimention())
-            return false;
-        
-        return Precision.equals(getX(), v.get(0), ulp) && Precision.equals(getY(), v.get(1), ulp);
-    }
 }

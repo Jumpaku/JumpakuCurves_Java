@@ -42,6 +42,15 @@ public interface Point {
                         (c, p) -> p.getVec().scale(c)))
                 .foldLeft(origin(d), (p, v) -> p.move(v));
     }
+
+    
+    public static Boolean equals(Point p1, Point p2, Double eps){
+        return Vec.equals(p1.getVec(), p2.getVec(), eps);
+    }
+    
+    public static Boolean equals(Point p1, Point p2, Integer ulp){
+        return Vec.equals(p1.getVec(), p2.getVec(), ulp);
+    }
     
     Vec getVec();
     
@@ -70,32 +79,31 @@ public interface Point {
         return getVec().get(i);
     }
 
-    default Vec differenceFrom(Point p){
+    default Vec from(Point p){
         if(!Objects.equals(getDimention(), p.getDimention()))
             throw new IllegalArgumentException("dimention miss match");
         
         return getVec().sub(p.getVec());
+    }
+
+    default Vec to(Point p){
+        if(!Objects.equals(getDimention(), p.getDimention()))
+            throw new IllegalArgumentException("dimention miss match");
+        
+        return p.getVec().sub(getVec());
     }
     
     default Double distance(Point p){
         if(!Objects.equals(getDimention(), p.getDimention()))
             throw new IllegalArgumentException("dimention miss match");
 
-        return differenceFrom(p).length();
+        return from(p).length();
     }
     
     default Double distanceSquare(Point p){
         if(!Objects.equals(getDimention(), p.getDimention()))
             throw new IllegalArgumentException("dimention miss match");
 
-        return differenceFrom(p).square();
-    }
-    
-    default Boolean equals(Point p, Double eps){
-        return getVec().equals(p.getVec(), eps);
-    }
-    
-    default Boolean equals(Point p, Integer ulp){
-        return getVec().equals(p.getVec(), ulp);
+        return from(p).square();
     }
 }

@@ -176,38 +176,6 @@ public class Vec2Test {
     }
 
     /**
-     * Test of equals method, of class Vec2.
-     */
-    @Test
-    public void testEquals_Vec_Double() {
-        System.out.println("equals");
-        Vec v = new Vec2(2.3, 111222333.000000100003);
-        Double eps = 1.0e-10;
-        Vec2 instance = new Vec2(2.3, 111222333.000000100004);
-        Boolean expResult = true;
-        Boolean result = instance.equals(v, eps);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of equals method, of class Vec2.
-     */
-    @Test
-    public void testEquals_Vec_Integer() {
-        System.out.println("equals");
-        Vec v = new Vec2(1000000.3, 1.2345678910e-12);
-        Integer ulp = 500000;
-        Vec2 instance = new Vec2(1000000.3, 1.2345678911e-12);
-        Boolean expResult = true;
-        Boolean result = instance.equals(v, ulp);
-        assertEquals(expResult, result);
-        ulp = 5000;
-        expResult = false;
-        result = instance.equals(v, ulp);
-        assertEquals(expResult, result);
-    }    
-
-    /**
      * Test of cross method, of class Vec2.
      */
     @Test

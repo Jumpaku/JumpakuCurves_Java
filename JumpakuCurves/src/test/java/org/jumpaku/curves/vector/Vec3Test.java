@@ -191,39 +191,6 @@ public class Vec3Test {
     }
     
     /**
-     * Test of equals method, of class Vec3.
-     */
-    @Test
-    public void testEquals_Vec_Double() {
-        System.out.println("equals");
-        Vec v = new Vec3(2.3, 0.0, 111222333.000000100003);
-        Double eps = 1.0e-10;
-        Vec3 instance = new Vec3(2.3, -0.0, 111222333.000000100004);
-        Boolean expResult = true;
-        Boolean result = instance.equals(v, eps);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of equals method, of class Vec3.
-     */
-    @Test
-    public void testEquals_Vec_Integer() {
-        System.out.println("equals");
-        Vec v = new Vec3(1000000.3, 403.2, 1.2345678910e-12);
-        Integer ulp = 500000;
-        Vec3 instance = new Vec3(1000000.3, 403.2, 1.2345678911e-12);
-        Boolean expResult = true;
-        Boolean result = instance.equals(v, ulp);
-        assertEquals(expResult, result);
-        
-        ulp = 5000;
-        expResult = false;
-        result = instance.equals(v, ulp);
-        assertEquals(expResult, result);
-    }    
-
-    /**
      * Test of cross method, of class Vec3.
      */
     @Test

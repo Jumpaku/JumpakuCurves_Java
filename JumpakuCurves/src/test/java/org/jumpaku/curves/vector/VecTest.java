@@ -131,34 +131,6 @@ public class VecTest {
     }
 
     /**
-     * Test of equals method, of class Vec.
-     */
-    @Test
-    public void testEquals_Vec_Double() {
-        System.out.println("equals");
-        Vec v = Vec.of(-0.0, 2.0, 1.000000000000001, 3.4);
-        Double eps = 1.0e-10;
-        Vec instance = Vec.of(0.0, 2.0, 1.0, 3.40000000001);
-        Boolean expResult = true;
-        Boolean result = instance.equals(v, eps);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of equals method, of class Vec.
-     */
-    @Test
-    public void testEquals_Vec_Integer() {
-        System.out.println("equals");
-        Vec v = Vec.of(-0.0, 2.0, 1.0000000001, 3.4);
-        Integer ulp = 450370;
-        Vec instance = Vec.of(0.0, 2.0, 1.0, 3.40000000001);
-        Boolean expResult = true;
-        Boolean result = instance.equals(v, ulp);
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test of sub method, of class Vec.
      */
     @Test
@@ -278,5 +250,39 @@ public class VecTest {
         Vec expResult = Vec.of(-0.1,-2.3,-4.5,-6.7);
         Vec result = instance.sub(a, v);
         assertTrue(checkEquals(expResult, result));
+    }
+
+    /**
+     * Test of equals method, of class Vec.
+     */
+    @Test
+    public void testEquals_3args_1() {
+        System.out.println("equals");
+        Vec v = Vec.of(1.0, 0.4, -5.3, -6.3);
+        Vec v1 = Vec.of(1.0, 0.4, -5.3, -6.3);
+        Vec v2 = Vec.of(4.6, 3.2, -0.8, 1.2);
+        Vec v3 = Vec.of(1.0, 0.4, -5.3, -6.3, 1.0);
+        
+        Double eps = 1.0e-10;
+        assertTrue(Vec.equals(v, v1, eps));
+        assertTrue(!Vec.equals(v, v2, eps));
+        assertTrue(!Vec.equals(v, v3, eps));
+    }
+
+    /**
+     * Test of equals method, of class Vec.
+     */
+    @Test
+    public void testEquals_3args_2() {
+        System.out.println("equals");
+        Vec v = Vec.of(1.0, 0.4, -5.3, -6.3);
+        Vec v1 = Vec.of(1.0, 0.4, -5.3, -6.3);
+        Vec v2 = Vec.of(4.6, 3.2, -0.8, 1.2);
+        Vec v3 = Vec.of(1.0, 0.4, -5.3, -6.3, 1.0);
+        
+        Integer ulp = 1;
+        assertTrue(Vec.equals(v, v1, ulp));
+        assertTrue(!Vec.equals(v, v2, ulp));
+        assertTrue(!Vec.equals(v, v3, ulp));
     }
 }

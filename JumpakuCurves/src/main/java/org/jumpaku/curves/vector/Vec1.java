@@ -97,26 +97,4 @@ public class Vec1 implements Vec{
     public Double getX() {
         return getVector1d().getX();
     }
-
-    @Override
-    public Boolean equals(Vec v, Double eps) {
-        if(v == null)
-            return false;
-        
-        if(1 != v.getDimention())
-            return false;
-        
-        return Precision.equals(getX(), v.get(0), eps);
-    }
-
-    @Override
-    public Boolean equals(Vec v, Integer ulp) {
-        if(v == null)
-            return false;
-        
-        if(1 != v.getDimention())
-            return false;
-        
-        return Precision.equals(getX(), v.get(0), ulp);
-    }
 }

@@ -29,8 +29,13 @@ public class Point2D implements Point{
     }
 
     @Override
-    public Vec2 differenceFrom(Point p) {
-        return new Vec2(Point.super.differenceFrom(p));
+    public Vec2 from(Point p) {
+        return new Vec2(Point.super.from(p));
+    }
+
+    @Override
+    public Vec2 to(Point p) {
+        return new Vec2(Point.super.to(p)); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
