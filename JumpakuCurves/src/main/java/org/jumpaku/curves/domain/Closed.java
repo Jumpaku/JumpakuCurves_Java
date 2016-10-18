@@ -26,7 +26,7 @@ public final class Closed extends Interval{
      * @return tが[from, to]に含まれる場合{@code true}, そうでない場合{@code false} {@code true} if t is in [from, to];otherwise {@code false}
      */
     @Override
-    public final Boolean isIn(Double t) {
+    public final Boolean contains(Double t) {
         return getFrom().compareTo(t) <= 0 && getTo().compareTo(t) >= 0;
     }
     

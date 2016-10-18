@@ -1,6 +1,7 @@
 
 package org.jumpaku.curves;
 
+import java.util.function.Function;
 import org.jumpaku.curves.domain.Domain;
 import org.jumpaku.curves.vector.Point;
 
@@ -12,16 +13,23 @@ import org.jumpaku.curves.vector.Point;
  * Represents mapping to plane or space from real number.</p>
  * <p>
  * 
- * @author jumpaku
- * @param <P>
+ * @author Jumpaku
  */
-public interface Curve <P extends Point>{
+public interface Curve extends Function<Double, Point>{
+
+    @Override
+    public default Point apply(Double t) {
+        return evaluate(t);
+    }
+    
+    
+    
     /**
      * <p>パラメータtに対応する評価点の位置ベクトルを返します Evaluates point corresponding t.</p>
      * @param t パラメータ parameter
      * @return 評価点 Evaluated point
      */
-    P evaluate(Double t);
+    Point evaluate(Double t);
     
     /**
      * <p>曲線が写像される平面や空間の次元を返します Returns dimention of this curve.</p>

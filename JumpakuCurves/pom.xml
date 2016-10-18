@@ -42,9 +42,9 @@
     <dependencies>
         <!-- http://mvnrepository.com/artifact/com.javaslang/javaslang -->
         <dependency>
-            <groupId>com.javaslang</groupId>
+            <groupId>io.javaslang</groupId>
             <artifactId>javaslang</artifactId>
-            <version>2.0.0-RC4</version>
+            <version>[2.0.2,)</version>
         </dependency>
         <!--Apache commons math-->
         <dependency>

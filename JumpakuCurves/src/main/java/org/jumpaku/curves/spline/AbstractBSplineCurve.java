@@ -84,7 +84,7 @@ public abstract class AbstractBSplineCurve implements BSplineCurve {
 
     @Override
     public final BSplineCurve insertKnot(Double u){
-        if(!getDomain().isIn(u))
+        if(!getDomain().contains(u))
             throw new IllegalArgumentException("New knot to add is out of domain.");
         
         final Array<Double> oknots = getKnots();

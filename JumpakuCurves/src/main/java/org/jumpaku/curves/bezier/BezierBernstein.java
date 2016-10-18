@@ -12,19 +12,19 @@ import org.jumpaku.curves.vector.Point;
  *
  * @author Jumpaku
  */
-public class BezierCurveBernstein extends AbstractBezierCurve {
+public class BezierBernstein extends AbstractBezier {
     
     private final Array<Double> combinations;
     
-    public BezierCurveBernstein(Array<Point> cp, Integer dimention) {
+    public BezierBernstein(Array<? extends Point> cp, Integer dimention) {
         super(cp, dimention);
         final Integer degree = cp.size() - 1;
-        combinations = BezierCurve.combinations(degree);
+        combinations = Bezier.combinations(degree);
     }
     
     @Override
     public final Point evaluate(Double t) {
-        if(!getDomain().isIn(t))
+        if(!getDomain().contains(t))
             throw new IllegalArgumentException("Parameter t out of domain [0,1]");
         
         Array<Point> cps = getControlPoints();
