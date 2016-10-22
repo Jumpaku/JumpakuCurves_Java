@@ -12,6 +12,7 @@ package org.jumpaku.fuzzy;
  * @param <T>
  */
 public interface Membership<U extends Membership<U, T>, T> {
+    
     Grade mu(T t);
     
     Grade possibility(U u);

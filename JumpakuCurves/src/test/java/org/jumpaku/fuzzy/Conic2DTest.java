@@ -57,14 +57,14 @@ public class Conic2DTest {
     }
 
     /**
-     * Test of getRadius method, of class Conic2D.
+     * Test of getFuzzyness method, of class Conic2D.
      */
     @Test
-    public void testGetRadius() {
+    public void testGetFuzzyness() {
         System.out.println("getRadius");
         Conic2D instance = new Conic2D(2.4, 4.6, 6.8);
         Double expResult = 6.8;
-        Double result = instance.getRadius();
+        Double result = instance.getFuzzyness();
         assertEquals(expResult, result);
     }
 

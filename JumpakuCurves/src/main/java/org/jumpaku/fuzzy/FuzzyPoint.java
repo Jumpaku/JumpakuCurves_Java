@@ -5,10 +5,13 @@
  */
 package org.jumpaku.fuzzy;
 
+import org.jumpaku.curves.vector.Point;
+
 /**
  *
  * @author Jumpaku
+ * @param <F>
  */
-public interface FuzzyPoint {
-    
+public interface FuzzyPoint<F> extends Point{
+    F getFuzzyness();
 }
