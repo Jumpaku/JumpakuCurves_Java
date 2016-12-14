@@ -16,7 +16,7 @@ import org.jumpaku.curves.vector.Vec;
  * 
  * @author Jumpaku
  */
-public interface SplineCurve extends Curve{
+public interface Spline extends Curve{
    
     /**
      * {@inheritDoc }

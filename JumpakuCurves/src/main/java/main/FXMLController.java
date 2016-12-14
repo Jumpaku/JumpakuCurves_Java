@@ -29,11 +29,11 @@ import org.jumpaku.curves.interpolation.Average;
 import org.jumpaku.curves.interpolation.BSplineInterpolater;
 import org.jumpaku.curves.interpolation.Data;
 import org.jumpaku.curves.interpolation.KnotGenerator;
-import org.jumpaku.curves.spline.SplineCurve;
-import org.jumpaku.curves.spline.BSplineCurve2D;
+import org.jumpaku.curves.spline.BSpline2D;
 import org.jumpaku.curves.vector.Point2D;
 import org.jumpaku.curves.vector.Vec2;
 import org.jumpaku.curves.bezier.RationalBezier;
+import org.jumpaku.curves.spline.Spline;
 
 public class FXMLController implements Initializable {
     
@@ -61,7 +61,7 @@ public class FXMLController implements Initializable {
         Stream.iterate(0.0, v -> v + Math.pow(2, -8)).takeWhile(v -> v <= 1.0)
                 .map(rbs._2())
                 .forEach(p -> canvas.getGraphicsContext2D().fillOval(p.get(0)-1, p.get(1)-1, 2, 2));
-        //curve = BSplineCurve2D.create(Array.rangeBy(0, controlPoints.size() + 3 + 1.0, 1.0), Array.ofAll(controlPoints), 3);
+        //curve = BSpline2D.create(Array.rangeBy(0, controlPoints.size() + 3 + 1.0, 1.0), Array.ofAll(controlPoints), 3);
         //curve = Bezier2D.create(Array.ofAll(controlPoints));
         //Array<Double> knots = Stream.rangeClosed(0, dataPoint.size() + 3).map(i -> Double.valueOf(i)).toArray();
         //Double d = (knots.get(knots.size()-4) - knots.get(3)) / (double)(dataPoint.size()-1);
@@ -129,8 +129,8 @@ public class FXMLController implements Initializable {
             //renderPoints(context, curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE);
             renderPolyline(context, curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE, false);
     
-            /*BSplineCurve2D compared = 
-                    BSplineCurve2D.create(curve.getKnots(), curve.getControlPoints(), curve.getDegree());
+            /*BSpline2D compared = 
+                    BSpline2D.create(curve.getKnots(), curve.getControlPoints(), curve.getDegree());
          
             renderCurve(context, compared, Color.RED);
             renderPoints(context, compared.getControlPoints().toJavaList(), Color.RED);

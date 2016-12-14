@@ -37,7 +37,7 @@ public abstract class AbstractRationalBezier implements RationalBezier{
     }
     
     protected final Array<? extends Point> getProducts(){
-        return getPairs().map(t -> t.transform((p, w) -> Point.of(p.getVec().scale(w))));
+        return getPairs().map(t -> t.apply((p, w) -> Point.of(p.getVec().scale(w))));
     }
     
     protected final Bezier getProductBezier(){

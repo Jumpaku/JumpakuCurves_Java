@@ -15,10 +15,10 @@ import org.jumpaku.curves.vector.Point;
  *
  * @author Jumpaku
  */
-public final class BSplineCurveDeBoor extends AbstractBSplineCurve {
+public final class BSplineDeBoor extends AbstractBSpline {
     
     private final Interval domain;
-    public BSplineCurveDeBoor(Array<Double> knots, Array<Point> controlPoints, Integer degree, Integer dimemtion) {
+    public BSplineDeBoor(Array<Double> knots, Array<Point> controlPoints, Integer degree, Integer dimemtion) {
         super(knots, controlPoints, degree, dimemtion);
         domain = new ClosedOpen(super.getDomain().getFrom(), super.getDomain().getTo());
     }

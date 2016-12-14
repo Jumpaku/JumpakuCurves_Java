@@ -13,9 +13,9 @@ import org.jumpaku.curves.vector.Point;
  *
  * @author Jumpaku
  */
-public final class BSplineCurveReduction extends AbstractBSplineCurve{
+public final class BSplineReduction extends AbstractBSpline{
 
-    public BSplineCurveReduction(Array<Double> knots, Array<Point> controlPoints, Integer degree, Integer dimention) {
+    public BSplineReduction(Array<Double> knots, Array<Point> controlPoints, Integer degree, Integer dimention) {
         super(knots, controlPoints, degree, dimention);
     }
     
@@ -24,8 +24,8 @@ public final class BSplineCurveReduction extends AbstractBSplineCurve{
         if(!getDomain().contains(t))
             throw new IllegalArgumentException("t is out of domain");
         
-        return Point.of(Stream.ofAll(getControlPoints()).zipWithIndex().map(cpi -> cpi.transform(
-                        (cp, i) -> cp.getVec().scale(BSplineCurve.bSplineBasis(getDegree(), i.intValue(), t, getKnots()))))
+        return Point.of(Stream.ofAll(getControlPoints())
+                .zipWithIndex((cp, i) -> cp.getVec().scale(BSpline.bSplineBasis(getDegree(), i, t, getKnots())))
                 .reduce((v1, v2) -> v1.add(v2)));
     }
 }

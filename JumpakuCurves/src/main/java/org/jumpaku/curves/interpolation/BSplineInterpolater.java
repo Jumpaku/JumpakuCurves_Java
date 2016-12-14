@@ -13,16 +13,16 @@ import javaslang.collection.Stream;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
-import org.jumpaku.curves.spline.BSplineCurve;
-import org.jumpaku.curves.spline.SplineCurve;
 import org.jumpaku.curves.vector.Point;
 import org.jumpaku.curves.vector.Vec;
+import org.jumpaku.curves.spline.Spline;
+import org.jumpaku.curves.spline.BSpline;
 
 /**
  *
  * @author Jumpaku
  */
-public class BSplineInterpolater implements Interpolater<SplineCurve> {
+public class BSplineInterpolater implements Interpolater<Spline> {
     
     public static class Builder{
         private final Integer degree;
@@ -95,12 +95,12 @@ public class BSplineInterpolater implements Interpolater<SplineCurve> {
     }
     
     @Override
-    public BSplineCurve interpolate() {
+    public BSpline interpolate() {
         
         RealMatrix m = new Array2DRowRealMatrix(data.size(), data.size());
         for(int i = 0; i < data.size(); ++i){
             for(int j = 0; j < data.size(); ++j){
-                m.setEntry(i, j, BSplineCurve.bSplineBasis(degree, j, data.get(i).getParam(), knots));
+                m.setEntry(i, j, BSpline.bSplineBasis(degree, j, data.get(i).getParam(), knots));
             }
         }
         m = MatrixUtils.inverse(m);
@@ -118,7 +118,7 @@ public class BSplineInterpolater implements Interpolater<SplineCurve> {
             cp.add(Point.of(Vec.of(Arrays.stream(tmp.getColumn(i)).boxed().toArray(Double[]::new))));
         }
         
-        return BSplineCurve.create(knots, Array.ofAll(cp), degree, dimention);
+        return BSpline.create(knots, Array.ofAll(cp), degree, dimention);
     }
     
 }

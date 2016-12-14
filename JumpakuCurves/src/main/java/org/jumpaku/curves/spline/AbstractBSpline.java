@@ -18,7 +18,7 @@ import org.jumpaku.curves.vector.Vec;
  *
  * @author Jumpaku
  */
-public abstract class AbstractBSplineCurve implements BSplineCurve {
+public abstract class AbstractBSpline implements BSpline {
         
     private final Interval domain;
     private final Array<Double> knots;
@@ -26,7 +26,7 @@ public abstract class AbstractBSplineCurve implements BSplineCurve {
     private final Integer degree;
     private final Integer dimention;
 
-    public AbstractBSplineCurve(Array<Double> knots, Array<Point> controlPoints, Integer degree, Integer dimention) {
+    public AbstractBSpline(Array<Double> knots, Array<Point> controlPoints, Integer degree, Integer dimention) {
         if(knots.exists(k -> k == null))
             throw new IllegalArgumentException("knots contain null");
         
@@ -83,7 +83,7 @@ public abstract class AbstractBSplineCurve implements BSplineCurve {
     }
 
     @Override
-    public final BSplineCurve insertKnot(Double u){
+    public final BSpline insertKnot(Double u){
         if(!getDomain().contains(u))
             throw new IllegalArgumentException("New knot to add is out of domain.");
         
@@ -101,8 +101,8 @@ public abstract class AbstractBSplineCurve implements BSplineCurve {
         Array<Point> ncps = Array.ofAll(ocps.subSequence(k, ocps.size()).prependAll(tmp).prependAll(ocps.subSequence(0, k-n + 1)));
         Array<Double> nknots = oknots.insert(k + 1, u);
         
-        final SplineCurve original = this;        
-        return new AbstractBSplineCurve(nknots, ncps, n, getDimention()) {
+        final Spline original = this;        
+        return new AbstractBSpline(nknots, ncps, n, getDimention()) {
             @Override
             public Point evaluate(Double t) {
                 return original.evaluate(t);
@@ -117,7 +117,7 @@ public abstract class AbstractBSplineCurve implements BSplineCurve {
         java.util.List<Vec> terms = new ArrayList<>(size);
         Integer p = getDegree() - 1;
         for(int i = 1; i <= size; ++i){
-            terms.add(cp.get(i).from(cp.get(i-1)).scale(BSplineCurve.bSplineBasis(p, i, t, getKnots())));
+            terms.add(cp.get(i).from(cp.get(i-1)).scale(BSpline.bSplineBasis(p, i, t, getKnots())));
         }
         
         return Stream.ofAll(terms).reduce((v1, v2) -> v1.add(v2));

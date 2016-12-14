@@ -15,19 +15,19 @@ import org.jumpaku.curves.vector.Vec3;
  *
  * @author Jumpaku
  */
-public class BSplineCurve3D implements BSplineCurve{
+public class BSpline3D implements BSpline{
 
-    BSplineCurve curve;
+    BSpline curve;
     
-    public static BSplineCurve3D create(Array<Double> knots, Array<Point3D> controlPoints, Integer degree){
-        return new BSplineCurve3D(new BSplineCurveDeBoor(knots, controlPoints.map(p->p), degree, 2));
+    public static BSpline3D create(Array<Double> knots, Array<Point3D> controlPoints, Integer degree){
+        return new BSpline3D(new BSplineDeBoor(knots, controlPoints.map(p->p), degree, 2));
     }
 
-    private BSplineCurve3D(BSplineCurveDeBoor curve) {
+    private BSpline3D(BSplineDeBoor curve) {
         this.curve = curve;
     }
 
-    private BSplineCurve3D(BSplineCurve curve) {
+    private BSpline3D(BSpline curve) {
         this.curve = curve;
     }
 
@@ -58,8 +58,8 @@ public class BSplineCurve3D implements BSplineCurve{
     }
 
     @Override
-    public BSplineCurve3D insertKnot(Double u) {
-        return new BSplineCurve3D(curve.insertKnot(u));
+    public BSpline3D insertKnot(Double u) {
+        return new BSpline3D(curve.insertKnot(u));
     }
 
     @Override

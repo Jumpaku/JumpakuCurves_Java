@@ -15,15 +15,15 @@ import org.jumpaku.curves.vector.Vec2;
  *
  * @author ito tomohiko
  */
-public class BSplineCurve2D implements BSplineCurve{
+public class BSpline2D implements BSpline{
 
-    BSplineCurve curve;
+    BSpline curve;
     
-    public static BSplineCurve2D create(Array<Double> knots, Array<Point2D> controlPoints, Integer degree){
-        return new BSplineCurve2D(new BSplineCurveDeBoor(knots, controlPoints.map(p2 -> p2), degree, 2));
+    public static BSpline2D create(Array<Double> knots, Array<Point2D> controlPoints, Integer degree){
+        return new BSpline2D(new BSplineDeBoor(knots, controlPoints.map(p2 -> p2), degree, 2));
     }
 
-    private BSplineCurve2D(BSplineCurve curve) {
+    private BSpline2D(BSpline curve) {
         this.curve = curve;
     }
 
@@ -54,8 +54,8 @@ public class BSplineCurve2D implements BSplineCurve{
     }
 
     @Override
-    public BSplineCurve2D insertKnot(Double u) {
-        return new BSplineCurve2D(curve.insertKnot(u));
+    public BSpline2D insertKnot(Double u) {
+        return new BSpline2D(curve.insertKnot(u));
     }
 
     @Override

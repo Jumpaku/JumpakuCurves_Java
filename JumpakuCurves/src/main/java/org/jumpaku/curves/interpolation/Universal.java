@@ -9,10 +9,10 @@ import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
-import org.jumpaku.curves.spline.BSplineCurve;
 import org.jumpaku.curves.utils.GoldenSectionSearch;
 import org.jumpaku.curves.vector.Point;
 import org.jumpaku.curves.vector.Vec;
+import org.jumpaku.curves.spline.BSpline;
 
 /**
  *
@@ -36,8 +36,7 @@ public class Universal implements Parameterizer{
                 .toArray();
         
         return points.zipWithIndex()
-                .map(pt -> pt.transform((p, i) -> new Data<>(p, GoldenSectionSearch.whereMaximum(
-                        t -> BSplineCurve.bSplineBasis(degree, i.intValue(), t, knots), 
+                .map(pt -> pt.transform((p, i) -> new Data<>(p, GoldenSectionSearch.whereMaximum(t -> BSpline.bSplineBasis(degree, i.intValue(), t, knots), 
                             knots.get(i.intValue()), knots.get(i.intValue() + degree + 1)))));
     }
     

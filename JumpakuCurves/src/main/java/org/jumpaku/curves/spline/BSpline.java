@@ -12,7 +12,7 @@ import org.jumpaku.curves.vector.Point;
  *
  * @author Jumpaku
  */
-public interface BSplineCurve extends SplineCurve{
+public interface BSpline extends Spline{
     
     /**
      * 
@@ -42,9 +42,9 @@ public interface BSplineCurve extends SplineCurve{
         return Double.isFinite((a-b)/(c-d)) ? (a-b)/(c-d) : 0.0;
     }
     
-    public static BSplineCurve create(Array<Double> knots, Array<Point> controlPoints, Integer degree, Integer dimention){
-        return new BSplineCurveDeBoor(knots, controlPoints, degree, dimention);
+    public static BSpline create(Array<Double> knots, Array<Point> controlPoints, Integer degree, Integer dimention){
+        return new BSplineDeBoor(knots, controlPoints, degree, dimention);
     }
     
-    BSplineCurve insertKnot(Double u);    
+    BSpline insertKnot(Double u);    
 }
