@@ -6,6 +6,8 @@
 package org.jumpaku.curves.spline;
 
 import javaslang.collection.Array;
+import javaslang.collection.Stream;
+import org.apache.commons.math3.util.FastMath;
 import org.jumpaku.curves.vector.Point;
 
 /**
@@ -38,12 +40,26 @@ public interface BSpline extends Spline{
         return left + right;
     }
     
-    static Double bSplineBasisHelper(Double a, Double b, Double c, Double d){
+    @Deprecated
+    public static Double bSplineBasisHelper(Double a, Double b, Double c, Double d){
         return Double.isFinite((a-b)/(c-d)) ? (a-b)/(c-d) : 0.0;
     }
     
     public static BSpline create(Array<Double> knots, Array<Point> controlPoints, Integer degree, Integer dimention){
         return new BSplineDeBoor(knots, controlPoints, degree, dimention);
+    }
+
+    /**
+     *
+     * @param degree the value of degree
+     * @param begin the value of begin
+     * @param end the value of end
+     * @param maxKnotInterval the value of maxKnotInterval
+     * @return 
+     */
+    public static Array<Double> createUniformedClampedKnots(Integer degree, Double begin, Double end, Double maxKnotInterval) {
+        long n = (long) (FastMath.ceil((end - begin) / maxKnotInterval));
+        return Stream.fill(degree, () -> begin).appendAll(Stream.rangeClosed(0, n).map((Long i) -> begin * (n - i) / n + end * i / n)).appendAll(Stream.fill(degree, () -> end)).toArray();
     }
     
     BSpline insertKnot(Double u);    

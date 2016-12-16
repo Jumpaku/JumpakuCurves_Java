@@ -5,7 +5,7 @@
  */
 package org.jumpaku.curves.fitting;
 
-import org.jumpaku.curves.fitting.TimeSeriesData;
+import org.jumpaku.curves.TimeSeriesData;
 import org.apache.commons.math3.util.Precision;
 import org.jumpaku.curves.vector.Point;
 import org.jumpaku.curves.vector.Point3D;

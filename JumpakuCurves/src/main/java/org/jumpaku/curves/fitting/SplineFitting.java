@@ -5,17 +5,17 @@
  */
 package org.jumpaku.curves.fitting;
 
-import java.util.stream.DoubleStream;
+import java.util.Comparator;
+import org.jumpaku.curves.TimeSeriesData;
 import javaslang.collection.Array;
-import javaslang.collection.List;
 import javaslang.collection.Stream;
+import org.apache.commons.math3.linear.DiagonalMatrix;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.util.FastMath;
 import org.jumpaku.curves.spline.BSpline;
 import org.jumpaku.curves.vector.Point;
-import org.jumpaku.curves.spline.Spline;
 import org.jumpaku.curves.vector.Vec;
 
 /**
@@ -29,59 +29,56 @@ public class SplineFitting<P extends Point> {
     private final Integer degree;
 
     public SplineFitting(Double maxKnotInterval, Integer degree, Array<TimeSeriesData<P>> data) {
-        this.knots = createKnots(degree, data.head().getTime(), data.last().getTime(), maxKnotInterval);
+        this.knots = BSpline.createUniformedClampedKnots(degree, data.head().getTime(), data.last().getTime(), maxKnotInterval);
         this.degree = degree;
         this.data = data;
     }
     
-    public static Array<Double> createKnots(Integer degree, Double begin, Double end, Double maxKnotInterval){
-        long n = (long)(FastMath.ceil(end - begin/maxKnotInterval));
-        return Stream.fill(degree, () -> begin)
-                .appendAll(Stream.rangeClosed(0, n)
-                        .map(i -> begin*(n - i)/n + end*i/n))
-                .appendAll(Stream.fill(degree, () -> end))
-                .toArray();
+    public BSpline fit(Integer degree, Array<Double> knots, Array<TimeSeriesData<P>> data){
+        return BSpline.create(knots, coreateControlPoints(degree, knots, data), degree, data.get().getData().getDimention());
     }
-    
-    public static <P extends Point> Array<Point> coreateControlPoints(final Integer degree, Double maxKnotInterval, Array<TimeSeriesData<P>> data){
-        final Double tHead = data.head().getTime();
-        final Double tLast = data.last().getTime();
-        final Point pHead = data.head().getData();
-        final Point pLast = data.last().getData();
-        final Array<Double> knots = createKnots(degree, tHead, tLast, maxKnotInterval);
+    private static <P extends Point> Array<Point> coreateControlPoints(Integer degree, Array<Double> knots, Array<TimeSeriesData<P>> data){
         final int dataSize = data.size();
         final int knotsSize = knots.size();
         final int cpSize = knotsSize - degree - 1;
-        final int dimention = pHead.getDimention();
+        final int dimention = data.head().getData().getDimention();
         
-        final double[][] dArray = new double[dataSize - 2][dimention];
-        for(int i = 1; i <= dataSize - 1; ++i){
-            double ti = data.get(i).getTime();
-            Vec qi = data.get(i).getData().getVec()
-                    .sub(pHead.getVec().scale(BSpline.bSplineBasis(degree, 1, ti, knots)))
-                    .sub(pLast.getVec().scale(BSpline.bSplineBasis(degree, cpSize - 1, ti, knots)));
+        final double[][] dArray = new double[dataSize][dimention];
+        for(int i = 0; i < dataSize; ++i){
             for (int j = 0; j < dimention; j++) {
-                dArray[i-1][j] = qi.get(j);
+                dArray[i][j] = data.get(i).getData().get(j);
             }
+        }
+        final double[][] nArray = new double[dataSize][cpSize];
+        for (int i = 0; i < dataSize; i++) {
+            for (int j = 0; j < cpSize; j++) {
+                nArray[i][j] = BSpline.bSplineBasis(degree, j, data.get(i).getTime(), knots);
+            }
+        }
+        final double[] wArray = new double[dataSize];
+        for (int i = 0; i < dataSize; i++) {
+            wArray[i] = data.get(i).getWeight();
+            
         }
         
-        final double[][] nArray = new double[dataSize - 2][cpSize - 2];
-        for (int i = 1; i <= dataSize - 1; i++) {
-            double ti = data.get(i).getTime();
-            for (int j = 1; j < cpSize - 1; j++) {
-                nArray[i-1][j-1] = BSpline.bSplineBasis(degree, j, ti, knots);
-            }
-        }
-
+        final RealMatrix w = new DiagonalMatrix(wArray); // W
         final RealMatrix d = MatrixUtils.createRealMatrix(dArray); // D
-        final RealMatrix n = MatrixUtils.createRealMatrix(nArray); // N  
-        RealMatrix cp = new LUDecomposition(n.transpose().multiply(n).multiply(d)).getSolver()
-                .solve(n.transpose().multiply(d));
+        final RealMatrix n = MatrixUtils.createRealMatrix(nArray); // N
+        final RealMatrix a = n.transpose().multiply(w).multiply(n); // A = N^T W N
+        final RealMatrix y = n.transpose().multiply(w).multiply(d); // y = N^T W D
+        RealMatrix x =  new LUDecomposition(a).getSolver().solve(y); // x = A^-1 y
         
-        return Stream.of(pHead)
-                .appendAll(Stream.of(cp.getData())
-                        .map(ds -> Point.of(Stream.ofAll(ds).toJavaArray(Double.class))))
-                .append(pLast)
+        return Stream.of(x.getData())
+                .map(ds -> Point.of(Stream.ofAll(ds).toJavaArray(Double.class)))
                 .toArray();
+    }
+    
+    private static <P extends Point> Array<Point> coreateControlPoints(final Integer degree, Double maxKnotInterval, Array<TimeSeriesData<P>> data){
+        data = data.sorted(Comparator.comparing(TimeSeriesData::getTime));
+        final Double begin = data.head().getTime();
+        final Double end = data.last().getTime();
+        final Array<Double> knots = BSpline.createUniformedClampedKnots(degree, begin, end, maxKnotInterval);
+        
+        return coreateControlPoints(degree, knots, data);
     }
 }
