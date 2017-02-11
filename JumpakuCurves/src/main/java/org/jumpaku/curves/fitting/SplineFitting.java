@@ -73,8 +73,8 @@ public class SplineFitting<P extends Point> {
                 .toArray();
     }
     
-    private static <P extends Point> Array<Point> coreateControlPoints(final Integer degree, Double maxKnotInterval, Array<TimeSeriesData<P>> data){
-        data = data.sorted(Comparator.comparing(TimeSeriesData::getTime));
+    public static <P extends Point> Array<Point> coreateControlPoints(final Integer degree, Double maxKnotInterval, Array<TimeSeriesData<P>> data){
+        //data = data.sorted(Comparator.comparing(TimeSeriesData::getTime));
         final Double begin = data.head().getTime();
         final Double end = data.last().getTime();
         final Array<Double> knots = BSpline.createUniformedClampedKnots(degree, begin, end, maxKnotInterval);
