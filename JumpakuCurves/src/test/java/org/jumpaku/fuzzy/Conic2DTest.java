@@ -5,8 +5,10 @@
  */
 package org.jumpaku.fuzzy;
 
-import org.jumpaku.curves.vector.Point2D;
-import org.jumpaku.curves.vector.Vec2;
+import org.jumpaku.old.fuzzy.Conic2D;
+import org.jumpaku.old.fuzzy.Grade;
+import org.jumpaku.old.curves.vector.Point2D;
+import org.jumpaku.old.curves.vector.Vec2;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

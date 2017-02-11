@@ -6,10 +6,10 @@
 package org.jumpaku.curves.test;
 
 import org.apache.commons.math3.util.Precision;
-import org.jumpaku.curves.vector.Vec;
-import org.jumpaku.curves.vector.Vec1;
-import org.jumpaku.curves.vector.Vec2;
-import org.jumpaku.curves.vector.Vec3;
+import org.jumpaku.old.curves.vector.Vec;
+import org.jumpaku.old.curves.vector.Vec1;
+import org.jumpaku.old.curves.vector.Vec2;
+import org.jumpaku.old.curves.vector.Vec3;
 
 /**
  *

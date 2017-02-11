@@ -5,6 +5,10 @@
  */
 package org.jumpaku.curves.vector;
 
+import org.jumpaku.old.curves.vector.Point3D;
+import org.jumpaku.old.curves.vector.Vec;
+import org.jumpaku.old.curves.vector.Vec3;
+import org.jumpaku.old.curves.vector.Point;
 import java.util.Arrays;
 import static org.jumpaku.curves.test.TestUtils.*;
 import org.junit.Test;

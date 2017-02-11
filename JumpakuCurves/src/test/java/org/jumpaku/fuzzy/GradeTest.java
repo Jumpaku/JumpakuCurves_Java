@@ -5,6 +5,7 @@
  */
 package org.jumpaku.fuzzy;
 
+import org.jumpaku.old.fuzzy.Grade;
 import java.util.Objects;
 import org.junit.Test;
 import static org.junit.Assert.*;

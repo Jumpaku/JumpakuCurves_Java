@@ -5,10 +5,10 @@
  */
 package org.jumpaku.curves.fitting;
 
-import org.jumpaku.curves.TimeSeriesData;
+import org.jumpaku.old.curves.TimeSeriesData;
 import org.apache.commons.math3.util.Precision;
-import org.jumpaku.curves.vector.Point;
-import org.jumpaku.curves.vector.Point3D;
+import org.jumpaku.old.curves.vector.Point;
+import org.jumpaku.old.curves.vector.Point3D;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -11,7 +11,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
-import org.jumpaku.curves.TimeSeriesData;
+import org.jumpaku.old.curves.TimeSeriesData;
 
 /** Model の機能を定義します. */
 /*package private*/ interface CurveInputModel {
