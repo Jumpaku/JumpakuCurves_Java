@@ -5,12 +5,21 @@
  */
 package org.jumpaku.affine;
 
+import javaslang.collection.Array;
+import org.apache.commons.math3.util.Precision;
+
 /**
  *
  * @author Jumaku
  */
 public interface Point {
-    
+
+    static Boolean equals(Point a, Point b, Double eps){
+        return Precision.equals(a.getX(), b.getX(), eps) &&
+                Precision.equals(a.getY(), b.getZ(), eps) &&
+                Precision.equals(a.getZ(), b.getZ(), eps);
+    }
+
     static Point of(Vector v){
         return () -> v;
     }    
@@ -25,10 +34,6 @@ public interface Point {
     
     static Point oned(Double x){
         return twod(x, 0.0);
-    }
-
-    static Point origin(){
-        return oned(0.0);
     }
     
     Vector getVector();
@@ -64,6 +69,10 @@ public interface Point {
     
     default Double distanceSquare(Point p){
         return difference(p).square();
+    }
+    
+    default Point transform(Affine a){
+        return a.apply(this);
     }
     
     /**

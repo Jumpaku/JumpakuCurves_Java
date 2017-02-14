@@ -6,8 +6,8 @@
 package org.jumpaku.affine;
 
 import java.util.function.UnaryOperator;
+import javaslang.Tuple2;
 import javaslang.Tuple4;
-import javaslang.collection.Array;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.util.FastMath;
@@ -78,10 +78,26 @@ public interface Affine extends UnaryOperator<Point>{
         return IDENTITY;
     }
     
-    static Affine changeBasis(Tuple4<Point, Point, Point, Point> befor, Tuple4<Point, Point, Point, Point> after){
-        RealMatrix a = MatrixUtils.createRealMatrix(new double[][]{{},{},{},{}});
-        RealMatrix b = MatrixUtils.createRealMatrix(new double[][]{{},{},{},{}});
-        return of(MatrixUtils.inverse(a).multiply(b));
+    static Affine similarity(Tuple2<Point, Point> ab, Tuple2<Point, Point> cd){
+        Vector a = ab._2().difference(ab._1());
+        Vector b = cd._2().difference(cd._1());
+        Vector ac = cd._1().difference(ab._1());
+        return identity().rotateAt(ab._1(), a, b).translate(ac);
+    }
+    
+    static Affine cariblate(Tuple4<Point, Point, Point, Point> befor, Tuple4<Point, Point, Point, Point> after){
+        RealMatrix a = MatrixUtils.createRealMatrix(new double[][]{
+            {befor._1().getX(), befor._1().getY(), befor._1().getZ(), 1},
+            {befor._2().getX(), befor._2().getY(), befor._2().getZ(), 1},
+            {befor._3().getX(), befor._3().getY(), befor._3().getZ(), 1},
+            {befor._4().getX(), befor._4().getY(), befor._4().getZ(), 1}}).transpose();
+        RealMatrix b = MatrixUtils.createRealMatrix(new double[][]{
+            {after._1().getX(), after._1().getY(), after._1().getZ(), 1},
+            {after._2().getX(), after._2().getY(), after._2().getZ(), 1},
+            {after._3().getX(), after._3().getY(), after._3().getZ(), 1},
+            {after._4().getX(), after._4().getY(), after._4().getZ(), 1}}).transpose();
+        
+        return of(b.multiply(MatrixUtils.inverse(a)));
     }
     
     static Affine transformationAt(Point p, Affine a){

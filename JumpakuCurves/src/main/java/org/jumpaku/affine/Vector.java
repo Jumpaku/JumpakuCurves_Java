@@ -5,14 +5,22 @@
  */
 package org.jumpaku.affine;
 
+import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.util.FastMath;
+import org.apache.commons.math3.util.Precision;
 
 /**
  *
  * @author Jumpaku
  */
 public interface Vector {
+    
+    static Boolean equals(Vector a, Vector b, Double eps){
+        return Precision.equals(a.getX(), b.getX(), eps) &&
+                Precision.equals(a.getY(), b.getY(), eps) &&
+                Precision.equals(a.getZ(), b.getZ(), eps);
+    }
     
     static Vector of(Vector3D v){
         return new Vector() {
@@ -55,6 +63,12 @@ public interface Vector {
     
     static Vector oned(Double x){
         return twod(x, 0.0);
+    }
+    
+    static final Vector ZERO = of(0.0, 0.0, 0.0);
+    
+    static Vector zero(){
+        return ZERO;
     }
     
     Vector add(Vector v);
