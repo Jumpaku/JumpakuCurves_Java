@@ -88,21 +88,21 @@ public class VectorTest {
     }
 
     /**
-     * Test of twod method, of class Vector.
+     * Test of of method, of class Vector.
      */
     @Test
-    public void testTwod() {
-        System.out.println("twod");
-        assertTrue(Vector.equals(Vector.of(-0.4345, 120095.13531, 0.0), Vector.twod(-0.4345, 120095.13531), 1.0e-10));
+    public void testOf_2args() {
+        System.out.println("of");
+        assertTrue(Vector.equals(Vector.of(-0.4345, 120095.13531, 0.0), Vector.of(-0.4345, 120095.13531), 1.0e-10));
     }
 
     /**
-     * Test of oned method, of class Vector.
+     * Test of of method, of class Vector.
      */
     @Test
-    public void testOned() {
-        System.out.println("oned");
-        assertTrue(Vector.equals(Vector.of(-0.4345, 0.0, 0.0), Vector.oned(-0.4345), 1.0e-10));
+    public void testOf() {
+        System.out.println("of");
+        assertTrue(Vector.equals(Vector.of(-0.4345, 0.0, 0.0), Vector.of(-0.4345), 1.0e-10));
 
     }
 
@@ -247,6 +247,15 @@ public class VectorTest {
         assertTrue(Vector.equals(Vector.of(-1.0/3.0, 2.0/3.0, -2.0/3.0), Vector.of(-1.0, 2.0, -2.0).normalize(), 1.0e-10));
     }
 
+    /**
+     * Test of normalize method, of class Vector.
+     */
+    @Test
+    public void testResize() {
+        System.out.println("resize");
+        assertTrue(Vector.equals(Vector.of(-2.0/3.0, 4.0/3.0, -4.0/3.0), Vector.of(-1.0, 2.0, -2.0).resize(2.0), 1.0e-10));
+    }
+    
     /**
      * Test of cross method, of class Vector.
      */

@@ -18,6 +18,30 @@ import org.apache.commons.math3.util.FastMath;
  */
 public interface Affine extends UnaryOperator<Point>{
 
+    public static class Matrix implements Affine{
+
+        private final RealMatrix matrix;
+
+        public Matrix(RealMatrix matrix) {
+            this.matrix = matrix;
+        }
+        
+        @Override public Point apply(Point p) {
+            double[] array = matrix.operate(new double[]{p.getX(), p.getY(), p.getZ(), 1.0});
+            return Point.of(array[0], array[1], array[2]);
+        }
+
+        @Override public Affine invert() {
+            return new Matrix(MatrixUtils.inverse(matrix));
+        }
+
+        @Override
+        public Affine concatenate(Affine a) {
+            return a instanceof Matrix ?
+                    new Matrix(((Matrix)a).matrix.multiply(matrix)) : Affine.super.concatenate(a);
+        }
+    }
+    
     static Affine translation(Vector v){
         return of(MatrixUtils.createRealMatrix(new double[][]{
             { 1, 0, 0, v.getX() },
@@ -47,41 +71,19 @@ public interface Affine extends UnaryOperator<Point>{
     }
     
     static Affine of(RealMatrix m){
-        return new Affine() {
-            @Override public Point apply(Point p) {
-                double[] array = m.operate(new double[]{p.getX(), p.getY(), p.getZ(), 1.0});
-                return Point.of(array[0], array[1], array[2]);
-            }
-
-            @Override public Affine invert() {
-                return of(MatrixUtils.inverse(m));
-            }
-        };
+        return new Matrix(m);
     }
     
-    static Affine IDENTITY = new Affine() {
-        @Override public Point apply(Point p) {
-            return p;
-        }
-
-        @Override public Affine invert() {
-            return this;
-        }
-
-        @Override
-        public Affine concatenate(Affine a) {
-            return a;
-        }
-    };
+    static Affine IDENTITY = of(MatrixUtils.createRealIdentityMatrix(4));
     
     static Affine identity(){
         return IDENTITY;
     }
     
     static Affine similarity(Tuple2<Point, Point> ab, Tuple2<Point, Point> cd){
-        Vector a = ab._2().difference(ab._1());
-        Vector b = cd._2().difference(cd._1());
-        Vector ac = cd._1().difference(ab._1());
+        Vector a = ab._2().diff(ab._1());
+        Vector b = cd._2().diff(cd._1());
+        Vector ac = cd._1().diff(ab._1());
         return identity().rotateAt(ab._1(), a, b).translate(ac);
     }
     
@@ -129,7 +131,7 @@ public interface Affine extends UnaryOperator<Point>{
     }
 
     default Affine rotate(Point axisInitial, Point axisTerminal, Double radian){
-        return rotate(axisTerminal.difference(axisInitial), radian);
+        return rotate(axisTerminal.diff(axisInitial), radian);
     }
  
     default Affine rotateAt(Point center, Vector axis, Double radian){
@@ -164,6 +166,12 @@ public interface Affine extends UnaryOperator<Point>{
     
     Affine invert();
     
+    /**
+     * transforms a point p to b(a(p))
+     * @param a
+     * @param b
+     * @return 
+     */
     static Affine concatnate(Affine a, Affine b){
         return new Affine() {
             @Override public Point apply(Point p) {
@@ -180,6 +188,11 @@ public interface Affine extends UnaryOperator<Point>{
         };
     }
     
+    /**
+     * transforms a point p to a(this(p))
+     * @param a
+     * @return 
+     */
     default Affine concatenate(Affine a){
         return concatnate(this, a);
     }

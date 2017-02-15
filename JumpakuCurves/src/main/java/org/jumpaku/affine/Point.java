@@ -5,9 +5,6 @@
  */
 package org.jumpaku.affine;
 
-import javaslang.collection.Array;
-import org.apache.commons.math3.util.Precision;
-
 /**
  *
  * @author Jumaku
@@ -15,9 +12,7 @@ import org.apache.commons.math3.util.Precision;
 public interface Point {
 
     static Boolean equals(Point a, Point b, Double eps){
-        return Precision.equals(a.getX(), b.getX(), eps) &&
-                Precision.equals(a.getY(), b.getZ(), eps) &&
-                Precision.equals(a.getZ(), b.getZ(), eps);
+        return Vector.equals(a.getVector(), b.getVector(), eps);
     }
 
     static Point of(Vector v){
@@ -25,21 +20,21 @@ public interface Point {
     }    
     
     static Point of(Double x, Double y, Double z){
-        return of(Vector.of(x, y, z));
+        return Point.of(Vector.of(x, y, z));
     }
     
-    static Point twod(Double x, Double y){
-        return of(x, y, 0.0);
+    static Point of(Double x, Double y){
+        return Point.of(x, y, 0.0);
     }
     
-    static Point oned(Double x){
-        return twod(x, 0.0);
+    static Point of(Double x){
+        return Point.of(x, 0.0);
     }
     
     Vector getVector();
     
     default Point translate(Vector v){
-        return of(getVector().add(v));
+        return Point.of(getVector().add(v));
     }
     
     default Double getX(){
@@ -59,37 +54,56 @@ public interface Point {
      * @param p
      * @return this - p
      */
-    default Vector difference(Point p){
+    default Vector diff(Point p){
         return getVector().sub(p.getVector());
     }
     
-    default Double distance(Point p){
-        return difference(p).length();
+    default Double dist(Point p){
+        return diff(p).length();
     }
     
-    default Double distanceSquare(Point p){
-        return difference(p).square();
-    }
-    
-    default Point transform(Affine a){
-        return a.apply(this);
+    default Double distSquare(Point p){
+        return diff(p).square();
     }
     
     /**
      * 
+     * @param t
      * @param p
-     * @param r
-     * @return (1-r)*this + r*p 
+     * @return this+t*(p-this) = (1-t)*this + t*p 
      */
-    default Point divide(Point p, Double r) {
-        return of(Vector .add(1-r, getVector(), r, p.getVector()));
+    default Point divide(Double t, Point p) {
+        return Point.of(Vector .add(1-t, getVector(), t, p.getVector()));
     }
     
+    /**
+     * 
+     * @param p1
+     * @param p2
+     * @return area of a triangle (this, p1, p2) 
+     */
     default Double area(Point p1, Point p2){
-        return difference(p1).cross(difference(p2)).length()/2.0;
+        return diff(p1).cross(diff(p2)).length()/2.0;
     }
-        
+    
+    /**
+     * 
+     * @param p1
+     * @param p2
+     * @param p3
+     * @return volume of a Tetrahedron (this, p1, p2, p3)
+     */
+    default Double volume(Point p1, Point p2, Point p3){
+        return diff(p1).cross(diff(p2)).dot(diff(p3))/6.0;
+    }
+    
+    /**
+     * 
+     * @param p1
+     * @param p2
+     * @return (p1-this)x(p2-this)/|(p1-this)x(p2-this)|
+     */
     default Vector normal(Point p1, Point p2){
-        return p1.difference(this).cross(p2.difference(this)).normalize();
+        return p1.diff(this).cross(p2.diff(this)).normalize();
     }
 }

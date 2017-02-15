@@ -5,7 +5,6 @@
  */
 package org.jumpaku.affine;
 
-import javaslang.collection.Array;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.Precision;
@@ -26,12 +25,12 @@ public interface Vector {
         return new Vector() {
             @Override
             public Vector add(Vector other) {
-                return of(v.add(new Vector3D(other.getX(), other.getY(), other.getZ())));
+                return Vector.of(v.add(new Vector3D(other.getX(), other.getY(), other.getZ())));
             }
 
             @Override
             public Vector scale(Double s) {
-                return of(v.scalarMultiply(s));
+                return Vector.of(v.scalarMultiply(s));
             }
 
             @Override
@@ -57,12 +56,12 @@ public interface Vector {
         return of(new Vector3D(x, y, z));
     }
     
-    static Vector twod(Double x, Double y){
+    static Vector of(Double x, Double y){
         return of(x, y, 0.0);
     }
     
-    static Vector oned(Double x){
-        return twod(x, 0.0);
+    static Vector of(Double x){
+        return of(x, 0.0);
     }
     
     static final Vector ZERO = of(0.0, 0.0, 0.0);
@@ -113,6 +112,10 @@ public interface Vector {
     
     default Vector normalize(){
         return scale(1.0/length());
+    }
+    
+    default Vector resize(Double l){
+        return scale(l/length());
     }
     
     default Vector cross(Vector v){
