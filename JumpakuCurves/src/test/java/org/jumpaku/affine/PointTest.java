@@ -5,13 +5,12 @@
  */
 package org.jumpaku.affine;
 
-import org.apache.commons.math3.util.Precision;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
 public class PointTest {
     
@@ -35,9 +34,9 @@ public class PointTest {
     public void testOf_Vector() {
         System.out.println("of");
         Point p = Point.of(Vector.of(1.0004,2.0,-0.00512));
-        assertTrue(Precision.equals(1.0004, p.getX(), 1.0e-10));
-        assertTrue(Precision.equals(2.0, p.getY(), 1.0e-10));
-        assertTrue(Precision.equals(-0.00512, p.getZ(), 1.0e-10));
+        assertEquals(1.0004, p.getX(), 1.0e-10);
+        assertEquals(2.0, p.getY(), 1.0e-10);
+        assertEquals(-0.00512, p.getZ(), 1.0e-10);
     }
 
     /**
@@ -47,9 +46,9 @@ public class PointTest {
     public void testOf_3args() {
         System.out.println("of");
         Point p = Point.of(1.0004,2.0,-0.00512);
-        assertTrue(Precision.equals(1.0004, p.getX(), 1.0e-10));
-        assertTrue(Precision.equals(2.0, p.getY(), 1.0e-10));
-        assertTrue(Precision.equals(-0.00512, p.getZ(), 1.0e-10));
+        assertEquals(1.0004, p.getX(), 1.0e-10);
+        assertEquals(2.0, p.getY(), 1.0e-10);
+        assertEquals(-0.00512, p.getZ(), 1.0e-10);
     }
 
     /**
@@ -59,9 +58,9 @@ public class PointTest {
     public void testOf_Double_Double() {
         System.out.println("of");
         Point p = Point.of(1.0004,2.0);
-        assertTrue(Precision.equals(1.0004, p.getX(), 1.0e-10));
-        assertTrue(Precision.equals(2.0, p.getY(), 1.0e-10));
-        assertTrue(Precision.equals(0.0, p.getZ(), 1.0e-10));
+        assertEquals(1.0004, p.getX(), 1.0e-10);
+        assertEquals(2.0, p.getY(), 1.0e-10);
+        assertEquals(0.0, p.getZ(), 1.0e-10);
     }
 
     /**
@@ -71,9 +70,9 @@ public class PointTest {
     public void testOf_Double() {
         System.out.println("of");
         Point p = Point.of(1.0004);
-        assertTrue(Precision.equals(1.0004, p.getX(), 1.0e-10));
-        assertTrue(Precision.equals(0.0, p.getY(), 1.0e-10));
-        assertTrue(Precision.equals(0.0, p.getZ(), 1.0e-10));
+        assertEquals(1.0004, p.getX(), 1.0e-10);
+        assertEquals(0.0, p.getY(), 1.0e-10);
+        assertEquals(0.0, p.getZ(), 1.0e-10);
     }
 
     /**
@@ -102,7 +101,7 @@ public class PointTest {
     public void testGetX() {
         System.out.println("getX");
         Point p = Point.of(1.0004,2.0,-0.00512);
-        assertTrue(Precision.equals(1.0004, p.getX(), 1.0e-10));
+        assertEquals(1.0004, p.getX(), 1.0e-10);
     }
 
     /**
@@ -112,7 +111,7 @@ public class PointTest {
     public void testGetY() {
         System.out.println("getY");
         Point p = Point.of(1.0004,2.0,-0.00512);
-        assertTrue(Precision.equals(2.0, p.getY(), 1.0e-10));
+        assertEquals(2.0, p.getY(), 1.0e-10);
     }
 
     /**
@@ -122,7 +121,7 @@ public class PointTest {
     public void testGetZ() {
         System.out.println("getZ");
         Point p = Point.of(1.0004,2.0,-0.00512);
-        assertTrue(Precision.equals(-0.00512, p.getZ(), 1.0e-10));
+        assertEquals(-0.00512, p.getZ(), 1.0e-10);
     }
 
     /**
@@ -140,7 +139,7 @@ public class PointTest {
     @Test
     public void testDist() {
         System.out.println("dist");
-        assertTrue(Precision.equals(3.0, Point.of(1.0, -2.0, 2.0).dist(Point.of(2.0, -4.0, 0.0)), 1.0e-10));
+        assertEquals(3.0, Point.of(1.0, -2.0, 2.0).dist(Point.of(2.0, -4.0, 0.0)), 1.0e-10);
     }
 
     /**
@@ -149,7 +148,7 @@ public class PointTest {
     @Test
     public void testDistSquare() {
         System.out.println("distSquare");
-        assertTrue(Precision.equals(9.0, Point.of(1.0, -2.0, 2.0).distSquare(Point.of(2.0, -4.0, 0.0)), 1.0e-10));
+        assertEquals(9.0, Point.of(1.0, -2.0, 2.0).distSquare(Point.of(2.0, -4.0, 0.0)), 1.0e-10);
     }
 
     /**
@@ -167,7 +166,7 @@ public class PointTest {
     @Test
     public void testArea() {
         System.out.println("area");
-        assertTrue(Precision.equals(7.5, Point.of(1.0, 1.0, -1.0).area(Point.of(-3.0, 1.0, 2.0), Point.of(1.0, 4.0, -1.0)), 1.0e-10));
+        assertEquals(7.5, Point.of(1.0, 1.0, -1.0).area(Point.of(-3.0, 1.0, 2.0), Point.of(1.0, 4.0, -1.0)), 1.0e-10);
     }
 
     /**
@@ -176,7 +175,7 @@ public class PointTest {
     @Test
     public void testVolume() {
         System.out.println("area");
-        assertTrue(Precision.equals(1.0/3.0, Point.of(0.0, 0.0, 0.0).volume(Point.of(1.0, 1.0, 0.0), Point.of(-1.0, 1.0, 0.0), Point.of(1.0, 1.0, -1.0)), 1.0e-10));
+        assertEquals(1.0/3.0, Point.of(0.0, 0.0, 0.0).volume(Point.of(1.0, 1.0, 0.0), Point.of(-1.0, 1.0, 0.0), Point.of(1.0, 1.0, -1.0)), 1.0e-10);
     }
 
     /**
@@ -186,5 +185,23 @@ public class PointTest {
     public void testNormal() {
         System.out.println("normal");
         assertTrue(Vector.equals(Vector.of(0.0,1.0,0.0), Point.of(1.0, 1.0, 0.0).normal(Point.of(-1.0, 1.0, 0.0), Point.of(0.0, 1.0, 1.0)), 1.0e-10));
-    }    
+    }
+    
+    @Test
+    public void testTransform(){
+        System.out.println("transform");
+        assertTrue(Point.equals(Point.of(1.0, 3.0, -0.5), Point.of(3.3, -2.4, -1.0).transform(
+                Affine.translation(Vector.of(-2.3, 5.4, 0.5))), 1.0e-10));
+        assertTrue(Point.equals(Point.of(-1.0, 1.0, 1.0), Point.of(1.0, 1.0, -1.0).transform(
+                Affine.rotation(Vector.of(1.0, 1.0, 1.0), Math.PI*2.0/3.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(6.9, -10.8, -0.5), Point.of(3.0, -2.0, -1.0).transform(
+                Affine.scaling(2.3, 5.4, 0.5)), 1.0e-10));
+    }
+    
+    @Test
+    public void testToString(){
+        System.out.println("toString");
+        JsonPoint instance = new JsonPoint();
+        assertTrue(Point.equals(Point.of(1.23, 4.56, -7.89), instance.fromJson(Point.toString(Point.of(1.23, 4.56, -7.89))), 1.0e-10));
+    }
 }

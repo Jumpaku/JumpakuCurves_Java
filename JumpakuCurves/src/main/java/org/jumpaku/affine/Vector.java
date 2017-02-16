@@ -15,6 +15,8 @@ import org.apache.commons.math3.util.Precision;
  */
 public interface Vector {
     
+    static final JsonVector CONVERTER = new JsonVector();
+    
     static Boolean equals(Vector a, Vector b, Double eps){
         return Precision.equals(a.getX(), b.getX(), eps) &&
                 Precision.equals(a.getY(), b.getY(), eps) &&
@@ -23,18 +25,15 @@ public interface Vector {
     
     static Vector of(Vector3D v){
         return new Vector() {
-            @Override
-            public Vector add(Vector other) {
+            @Override public Vector add(Vector other) {
                 return Vector.of(v.add(new Vector3D(other.getX(), other.getY(), other.getZ())));
             }
 
-            @Override
-            public Vector scale(Double s) {
+            @Override public Vector scale(Double s) {
                 return Vector.of(v.scalarMultiply(s));
             }
 
-            @Override
-            public Double dot(Vector other) {
+            @Override public Double dot(Vector other) {
                 return v.dotProduct(new Vector3D(other.getX(), other.getY(), other.getZ()));
             }
 
@@ -48,6 +47,10 @@ public interface Vector {
 
             @Override public Double getZ() {
                 return v.getZ();
+            }
+            
+            @Override public String toString(){
+                return Vector.toString(this);
             }
         };
     }
@@ -68,6 +71,10 @@ public interface Vector {
     
     static Vector zero(){
         return ZERO;
+    }
+    
+    static String toString(Vector v){
+        return CONVERTER.toJson(v);
     }
     
     Vector add(Vector v);

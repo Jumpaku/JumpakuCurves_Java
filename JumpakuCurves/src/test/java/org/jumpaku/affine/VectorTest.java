@@ -6,13 +6,12 @@
 package org.jumpaku.affine;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.apache.commons.math3.util.Precision;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
 public class VectorTest {
     
@@ -82,9 +81,9 @@ public class VectorTest {
     public void testOf_3args() {
         System.out.println("of");
         Vector v = Vector.of(1.0, 3.0, -0.43);
-        assertTrue(Precision.equals(1.0, v.getX(), 1.0e-10));
-        assertTrue(Precision.equals(3.0, v.getY(), 1.0e-10));
-        assertTrue(Precision.equals(-0.43, v.getZ(), 1.0e-10));
+        assertEquals(1.0, v.getX(), 1.0e-10);
+        assertEquals(3.0, v.getY(), 1.0e-10);
+        assertEquals(-0.43, v.getZ(), 1.0e-10);
     }
 
     /**
@@ -134,8 +133,8 @@ public class VectorTest {
     @Test
     public void testDot() {
         System.out.println("dot");
-        assertTrue(Precision.equals(
-                7.53, Vector.of(-3.0, 4.5, -0.3).dot(Vector.of(2.0, 3.0, -0.1)), 1.0e-10));
+        assertEquals(
+                7.53, Vector.of(-3.0, 4.5, -0.3).dot(Vector.of(2.0, 3.0, -0.1)), 1.0e-10);
     }
 
     /**
@@ -144,8 +143,8 @@ public class VectorTest {
     @Test
     public void testGetX() {
         System.out.println("getX");
-        assertTrue(Precision.equals(
-                -3.0, Vector.of(-3.0, 4.5, -0.3).getX(), 1.0e-10));
+        assertEquals(
+                -3.0, Vector.of(-3.0, 4.5, -0.3).getX(), 1.0e-10);
     }
 
     /**
@@ -154,8 +153,8 @@ public class VectorTest {
     @Test
     public void testGetY() {
         System.out.println("getY");
-        assertTrue(Precision.equals(
-                4.5, Vector.of(-3.0, 4.5, -0.3).getY(), 1.0e-10));
+        assertEquals(
+                4.5, Vector.of(-3.0, 4.5, -0.3).getY(), 1.0e-10);
      }
 
     /**
@@ -164,8 +163,8 @@ public class VectorTest {
     @Test
     public void testGetZ() {
         System.out.println("getZ");
-        assertTrue(Precision.equals(
-                -0.3, Vector.of(-3.0, 4.5, -0.3).getZ(), 1.0e-10));
+        assertEquals(
+                -0.3, Vector.of(-3.0, 4.5, -0.3).getZ(), 1.0e-10);
      }
 
     /**
@@ -214,8 +213,8 @@ public class VectorTest {
     @Test
     public void testSquare() {
         System.out.println("square");
-        assertTrue(Precision.equals(
-                9.34, Vector.of(-3.0, 0.5, -0.3).square(), 1.0e-10));
+        assertEquals(
+                9.34, Vector.of(-3.0, 0.5, -0.3).square(), 1.0e-10);
     }
 
     /**
@@ -224,8 +223,8 @@ public class VectorTest {
     @Test
     public void testLength() {
         System.out.println("length");
-        assertTrue(Precision.equals(
-                3.05614135799, Vector.of(-3.0, 0.5, -0.3).length(), 1.0e-10));
+        assertEquals(
+                3.05614135799, Vector.of(-3.0, 0.5, -0.3).length(), 1.0e-10);
     }
 
     /**
@@ -271,7 +270,14 @@ public class VectorTest {
     @Test
     public void testAngle() {
         System.out.println("angle");
-        assertTrue(Precision.equals(
-                Math.PI/2.0, Vector.of(1.0, 1.0, 0.0).angle(Vector.of(1.0, -1.0, 0.0)), 1.0e-10));
+        assertEquals(
+                Math.PI/2.0, Vector.of(1.0, 1.0, 0.0).angle(Vector.of(1.0, -1.0, 0.0)), 1.0e-10);
+    }
+    
+    @Test
+    public void testToString(){
+        System.out.println("toString");
+        JsonVector instance = new JsonVector();
+        assertTrue(Vector.equals(Vector.of(1.23, 4.56, -7.89), instance.fromJson(Vector.toString(Vector.of(1.23, 4.56, -7.89))), 1.0e-10));
     }
 }

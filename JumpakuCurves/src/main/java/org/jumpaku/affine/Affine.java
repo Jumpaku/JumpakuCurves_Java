@@ -36,9 +36,9 @@ public interface Affine extends UnaryOperator<Point>{
         }
 
         @Override
-        public Affine concatenate(Affine a) {
+        public Affine concatnate(Affine a) {
             return a instanceof Matrix ?
-                    new Matrix(((Matrix)a).matrix.multiply(matrix)) : Affine.super.concatenate(a);
+                    new Matrix(((Matrix)a).matrix.multiply(matrix)) : Affine.super.concatnate(a);
         }
     }
     
@@ -84,7 +84,7 @@ public interface Affine extends UnaryOperator<Point>{
         Vector a = ab._2().diff(ab._1());
         Vector b = cd._2().diff(cd._1());
         Vector ac = cd._1().diff(ab._1());
-        return identity().rotateAt(ab._1(), a, b).translate(ac);
+        return identity().rotateAt(ab._1(), a, b).scaleAt(ab._1(), b.length()/a.length()).translate(ac);
     }
     
     static Affine cariblate(Tuple4<Point, Point, Point, Point> befor, Tuple4<Point, Point, Point, Point> after){
@@ -103,15 +103,15 @@ public interface Affine extends UnaryOperator<Point>{
     }
     
     static Affine transformationAt(Point p, Affine a){
-        return translation(p.getVector().negate()).concatenate(a).translate(p.getVector());
+        return translation(p.getVector().negate()).concatnate(a).translate(p.getVector());
     }
     
     default Affine transformAt(Point p, Affine a){
-        return concatenate(transformationAt(p, a));
+        return concatnate(transformationAt(p, a));
     }
     
     default Affine scale(Double x, Double y, Double z){
-        return concatenate(scaling(x, y, z));
+        return concatnate(scaling(x, y, z));
     }
     
     default Affine scale(Double scale){
@@ -127,7 +127,7 @@ public interface Affine extends UnaryOperator<Point>{
     }
     
     default Affine rotate(Vector axis, Double radian){
-        return concatenate(rotation(axis, radian));
+        return concatnate(rotation(axis, radian));
     }
 
     default Affine rotate(Point axisInitial, Point axisTerminal, Double radian){
@@ -155,7 +155,7 @@ public interface Affine extends UnaryOperator<Point>{
     }
 
     default Affine translate(Vector v){
-        return concatenate(translation(v));
+        return concatnate(translation(v));
     }
     
     default Affine translate(Double x, Double y, Double z){
@@ -179,11 +179,11 @@ public interface Affine extends UnaryOperator<Point>{
             }
 
             @Override public Affine invert() {
-                return concatnate(b.invert(), a.invert());
+                return Affine.concatnate(b.invert(), a.invert());
             }
 
-            @Override public Affine concatenate(Affine c) {
-                return concatnate(concatnate(a, b), c);
+            @Override public Affine concatnate(Affine c) {
+                return Affine.concatnate(Affine.concatnate(a, b), c);
             }
         };
     }
@@ -193,7 +193,7 @@ public interface Affine extends UnaryOperator<Point>{
      * @param a
      * @return 
      */
-    default Affine concatenate(Affine a){
+    default Affine concatnate(Affine a){
         return concatnate(this, a);
     }
 }

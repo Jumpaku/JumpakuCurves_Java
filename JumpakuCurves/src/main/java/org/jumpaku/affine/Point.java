@@ -10,13 +10,23 @@ package org.jumpaku.affine;
  * @author Jumaku
  */
 public interface Point {
+    
+    static final JsonPoint CONVERTER = new JsonPoint();
 
     static Boolean equals(Point a, Point b, Double eps){
         return Vector.equals(a.getVector(), b.getVector(), eps);
     }
 
     static Point of(Vector v){
-        return () -> v;
+        return new Point() {
+            @Override public Vector getVector() {
+                return v;
+            }
+            
+            @Override public String toString(){
+                return Point.toString(this);
+            }
+        };
     }    
     
     static Point of(Double x, Double y, Double z){
@@ -29,6 +39,10 @@ public interface Point {
     
     static Point of(Double x){
         return Point.of(x, 0.0);
+    }
+    
+    static String toString(Point p){
+        return CONVERTER.toJson(p);
     }
     
     Vector getVector();
@@ -105,5 +119,9 @@ public interface Point {
      */
     default Vector normal(Point p1, Point p2){
         return p1.diff(this).cross(p2.diff(this)).normalize();
+    }
+    
+    default Point transform(Affine a){
+        return a.apply(this);
     }
 }

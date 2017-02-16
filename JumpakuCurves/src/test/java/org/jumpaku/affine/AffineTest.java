@@ -5,6 +5,7 @@
  */
 package org.jumpaku.affine;
 
+import javaslang.Tuple;
 import javaslang.Tuple2;
 import javaslang.Tuple4;
 import org.apache.commons.math3.linear.MatrixUtils;
@@ -13,7 +14,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
 public class AffineTest {
     
@@ -76,13 +77,9 @@ public class AffineTest {
     @Test
     public void testSimilarity() {
         System.out.println("similarity");
-        Tuple2<Point, Point> ab = null;
-        Tuple2<Point, Point> cd = null;
-        Affine expResult = null;
-        Affine result = Affine.similarity(ab, cd);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Tuple2<Point, Point> ab = Tuple.of(Point.of(1.0, 0.0, 0.0), Point.of(0.0, 1.0, 0.0));
+        Tuple2<Point, Point> cd = Tuple.of(Point.of(1.0, 1.0,-1.0), Point.of(-1.0,1.0, 1.0));
+        assertTrue(Point.equals(Point.of(1.0, -1.0, 1.0), Affine.similarity(ab, cd).apply(Point.of(0.0, 0.0, 1.0)), 1.0e-10));
     }
 
     /**
@@ -91,13 +88,13 @@ public class AffineTest {
     @Test
     public void testCariblate() {
         System.out.println("cariblate");
-        Tuple4<Point, Point, Point, Point> befor = null;
-        Tuple4<Point, Point, Point, Point> after = null;
-        Affine expResult = null;
-        Affine result = Affine.cariblate(befor, after);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Tuple4<Point, Point, Point, Point> befor = Tuple.of(Point.of(1.0, 0.0, 0.0), Point.of(0.0, 1.0, 0.0), Point.of(0.0, 0.0, 1.0), Point.of(-1.0, -1.0, -1.0));
+        Tuple4<Point, Point, Point, Point> after = Tuple.of(Point.of(1.0,-1.0, 1.0), Point.of(1.0, 1.0,-1.0), Point.of(-1.0, 1.0, 1.0), Point.of( 1.0,  1.0,  1.0));
+        assertTrue(Point.equals(Point.of(1.0,-1.0, 1.0), Affine.cariblate(befor, after).apply(Point.of(1.0, 0.0, 0.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(1.0, 1.0,-1.0), Affine.cariblate(befor, after).apply(Point.of(0.0, 1.0, 0.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(-1.0, 1.0,1.0), Affine.cariblate(befor, after).apply(Point.of(0.0, 0.0, 1.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of( 1.0, 1.0,1.0), Affine.cariblate(befor, after).apply(Point.of(-1.0,-1.0,-1.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(0.5, 0.5, 0.5), Affine.cariblate(befor, after).apply(Point.of(0.0, 0.0, 0.0)), 1.0e-10));
     }
 
     /**
@@ -289,29 +286,23 @@ public class AffineTest {
      * Test of concatnate method, of class Affine.
      */
     @Test
-    public void testConcatnate() {
+    public void testConcatnate_2args() {
         System.out.println("concatnate");
-        Affine a = null;
-        Affine b = null;
-        Affine expResult = null;
-        Affine result = Affine.concatnate(a, b);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(Point.equals(Point.of(0.0, 1.0, 3.0),
+                Affine.concatnate(Affine.translation(Vector.of(-2.0, 5.0, 1.0)), Affine.rotation(Vector.of(1.0, 1.0, 1.0), Math.PI*2.0/3.0))
+                        .apply(Point.of(3.0, -2.0, -1.0)), 1.0e-10));
     }
 
     /**
-     * Test of concatenate method, of class Affine.
+     * Test of concatnate method, of class Affine.
      */
     @Test
-    public void testConcatenate() {
+    public void testConcatnate() {
         System.out.println("concatenate");
-        Affine a = null;
-        Affine instance = new AffineImpl();
-        Affine expResult = null;
-        Affine result = instance.concatenate(a);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(Point.equals(Point.of(0.0, 1.0, 3.0),
+                Affine.identity()
+                        .concatnate(Affine.translation(Vector.of(-2.0, 5.0, 1.0)))
+                        .concatnate(Affine.rotation(Vector.of(1.0, 1.0, 1.0), Math.PI*2.0/3.0))
+                        .apply(Point.of(3.0, -2.0, -1.0)), 1.0e-10));
     }
 }
