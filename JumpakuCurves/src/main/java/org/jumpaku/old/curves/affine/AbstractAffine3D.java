@@ -10,7 +10,7 @@ import org.jumpaku.old.curves.vector.Vec3;
 
 /**
  *
- * @author ito tomohiko
+ * @author ito Jumpaku
  */
 public abstract class AbstractAffine3D implements Affine3D{
 

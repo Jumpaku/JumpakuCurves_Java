@@ -10,7 +10,7 @@ import org.jumpaku.affine.Point;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  * @param <P>
  */
 public interface Curve<P extends Point> extends Function<Double, P>{

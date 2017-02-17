@@ -16,7 +16,7 @@ import org.jumpaku.old.curves.vector.Vec;
 
 /**
  *
- * @author ito tomohiko
+ * @author ito Jumpaku
  */
 public abstract class AbstractRationalBezier implements RationalBezier{
 

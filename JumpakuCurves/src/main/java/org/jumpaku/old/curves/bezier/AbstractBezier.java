@@ -4,7 +4,7 @@ package org.jumpaku.old.curves.bezier;
 import java.util.LinkedList;
 import java.util.List;
 import javaslang.collection.Array;
-import org.jumpaku.curves.domain.Closed;
+import org.jumpaku.old.curves.domain.Closed;
 import org.jumpaku.old.curves.vector.Point;
 import org.jumpaku.old.curves.vector.Vec;
 

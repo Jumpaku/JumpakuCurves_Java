@@ -7,8 +7,8 @@ package org.jumpaku.old.curves.spline;
 
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
-import org.jumpaku.curves.domain.ClosedOpen;
-import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.old.curves.domain.ClosedOpen;
+import org.jumpaku.old.curves.domain.Interval;
 import org.jumpaku.old.curves.vector.Point;
 
 /**

@@ -11,7 +11,7 @@ import org.jumpaku.json.Converter;
  *
  * @author Jumpaku
  */
-public class JsonVector implements Converter<Vector>{
+public final class JsonVector implements Converter<Vector>{
     
     public static class VectorData{
     

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curves.domain;
+package org.jumpaku.old.curves.domain;
 
 /**
  * <p>左閉右開区間を表します Represents left-closed, right-open interval.</p>

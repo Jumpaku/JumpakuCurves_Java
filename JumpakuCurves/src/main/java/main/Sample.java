@@ -17,7 +17,7 @@ import org.jumpaku.old.curves.vector.Point2D;
 
 /**
  *
- * @author ito tomohiko
+ * @author ito Jumpaku
  */
 public class Sample {
     public static void main(String[] args) {

@@ -11,7 +11,7 @@ import org.jumpaku.json.Converter;
  *
  * @author Jumpaku
  */
-public class JsonPoint implements Converter<Point>{
+public final class JsonPoint implements Converter<Point>{
     
     public static class Data{
     

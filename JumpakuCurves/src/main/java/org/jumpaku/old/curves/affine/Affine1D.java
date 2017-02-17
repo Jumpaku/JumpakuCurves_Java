@@ -10,7 +10,7 @@ import org.jumpaku.old.curves.vector.Vec1;
 
 /**
  *
- * @author ito tomohiko
+ * @author ito Jumpaku
  */
 public interface Affine1D extends Affine<Point1D>{
 

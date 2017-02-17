@@ -6,14 +6,14 @@
 package org.jumpaku.old.curves.spline;
 
 import javaslang.collection.Array;
-import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.old.curves.domain.Interval;
 import org.jumpaku.old.curves.vector.Point;
 import org.jumpaku.old.curves.vector.Point2D;
 import org.jumpaku.old.curves.vector.Vec2;
 
 /**
  *
- * @author ito tomohiko
+ * @author ito Jumpaku
  */
 public class BSpline2D implements BSpline{
 

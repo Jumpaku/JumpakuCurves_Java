@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
 public class IntervalTest {
     

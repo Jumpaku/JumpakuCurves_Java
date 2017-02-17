@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.old.fuzzy;
+package org.jumpaku.fuzzy;
+
+import java.util.function.Function;
 
 /**
  *
@@ -11,9 +13,13 @@ package org.jumpaku.old.fuzzy;
  * @param <M>
  * @param <T>
  */
-public interface Membership<M extends Membership<M, T>, T> {
+public interface Membership<M extends Membership<M, T>, T> extends Function<T, Grade>{
+
+    @Override public default Grade apply(T t) {
+        return membership(t);
+    }
     
-    Grade mu(T t);
+    Grade membership(T t);
     
     Grade possibility(M u);
      

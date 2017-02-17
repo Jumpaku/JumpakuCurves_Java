@@ -7,11 +7,11 @@ package org.jumpaku.old.curves.utils;
 
 import java.util.function.UnaryOperator;
 import org.apache.commons.math3.util.Precision;
-import org.jumpaku.curves.domain.Closed;
+import org.jumpaku.old.curves.domain.Closed;
 
 /**
  *
- * @author ito tomohiko
+ * @author ito Jumpaku
  */
 public class GoldenSectionSearch {
     private static final Double GOLD_INVERSE = 1.0/1.6180339887498948482045868343656381177203;

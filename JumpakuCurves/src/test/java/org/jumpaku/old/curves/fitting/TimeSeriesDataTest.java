@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curves.fitting;
+package org.jumpaku.old.curves.fitting;
 
 import org.jumpaku.old.curves.TimeSeriesData;
 import org.apache.commons.math3.util.Precision;
@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
 public class TimeSeriesDataTest {
     

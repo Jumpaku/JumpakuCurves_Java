@@ -7,7 +7,7 @@ package org.jumpaku.old.curves.bezier;
 
 import javaslang.collection.Array;
 import org.jumpaku.old.curves.affine.Affine2D;
-import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.old.curves.domain.Interval;
 import org.jumpaku.old.curves.vector.Point2D;
 import org.jumpaku.old.curves.vector.Vec2;
 

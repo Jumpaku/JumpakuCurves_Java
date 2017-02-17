@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import javaslang.collection.List;
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
-import org.jumpaku.curves.domain.Closed;
-import org.jumpaku.curves.domain.Interval;
+import org.jumpaku.old.curves.domain.Closed;
+import org.jumpaku.old.curves.domain.Interval;
 import org.jumpaku.old.curves.vector.Point;
 import org.jumpaku.old.curves.vector.Vec;
 

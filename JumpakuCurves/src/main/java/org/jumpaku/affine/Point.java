@@ -87,7 +87,7 @@ public interface Point {
      * @return this+t*(p-this) = (1-t)*this + t*p 
      */
     default Point divide(Double t, Point p) {
-        return Point.of(Vector .add(1-t, getVector(), t, p.getVector()));
+        return Point.of(Vector.add(1-t, getVector(), t, p.getVector()));
     }
     
     /**

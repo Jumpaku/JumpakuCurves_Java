@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.fuzzy;
+package org.jumpaku.old.fuzzy;
 
 import org.jumpaku.old.fuzzy.Conic2D;
 import org.jumpaku.old.fuzzy.Grade;
@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author ito tomohiko
+ * @author ito Jumpaku
  */
 public class Conic2DTest {
     

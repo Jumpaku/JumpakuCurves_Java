@@ -11,7 +11,7 @@ import org.jumpaku.json.Converter;
  *
  * @author Jumpaku
  */
-public class JsonInterval implements Converter<Interval>{
+public final class JsonInterval implements Converter<Interval>{
 
     public static class Data{
 

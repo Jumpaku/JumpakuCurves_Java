@@ -2,7 +2,7 @@
 package org.jumpaku.old.curves;
 
 import java.util.function.Function;
-import org.jumpaku.curves.domain.Domain;
+import org.jumpaku.old.curves.domain.Domain;
 import org.jumpaku.old.curves.vector.Point;
 
 /**

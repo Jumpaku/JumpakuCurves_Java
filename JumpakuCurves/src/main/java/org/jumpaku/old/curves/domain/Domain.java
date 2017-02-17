@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curves.domain;
+package org.jumpaku.old.curves.domain;
 
 /**
  * <p>関数の定義域を表します Represents domain of function.</p>

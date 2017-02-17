@@ -14,7 +14,7 @@ import org.jumpaku.old.curves.vector.Vec;
 
 /**
  *
- * @author ito tomohiko
+ * @author ito Jumpaku
  */
 public class RationalBezierAccurate extends AbstractRationalBezier {
 

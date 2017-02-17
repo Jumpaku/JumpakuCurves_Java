@@ -14,7 +14,7 @@ import org.jumpaku.old.curves.vector.Point;
 
 /**
  *
- * @author ito tomohiko
+ * @author ito Jumpaku
  */
 public class BezierDeCasteljau extends AbstractBezier{
     public BezierDeCasteljau(Array<? extends Point> cp, Integer dimention) {

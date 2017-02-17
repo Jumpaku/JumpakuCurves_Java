@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curves.domain;
+package org.jumpaku.old.curves.domain;
 
 /**
  * <p>閉区間を表します Represents closed doamin.</p>

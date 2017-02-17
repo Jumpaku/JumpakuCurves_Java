@@ -12,7 +12,7 @@ import org.apache.commons.math3.util.FastMath;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
 public interface Interval extends Domain{
     
