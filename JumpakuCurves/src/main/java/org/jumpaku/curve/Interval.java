@@ -17,19 +17,21 @@ import org.apache.commons.math3.util.FastMath;
 public interface Interval extends Domain{
     
     static final JsonInterval CONVERTER = new JsonInterval();
+
+    static Interval ZERO_ONE = Interval.of(0.0, 1.0);
     
-    static Interval closed(Double start, Double end){
+    static Interval of(Double begin, Double end){
         return new Interval() {
+            @Override public Boolean includes(Double t) {
+                return getbegin().compareTo(t) <= 0 && getEnd().compareTo(t) >= 0;
+            }
+
             @Override public Double getbegin() {
-                return start;
+                return begin;
             }
 
             @Override public Double getEnd() {
                 return end;
-            }
-
-            @Override public Boolean includes(Double t) {
-                return Double.compare(start, t) <= 0 && Double.compare(t, end) <= 0;
             }
             
             @Override public String toString(){
@@ -56,6 +58,10 @@ public interface Interval extends Domain{
     }
 
     @Override Boolean includes(Double t);
+    
+    default Boolean includes(Interval i){
+        return getbegin().compareTo(i.getbegin()) <= 0 && getEnd().compareTo(i.getEnd()) >= 0;
+    }
     
     Double getbegin();
     

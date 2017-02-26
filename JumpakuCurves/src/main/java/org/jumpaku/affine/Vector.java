@@ -77,9 +77,13 @@ public interface Vector {
         return CONVERTER.toJson(v);
     }
     
+    static Vector add(Double a, Vector v1, Double b, Vector v2){
+        return v1.scale(a).add(b, v2);
+    }
+
     Vector add(Vector v);
 
-    Vector scale(Double s);
+    Vector scale(Double w);
 
     Double dot(Vector v);
     
@@ -88,10 +92,6 @@ public interface Vector {
     Double getY();
     
     Double getZ();
-    
-    static Vector add(Double a, Vector v1, Double b, Vector v2){
-        return v1.scale(a).add(b, v2);
-    }
     
     default Vector sub(Vector v){
         return add(v.negate());

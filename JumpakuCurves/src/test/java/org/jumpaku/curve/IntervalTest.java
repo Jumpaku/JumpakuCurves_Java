@@ -5,7 +5,6 @@
  */
 package org.jumpaku.curve;
 
-import org.apache.commons.math3.util.Precision;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -22,9 +21,9 @@ public class IntervalTest {
      * Test of closed method, of class Interval.
      */
     @Test
-    public void testClosed() {
-        System.out.println("closed");
-        Interval instance = Interval.closed(-2.3, 3.4);
+    public void testOf() {
+        System.out.println("of");
+        Interval instance = Interval.of(-2.3, 3.4);
         assertEquals(-2.3, instance.getbegin(), 1.0e-10);
         assertEquals(3.4, instance.getEnd(), 1.0e-10);
     }
@@ -36,7 +35,7 @@ public class IntervalTest {
     public void testSample_Integer() {
         System.out.println("sample");
         assertArrayEquals(new double[]{-0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5},
-                Interval.closed(-0.1, 0.5).sample(7).toJavaStream().mapToDouble(d->d).toArray(), 1.0e-10);
+                Interval.of(-0.1, 0.5).sample(7).toJavaStream().mapToDouble(d->d).toArray(), 1.0e-10);
     }
 
     /**
@@ -46,7 +45,7 @@ public class IntervalTest {
     public void testSample_Double() {
         System.out.println("sample");
         assertArrayEquals(new double[]{-0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5},
-                Interval.closed(-0.1, 0.5).sample(0.09).toJavaStream().mapToDouble(d->d).toArray(), 1.0e-10);
+                Interval.of(-0.1, 0.5).sample(0.09).toJavaStream().mapToDouble(d->d).toArray(), 1.0e-10);
     }
 
     /**
@@ -55,7 +54,7 @@ public class IntervalTest {
     @Test
     public void testGetbegin() {
         System.out.println("getbegin");
-        Interval instance = Interval.closed(-2.3, 3.4);
+        Interval instance = Interval.of(-2.3, 3.4);
         assertEquals(-2.3, instance.getbegin(), 1.0e-10);
     }
 
@@ -65,7 +64,7 @@ public class IntervalTest {
     @Test
     public void testGetEnd() {
         System.out.println("getEnd");
-        Interval instance = Interval.closed(-2.3, 3.4);
+        Interval instance = Interval.of(-2.3, 3.4);
         assertEquals(3.4, instance.getEnd(), 1.0e-10);
     }
 
@@ -75,7 +74,7 @@ public class IntervalTest {
     @Test
     public void testIncludes() {
         System.out.println("getEnd");
-        Interval instance = Interval.closed(-2.3, 3.4);
+        Interval instance = Interval.of(-2.3, 3.4);
         assertEquals(true, instance.includes(-2.3));
         assertEquals(true, instance.includes( 3.4));
         assertEquals(true, instance.includes( 1.0));
@@ -89,7 +88,7 @@ public class IntervalTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Interval instance = new JsonInterval().fromJson(Interval.closed(-2.3, 3.4).toString());
+        Interval instance = new JsonInterval().fromJson(Interval.of(-2.3, 3.4).toString()).get();
         assertEquals(-2.3, instance.getbegin(), 1.0e-10);
         assertEquals(3.4, instance.getEnd(), 1.0e-10);
     }  

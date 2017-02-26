@@ -6,18 +6,36 @@
 package org.jumpaku.json;
 
 import com.google.gson.Gson;
+import java.lang.reflect.Type;
+import javaslang.control.Option;
 
 /**
  *
  * @author Jumpaku
- * @param <T>
+ * @param <D>
  */
-public interface Converter<T> {
+public interface Converter<D> {
+    
+    static interface Temporary<D>{
+        D newInstance();
+    }
     
     static final Gson GSON = new Gson();
     
-    String toJson(T t);
+    default String toJson(D d){
+        return GSON.toJson(toTemporary(d));
+    }
     
-    T fromJson(String json);
+    default Option<D> fromJson(String json){
+        try{
+            return Option.of(((Temporary<D>)GSON.fromJson(json, getTemporaryType()))
+                    .newInstance());
+        }catch(Exception e){
+            return Option.none();
+        }
+    }
+
+    Type getTemporaryType();
     
+    Temporary<D> toTemporary(D d);
 }

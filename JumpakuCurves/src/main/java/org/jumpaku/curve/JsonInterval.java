@@ -5,6 +5,7 @@
  */
 package org.jumpaku.curve;
 
+import java.lang.reflect.Type;
 import org.jumpaku.json.Converter;
 
 /**
@@ -13,26 +14,32 @@ import org.jumpaku.json.Converter;
  */
 public final class JsonInterval implements Converter<Interval>{
 
-    public static class Data{
+    @Override
+    public Type getTemporaryType() {
+        return Data.class;
+    }
 
-        private final Double start;
+    @Override
+    public Temporary<Interval> toTemporary(Interval i) {
+        return new Data(i);
+    }
 
+    public static class Data implements Temporary<Interval>{
+
+        private final Double begin;
+        
         private final Double end;
 
-        public Data(Double start, Double end) {
-            this.start = start;
-            this.end = end;
+        public Data(Interval i) {
+            this.begin = i.getbegin();
+            this.end = i.getEnd();
+        }
+
+        @Override
+        public Interval newInstance() {
+            return Interval.of(begin, end);
         }
     }
 
-    @Override
-    public String toJson(Interval i) {
-        return GSON.toJson(new Data(i.getbegin(), i.getEnd()), Data.class);
-    }
-
-    @Override
-    public Interval fromJson(String json) {
-        Data i = GSON.fromJson(json, Data.class);
-        return Interval.closed(i.start, i.end);
-    }
+    
 }

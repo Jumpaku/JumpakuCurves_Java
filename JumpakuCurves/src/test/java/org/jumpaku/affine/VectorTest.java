@@ -278,6 +278,6 @@ public class VectorTest {
     public void testToString(){
         System.out.println("toString");
         JsonVector instance = new JsonVector();
-        assertTrue(Vector.equals(Vector.of(1.23, 4.56, -7.89), instance.fromJson(Vector.toString(Vector.of(1.23, 4.56, -7.89))), 1.0e-10));
+        assertTrue(Vector.equals(Vector.of(1.23, 4.56, -7.89), instance.fromJson(Vector.toString(Vector.of(1.23, 4.56, -7.89))).get(), 1.0e-10));
     }
 }

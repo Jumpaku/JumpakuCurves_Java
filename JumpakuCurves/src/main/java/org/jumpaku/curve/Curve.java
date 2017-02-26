@@ -11,18 +11,22 @@ import org.jumpaku.affine.Point;
 /**
  *
  * @author Jumpaku
- * @param <P>
  */
-public interface Curve<P extends Point> extends Function<Double, P>{
+public interface Curve extends Function<Double, Point>{
 
-    @Override default P apply(Double t) {
+    @Override default Point apply(Double t) {
         if(!getDomain().includes(t))
             throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
         
         return evaluate(t);
     }
     
-    P evaluate(Double t);
-    
+    /**
+     * @param t
+     * @return
+     * @throws IllegalArgumentException !getDomain().includes(t)
+     */
+    Point evaluate(Double t);
+
     Domain getDomain();
 }

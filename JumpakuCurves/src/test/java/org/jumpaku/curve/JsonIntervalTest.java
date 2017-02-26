@@ -23,7 +23,7 @@ public class JsonIntervalTest {
     @Test
     public void testToJson() {
         System.out.println("toJson");
-        Interval instance = new JsonInterval().fromJson(Interval.closed(-2.3, 3.4).toString());
+        Interval instance = new JsonInterval().fromJson(Interval.of(-2.3, 3.4).toString()).get();
         assertEquals(-2.3, instance.getbegin(), 1.0e-10);
         assertEquals(3.4, instance.getEnd(), 1.0e-10);
     }
@@ -34,9 +34,29 @@ public class JsonIntervalTest {
     @Test
     public void testFromJson() {
         System.out.println("fromJson");
-        Interval instance = new JsonInterval().fromJson("{start: -2.3, end: 3.4}");
+        Interval instance = new JsonInterval().fromJson("{begin: -2.3, end: 3.4}").get();
         assertEquals(-2.3, instance.getbegin(), 1.0e-10);
         assertEquals(3.4, instance.getEnd(), 1.0e-10);
     }
     
+    /**
+     * Test of getTemporaryType method, of class JsonPoint.
+     */
+    @Test
+    public void testGetTemporaryType() {
+        System.out.println("getTemporaryType");
+        assertEquals(JsonInterval.Data.class, new JsonInterval().getTemporaryType());
+    }
+
+    /**
+     * Test of toTemporary method, of class JsonPoint.
+     */
+    @Test
+    public void testToTemporary() {
+        System.out.println("toTemporary");
+        Interval result = new JsonInterval().toTemporary(Interval.of(-4.3, 5.4)).newInstance();
+        Interval expected = Interval.of(-4.3, 5.4);
+        assertEquals(expected.getbegin(), result.getbegin(), 1.0e-10);
+        assertEquals(expected.getEnd(), result.getEnd(), 1.0e-10);
+    }
 }

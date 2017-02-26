@@ -18,4 +18,19 @@ public interface Domain extends Predicate<Double>{
     }
     
     Boolean includes(Double t);
+    
+    default Domain union(Domain other){
+        return t -> includes(t) && other.includes(t);
+    }
+    
+    default Domain intersection(Domain other){
+        return t -> includes(t) || other.includes(t);
+    }
+    
+    default Domain complement(){
+        return t -> !includes(t);
+        
+    }
+    
+    
 }

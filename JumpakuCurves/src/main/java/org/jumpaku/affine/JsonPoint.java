@@ -5,6 +5,7 @@
  */
 package org.jumpaku.affine;
 
+import java.lang.reflect.Type;
 import org.jumpaku.json.Converter;
 
 /**
@@ -12,8 +13,18 @@ import org.jumpaku.json.Converter;
  * @author Jumpaku
  */
 public final class JsonPoint implements Converter<Point>{
+
+    @Override
+    public Type getTemporaryType() {
+        return Data.class;
+    }
+
+    @Override
+    public Data toTemporary(Point p) {
+        return new Data(p);
+    }
     
-    public static class Data{
+    public static class Data implements Converter.Temporary<Point>{
     
         private final Double x;
 
@@ -21,19 +32,14 @@ public final class JsonPoint implements Converter<Point>{
 
         private final Double z;
 
-        public Data(Double x, Double y, Double z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+        public Data(Point p) {
+            this.x = p.getX();
+            this.y = p.getY();
+            this.z = p.getZ();
+        }
+
+        @Override public Point newInstance() {
+            return Point.of(x, y, z);
         }
     }
-    
-    @Override public String toJson(Point v){
-        return GSON.toJson(new Data(v.getX(), v.getY(), v.getZ()));
-    }
-    
-    @Override public Point fromJson(String json){
-        Data p = GSON.fromJson(json, Data.class);
-        return Point.of(p.x, p.y, p.z);
-    }   
 }

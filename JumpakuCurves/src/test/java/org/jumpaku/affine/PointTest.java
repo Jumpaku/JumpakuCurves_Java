@@ -202,6 +202,6 @@ public class PointTest {
     public void testToString(){
         System.out.println("toString");
         JsonPoint instance = new JsonPoint();
-        assertTrue(Point.equals(Point.of(1.23, 4.56, -7.89), instance.fromJson(Point.toString(Point.of(1.23, 4.56, -7.89))), 1.0e-10));
+        assertTrue(Point.equals(Point.of(1.23, 4.56, -7.89), instance.fromJson(Point.toString(Point.of(1.23, 4.56, -7.89))).get(), 1.0e-10));
     }
 }

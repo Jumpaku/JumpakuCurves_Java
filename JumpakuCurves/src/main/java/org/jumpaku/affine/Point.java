@@ -47,10 +47,6 @@ public interface Point {
     
     Vector getVector();
     
-    default Point translate(Vector v){
-        return Point.of(getVector().add(v));
-    }
-    
     default Double getX(){
         return getVector().getX();
     }
@@ -63,6 +59,10 @@ public interface Point {
         return getVector().getZ();
     }        
     
+    default Point translate(Vector v){
+        return Point.of(getVector().add(v));
+    }
+
     /**
      * 
      * @param p

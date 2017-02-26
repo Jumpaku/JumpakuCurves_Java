@@ -5,6 +5,7 @@
  */
 package org.jumpaku.affine;
 
+import java.lang.reflect.Type;
 import org.jumpaku.json.Converter;
 
 /**
@@ -12,8 +13,16 @@ import org.jumpaku.json.Converter;
  * @author Jumpaku
  */
 public final class JsonVector implements Converter<Vector>{
+
+    @Override public Type getTemporaryType() {
+        return Data.class;
+    }
+
+    @Override public Temporary<Vector> toTemporary(Vector v) {
+        return new Data(v); 
+    }
     
-    public static class VectorData{
+    public static class Data implements Converter.Temporary<Vector>{
     
         private final Double x;
 
@@ -21,19 +30,14 @@ public final class JsonVector implements Converter<Vector>{
 
         private final Double z;
 
-        public VectorData(Double x, Double y, Double z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+        public Data(Vector v) {
+            this.x = v.getX();
+            this.y = v.getY();
+            this.z = v.getZ();
+        }
+
+        @Override public Vector newInstance() {
+            return Vector.of(x, y, z);
         }
     }
-    
-    @Override public String toJson(Vector v){
-        return GSON.toJson(new VectorData(v.getX(), v.getY(), v.getZ()));
-    }
-    
-    @Override public Vector fromJson(String json){
-        VectorData v = GSON.fromJson(json, VectorData.class);
-        return Vector.of(v.x, v.y, v.z);
-    }   
 }
