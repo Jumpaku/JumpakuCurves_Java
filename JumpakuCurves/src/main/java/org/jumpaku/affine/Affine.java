@@ -18,7 +18,7 @@ import org.apache.commons.math3.util.FastMath;
  */
 public interface Affine extends UnaryOperator<Point>{
 
-    public static class Matrix implements Affine{
+    public static final class Matrix implements Affine{
 
         private final RealMatrix matrix;
 
@@ -76,7 +76,7 @@ public interface Affine extends UnaryOperator<Point>{
     
     static Affine IDENTITY = of(MatrixUtils.createRealIdentityMatrix(4));
     
-    static Affine identity(){
+    static Affine id(){
         return IDENTITY;
     }
     
@@ -84,7 +84,7 @@ public interface Affine extends UnaryOperator<Point>{
         Vector a = ab._2().diff(ab._1());
         Vector b = cd._2().diff(cd._1());
         Vector ac = cd._1().diff(ab._1());
-        return identity().rotateAt(ab._1(), a, b).scaleAt(ab._1(), b.length()/a.length()).translate(ac);
+        return id().rotateAt(ab._1(), a, b).scaleAt(ab._1(), b.length()/a.length()).translate(ac);
     }
     
     static Affine cariblate(Tuple4<Point, Point, Point, Point> befor, Tuple4<Point, Point, Point, Point> after){

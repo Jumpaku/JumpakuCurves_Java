@@ -7,6 +7,7 @@ package org.jumpaku.curve.bezier;
 
 import javaslang.Tuple2;
 import javaslang.collection.Array;
+import javaslang.control.Option;
 import org.jumpaku.affine.Point;
 import org.jumpaku.affine.Vector;
 import org.jumpaku.curve.DefinedOnInterval;
@@ -16,13 +17,11 @@ import org.jumpaku.curve.Interval;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
 public interface BezierDerivative extends Derivative, Differentiable, DefinedOnInterval<BezierDerivative>{
 
     static BezierDerivative create(Bezier bezier){
-        Array<Vector> controlVectors = bezier.getControlPoints().map(Point::getVector);
-        Interval interval = bezier.getDomain();
         return new BezierDerivative() {
             @Override public Interval getDomain() {
                 return bezier.getDomain();
@@ -46,7 +45,7 @@ public interface BezierDerivative extends Derivative, Differentiable, DefinedOnI
             }
 
             @Override public Array<Vector> getControlVectors() {
-                return controlVectors;
+                return bezier.getControlPoints().map(Point::getVector);
             }
 
             @Override public Integer getDegree() {
@@ -65,11 +64,23 @@ public interface BezierDerivative extends Derivative, Differentiable, DefinedOnI
             public Tuple2<? extends BezierDerivative, ? extends BezierDerivative> subdivide(Double t) {
                 return bezier.subdivide(t).map(BezierDerivative::create, BezierDerivative::create);
             }
+
+            @Override public String toString() {
+                return super.toString(); 
+            }
         };
     }
 
-    public static BezierDerivative create(Array<Vector> vs, Interval domain){
+    public static BezierDerivative create(Array<? extends Vector> vs, Interval domain){
         return create(Bezier.create(vs.map(Point::of),domain));
+    }
+    
+    public static String toJson(BezierDerivative db){
+        return JsonBezierDerivative.CONVERTER.toJson(db);
+    }
+    
+    public static Option<BezierDerivative> fromJson(String json){
+        return JsonBezierDerivative.CONVERTER.fromJson(json);
     }
 
     @Override Interval getDomain();

@@ -97,5 +97,4 @@ public final class Grade implements Comparable<Grade> {
     @Override public int compareTo(Grade g) {
         return compare(this, g);
     }    
-    
 }

@@ -63,12 +63,12 @@ public class AffineTest {
     }
 
     /**
-     * Test of identity method, of class Affine.
+     * Test of id method, of class Affine.
      */
     @Test
-    public void testIdentity() {
+    public void testId() {
         System.out.println("identity");
-        assertTrue(Point.equals(Point.of(2.0, -2.0, -1.0), Affine.identity().apply(Point.of(2.0, -2.0, -1.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(2.0, -2.0, -1.0), Affine.id().apply(Point.of(2.0, -2.0, -1.0)), 1.0e-10));
     }
 
     /**
@@ -121,13 +121,13 @@ public class AffineTest {
     public void testTransformAt() {
         System.out.println("transformAt");
         assertTrue(Point.equals(Point.of(1.0, 3.0, -0.5),
-                Affine.identity().transformAt(Point.of(1.0, 2.0, 3.0),
+                Affine.id().transformAt(Point.of(1.0, 2.0, 3.0),
                         Affine.translation(Vector.of(-2.3, 5.4, 0.5))).apply(Point.of(3.3, -2.4, -1.0)), 1.0e-10));
         assertTrue(Point.equals(Point.of(-1.0, 1.0, 1.0),
-                Affine.identity().transformAt(Point.of(1.0, -1.0, 1.0),
+                Affine.id().transformAt(Point.of(1.0, -1.0, 1.0),
                         Affine.rotation(Vector.of(1.0, 1.0, 1.0), Math.PI/3.0)).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
         assertTrue(Point.equals(Point.of(5.6, -15.2, 0.0),
-                Affine.identity().transformAt(Point.of(1.0, 1.0, 1.0),
+                Affine.id().transformAt(Point.of(1.0, 1.0, 1.0),
                         Affine.scaling(2.3, 5.4, 0.5)).apply(Point.of(3.0, -2.0, -1.0)), 1.0e-10));
     }
 
@@ -137,7 +137,7 @@ public class AffineTest {
     @Test
     public void testScale_3args() {
         System.out.println("scale");
-        assertTrue(Point.equals(Point.of(4.0, -6.0, -4.0), Affine.identity().scale(2.0, 3.0, 4.0).apply(Point.of(2.0, -2.0, -1.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(4.0, -6.0, -4.0), Affine.id().scale(2.0, 3.0, 4.0).apply(Point.of(2.0, -2.0, -1.0)), 1.0e-10));
     }
 
     /**
@@ -146,7 +146,7 @@ public class AffineTest {
     @Test
     public void testScale_Double() {
         System.out.println("scale");
-        assertTrue(Point.equals(Point.of(4.0, -4.0, -2.0), Affine.identity().scale(2.0).apply(Point.of(2.0, -2.0, -1.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(4.0, -4.0, -2.0), Affine.id().scale(2.0).apply(Point.of(2.0, -2.0, -1.0)), 1.0e-10));
     }
 
     /**
@@ -155,7 +155,7 @@ public class AffineTest {
     @Test
     public void testScaleAt_4args() {
         System.out.println("scaleAt");
-        assertTrue(Point.equals(Point.of(3.0, -8.0, -7.0), Affine.identity().scaleAt(Point.of(1.0, 1.0, 1.0), 2.0, 3.0, 4.0).apply(Point.of(2.0, -2.0, -1.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(3.0, -8.0, -7.0), Affine.id().scaleAt(Point.of(1.0, 1.0, 1.0), 2.0, 3.0, 4.0).apply(Point.of(2.0, -2.0, -1.0)), 1.0e-10));
     }
 
     /**
@@ -164,7 +164,7 @@ public class AffineTest {
     @Test
     public void testScaleAt_Point_Double() {
         System.out.println("scaleAt");
-        assertTrue(Point.equals(Point.of(4.0, -8.0, -5.0), Affine.identity().scaleAt(Point.of(1.0, 1.0, 1.0), 3.0).apply(Point.of(2.0, -2.0, -1.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(4.0, -8.0, -5.0), Affine.id().scaleAt(Point.of(1.0, 1.0, 1.0), 3.0).apply(Point.of(2.0, -2.0, -1.0)), 1.0e-10));
     }
 
     /**
@@ -173,7 +173,7 @@ public class AffineTest {
     @Test
     public void testRotate_Vector_Double() {
         System.out.println("rotate");
-        assertTrue(Point.equals(Point.of(-1.0, 1.0, 1.0), Affine.identity().rotate(Vector.of(1.0, 1.0, 1.0), Math.PI*2.0/3.0).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(-1.0, 1.0, 1.0), Affine.id().rotate(Vector.of(1.0, 1.0, 1.0), Math.PI*2.0/3.0).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
     }
 
     /**
@@ -183,7 +183,7 @@ public class AffineTest {
     public void testRotate_3args_1() {
         System.out.println("rotate");
         assertTrue(Point.equals(Point.of(-1.0, 1.0, 1.0),
-                Affine.identity().rotate(Point.of(0.0, 0.0, -1.0), Point.of(1.0, 1.0, 0.0), Math.PI*2.0/3.0).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
+                Affine.id().rotate(Point.of(0.0, 0.0, -1.0), Point.of(1.0, 1.0, 0.0), Math.PI*2.0/3.0).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
     }
 
     /**
@@ -193,7 +193,7 @@ public class AffineTest {
     public void testRotateAt_3args_1() {
         System.out.println("rotateAt");
         assertTrue(Point.equals(Point.of(-1.0, 1.0, 1.0),
-                Affine.identity().rotateAt(Point.of(1.0, 1.0, 1.0), Vector.of(0.0, 1.0, 0.0), Math.PI/2).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
+                Affine.id().rotateAt(Point.of(1.0, 1.0, 1.0), Vector.of(0.0, 1.0, 0.0), Math.PI/2).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
     }
 
     /**
@@ -203,7 +203,7 @@ public class AffineTest {
     public void testRotate_3args_2() {
         System.out.println("rotate");
         assertTrue(Point.equals(Point.of(-1.0, 1.0, 1.0),
-                Affine.identity().rotate(Vector.of(0.0, 1.0, -1.0), Vector.of(-1.0, 1.0, 0.0), Math.PI/3.0*2.0).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
+                Affine.id().rotate(Vector.of(0.0, 1.0, -1.0), Vector.of(-1.0, 1.0, 0.0), Math.PI/3.0*2.0).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
     }
 
     /**
@@ -213,7 +213,7 @@ public class AffineTest {
     public void testRotate_Vector_Vector() {
         System.out.println("rotate");
         assertTrue(Point.equals(Point.of(-1.0, 1.0, 1.0),
-                Affine.identity().rotate(Vector.of(0.0, 1.0, -1.0), Vector.of(-1.0, 0.0, 1.0)).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
+                Affine.id().rotate(Vector.of(0.0, 1.0, -1.0), Vector.of(-1.0, 0.0, 1.0)).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
     }
 
     /**
@@ -223,7 +223,7 @@ public class AffineTest {
     public void testRotateAt_4args() {
         System.out.println("rotateAt");
         assertTrue(Point.equals(Point.of(-1.0, 1.0, 1.0),
-                Affine.identity().rotateAt(Point.of(1.0, -1.0, 1.0), Vector.of(0.0, 1.0, -1.0), Vector.of(-1.0, 0.0, 1.0), Math.PI/3.0).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
+                Affine.id().rotateAt(Point.of(1.0, -1.0, 1.0), Vector.of(0.0, 1.0, -1.0), Vector.of(-1.0, 0.0, 1.0), Math.PI/3.0).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
     }
 
     /**
@@ -233,7 +233,7 @@ public class AffineTest {
     public void testRotateAt_3args_2() {
         System.out.println("rotateAt");
         assertTrue(Point.equals(Point.of(-1.0, 1.0, 1.0),
-                Affine.identity().rotateAt(Point.of(1.0, -1.0, 1.0), Vector.of(0.0, 2.0, -2.0), Vector.of(-2.0, 2.0, 0.0)).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
+                Affine.id().rotateAt(Point.of(1.0, -1.0, 1.0), Vector.of(0.0, 2.0, -2.0), Vector.of(-2.0, 2.0, 0.0)).apply(Point.of(1.0, 1.0, -1.0)), 1.0e-10));
     }
 
     /**
@@ -242,7 +242,7 @@ public class AffineTest {
     @Test
     public void testTranslate_Vector() {
         System.out.println("translate");
-        assertTrue(Point.equals(Point.of(1.0, 3.0, -0.5), Affine.identity().translate(Vector.of(-2.3, 5.4, 0.5)).apply(Point.of(3.3, -2.4, -1.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(1.0, 3.0, -0.5), Affine.id().translate(Vector.of(-2.3, 5.4, 0.5)).apply(Point.of(3.3, -2.4, -1.0)), 1.0e-10));
     }
 
     /**
@@ -251,7 +251,7 @@ public class AffineTest {
     @Test
     public void testTranslate_3args() {
         System.out.println("translate");
-        assertTrue(Point.equals(Point.of(1.0, 3.0, -0.5), Affine.identity().translate(-2.3, 5.4, 0.5).apply(Point.of(3.3, -2.4, -1.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(1.0, 3.0, -0.5), Affine.id().translate(-2.3, 5.4, 0.5).apply(Point.of(3.3, -2.4, -1.0)), 1.0e-10));
     }
 
     /**
@@ -300,7 +300,7 @@ public class AffineTest {
     public void testConcatnate() {
         System.out.println("concatenate");
         assertTrue(Point.equals(Point.of(0.0, 1.0, 3.0),
-                Affine.identity()
+                Affine.id()
                         .concatnate(Affine.translation(Vector.of(-2.0, 5.0, 1.0)))
                         .concatnate(Affine.rotation(Vector.of(1.0, 1.0, 1.0), Math.PI*2.0/3.0))
                         .apply(Point.of(3.0, -2.0, -1.0)), 1.0e-10));

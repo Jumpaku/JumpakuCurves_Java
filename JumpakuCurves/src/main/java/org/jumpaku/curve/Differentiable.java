@@ -9,7 +9,7 @@ import org.jumpaku.affine.Vector;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
 public interface Differentiable {
 

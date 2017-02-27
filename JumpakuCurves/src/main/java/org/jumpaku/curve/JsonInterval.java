@@ -14,24 +14,24 @@ import org.jumpaku.json.Converter;
  */
 public final class JsonInterval implements Converter<Interval>{
 
-    @Override
-    public Type getTemporaryType() {
+    static final JsonInterval CONVERTER = new JsonInterval();
+
+    @Override public Type getTemporaryType() {
         return Data.class;
     }
 
-    @Override
-    public Temporary<Interval> toTemporary(Interval i) {
+    @Override public Temporary<Interval> toTemporary(Interval i) {
         return new Data(i);
     }
 
-    public static class Data implements Temporary<Interval>{
+    public static final class Data implements Temporary<Interval>{
 
         private final Double begin;
         
         private final Double end;
 
         public Data(Interval i) {
-            this.begin = i.getbegin();
+            this.begin = i.getBegin();
             this.end = i.getEnd();
         }
 
@@ -40,6 +40,4 @@ public final class JsonInterval implements Converter<Interval>{
             return Interval.of(begin, end);
         }
     }
-
-    
 }

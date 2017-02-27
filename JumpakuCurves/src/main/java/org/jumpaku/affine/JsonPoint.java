@@ -14,17 +14,15 @@ import org.jumpaku.json.Converter;
  */
 public final class JsonPoint implements Converter<Point>{
 
-    @Override
-    public Type getTemporaryType() {
+    @Override public Type getTemporaryType() {
         return Data.class;
     }
 
-    @Override
-    public Data toTemporary(Point p) {
+    @Override public Converter.Temporary<Point> toTemporary(Point p) {
         return new Data(p);
     }
     
-    public static class Data implements Converter.Temporary<Point>{
+    public static final class Data implements Converter.Temporary<Point>{
     
         private final Double x;
 
@@ -42,4 +40,6 @@ public final class JsonPoint implements Converter<Point>{
             return Point.of(x, y, z);
         }
     }
+    
+    public static final Converter<Point> CONVERTER = new JsonPoint();
 }

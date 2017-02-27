@@ -7,7 +7,7 @@ package org.jumpaku.curve;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  * @param <C>
  */
 public interface DefinedOnInterval<C extends DefinedOnInterval<C>>{

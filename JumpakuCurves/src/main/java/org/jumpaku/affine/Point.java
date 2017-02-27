@@ -5,13 +5,13 @@
  */
 package org.jumpaku.affine;
 
+import javaslang.control.Option;
+
 /**
  *
  * @author Jumaku
  */
 public interface Point {
-    
-    static final JsonPoint CONVERTER = new JsonPoint();
 
     static Boolean equals(Point a, Point b, Double eps){
         return Vector.equals(a.getVector(), b.getVector(), eps);
@@ -24,7 +24,7 @@ public interface Point {
             }
             
             @Override public String toString(){
-                return Point.toString(this);
+                return Point.toJson(this);
             }
         };
     }    
@@ -41,8 +41,12 @@ public interface Point {
         return Point.of(x, 0.0);
     }
     
-    static String toString(Point p){
-        return CONVERTER.toJson(p);
+    static String toJson(Point p){
+        return JsonPoint.CONVERTER.toJson(p);
+    }
+    
+    static Option<Point> fromJson(String json){
+        return JsonPoint.CONVERTER.fromJson(json);
     }
     
     Vector getVector();

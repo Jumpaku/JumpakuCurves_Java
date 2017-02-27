@@ -14,6 +14,8 @@ import org.jumpaku.json.Converter;
  */
 public final class JsonVector implements Converter<Vector>{
 
+    public static final JsonVector CONVERTER = new JsonVector();
+
     @Override public Type getTemporaryType() {
         return Data.class;
     }
@@ -22,7 +24,7 @@ public final class JsonVector implements Converter<Vector>{
         return new Data(v); 
     }
     
-    public static class Data implements Converter.Temporary<Vector>{
+    public static final class Data implements Converter.Temporary<Vector>{
     
         private final Double x;
 

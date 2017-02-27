@@ -13,9 +13,9 @@ import org.jumpaku.json.Converter;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
-public class JsonBezier implements Converter<Bezier>{
+public final class JsonBezier implements Converter<Bezier>{
 
     @Override public Type getTemporaryType() {
         return Data.class;
@@ -25,7 +25,7 @@ public class JsonBezier implements Converter<Bezier>{
         return new Data(bezier);
     }
 
-    public static class Data implements Converter.Temporary<Bezier>{
+    public static final class Data implements Converter.Temporary<Bezier>{
         private final JsonPoint.Data[] controlPoints;
         private final JsonInterval.Data interval;
 
@@ -38,4 +38,6 @@ public class JsonBezier implements Converter<Bezier>{
             return Bezier.create(Array.of(controlPoints).map(JsonPoint.Data::newInstance), interval.newInstance());
         }
     }
+    
+    public static final JsonBezier CONVERTER = new JsonBezier();
 }

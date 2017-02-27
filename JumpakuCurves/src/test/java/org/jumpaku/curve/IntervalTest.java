@@ -24,7 +24,7 @@ public class IntervalTest {
     public void testOf() {
         System.out.println("of");
         Interval instance = Interval.of(-2.3, 3.4);
-        assertEquals(-2.3, instance.getbegin(), 1.0e-10);
+        assertEquals(-2.3, instance.getBegin(), 1.0e-10);
         assertEquals(3.4, instance.getEnd(), 1.0e-10);
     }
 
@@ -49,13 +49,13 @@ public class IntervalTest {
     }
 
     /**
-     * Test of getbegin method, of class Interval.
+     * Test of getBegin method, of class Interval.
      */
     @Test
     public void testGetbegin() {
         System.out.println("getbegin");
         Interval instance = Interval.of(-2.3, 3.4);
-        assertEquals(-2.3, instance.getbegin(), 1.0e-10);
+        assertEquals(-2.3, instance.getBegin(), 1.0e-10);
     }
 
     /**
@@ -89,7 +89,7 @@ public class IntervalTest {
     public void testToString() {
         System.out.println("toString");
         Interval instance = new JsonInterval().fromJson(Interval.of(-2.3, 3.4).toString()).get();
-        assertEquals(-2.3, instance.getbegin(), 1.0e-10);
+        assertEquals(-2.3, instance.getBegin(), 1.0e-10);
         assertEquals(3.4, instance.getEnd(), 1.0e-10);
     }  
 }

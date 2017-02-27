@@ -10,7 +10,7 @@ import org.jumpaku.affine.Vector;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
 public interface Derivative extends Function<Double, Vector>{
 

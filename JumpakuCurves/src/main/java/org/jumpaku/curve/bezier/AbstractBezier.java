@@ -11,6 +11,7 @@ import javaslang.collection.Array;
 import javaslang.collection.List;
 import javaslang.collection.Stream;
 import org.jumpaku.affine.Vector;
+import org.jumpaku.curve.Differentiable;
 import org.jumpaku.curve.Interval;
 
 /**
@@ -34,40 +35,49 @@ public abstract class AbstractBezier implements Bezier{
 
     @Override public abstract org.jumpaku.affine.Point evaluate(Double t);
 
-    @Override public Interval getDomain() {
+    @Override
+    public final org.jumpaku.affine.Point apply(Double t) {
+        return Bezier.super.apply(t); 
+    }
+
+    @Override public final Interval getDomain() {
         return domain;
     }
 
-    @Override public Integer getDegree() {
+    @Override public final Integer getDegree() {
         return getControlPoints().size() - 1;
     }
     
-    @Override public Vector differentiate(Double t) {
-        return differentiate().evaluate(t);
+    @Override public final Vector differentiate(Double t) {
+        return Bezier.super.differentiate(t);
     }
 
-    @Override public BezierDerivative differentiate() {
+    @Override public final BezierDerivative differentiate() {
         Array<? extends org.jumpaku.affine.Point> cp = getControlPoints();
-        Array<Vector> vs = cp.zipWith(cp.tail(), (post, pre) -> post.diff(pre).scale(getDegree().doubleValue()));
+        Array<Vector> vs = cp.zipWith(cp.tail(), (pre, post) -> post.diff(pre).scale(getDegree().doubleValue()));
         return BezierDerivative.create(vs, getDomain());
     }
 
-    @Override public Bezier restrict(Interval i) {
-        if(getDomain().includes(i))
+    @Override public final Bezier restrict(Interval i) {
+        if(!getDomain().includes(i))
             throw new IllegalArgumentException("Interval i must be a subset of this domain");
         
         return Bezier.create(getControlPoints(), i);
     }
 
-    @Override public Bezier reverse() {
+    @Override public final Bezier restrict(Double begin, Double end) {
+        return Bezier.super.restrict(begin, end);
+    }
+    
+    @Override public final Bezier reverse() {
         return Bezier.create(getControlPoints().reverse(), getDomain());
     }
 
-    @Override public Array<org.jumpaku.affine.Point> getControlPoints() {
+    @Override public final Array<org.jumpaku.affine.Point> getControlPoints() {
         return controlPoints;
     }
 
-    @Override public Bezier elevate(){
+    @Override public final Bezier elevate(){
         return Bezier.create(createElevatedControlPoints(), getDomain());
     }
     
@@ -83,9 +93,9 @@ public abstract class AbstractBezier implements Bezier{
                 .toArray();
     }
 
-    @Override public Bezier reduce(){
+    @Override public final Bezier reduce(){
         if(getDegree() < 1)
-            throw new IllegalArgumentException("degree is too small");
+            throw new IllegalStateException("degree is too small");
         
         return Bezier.create(createReducedControlPoints(), getDomain());
     }
@@ -106,13 +116,13 @@ public abstract class AbstractBezier implements Bezier{
                             qi -> Tuple.of(
                                     cp.get(qi._2()).divide(1-1/(1.0-qi._2()/n), qi._1()),
                                     qi._2()+1))
-                    .take(r+1).map(Tuple2::_1).toArray();
+                    .take(r).map(Tuple2::_1).toArray();
                     
             Array<org.jumpaku.affine.Point> second = Stream.iterate(Tuple.of(cp.last(), n-1),
                             qi -> Tuple.of(
                                     cp.get(qi._2()).divide(1-1.0/qi._2()/n, qi._1()),
                                     qi._2()-1))
-                    .take(r+1).map(Tuple2::_1).reverse().toArray();
+                    .take(r).map(Tuple2::_1).reverse().toArray();
             
             double al = r/(m-1.0);
             org.jumpaku.affine.Point pl = cp.get(r).divide(-al/(1.0-al), first.last());
@@ -143,7 +153,7 @@ public abstract class AbstractBezier implements Bezier{
     }
     
     @Override
-    public Tuple2<? extends Bezier, ? extends Bezier> subdivide(Double t) {
+    public final Tuple2<? extends Bezier, ? extends Bezier> subdivide(Double t) {
         if(!getDomain().includes(t))
             throw new IllegalArgumentException("t must be in " + getDomain().toString() + ", but t = ");
         return createDividedControlPointsArray(t)
@@ -164,7 +174,7 @@ public abstract class AbstractBezier implements Bezier{
         return Tuple.of(first.reverse().toArray(), second.toArray());
     }    
     
-    @Override public String toString(){
-        return null;//Bezier.toString(this);
+    @Override final public String toString(){
+        return Bezier.toJson(this);
     }
 }

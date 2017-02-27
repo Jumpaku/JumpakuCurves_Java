@@ -5,6 +5,7 @@
  */
 package org.jumpaku.affine;
 
+import javaslang.control.Option;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.Precision;
@@ -14,8 +15,6 @@ import org.apache.commons.math3.util.Precision;
  * @author Jumpaku
  */
 public interface Vector {
-    
-    static final JsonVector CONVERTER = new JsonVector();
     
     static Boolean equals(Vector a, Vector b, Double eps){
         return Precision.equals(a.getX(), b.getX(), eps) &&
@@ -50,7 +49,7 @@ public interface Vector {
             }
             
             @Override public String toString(){
-                return Vector.toString(this);
+                return Vector.toJson(this);
             }
         };
     }
@@ -73,8 +72,12 @@ public interface Vector {
         return ZERO;
     }
     
-    static String toString(Vector v){
-        return CONVERTER.toJson(v);
+    static String toJson(Vector v){
+        return JsonVector.CONVERTER.toJson(v);
+    }
+    
+    static Option<Vector> fromJson(String json){
+        return JsonVector.CONVERTER.fromJson(json);
     }
     
     static Vector add(Double a, Vector v1, Double b, Vector v2){
