@@ -11,7 +11,6 @@ import javaslang.collection.Array;
 import javaslang.collection.List;
 import javaslang.collection.Stream;
 import org.jumpaku.affine.Vector;
-import org.jumpaku.curve.Differentiable;
 import org.jumpaku.curve.Interval;
 
 /**

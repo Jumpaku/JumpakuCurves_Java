@@ -237,7 +237,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of translate method, of class Affine.
+     * Test of move method, of class Affine.
      */
     @Test
     public void testTranslate_Vector() {
@@ -246,7 +246,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of translate method, of class Affine.
+     * Test of move method, of class Affine.
      */
     @Test
     public void testTranslate_3args() {

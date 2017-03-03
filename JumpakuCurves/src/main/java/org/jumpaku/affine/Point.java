@@ -63,7 +63,7 @@ public interface Point {
         return getVector().getZ();
     }        
     
-    default Point translate(Vector v){
+    default Point move(Vector v){
         return Point.of(getVector().add(v));
     }
 

@@ -86,12 +86,12 @@ public class PointTest {
     }
 
     /**
-     * Test of translate method, of class Point.
+     * Test of move method, of class Point.
      */
     @Test
     public void testTranslate() {
         System.out.println("translate");
-        assertTrue(Point.equals(Point.of(4.8,6.2,4.7), Point.of(1.4,2.0,-0.7).translate(Vector.of(3.4, 4.2, 5.4)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(4.8,6.2,4.7), Point.of(1.4,2.0,-0.7).move(Vector.of(3.4, 4.2, 5.4)), 1.0e-10));
     }
 
     /**
