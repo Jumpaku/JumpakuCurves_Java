@@ -5,6 +5,7 @@
  */
 package org.jumpaku.affine;
 
+import javaslang.control.Option;
 import org.apache.commons.math3.util.FastMath;
 import org.jumpaku.fuzzy.Grade;
 import org.jumpaku.fuzzy.Membership;
@@ -12,60 +13,51 @@ import org.jumpaku.fuzzy.Membership;
 /**
  *
  * @author Jumpaku
- * @param <FV>
  */
-public interface FuzzyVector<FV extends FuzzyVector<FV>> extends Membership<FV, Vector>, Vector{
+public interface FuzzyVector extends Membership<FuzzyVector, Vector>, Vector{
     
-    public static final class Cone implements FuzzyVector<Cone>{
+    public static final class Cone implements FuzzyVector{
 
         private final Vector vector;
         
-        private  final Double fuzziness;
+        private  final Double r;
 
         public Cone(Vector vector, Double fuzziness) {
             this.vector = vector;
-            this.fuzziness = fuzziness;
+            this.r = fuzziness;
         }
         
-        public Double getFuzziness() {
-            return fuzziness;
+        @Override public Double getR() {
+            return r;
         }
 
-        @Override public Cone fAdd(Cone v) {
-            return new Cone(vector.add(v), FastMath.abs(fuzziness) + FastMath.abs(v.fuzziness));
+        @Override public FuzzyVector add(Vector v) {
+            return new Cone(vector.add(v), getR() + (v instanceof FuzzyVector ? ((FuzzyVector)v).getR() : 0.0));
         }
 
-        @Override public Cone fScale(Double a) {
-            return new Cone(vector.scale(a), FastMath.abs(fuzziness*a));
+        @Override public FuzzyVector scale(Double a) {
+            return new Cone(vector.scale(a), getR()*FastMath.abs(a));
         }
 
         @Override public Grade membership(Vector v) {
-            return Grade.clamped(vector.sub(v).length()/getFuzziness());
+            return Grade.clamped(vector.sub(v).length()/getR());
         }
 
-        @Override public Grade possibility(Cone v) {
-        double ra = getFuzziness();
-        double rb = v.getFuzziness();
-        double d = sub(v).length();
-        return !Double.isFinite(d/(ra + rb)) ? 
-                Grade.of(Vector.equals(this, v, 1.0e-10)) : Grade.clamped(1.0 - d/(ra + rb));
+        @Override public Grade possibility(FuzzyVector v) {
+            double ra = getR();
+            double rb = v.getR();
+            double d = sub(v).length();
+            return !Double.isFinite(d/(ra + rb)) ? 
+                    Grade.of(Vector.equals(this, v, 1.0e-10)) : Grade.clamped(1.0 - d/(ra + rb));
         }
 
-        @Override public Grade necessity(Cone v) {
-        double ra = getFuzziness();
-        double rb = v.getFuzziness();
-        double d = sub(v).length();
-        return !Double.isFinite(d/(ra + rb)) ? Grade.of(Vector.equals(this, v, 1.0e-10)) : 
-               d < ra                        ? Grade.of(Math.min((ra - d)/(ra + rb), (ra + d)/(ra + rb))) :
-                                               Grade.falseValue();
-        }
-
-        @Override public Vector add(Vector v) {
-            return vector.add(v);
-        }
-
-        @Override public Vector scale(Double w) {
-            return vector.scale(w);
+        @Override public Grade necessity(FuzzyVector v) {
+            double ra = getR();
+            double rb = v.getR();
+            double d = sub(v).length();
+            return !Double.isFinite(d/(ra + rb)) ? Grade.of(Vector.equals(this, v, 1.0e-10)) : 
+                   d < ra                        ? Grade.of(Math.min((ra - d)/(ra + rb), (ra + d)/(ra + rb))) :
+                                                   Grade.falseValue();
         }
 
         @Override public Double dot(Vector v) {
@@ -83,25 +75,90 @@ public interface FuzzyVector<FV extends FuzzyVector<FV>> extends Membership<FV, 
         @Override public Double getZ() {
             return vector.getZ();
         }
+        @Override public String toString(){
+            return FuzzyVector.toJson(this);
+        }
     }
     
-    FV fAdd(FV v);
+    static FuzzyVector of(Double x, Double y, Double z, Double r){
+        if(r.compareTo(0.0) < 0)
+            throw new IllegalArgumentException("r must be grater than or equal to 0.0, but r = " + r);
+ 
+        return of(Vector.of(x, y, z), r);
+    }
     
-    FV fScale(Double a);
+    static FuzzyVector of(Double x, Double y, Double r){
+        return of(Vector.of(x, y, 0.0), r);
+    }
     
-    default FV fAdd(Double a, FV v){
-        return fAdd(v.fScale(a));
+    static FuzzyVector of(Double x, Double r){
+        return of(Vector.of(x, 0.0), r);
+    }
+    
+    static FuzzyVector zero(Double r){
+        return of(Vector.zero(), r);
+    }
+    
+    static FuzzyVector of(Vector v, Double r){
+        return new Cone(v, r);
+    }
+    
+    static FuzzyVector crisp(Double x, Double y, Double z){
+        return of(x, y, z, 0.0);
+    }
+    
+    static FuzzyVector crisp(Double x, Double y){
+        return of(x, y, 0.0);
+    }    
+    
+    static FuzzyVector crisp(Double x){
+        return of(x, 0.0);
+    }    
+    
+    static FuzzyVector crisp(Vector v){
+        return of(v, 0.0);
+    }    
+    
+    static FuzzyVector zero(){
+        return zero(0.0);
+    }
+    
+    static String toJson(FuzzyVector v){
+        return JsonFuzzyVector.CONVERTER.toJson(v);
+    }
+    
+    static Option<FuzzyVector> fromJson(String json){
+        return JsonFuzzyVector.CONVERTER.fromJson(json);
     }
 
-    default FV fSub(FV v){
-        return fAdd(v.fNegate());
-    }
+    Double getR();
+    
+    @Override FuzzyVector add(Vector v);
+    
+    @Override FuzzyVector scale(Double a);
 
-    default FV fSub(Double a, FV v){
-        return fSub(v.fScale(a));
+    @Override default FuzzyVector sub(Vector v){
+        return add(v.negate());
     }
     
-    default FV fNegate(){
-        return fScale(-1.0);
+    @Override default FuzzyVector sub(Double a, Vector v){
+        return sub(v.scale(a));
     }
+    
+    @Override default FuzzyVector add(Double a, Vector v){
+        return add(v.scale(a));
+    }
+    
+    @Override default FuzzyVector negate(){
+        return scale(-1.0);
+    }
+    
+    @Override default FuzzyVector normalize(){
+        return scale(1.0/length());
+    }
+    
+    @Override default FuzzyVector resize(Double l){
+        return scale(l/length());
+    }    
+    
 }

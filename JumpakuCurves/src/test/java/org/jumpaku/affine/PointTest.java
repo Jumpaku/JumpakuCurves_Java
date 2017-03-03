@@ -89,7 +89,7 @@ public class PointTest {
      * Test of move method, of class Point.
      */
     @Test
-    public void testTranslate() {
+    public void testMove() {
         System.out.println("translate");
         assertTrue(Point.equals(Point.of(4.8,6.2,4.7), Point.of(1.4,2.0,-0.7).move(Vector.of(3.4, 4.2, 5.4)), 1.0e-10));
     }
@@ -158,6 +158,10 @@ public class PointTest {
     public void testDivide() {
         System.out.println("divide");
         assertTrue(Point.equals(Point.of(1.3, -2.6, 1.4), Point.of(1.0, -2.0, 2.0).divide(0.3, Point.of(2.0, -4.0, 0.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(0.0, 0.0, 4.0), Point.of(1.0, -2.0, 2.0).divide(-1.0, Point.of(2.0, -4.0, 0.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(3.0, -6.0, -2.0), Point.of(1.0, -2.0, 2.0).divide(2.0, Point.of(2.0, -4.0, 0.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(1.0, -2.0, 2.0), Point.of(1.0, -2.0, 2.0).divide(0.0, Point.of(2.0, -4.0, 0.0)), 1.0e-10));
+        assertTrue(Point.equals(Point.of(2.0, -4.0, 0.0), Point.of(1.0, -2.0, 2.0).divide(1.0, Point.of(2.0, -4.0, 0.0)), 1.0e-10));
     }
 
     /**
