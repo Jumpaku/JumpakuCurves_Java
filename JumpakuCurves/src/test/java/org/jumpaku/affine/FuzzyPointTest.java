@@ -196,13 +196,31 @@ public class FuzzyPointTest {
     @Test
     public void testMembership() {
         System.out.println("membership");
-        Point p = null;
-        FuzzyPoint instance = new FuzzyPointImpl();
-        Grade expResult = null;
-        Grade result = instance.membership(p);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Point p1 = Point.of(1.0, 1.0);
+        Point p2 = Point.of(1.0, 0.0);
+        Point p3 = Point.of(1.0, -1.0);
+        Point p4 = Point.of(0.0, 0.0);
+        FuzzyPoint instance = FuzzyPoint.of(1.0, 1.0, 0.0, 2.0);
+        
+        Grade expResult1 = Grade.trueValue();
+        Grade result1 = instance.membership(p1);
+        assertEquals(expResult1.getValue(), result1.getValue(), 1.0e-10);
+        
+        Grade expResult2 = Grade.of(0.5);
+        Grade result2 = instance.membership(p2);
+        assertEquals(expResult2.getValue(), result2.getValue(), 1.0e-10);
+        
+        Grade expResult3 = Grade.falseValue();
+        Grade result3 = instance.membership(p3);
+        assertEquals(expResult3.getValue(), result3.getValue(), 1.0e-10);
+        
+        Grade expResult4 = Grade.of(1.0 - 1.0 / Math.sqrt(2));
+        Grade result4 = instance.membership(p4);
+        assertEquals(expResult4.getValue(), result4.getValue(), 1.0e-10);
+        
+        
+        assertEquals(1.0, FuzzyPoint.crisp(0.0, 0.0).membership(Point.of(0.0, 0.0)).getValue(), 1.0e-10);
+        assertEquals(0.0, FuzzyPoint.crisp(0.0, 0.0).membership(Point.of(1.0, 0.0)).getValue(), 1.0e-10);
     }
 
     /**
@@ -211,13 +229,23 @@ public class FuzzyPointTest {
     @Test
     public void testPossibility() {
         System.out.println("possibility");
-        FuzzyPoint p = null;
-        FuzzyPoint instance = new FuzzyPointImpl();
-        Grade expResult = null;
-        Grade result = instance.possibility(p);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        FuzzyPoint p1 = FuzzyPoint.of(0.0, 1.0, 0.0, 2.0);
+        FuzzyPoint p2 = FuzzyPoint.of(0.0, 2.0, 0.0, 2.0);
+        FuzzyPoint p3 = FuzzyPoint.of(0.0, 3.0, 0.0, 2.0);
+        FuzzyPoint p4 = FuzzyPoint.of(2.0, 2.0, 0.0, 2.0);
+        FuzzyPoint instance = FuzzyPoint.of(0.0, 0.0, 0.0, 2.0);
+        Grade expResult1 = Grade.of(0.75);
+        Grade expResult2 = Grade.of(0.5);
+        Grade expResult3 = Grade.of(0.25);
+        Grade expResult4 = Grade.of(1.0 - 1.0/Math.sqrt(2.0));
+        Grade result1 = instance.possibility(p1);
+        Grade result2 = instance.possibility(p2);
+        Grade result3 = instance.possibility(p3);
+        Grade result4 = instance.possibility(p4);
+        assertEquals(expResult1.getValue(), result1.getValue(), 1.0e-10);
+        assertEquals(expResult2.getValue(), result2.getValue(), 1.0e-10);
+        assertEquals(expResult3.getValue(), result3.getValue(), 1.0e-10);
+        assertEquals(expResult4.getValue(), result4.getValue(), 1.0e-10);
     }
 
     /**
@@ -226,13 +254,23 @@ public class FuzzyPointTest {
     @Test
     public void testNecessity() {
         System.out.println("necessity");
-        FuzzyPoint p = null;
-        FuzzyPoint instance = new FuzzyPointImpl();
-        Grade expResult = null;
-        Grade result = instance.necessity(p);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        FuzzyPoint p1 = FuzzyPoint.of(0.0, 0.0, 0.0, 2.0);
+        FuzzyPoint p2 = FuzzyPoint.of(1.0, 0.0, 0.0, 2.0);
+        FuzzyPoint p3 = FuzzyPoint.of(2.0, 0.0, 0.0, 2.0);
+        FuzzyPoint p4 = FuzzyPoint.of(3.0, 0.0, 0.0, 5.0);
+        FuzzyPoint instance = FuzzyPoint.of(0.0, 0.0, 0.0, 2.0);
+        Grade expResult1 = Grade.of(0.5);
+        Grade expResult2 = Grade.of(0.25);
+        Grade expResult3 = Grade.of(0.0);
+        Grade expResult4 = Grade.of(0.0);
+        Grade result1 = instance.necessity(p1);
+        Grade result2 = instance.necessity(p2);
+        Grade result3 = instance.necessity(p3);
+        Grade result4 = instance.necessity(p4);
+        assertEquals(expResult1.getValue(), result1.getValue(), 1.0e-10);
+        assertEquals(expResult2.getValue(), result2.getValue(), 1.0e-10);
+        assertEquals(expResult3.getValue(), result3.getValue(), 1.0e-10);
+        assertEquals(expResult4.getValue(), result4.getValue(), 1.0e-10);
     }
 
     /**

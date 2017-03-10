@@ -10,15 +10,11 @@ package org.jumpaku.curve;
  * @author Jumpaku
  * @param <C>
  */
-public interface DefinedOnInterval<C extends DefinedOnInterval<C>>{
-
-    Interval getDomain();
-
+public interface DefinedOnInterval<C> {
+    
     C restrict(Interval i);
     
     default C restrict(Double begin, Double end){
         return restrict(Interval.of(begin, end));
     }
-    
-    C reverse();
 }

@@ -91,9 +91,9 @@ public interface BezierDerivative extends Derivative, Differentiable, DefinedOnI
 
     @Override BezierDerivative restrict(Interval i);
 
-    @Override BezierDerivative reverse();
+    BezierDerivative reverse();
 
-    Array<Vector> getControlVectors();
+    Array<? extends Vector> getControlVectors();
 
     Integer getDegree();
     

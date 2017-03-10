@@ -29,13 +29,13 @@ public interface Nurbs extends Curve, Differentiable, DefinedOnInterval<Nurbs>{
 
     @Override Nurbs restrict(Interval i);
 
-    @Override Nurbs reverse();
+    Nurbs reverse();
 
-    Array<Point> getControlPoints();
+    Array<? extends Point> getControlPoints();
 
     Array<Double> getWeights();
     
-    Array<Tuple2<Point, Double>> getWeightedPoints();
+    Array<Tuple2<? extends Point, Double>> getWeightedPoints();
     
     Array<Double> getKnots();
     
@@ -43,7 +43,7 @@ public interface Nurbs extends Curve, Differentiable, DefinedOnInterval<Nurbs>{
     
     Nurbs insertKnot(Double t);
     
-    Array<RationalBezier> toRationalBeziers();
+    Array<? extends RationalBezier> toRationalBeziers();
     
     Tuple2<? extends RationalBezier, ? extends RationalBezier> subdivide(Double t);
 }

@@ -137,7 +137,7 @@ public class PointTest {
      * Test of dist method, of class Point.
      */
     @Test
-    public void testDist() {
+    public void testDist_Point() {
         System.out.println("dist");
         assertEquals(3.0, Point.of(1.0, -2.0, 2.0).dist(Point.of(2.0, -4.0, 0.0)), 1.0e-10);
     }
@@ -204,8 +204,30 @@ public class PointTest {
     
     @Test
     public void testToJson(){
-        System.out.println("toString");
+        System.out.println("toJson");
         JsonPoint instance = new JsonPoint();
         assertTrue(Point.equals(Point.of(1.23, 4.56, -7.89), instance.fromJson(Point.toJson(Point.of(1.23, 4.56, -7.89))).get(), 1.0e-10));
+    }
+
+    /**
+     * Test of fromJson method, of class Point.
+     */
+    @Test
+    public void testFromJson() {
+        System.out.println("fromJson");
+        JsonPoint instance = new JsonPoint();
+        assertTrue(Point.equals(Point.of(1.23, 4.56, -7.89), instance.fromJson("{x:1.23, y:4.56, z:-7.89}").get(), 1.0e-10));
+    }
+
+    /**
+     * Test of dist method, of class Point.
+     */
+    @Test
+    public void testDist_Point_Point() {
+        System.out.println("dist");
+        Point a = Point.of(1.0, 0.0, -1.0);
+        Point b = Point.of(0.0, 1.0, 1.0);
+        Point instance = Point.of(1.0, 1.0, 0.0);
+        assertEquals(Math.pow(2, 0.5)/2, instance.dist(a, b), 1.0e-10);
     }
 }

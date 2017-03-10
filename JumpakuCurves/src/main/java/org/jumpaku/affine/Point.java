@@ -80,6 +80,20 @@ public interface Point {
         return diff(p).length();
     }
     
+    /**
+     * distance between this point and line ab. 
+     * @param a
+     * @param b
+     * @return 
+     */
+    default Double dist(Point a, Point b){
+        Point p = this;
+        Vector ap = p.diff(a);
+        Vector ab = b.diff(a);
+        Point h = a.move(ab.scale(ap.dot(ab)/ab.square()));
+        return p.dist(h);
+    }
+    
     default Double distSquare(Point p){
         return diff(p).square();
     }

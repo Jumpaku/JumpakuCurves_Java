@@ -15,10 +15,13 @@ import org.jumpaku.affine.Vector;
 public interface Derivative extends Function<Double, Vector>{
 
     @Override default Vector apply(Double t) {
+        if(!getDomain().includes(t))
+            throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
+
         return evaluate(t);
     }
     
     Vector evaluate(Double t);
 
-    Domain getDomain();
+    Interval getDomain();
 }

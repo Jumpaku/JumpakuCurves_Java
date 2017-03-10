@@ -28,13 +28,13 @@ public interface RationalBezier extends Curve, Differentiable, DefinedOnInterval
 
     @Override RationalBezier restrict(Interval i);
 
-    @Override RationalBezier reverse();
+    RationalBezier reverse();
 
-    Array<Point> getControlPoints();
+    Array<? extends Point> getControlPoints();
     
     Array<Double> getWeights();
     
-    Array<Tuple2<Point, Double>> getWeightedPoints();
+    Array<Tuple2<? extends Point, Double>> getWeightedPoints();
 
     Integer getDegree();
     

@@ -137,9 +137,9 @@ public interface Bezier extends Curve, Differentiable, DefinedOnInterval<Bezier>
 
     @Override Bezier restrict(Interval i);
 
-    @Override Bezier reverse();
+     Bezier reverse();
 
-    Array<org.jumpaku.affine.Point> getControlPoints();
+    Array<? extends org.jumpaku.affine.Point> getControlPoints();
 
     Integer getDegree();
     

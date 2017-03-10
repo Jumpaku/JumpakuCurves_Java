@@ -29,9 +29,9 @@ public interface BSpline extends Curve, Differentiable, DefinedOnInterval<BSplin
 
     @Override BSpline restrict(Interval i);
 
-    @Override BSpline reverse();
+    BSpline reverse();
 
-    Array<Point> getControlPoints();
+    Array<? extends Point> getControlPoints();
 
     Array<Double> getKnots();
     
@@ -39,7 +39,7 @@ public interface BSpline extends Curve, Differentiable, DefinedOnInterval<BSplin
     
     BSpline insertKnot(Double t);
     
-    Array<Bezier> toBeziers();
+    Array<? extends Bezier> toBeziers();
     
     Tuple2<? extends Bezier, ? extends Bezier> subdivide(Double t);
 }

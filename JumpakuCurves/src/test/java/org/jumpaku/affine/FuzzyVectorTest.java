@@ -7,6 +7,7 @@ package org.jumpaku.affine;
 
 import static org.jumpaku.affine.FuzzyVectorMatcher.fuzzyVectorOf;
 import static org.hamcrest.core.Is.is;
+import org.jumpaku.fuzzy.Grade;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -258,6 +259,90 @@ public class FuzzyVectorTest {
         FuzzyVector instance = FuzzyVector.of(1.0, 2.0, -2.0, 1.0);
         assertThat(instance.normalize(), is(fuzzyVectorOf(1.0/3.0, 2.0/3.0, -2.0/3.0, 1.0/3.0)));
     }
+
+    /**
+     * Test of membership method, of class FuzzyPoint.
+     */
+    @Test
+    public void testMembership() {
+        System.out.println("membership");
+        Vector p1 = Vector.of(1.0, 1.0);
+        Vector p2 = Vector.of(1.0, 0.0);
+        Vector p3 = Vector.of(1.0, -1.0);
+        Vector p4 = Vector.of(0.0, 0.0);
+        FuzzyVector instance = FuzzyVector.of(1.0, 1.0, 0.0, 2.0);
+        
+        Grade expResult1 = Grade.trueValue();
+        Grade result1 = instance.membership(p1);
+        assertEquals(expResult1.getValue(), result1.getValue(), 1.0e-10);
+        
+        Grade expResult2 = Grade.of(0.5);
+        Grade result2 = instance.membership(p2);
+        assertEquals(expResult2.getValue(), result2.getValue(), 1.0e-10);
+        
+        Grade expResult3 = Grade.falseValue();
+        Grade result3 = instance.membership(p3);
+        assertEquals(expResult3.getValue(), result3.getValue(), 1.0e-10);
+        
+        Grade expResult4 = Grade.of(1.0 - 1.0 / Math.sqrt(2));
+        Grade result4 = instance.membership(p4);
+        assertEquals(expResult4.getValue(), result4.getValue(), 1.0e-10);
+        
+        
+        assertEquals(1.0, FuzzyVector.crisp(0.0, 0.0).membership(Vector.of(0.0, 0.0)).getValue(), 1.0e-10);
+        assertEquals(0.0, FuzzyVector.crisp(0.0, 0.0).membership(Vector.of(1.0, 0.0)).getValue(), 1.0e-10);
+    }
+
+    /**
+     * Test of possibility method, of class FuzzyPoint.
+     */
+    @Test
+    public void testPossibility() {
+        System.out.println("possibility");
+        FuzzyVector p1 = FuzzyVector.of(0.0, 1.0, 0.0, 2.0);
+        FuzzyVector p2 = FuzzyVector.of(0.0, 2.0, 0.0, 2.0);
+        FuzzyVector p3 = FuzzyVector.of(0.0, 3.0, 0.0, 2.0);
+        FuzzyVector p4 = FuzzyVector.of(2.0, 2.0, 0.0, 2.0);
+        FuzzyVector instance = FuzzyVector.of(0.0, 0.0, 0.0, 2.0);
+        Grade expResult1 = Grade.of(0.75);
+        Grade expResult2 = Grade.of(0.5);
+        Grade expResult3 = Grade.of(0.25);
+        Grade expResult4 = Grade.of(1.0 - 1.0/Math.sqrt(2.0));
+        Grade result1 = instance.possibility(p1);
+        Grade result2 = instance.possibility(p2);
+        Grade result3 = instance.possibility(p3);
+        Grade result4 = instance.possibility(p4);
+        assertEquals(expResult1.getValue(), result1.getValue(), 1.0e-10);
+        assertEquals(expResult2.getValue(), result2.getValue(), 1.0e-10);
+        assertEquals(expResult3.getValue(), result3.getValue(), 1.0e-10);
+        assertEquals(expResult4.getValue(), result4.getValue(), 1.0e-10);
+    }
+
+    /**
+     * Test of necessity method, of class FuzzyPoint.
+     */
+    @Test
+    public void testNecessity() {
+        System.out.println("necessity");
+        FuzzyVector p1 = FuzzyVector.of(0.0, 0.0, 0.0, 2.0);
+        FuzzyVector p2 = FuzzyVector.of(1.0, 0.0, 0.0, 2.0);
+        FuzzyVector p3 = FuzzyVector.of(2.0, 0.0, 0.0, 2.0);
+        FuzzyVector p4 = FuzzyVector.of(3.0, 0.0, 0.0, 5.0);
+        FuzzyVector instance = FuzzyVector.of(0.0, 0.0, 0.0, 2.0);
+        Grade expResult1 = Grade.of(0.5);
+        Grade expResult2 = Grade.of(0.25);
+        Grade expResult3 = Grade.of(0.0);
+        Grade expResult4 = Grade.of(0.0);
+        Grade result1 = instance.necessity(p1);
+        Grade result2 = instance.necessity(p2);
+        Grade result3 = instance.necessity(p3);
+        Grade result4 = instance.necessity(p4);
+        assertEquals(expResult1.getValue(), result1.getValue(), 1.0e-10);
+        assertEquals(expResult2.getValue(), result2.getValue(), 1.0e-10);
+        assertEquals(expResult3.getValue(), result3.getValue(), 1.0e-10);
+        assertEquals(expResult4.getValue(), result4.getValue(), 1.0e-10);
+    }
+
 
     /**
      * Test of resize method, of class FuzzyVector.

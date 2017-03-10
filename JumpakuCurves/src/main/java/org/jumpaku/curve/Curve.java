@@ -28,5 +28,5 @@ public interface Curve extends Function<Double, Point>{
      */
     Point evaluate(Double t);
 
-    Domain getDomain();
+    Interval getDomain();
 }

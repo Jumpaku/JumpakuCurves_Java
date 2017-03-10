@@ -40,7 +40,10 @@ public interface FuzzyVector extends Membership<FuzzyVector, Vector>, Vector{
         }
 
         @Override public Grade membership(Vector v) {
-            return Grade.clamped(vector.sub(v).length()/getR());
+            double d = vector.sub(v).length();
+            double r = getR();
+            return Double.isFinite(d/r) ?
+                    Grade.clamped(1.0-d/r) : Grade.of(Vector.equals(this, v, 1.0e-10));
         }
 
         @Override public Grade possibility(FuzzyVector v) {
