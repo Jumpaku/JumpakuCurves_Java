@@ -5,7 +5,6 @@
  */
 package org.jumpaku.curve.polyline;
 
-import org.apache.commons.math3.util.Precision;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;

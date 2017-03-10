@@ -25,14 +25,14 @@ public final class JsonPolyline implements Converter<Polyline>{
     }
 
     public static final class Data implements Converter.Temporary<Polyline>{
-        private final JsonFuzzyPoint.Data[] controlPoints;
+        private final JsonFuzzyPoint.Data[] points;
 
         public Data(Polyline polyline) {
-            this.controlPoints = polyline.getPoints().map(JsonFuzzyPoint.Data::new).toJavaArray(JsonFuzzyPoint.Data.class);
+            this.points = polyline.getPoints().map(JsonFuzzyPoint.Data::new).toJavaArray(JsonFuzzyPoint.Data.class);
         }
 
         @Override public Polyline newInstance() {
-            return Polyline.create(Array.of(controlPoints).map(JsonFuzzyPoint.Data::newInstance));
+            return Polyline.create(Array.of(points).map(JsonFuzzyPoint.Data::newInstance));
         }
     }
     
