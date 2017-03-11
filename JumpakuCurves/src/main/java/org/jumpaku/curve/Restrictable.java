@@ -10,7 +10,7 @@ package org.jumpaku.curve;
  * @author Jumpaku
  * @param <C>
  */
-public interface DefinedOnInterval<C> {
+public interface Restrictable<C> {
     
     C restrict(Interval i);
     

@@ -63,7 +63,7 @@ public interface Interval extends Domain{
     @Override Boolean includes(Double t);
     
     default Boolean includes(Interval i){
-        return getBegin().compareTo(i.getBegin()) <= 0 && getEnd().compareTo(i.getEnd()) >= 0;
+        return getBegin() <= i.getBegin() && i.getEnd() <= getEnd();
     }
     
     Double getBegin();

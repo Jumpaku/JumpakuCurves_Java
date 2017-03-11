@@ -39,8 +39,8 @@ public final class JsonBezierDerivative implements Converter<BezierDerivative>{
         }
         
         @Override public BezierDerivative newInstance() {
-            return BezierDerivative.create(
-                    Array.of(controlVectors).map(JsonVector.Data::newInstance), interval.newInstance());
+            return BezierDerivative.create(interval.newInstance(), 
+                    Array.of(controlVectors).map(JsonVector.Data::newInstance));
         }
     }
 }

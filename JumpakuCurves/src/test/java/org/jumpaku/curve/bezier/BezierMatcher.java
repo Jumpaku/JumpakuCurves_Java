@@ -29,7 +29,8 @@ public class BezierMatcher extends TypeSafeMatcher<Bezier>{
     }
     
     @Override protected boolean matchesSafely(Bezier item) {
-        return expected.getControlPoints().zipWith(item.getControlPoints(), (e, a)->Point.equals(e, a, 1.0e-10)).forAll(b->b)
+        return expected.getControlPoints().zipWith(item.getControlPoints(),
+                (e, a)->Point.equals(e, a, 1.0e-10) && Precision.equals(e.getR(), a.getR(), 1.0e-10)).forAll(b->b)
                 && expected.getControlPoints().size() == item.getControlPoints().size()
                 && Precision.equals(expected.getDomain().getBegin(), item.getDomain().getBegin(), 1.0e-10)
                 && Precision.equals(expected.getDomain().getEnd(), item.getDomain().getEnd(), 1.0e-10);

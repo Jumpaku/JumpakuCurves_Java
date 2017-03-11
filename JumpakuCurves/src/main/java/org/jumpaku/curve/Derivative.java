@@ -12,7 +12,7 @@ import org.jumpaku.affine.Vector;
  *
  * @author Jumpaku
  */
-public interface Derivative extends Function<Double, Vector>{
+public interface Derivative extends Function<Double, Vector>, Restrictable<Derivative>{
 
     @Override default Vector apply(Double t) {
         if(!getDomain().includes(t))
@@ -24,4 +24,22 @@ public interface Derivative extends Function<Double, Vector>{
     Vector evaluate(Double t);
 
     Interval getDomain();
+    
+    @Override public default Derivative restrict(Interval i) {
+        if(!getDomain().includes(i))
+            throw new IllegalArgumentException("i must be in " + getDomain() + ", but i = " + i);
+
+        return new Derivative() {
+            @Override public Vector evaluate(Double t) {
+                if(!i.includes(t))
+                    throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
+                
+                return Derivative.this.evaluate(t);
+            }
+
+            @Override public Interval getDomain() {
+                return i;
+            }
+        };
+    }  
 }

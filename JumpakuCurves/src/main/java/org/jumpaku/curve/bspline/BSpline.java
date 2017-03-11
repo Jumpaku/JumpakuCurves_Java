@@ -9,7 +9,6 @@ import javaslang.Tuple2;
 import javaslang.collection.Array;
 import org.jumpaku.affine.Point;
 import org.jumpaku.curve.Curve;
-import org.jumpaku.curve.DefinedOnInterval;
 import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Interval;
 import org.jumpaku.curve.Differentiable;
@@ -19,7 +18,7 @@ import org.jumpaku.curve.bezier.Bezier;
  *
  * @author Jumpaku
  */
-public interface BSpline extends Curve, Differentiable, DefinedOnInterval<BSpline>{
+public interface BSpline extends Curve, Differentiable{
         
     @Override Interval getDomain();
     

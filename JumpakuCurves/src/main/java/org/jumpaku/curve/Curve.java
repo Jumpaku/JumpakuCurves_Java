@@ -12,7 +12,7 @@ import org.jumpaku.affine.Point;
  *
  * @author Jumpaku
  */
-public interface Curve extends Function<Double, Point>{
+public interface Curve extends Function<Double, Point>, Restrictable<Curve>{
 
     @Override default Point apply(Double t) {
         if(!getDomain().includes(t))
@@ -29,4 +29,22 @@ public interface Curve extends Function<Double, Point>{
     Point evaluate(Double t);
 
     Interval getDomain();
+
+    @Override public default Curve restrict(Interval i) {
+        if(!getDomain().includes(i))
+            throw new IllegalArgumentException("i must be in " + getDomain() + ", but i = " + i);
+
+        return new Curve() {
+            @Override public Point evaluate(Double t) {
+                if(!i.includes(t))
+                    throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
+                
+                return Curve.this.evaluate(t);
+            }
+
+            @Override public Interval getDomain() {
+                return i;
+            }
+        };
+    }    
 }

@@ -10,6 +10,7 @@ import javaslang.Tuple2;
 import javaslang.collection.Array;
 import javaslang.collection.List;
 import javaslang.collection.Stream;
+import org.jumpaku.affine.FuzzyPoint;
 import org.jumpaku.affine.Vector;
 import org.jumpaku.curve.Interval;
 
@@ -19,25 +20,20 @@ import org.jumpaku.curve.Interval;
  */
 public abstract class AbstractBezier implements Bezier{
 
-    private final Array<org.jumpaku.affine.Point> controlPoints;
+    private final Array<FuzzyPoint> controlPoints;
     
     private final Interval domain;
 
-    public AbstractBezier(Iterable<? extends org.jumpaku.affine.Point> controlPoints, Interval domain) {
+    public AbstractBezier(Iterable<? extends FuzzyPoint> controlPoints, Interval domain) {
         this.controlPoints = Array.ofAll(controlPoints);
         this.domain = domain;
     }
-        
-    public static Array<org.jumpaku.affine.Point> decasteljau(Double t, Array<org.jumpaku.affine.Point> cps){
+    
+    public static Array<FuzzyPoint> decasteljau(Double t, Array<FuzzyPoint> cps){
         return cps.zipWith(cps.tail(), (p0, p1) -> p0.divide(t, p1));
     }
 
-    @Override public abstract org.jumpaku.affine.Point evaluate(Double t);
-
-    @Override
-    public final org.jumpaku.affine.Point apply(Double t) {
-        return Bezier.super.apply(t); 
-    }
+    @Override public abstract FuzzyPoint evaluate(Double t);
 
     @Override public final Interval getDomain() {
         return domain;
@@ -52,16 +48,16 @@ public abstract class AbstractBezier implements Bezier{
     }
 
     @Override public final BezierDerivative differentiate() {
-        Array<? extends org.jumpaku.affine.Point> cp = getControlPoints();
+        Array<? extends FuzzyPoint> cp = getControlPoints();
         Array<Vector> vs = cp.zipWith(cp.tail(), (pre, post) -> post.diff(pre).scale(getDegree().doubleValue()));
-        return BezierDerivative.create(vs, getDomain());
+        return BezierDerivative.create(getDomain(), vs);
     }
 
     @Override public final Bezier restrict(Interval i) {
         if(!getDomain().includes(i))
             throw new IllegalArgumentException("Interval i must be a subset of this domain");
         
-        return Bezier.create(getControlPoints(), i);
+        return Bezier.create(i, getControlPoints());
     }
 
     @Override public final Bezier restrict(Double begin, Double end) {
@@ -69,20 +65,21 @@ public abstract class AbstractBezier implements Bezier{
     }
     
     @Override public final Bezier reverse() {
-        return Bezier.create(getControlPoints().reverse(), getDomain());
+        return Bezier.create(Interval.of(1-getDomain().getEnd(), 1-getDomain().getBegin()),
+                getControlPoints().reverse());
     }
 
-    @Override public final Array<org.jumpaku.affine.Point> getControlPoints() {
+    @Override public final Array<FuzzyPoint> getControlPoints() {
         return controlPoints;
     }
 
     @Override public final Bezier elevate(){
-        return Bezier.create(createElevatedControlPoints(), getDomain());
+        return Bezier.create(getDomain(), createElevatedControlPoints());
     }
     
-    private Array<org.jumpaku.affine.Point> createElevatedControlPoints() {
+    private Array<FuzzyPoint> createElevatedControlPoints() {
         Integer n = getDegree();
-        Array<org.jumpaku.affine.Point> cp = getControlPoints();
+        Array<FuzzyPoint> cp = getControlPoints();
         
         return Stream.rangeClosed(0, n+1)
                 .map(i ->
@@ -96,14 +93,14 @@ public abstract class AbstractBezier implements Bezier{
         if(getDegree() < 1)
             throw new IllegalStateException("degree is too small");
         
-        return Bezier.create(createReducedControlPoints(), getDomain());
+        return Bezier.create(getDomain(), createReducedControlPoints());
     }
     
-    private Array<org.jumpaku.affine.Point> createReducedControlPoints() {
+    private Array<FuzzyPoint> createReducedControlPoints() {
         int n = getControlPoints().size() - 1;
         int m = n + 1;
             
-        Array<? extends org.jumpaku.affine.Point> cp = getControlPoints();
+        Array<FuzzyPoint> cp = getControlPoints();
         
         if(m == 2){
             return Array.of(cp.get(0).divide(0.5, cp.get(1)));
@@ -111,23 +108,23 @@ public abstract class AbstractBezier implements Bezier{
         else if(m%2==0){
             int r = (m-2)/2;
             
-            Array<org.jumpaku.affine.Point> first = Stream.iterate(Tuple.of(cp.head(), 0), 
+            Array<FuzzyPoint> first = Stream.iterate(Tuple.of(cp.head(), 0), 
                             qi -> Tuple.of(
                                     cp.get(qi._2()).divide(1-1/(1.0-qi._2()/n), qi._1()),
                                     qi._2()+1))
                     .take(r).map(Tuple2::_1).toArray();
                     
-            Array<org.jumpaku.affine.Point> second = Stream.iterate(Tuple.of(cp.last(), n-1),
+            Array<FuzzyPoint> second = Stream.iterate(Tuple.of(cp.last(), n-1),
                             qi -> Tuple.of(
                                     cp.get(qi._2()).divide(1-1.0/qi._2()/n, qi._1()),
                                     qi._2()-1))
                     .take(r).map(Tuple2::_1).reverse().toArray();
             
             double al = r/(m-1.0);
-            org.jumpaku.affine.Point pl = cp.get(r).divide(-al/(1.0-al), first.last());
+            FuzzyPoint pl = cp.get(r).divide(-al/(1.0-al), first.last());
             double ar = (r+1)/(m-1.0);
-            org.jumpaku.affine.Point pr = cp.get(r+1).divide((-1.0+ar)/ar, second.head());
-            Stream<org.jumpaku.affine.Point> middle = Stream.of(pl.divide(0.5, pr));
+            FuzzyPoint pr = cp.get(r+1).divide((-1.0+ar)/ar, second.head());
+            Stream<FuzzyPoint> middle = Stream.of(pl.divide(0.5, pr));
             
             return Stream.concat(first, middle, second).toArray();
         }
@@ -152,17 +149,19 @@ public abstract class AbstractBezier implements Bezier{
     }
     
     @Override
-    public final Tuple2<? extends Bezier, ? extends Bezier> subdivide(Double t) {
+    public final Tuple2<Bezier, Bezier> subdivide(Double t) {
         if(!getDomain().includes(t))
             throw new IllegalArgumentException("t must be in " + getDomain().toString() + ", but t = ");
+        
         return createDividedControlPointsArray(t)
-                .map(cp -> Bezier.create(cp, getDomain()), cp -> Bezier.create(cp, getDomain()));
+                .map(cp -> Bezier.create(Interval.of(getDomain().getBegin()*t, 1.0), cp),
+                        cp -> Bezier.create(Interval.of(0.0, getDomain().getEnd()*t), cp));
     }
     
-    private Tuple2<Array<org.jumpaku.affine.Point>, Array<org.jumpaku.affine.Point>> createDividedControlPointsArray(Double t) {
-        Array<org.jumpaku.affine.Point> cp = getControlPoints();
-        List<org.jumpaku.affine.Point> first = List.of(cp.head());
-        List<org.jumpaku.affine.Point> second = List.of(cp.last());
+    private Tuple2<Array<FuzzyPoint>, Array<FuzzyPoint>> createDividedControlPointsArray(Double t) {
+        Array<FuzzyPoint> cp = getControlPoints();
+        List<FuzzyPoint> first = List.of(cp.head());
+        List<FuzzyPoint> second = List.of(cp.last());
 
         while(cp.size() > 1){
             cp = decasteljau(t, cp);

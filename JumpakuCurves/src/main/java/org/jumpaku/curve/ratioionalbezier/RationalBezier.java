@@ -3,26 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curve.ratioional;
+package org.jumpaku.curve.ratioionalbezier;
 
 import javaslang.Tuple2;
 import javaslang.collection.Array;
+import org.jumpaku.affine.FuzzyPoint;
 import org.jumpaku.affine.Point;
 import org.jumpaku.curve.Curve;
-import org.jumpaku.curve.DefinedOnInterval;
 import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Differentiable;
+import org.jumpaku.curve.FuzzyCurve;
 import org.jumpaku.curve.Interval;
 
 /**
  *
  * @author Jumpaku
  */
-public interface RationalBezier extends Curve, Differentiable, DefinedOnInterval<RationalBezier>{
+public interface RationalBezier extends FuzzyCurve, Differentiable{
     
     @Override Interval getDomain();
     
-    @Override Point evaluate(Double t);
+    @Override FuzzyPoint evaluate(Double t);
 
     @Override Derivative differentiate();
 
@@ -30,11 +31,11 @@ public interface RationalBezier extends Curve, Differentiable, DefinedOnInterval
 
     RationalBezier reverse();
 
-    Array<? extends Point> getControlPoints();
+    Array<FuzzyPoint> getControlPoints();
     
     Array<Double> getWeights();
     
-    Array<Tuple2<? extends Point, Double>> getWeightedPoints();
+    Array<Tuple2<FuzzyPoint, Double>> getWeightedPoints();
 
     Integer getDegree();
     
@@ -42,5 +43,5 @@ public interface RationalBezier extends Curve, Differentiable, DefinedOnInterval
     
     RationalBezier reduce();
     
-    Tuple2<? extends RationalBezier, ? extends RationalBezier> subdivide(Double t);
+    Tuple2<RationalBezier, RationalBezier> subdivide(Double t);
 }

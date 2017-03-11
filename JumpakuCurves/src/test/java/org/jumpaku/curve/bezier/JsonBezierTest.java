@@ -6,6 +6,7 @@
 package org.jumpaku.curve.bezier;
 
 import static org.hamcrest.core.Is.is;
+import org.jumpaku.affine.FuzzyPoint;
 import static org.jumpaku.curve.bezier.BezierMatcher.bezierOf;
 import org.jumpaku.affine.Point;
 import org.junit.Test;
@@ -28,8 +29,9 @@ public class JsonBezierTest {
     @Test
     public void testFromJson(){
         System.out.println("fromJson");
-        Bezier actual = new JsonBezier().fromJson("{\"controlPoints\":[{\"x\":0.0,\"y\":0.0,\"z\":0.0},{\"x\":0.0,\"y\":1.0,\"z\":0.0},{\"x\":1.0,\"y\":0.0,\"z\":0.0},{\"x\":1.0,\"y\":1.0,\"z\":0.0}],\"interval\":{\"begin\":0.0,\"end\":1.0}}").get();
-        Bezier expected = Bezier.create(Point.of(0.0, 0.0), Point.of(0.0, 1.0), Point.of(1.0, 0.0), Point.of(1.0, 1.0));
+        Bezier actual = new JsonBezier().fromJson(
+                "{interval:{begin:0.0,end:1.0}, controlPoints:[{x:0.0,y:0.0,z:0.0,r:1.0},{x:0.0,y:1.0,z:0.0,r:0.5},{x:1.0,y:0.0,z:0.0,r:2.0},{x:1.0,y:1.0,z:0.0,r:0.0}]}").get();
+        Bezier expected = Bezier.create(FuzzyPoint.of(0.0, 0.0, 1.0), FuzzyPoint.of(0.0, 1.0, 0.5), FuzzyPoint.of(1.0, 0.0, 2.0), FuzzyPoint.crisp(1.0, 1.0));
         assertThat(actual, is(bezierOf(expected)));
     }
 
@@ -48,8 +50,8 @@ public class JsonBezierTest {
     @Test
     public void testToTemporary() {
         System.out.println("toTemporary");
-        Bezier expected = Bezier.create(Point.of(0.0, 0.0), Point.of(0.0, 1.0), Point.of(1.0, 0.0), Point.of(1.0, 1.0));
-        assertThat(new JsonBezier().toTemporary(expected).newInstance(), is(bezierOf(expected)));
+        Bezier instance = Bezier.create(FuzzyPoint.of(0.0, 0.0, 5.0), FuzzyPoint.of(0.0, 1.0, 3.0), Point.of(1.0, 0.0, 0.0), FuzzyPoint.crisp(1.0));
+        assertThat(new JsonBezier().toTemporary(instance).newInstance(), is(bezierOf(instance)));
     }
     
 }

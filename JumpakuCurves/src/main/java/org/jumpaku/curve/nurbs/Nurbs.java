@@ -7,19 +7,19 @@ package org.jumpaku.curve.nurbs;
 
 import javaslang.Tuple2;
 import javaslang.collection.Array;
+import org.jumpaku.affine.FuzzyPoint;
 import org.jumpaku.affine.Point;
 import org.jumpaku.curve.Curve;
-import org.jumpaku.curve.DefinedOnInterval;
 import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Differentiable;
 import org.jumpaku.curve.Interval;
-import org.jumpaku.curve.ratioional.RationalBezier;
+import org.jumpaku.curve.ratioionalbezier.RationalBezier;
 
 /**
  *
  * @author Jumpaku
  */
-public interface Nurbs extends Curve, Differentiable, DefinedOnInterval<Nurbs>{
+public interface Nurbs extends Curve, Differentiable {
         
     @Override Interval getDomain();
     
@@ -31,11 +31,11 @@ public interface Nurbs extends Curve, Differentiable, DefinedOnInterval<Nurbs>{
 
     Nurbs reverse();
 
-    Array<? extends Point> getControlPoints();
+    Array<FuzzyPoint> getControlPoints();
 
     Array<Double> getWeights();
     
-    Array<Tuple2<? extends Point, Double>> getWeightedPoints();
+    Array<Tuple2<FuzzyPoint, Double>> getWeightedPoints();
     
     Array<Double> getKnots();
     
@@ -43,7 +43,7 @@ public interface Nurbs extends Curve, Differentiable, DefinedOnInterval<Nurbs>{
     
     Nurbs insertKnot(Double t);
     
-    Array<? extends RationalBezier> toRationalBeziers();
+    Array<RationalBezier> toRationalBeziers();
     
-    Tuple2<? extends RationalBezier, ? extends RationalBezier> subdivide(Double t);
+    Tuple2<Nurbs, Nurbs> subdivide(Double t);
 }
