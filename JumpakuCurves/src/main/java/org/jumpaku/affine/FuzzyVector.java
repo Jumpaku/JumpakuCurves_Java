@@ -15,6 +15,11 @@ import org.jumpaku.fuzzy.Membership;
  * @author Jumpaku
  */
 public interface FuzzyVector extends Membership<FuzzyVector, Vector>, Vector{
+
+    public static FuzzyVector add(double a, FuzzyVector v0, double b, FuzzyVector v1){
+        return new Cone(Vector.add(a, v0, b, v1),
+                FastMath.abs(a*v0.getR())+FastMath.abs(b*v1.getR()));
+    }
     
     public static final class Cone implements FuzzyVector{
 

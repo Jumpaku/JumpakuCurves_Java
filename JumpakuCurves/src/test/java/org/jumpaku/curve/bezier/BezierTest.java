@@ -15,6 +15,7 @@ import static org.jumpaku.curve.bezier.BezierMatcher.bezierOf;
 import static org.jumpaku.affine.FuzzyPointMatcher.fuzzyPointOf;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.jumpaku.affine.FuzzyPointMatcher.fuzzyPointOf;
 
 /**
  *

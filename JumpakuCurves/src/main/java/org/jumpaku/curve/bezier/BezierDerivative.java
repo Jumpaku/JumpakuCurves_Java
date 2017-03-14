@@ -13,12 +13,13 @@ import org.jumpaku.affine.Vector;
 import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Differentiable;
 import org.jumpaku.curve.Interval;
+import org.jumpaku.curve.Reverseable;
 
 /**
  *
  * @author Jumpaku
  */
-public interface BezierDerivative extends Derivative, Differentiable{
+public interface BezierDerivative extends Derivative, Differentiable, Reverseable<BezierDerivative>{
 
     static BezierDerivative create(Bezier bezier){
         return new BezierDerivative() {
@@ -27,7 +28,7 @@ public interface BezierDerivative extends Derivative, Differentiable{
             }
 
             @Override public Vector evaluate(Double t) {
-                return bezier.evaluate(t).getVector();
+                return bezier.evaluate(t).toVector();
             }
             
             @Override public BezierDerivative differentiate() {
@@ -43,7 +44,7 @@ public interface BezierDerivative extends Derivative, Differentiable{
             }
 
             @Override public Array<Vector> getControlVectors() {
-                return bezier.getControlPoints().map(Point::getVector);
+                return bezier.getControlPoints().map(Point::toVector);
             }
 
             @Override public Integer getDegree() {
@@ -93,7 +94,7 @@ public interface BezierDerivative extends Derivative, Differentiable{
         return restrict(Interval.of(begin, end));
     }
 
-    BezierDerivative reverse();
+    @Override BezierDerivative reverse();
 
     Array<Vector> getControlVectors();
 

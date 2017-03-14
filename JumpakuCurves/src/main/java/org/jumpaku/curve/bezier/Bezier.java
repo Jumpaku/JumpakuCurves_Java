@@ -10,35 +10,17 @@ import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import javaslang.control.Option;
 import org.jumpaku.affine.FuzzyPoint;
-import org.jumpaku.curve.Curve;
 import org.jumpaku.curve.Interval;
 import org.jumpaku.curve.Differentiable;
 import org.jumpaku.curve.FuzzyCurve;
-import org.jumpaku.curve.Restrictable;
+import org.jumpaku.curve.Reverseable;
 
 /**
  *
  * @author Jumpaku
  */
-public interface Bezier extends FuzzyCurve, Differentiable{
+public interface Bezier extends FuzzyCurve, Differentiable, Reverseable<Bezier>{
     
-    public static class Decasteljau extends AbstractBezier{
-        public Decasteljau(Array<? extends FuzzyPoint> cps, Interval interval) {
-            super(cps, interval);
-        }
-
-        @Override public FuzzyPoint evaluate(Double t) {
-            if(!getDomain().includes(t))
-                throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
-
-            Array<FuzzyPoint> cps = getControlPoints();
-            while(cps.size() > 1){
-                cps = decasteljau(t, cps);
-            }
-            return cps.head();
-        }
-    }
-
     public static Bezier create(Interval domain, Iterable<? extends org.jumpaku.affine.Point> controlPoints){
         Array<FuzzyPoint> cps = Stream.ofAll(controlPoints)
                 .map(p -> p instanceof FuzzyPoint ? (FuzzyPoint)p : FuzzyPoint.crisp(p))
@@ -85,11 +67,13 @@ public interface Bezier extends FuzzyCurve, Differentiable{
 
     @Override Bezier restrict(Interval i);
 
-     Bezier reverse();
+    @Override Bezier reverse();
 
     Array<FuzzyPoint> getControlPoints();
 
-    Integer getDegree();
+    default Integer getDegree(){
+        return getControlPoints().size() - 1;
+    }
     
     Bezier elevate();
     

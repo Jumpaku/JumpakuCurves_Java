@@ -18,13 +18,13 @@ import org.jumpaku.curve.Interval;
  *
  * @author Jumpaku
  */
-public abstract class AbstractBezier implements Bezier{
+public final class Decasteljau implements Bezier{
 
     private final Array<FuzzyPoint> controlPoints;
     
     private final Interval domain;
 
-    public AbstractBezier(Iterable<? extends FuzzyPoint> controlPoints, Interval domain) {
+    public Decasteljau(Iterable<? extends FuzzyPoint> controlPoints, Interval domain) {
         this.controlPoints = Array.ofAll(controlPoints);
         this.domain = domain;
     }
@@ -33,14 +33,19 @@ public abstract class AbstractBezier implements Bezier{
         return cps.zipWith(cps.tail(), (p0, p1) -> p0.divide(t, p1));
     }
 
-    @Override public abstract FuzzyPoint evaluate(Double t);
+    @Override public final FuzzyPoint evaluate(Double t) {
+        if(!getDomain().includes(t))
+            throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
+
+        Array<FuzzyPoint> cps = getControlPoints();
+        while(cps.size() > 1){
+            cps = decasteljau(t, cps);
+        }
+        return cps.head();
+    }
 
     @Override public final Interval getDomain() {
         return domain;
-    }
-
-    @Override public final Integer getDegree() {
-        return getControlPoints().size() - 1;
     }
     
     @Override public final Vector differentiate(Double t) {

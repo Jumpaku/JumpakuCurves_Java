@@ -16,9 +16,9 @@ import org.apache.commons.math3.util.FastMath;
  *
  * @author Jumpaku
  */
-public interface Affine extends UnaryOperator<Point>{
+public interface Transform extends UnaryOperator<Point>{
 
-    public static final class Matrix implements Affine{
+    public static final class Matrix implements Transform{
 
         private final RealMatrix matrix;
 
@@ -31,18 +31,18 @@ public interface Affine extends UnaryOperator<Point>{
             return Point.of(array[0], array[1], array[2]);
         }
 
-        @Override public Affine invert() {
+        @Override public Transform invert() {
             return new Matrix(MatrixUtils.inverse(matrix));
         }
 
         @Override
-        public Affine concatnate(Affine a) {
+        public Transform concatnate(Transform a) {
             return a instanceof Matrix ?
-                    new Matrix(((Matrix)a).matrix.multiply(matrix)) : Affine.super.concatnate(a);
+                    new Matrix(((Matrix)a).matrix.multiply(matrix)) : Transform.super.concatnate(a);
         }
     }
     
-    static Affine translation(Vector v){
+    static Transform translation(Vector v){
         return of(MatrixUtils.createRealMatrix(new double[][]{
             { 1, 0, 0, v.getX() },
             { 0, 1, 0, v.getY() },
@@ -51,7 +51,7 @@ public interface Affine extends UnaryOperator<Point>{
         }));
     }
         
-    static Affine rotation(Vector axis, Double radian){
+    static Transform rotation(Vector axis, Double radian){
         axis = axis.normalize();
         Double x = axis.getX();
         Double y = axis.getY();
@@ -66,28 +66,28 @@ public interface Affine extends UnaryOperator<Point>{
         }));
     }
     
-    static Affine scaling(Double x, Double y, Double z){
+    static Transform scaling(Double x, Double y, Double z){
         return of(MatrixUtils.createRealDiagonalMatrix(new double[]{x, y, z, 1}));
     }
     
-    static Affine of(RealMatrix m){
+    static Transform of(RealMatrix m){
         return new Matrix(m);
     }
     
-    static Affine IDENTITY = of(MatrixUtils.createRealIdentityMatrix(4));
+    static Transform IDENTITY = of(MatrixUtils.createRealIdentityMatrix(4));
     
-    static Affine id(){
+    static Transform id(){
         return IDENTITY;
     }
     
-    static Affine similarity(Tuple2<Point, Point> ab, Tuple2<Point, Point> cd){
+    static Transform similarity(Tuple2<Point, Point> ab, Tuple2<Point, Point> cd){
         Vector a = ab._2().diff(ab._1());
         Vector b = cd._2().diff(cd._1());
         Vector ac = cd._1().diff(ab._1());
         return id().rotateAt(ab._1(), a, b).scaleAt(ab._1(), b.length()/a.length()).translate(ac);
     }
     
-    static Affine cariblate(Tuple4<Point, Point, Point, Point> befor, Tuple4<Point, Point, Point, Point> after){
+    static Transform cariblate(Tuple4<Point, Point, Point, Point> befor, Tuple4<Point, Point, Point, Point> after){
         RealMatrix a = MatrixUtils.createRealMatrix(new double[][]{
             {befor._1().getX(), befor._1().getY(), befor._1().getZ(), 1},
             {befor._2().getX(), befor._2().getY(), befor._2().getZ(), 1},
@@ -102,69 +102,69 @@ public interface Affine extends UnaryOperator<Point>{
         return of(b.multiply(MatrixUtils.inverse(a)));
     }
     
-    static Affine transformationAt(Point p, Affine a){
-        return translation(p.getVector().negate()).concatnate(a).translate(p.getVector());
+    static Transform transformationAt(Point p, Transform a){
+        return translation(p.toVector().negate()).concatnate(a).translate(p.toVector());
     }
     
-    default Affine transformAt(Point p, Affine a){
+    default Transform transformAt(Point p, Transform a){
         return concatnate(transformationAt(p, a));
     }
     
-    default Affine scale(Double x, Double y, Double z){
+    default Transform scale(Double x, Double y, Double z){
         return concatnate(scaling(x, y, z));
     }
     
-    default Affine scale(Double scale){
+    default Transform scale(Double scale){
         return scale(scale, scale, scale);
     }
     
-    default Affine scaleAt(Point center, Double x, Double y, Double z){
+    default Transform scaleAt(Point center, Double x, Double y, Double z){
         return transformAt(center, scaling(x, y, z));
     }
     
-    default Affine scaleAt(Point center, Double scale){
+    default Transform scaleAt(Point center, Double scale){
         return scaleAt(center, scale, scale, scale);
     }
     
-    default Affine rotate(Vector axis, Double radian){
+    default Transform rotate(Vector axis, Double radian){
         return concatnate(rotation(axis, radian));
     }
 
-    default Affine rotate(Point axisInitial, Point axisTerminal, Double radian){
+    default Transform rotate(Point axisInitial, Point axisTerminal, Double radian){
         return rotate(axisTerminal.diff(axisInitial), radian);
     }
  
-    default Affine rotateAt(Point center, Vector axis, Double radian){
+    default Transform rotateAt(Point center, Vector axis, Double radian){
         return transformAt(center, rotation(axis, radian));
     }
     
-    default Affine rotate(Vector from, Vector to, Double radian){
+    default Transform rotate(Vector from, Vector to, Double radian){
         return rotate(from.cross(to), radian);
     }
     
-    default Affine rotate(Vector from, Vector to){
+    default Transform rotate(Vector from, Vector to){
         return rotate(from, to, from.angle(to));
     }
     
-    default Affine rotateAt(Point p, Vector from, Vector to, Double radian){
+    default Transform rotateAt(Point p, Vector from, Vector to, Double radian){
         return transformAt(p, rotation(from.cross(to), radian));
     }
     
-    default Affine rotateAt(Point p, Vector from, Vector to){
+    default Transform rotateAt(Point p, Vector from, Vector to){
         return rotateAt(p, from, to, from.angle(to));
     }
 
-    default Affine translate(Vector v){
+    default Transform translate(Vector v){
         return concatnate(translation(v));
     }
     
-    default Affine translate(Double x, Double y, Double z){
+    default Transform translate(Double x, Double y, Double z){
         return translate(Vector.of(x, y, z));
     }
 
     @Override Point apply(Point t);
     
-    Affine invert();
+    Transform invert();
     
     /**
      * transforms a point p to b(a(p))
@@ -172,18 +172,18 @@ public interface Affine extends UnaryOperator<Point>{
      * @param b
      * @return 
      */
-    static Affine concatnate(Affine a, Affine b){
-        return new Affine() {
+    static Transform concatnate(Transform a, Transform b){
+        return new Transform() {
             @Override public Point apply(Point p) {
                 return a.andThen(b).apply(p);
             }
 
-            @Override public Affine invert() {
-                return Affine.concatnate(b.invert(), a.invert());
+            @Override public Transform invert() {
+                return Transform.concatnate(b.invert(), a.invert());
             }
 
-            @Override public Affine concatnate(Affine c) {
-                return Affine.concatnate(Affine.concatnate(a, b), c);
+            @Override public Transform concatnate(Transform c) {
+                return Transform.concatnate(Transform.concatnate(a, b), c);
             }
         };
     }
@@ -193,7 +193,7 @@ public interface Affine extends UnaryOperator<Point>{
      * @param a
      * @return 
      */
-    default Affine concatnate(Affine a){
+    default Transform concatnate(Transform a){
         return concatnate(this, a);
     }
 }

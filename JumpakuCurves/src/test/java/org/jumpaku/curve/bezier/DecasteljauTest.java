@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  *
  * @author Jumpaku
  */
-public class AbstractBezierTest {
+public class DecasteljauTest {
     /**
      * Test of decasteljau method, of class AbstractBezier.
      */
@@ -29,7 +29,7 @@ public class AbstractBezierTest {
     public void testDecasteljau() {
         System.out.println("decasteljau");
         Array<FuzzyPoint> expResult = Array.of(FuzzyPoint.of(0.75, 0.75, -0.5, 0.75), FuzzyPoint.of(-0.25, 2.0, 3.0, 0.5));
-        Array<FuzzyPoint> result = AbstractBezier.decasteljau(0.25,
+        Array<FuzzyPoint> result = Decasteljau.decasteljau(0.25,
                 Array.of(FuzzyPoint.of(1.0, 0.0, -2.0, 1.0), FuzzyPoint.of(0.0, 3.0, 4.0, 0.0), FuzzyPoint.of(-1.0, -1.0, 0.0, 2.0)));
         assertEquals(result.size(), expResult.size());
         assertThat(result.get(0), FuzzyPointMatcher.fuzzyPointOf(expResult.get(0)));

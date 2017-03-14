@@ -11,6 +11,8 @@ import static org.hamcrest.core.Is.is;
 import org.jumpaku.fuzzy.Grade;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.jumpaku.affine.FuzzyPointMatcher.fuzzyPointOf;
+import static org.jumpaku.affine.FuzzyVectorMatcher.fuzzyVectorOf;
 
 /**
  *
@@ -157,13 +159,13 @@ public class FuzzyPointTest {
 
 
     /**
-     * Test of getVector method, of class FuzzyPoint.
+     * Test of toVector method, of class FuzzyPoint.
      */
     @Test
-    public void testGetVector() {
-        System.out.println("getVector");
+    public void testToVector() {
+        System.out.println("toVector");
         FuzzyPoint instance = FuzzyPoint.of(1.0, 2.0, -3.0, 4.0);
-        assertThat(instance.getVector(), is(fuzzyVectorOf(1.0, 2.0, -3.0, 4.0)));
+        assertThat(instance.toVector(), is(fuzzyVectorOf(1.0, 2.0, -3.0, 4.0)));
     }
 
     /**

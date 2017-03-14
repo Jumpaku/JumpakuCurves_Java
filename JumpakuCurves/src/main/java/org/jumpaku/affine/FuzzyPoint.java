@@ -18,7 +18,7 @@ public interface FuzzyPoint extends Membership<FuzzyPoint, Point>, Point{
     
     static FuzzyPoint of(FuzzyVector v){
         return new FuzzyPoint() {
-            @Override public FuzzyVector getVector() {
+            @Override public FuzzyVector toVector() {
                 return v;
             }
 
@@ -29,7 +29,7 @@ public interface FuzzyPoint extends Membership<FuzzyPoint, Point>, Point{
     }
     
     static FuzzyPoint of(Point p, Double r){
-        return of(FuzzyVector.of(p.getVector(), r));
+        return of(FuzzyVector.of(p.toVector(), r));
     }
 
     static FuzzyPoint of(Double x, Double y, Double z, Double r){
@@ -69,29 +69,29 @@ public interface FuzzyPoint extends Membership<FuzzyPoint, Point>, Point{
     }
 
     default Double getR() {
-        return getVector().getR();
+        return toVector().getR();
     }
     
-    @Override FuzzyVector getVector();
+    @Override FuzzyVector toVector();
 
     @Override default FuzzyPoint move(Vector v) {
-        return of(getVector().add(v));
+        return of(toVector().add(v));
     }
 
     @Override default FuzzyVector diff(Point p) {
-        return getVector().sub(p.getVector());
+        return toVector().sub(p.toVector());
     }
 
     @Override default Grade membership(Point p) {
-        return getVector().membership(p.getVector());
+        return toVector().membership(p.toVector());
     }
 
     @Override default Grade possibility(FuzzyPoint p) {
-        return getVector().possibility(p.getVector());
+        return toVector().possibility(p.toVector());
     }
 
     @Override default Grade necessity(FuzzyPoint p) {
-        return getVector().necessity(p.getVector());
+        return toVector().necessity(p.toVector());
     }
 
     @Override default FuzzyPoint divide(Double t, Point p){

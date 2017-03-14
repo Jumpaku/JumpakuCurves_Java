@@ -76,13 +76,13 @@ public class PointTest {
     }
 
     /**
-     * Test of getVector method, of class Point.
+     * Test of toVector method, of class Point.
      */
     @Test
-    public void testGetVector() {
-        System.out.println("getVector");
+    public void testToVector() {
+        System.out.println("toVector");
         Point p = Point.of(1.0004,2.0,-0.00512);
-        assertTrue(Vector.equals(Vector.of(1.0004,2.0,-0.00512), p.getVector(), 1.0e-10));
+        assertTrue(Vector.equals(Vector.of(1.0004,2.0,-0.00512), p.toVector(), 1.0e-10));
     }
 
     /**
@@ -195,11 +195,11 @@ public class PointTest {
     public void testTransform(){
         System.out.println("transform");
         assertTrue(Point.equals(Point.of(1.0, 3.0, -0.5), Point.of(3.3, -2.4, -1.0).transform(
-                Affine.translation(Vector.of(-2.3, 5.4, 0.5))), 1.0e-10));
+                Transform.translation(Vector.of(-2.3, 5.4, 0.5))), 1.0e-10));
         assertTrue(Point.equals(Point.of(-1.0, 1.0, 1.0), Point.of(1.0, 1.0, -1.0).transform(
-                Affine.rotation(Vector.of(1.0, 1.0, 1.0), Math.PI*2.0/3.0)), 1.0e-10));
+                Transform.rotation(Vector.of(1.0, 1.0, 1.0), Math.PI*2.0/3.0)), 1.0e-10));
         assertTrue(Point.equals(Point.of(6.9, -10.8, -0.5), Point.of(3.0, -2.0, -1.0).transform(
-                Affine.scaling(2.3, 5.4, 0.5)), 1.0e-10));
+                Transform.scaling(2.3, 5.4, 0.5)), 1.0e-10));
     }
     
     @Test

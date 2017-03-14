@@ -11,15 +11,15 @@ import javaslang.control.Option;
  *
  * @author Jumaku
  */
-public interface Point {
+public interface Point extends Divideable<Point>{
 
     static Boolean equals(Point a, Point b, Double eps){
-        return Vector.equals(a.getVector(), b.getVector(), eps);
+        return Vector.equals(a.toVector(), b.toVector(), eps);
     }
 
     static Point of(Vector v){
         return new Point() {
-            @Override public Vector getVector() {
+            @Override public Vector toVector() {
                 return v;
             }
             
@@ -49,22 +49,22 @@ public interface Point {
         return JsonPoint.CONVERTER.fromJson(json);
     }
     
-    Vector getVector();
+    Vector toVector();
     
     default Double getX(){
-        return getVector().getX();
+        return toVector().getX();
     }
     
     default Double getY(){
-        return getVector().getY();
+        return toVector().getY();
     }
     
     default Double getZ(){
-        return getVector().getZ();
+        return toVector().getZ();
     }        
     
     default Point move(Vector v){
-        return Point.of(getVector().add(v));
+        return Point.of(toVector().add(v));
     }
 
     /**
@@ -73,7 +73,7 @@ public interface Point {
      * @return this - p
      */
     default Vector diff(Point p){
-        return getVector().sub(p.getVector());
+        return toVector().sub(p.toVector());
     }
     
     default Double dist(Point p){
@@ -104,8 +104,8 @@ public interface Point {
      * @param p
      * @return this+t*(p-this) = (1-t)*this + t*p 
      */
-    default Point divide(Double t, Point p) {
-        return Point.of(Vector.add(1-t, getVector(), t, p.getVector()));
+    @Override default Point divide(Double t, Point p) {
+        return Point.of(Vector.add(1-t, toVector(), t, p.toVector()));
     }
     
     /**
@@ -139,7 +139,7 @@ public interface Point {
         return p1.diff(this).cross(p2.diff(this)).normalize();
     }
     
-    default Point transform(Affine a){
+    default Point transform(Transform a){
         return a.apply(this);
     }
 }
