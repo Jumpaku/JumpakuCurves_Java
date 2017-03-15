@@ -18,7 +18,7 @@ import org.jumpaku.curve.bezier.BezierDerivative;
 
 /**
  *
- * @author tomohiko
+ * @author jumpaku
  */
 public class Decasteljau implements RationalBezier{
 

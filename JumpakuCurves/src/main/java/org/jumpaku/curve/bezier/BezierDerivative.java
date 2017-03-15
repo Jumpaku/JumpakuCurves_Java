@@ -27,8 +27,8 @@ public interface BezierDerivative extends Derivative, Differentiable, Reverseabl
                 return bezier.getDomain();
             }
 
-            @Override public Vector evaluate(Double t) {
-                return bezier.evaluate(t).toVector();
+            @Override public Vector.Crisp evaluate(Double t) {
+                return bezier.evaluate(t).toVector().toCrisp();
             }
             
             @Override public BezierDerivative differentiate() {
@@ -70,8 +70,8 @@ public interface BezierDerivative extends Derivative, Differentiable, Reverseabl
         };
     }
 
-    public static BezierDerivative create(Interval domain, Array<? extends Vector> vs){
-        return create(Bezier.create(domain, vs.map(Point::of)));
+    public static BezierDerivative create(Interval domain, Array<? extends Vector.Crisp> vs){
+        return create(Bezier.create(domain, vs.map(Point.Crisp::new)));
     }
     
     public static String toJson(BezierDerivative db){
@@ -84,7 +84,7 @@ public interface BezierDerivative extends Derivative, Differentiable, Reverseabl
 
     @Override Interval getDomain();
     
-    @Override Vector evaluate(Double t);
+    @Override Vector.Crisp evaluate(Double t);
 
     @Override BezierDerivative differentiate();
 

@@ -7,7 +7,7 @@ package org.jumpaku.curve.bezier;
 
 import java.lang.reflect.Type;
 import javaslang.collection.Array;
-import org.jumpaku.affine.JsonFuzzyPoint;
+import org.jumpaku.affine.JsonPoint;
 import org.jumpaku.curve.JsonInterval;
 import org.jumpaku.json.Converter;
 
@@ -26,16 +26,16 @@ public final class JsonBezier implements Converter<Bezier>{
     }
 
     public static final class Data implements Converter.Temporary<Bezier>{
-        private final JsonFuzzyPoint.Data[] controlPoints;
+        private final JsonPoint.Data[] controlPoints;
         private final JsonInterval.Data interval;
 
         public Data(Bezier bezier) {
-            this.controlPoints = bezier.getControlPoints().map(JsonFuzzyPoint.Data::new).toJavaArray(JsonFuzzyPoint.Data.class);
+            this.controlPoints = bezier.getControlPoints().map(JsonPoint.Data::new).toJavaArray(JsonPoint.Data.class);
             this.interval = new JsonInterval.Data(bezier.getDomain());
         }
 
         @Override public Bezier newInstance() {
-            return Bezier.create(interval.newInstance(), Array.of(controlPoints).map(JsonFuzzyPoint.Data::newInstance));
+            return Bezier.create(interval.newInstance(), Array.of(controlPoints).map(JsonPoint.Data::newInstance));
         }
     }
     

@@ -6,9 +6,10 @@
 package org.jumpaku.affine;
 
 import java.lang.reflect.Type;
+import static org.hamcrest.core.Is.is;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
+import static org.jumpaku.affine.PointMatcher.pointOf;
 /**
  *
  * @author Jumpaku
@@ -25,8 +26,8 @@ public class JsonPointTest {
     public void testToJson() {
         System.out.println("toJson");
         JsonPoint instance = new JsonPoint();
-        assertTrue(Point.equals(Point.of(1.23, 4.56, -7.89),
-                instance.fromJson(instance.toJson(Point.of(1.23, 4.56, -7.89))).get(), 1.0e-10));
+        assertThat(instance.fromJson(instance.toJson(Point.fuzzy(1.23, 4.56, -7.89, 1.0))).get(),
+                is(pointOf(1.23, 4.56, -7.89, 1.0)));
     }
 
     /**
@@ -36,8 +37,9 @@ public class JsonPointTest {
     public void testFromJson() {
         System.out.println("fromJson");
         JsonPoint instance = new JsonPoint();
-        assertTrue(Point.equals(Point.of(1.23, 4.56, -7.89), instance.fromJson("{x:1.23, y:4.56, z:-7.89}").get(), 1.0e-10));
-        assertTrue(instance.fromJson("{x:1.23, y:4.56}").isEmpty());
+        assertThat(instance.fromJson("{x:1.23, y:4.56, z:-7.89, r:1.0}").get(),
+                is(pointOf(1.23, 4.56, -7.89, 1.0)));
+        assertTrue(instance.fromJson("{}").isEmpty());
     }   
 
     /**
@@ -55,7 +57,7 @@ public class JsonPointTest {
     @Test
     public void testToTemporary() {
         System.out.println("toTemporary");
-        assertTrue(Point.equals(Point.of(5.4, -4.2, 1.5e-35),
-                new JsonPoint().toTemporary(Point.of(5.4, -4.2, 1.5e-35)).newInstance(), 1.0e-10));
+        assertThat(new JsonPoint().toTemporary(Point.fuzzy(5.4, -4.2, 1.5e-35, 1.0)).newInstance(),
+                is(pointOf(5.4, -4.2, 1.5e-35, 1.0)));
     }
 }

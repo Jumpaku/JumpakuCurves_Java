@@ -13,7 +13,7 @@ import org.jumpaku.affine.Vector;
  */
 public interface Differentiable {
 
-    default Vector differentiate(Double t){
+    default Vector.Crisp differentiate(Double t){
         return differentiate().evaluate(t);
     }
     

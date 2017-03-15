@@ -13,26 +13,26 @@ import org.hamcrest.TypeSafeMatcher;
 
 /**
  *
- * @author tomohiko
+ * @author jumpaku
  */
-public class FuzzyVectorMatcher extends TypeSafeMatcher<FuzzyVector>{
+public class VectorMatcher extends TypeSafeMatcher<Vector>{
     
-    private final FuzzyVector expected;
+    private final Vector expected;
     
-    @Factory public static Matcher<FuzzyVector> fuzzyVectorOf(FuzzyVector v){
-        return new FuzzyVectorMatcher(v);
+    @Factory public static Matcher<Vector> vectorOf(Vector v){
+        return new VectorMatcher(v);
     }
 
-    @Factory public static Matcher<FuzzyVector> fuzzyVectorOf(Double x, Double y, Double z, Double r){
-        return new FuzzyVectorMatcher(FuzzyVector.of(x, y, z, r));
+    @Factory public static Matcher<Vector> vectorOf(Double x, Double y, Double z, Double r){
+        return new VectorMatcher(Vector.fuzzy(x, y, z, r));
     }
     
-    FuzzyVectorMatcher(FuzzyVector v){
+    VectorMatcher(Vector v){
         this.expected = v;
     }
     
-    @Override protected boolean matchesSafely(FuzzyVector item) {
-        return Vector.equals(expected, item, 1.0e-10) &&
+    @Override protected boolean matchesSafely(Vector item) {
+        return Vector.equals(expected.toCrisp(), item.toCrisp(), 1.0e-10) &&
                 Precision.equals(expected.getR(), item.getR(), 1.0e-10);
     }
 
@@ -40,7 +40,7 @@ public class FuzzyVectorMatcher extends TypeSafeMatcher<FuzzyVector>{
         description.appendValue(this.expected);
     }
 
-    @Override protected void describeMismatchSafely(FuzzyVector item, Description mismatchDescription) {
+    @Override protected void describeMismatchSafely(Vector item, Description mismatchDescription) {
         super.describeMismatchSafely(item, mismatchDescription);
     }
 }

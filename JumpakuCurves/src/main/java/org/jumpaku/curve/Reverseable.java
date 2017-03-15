@@ -7,7 +7,7 @@ package org.jumpaku.curve;
 
 /**
  *
- * @author tomohiko
+ * @author jumpaku
  */
 public interface Reverseable<C> {
     C reverse();

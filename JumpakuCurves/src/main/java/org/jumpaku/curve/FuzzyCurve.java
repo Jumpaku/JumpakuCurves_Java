@@ -6,40 +6,21 @@
 package org.jumpaku.curve;
 
 import javaslang.collection.Array;
-import org.jumpaku.affine.FuzzyPoint;
+import org.jumpaku.affine.Point;
 import org.jumpaku.curve.polyline.Polyline;
 import org.jumpaku.fuzzy.Grade;
 
 /**
  *
- * @author tomohiko
+ * @author jumpaku
  */
 public interface FuzzyCurve extends Curve{
 
     public static final Integer DEFAULT_FUZZY_MATCHING_POINTS = 30;
     
-    public static FuzzyCurve crisp(Curve curve){
-        return new FuzzyCurve() {
-            @Override public FuzzyPoint evaluate(Double t) {
-                return FuzzyPoint.crisp(curve.evaluate(t));
-            }
-
-            @Override public Interval getDomain() {
-                return curve.getDomain();
-            }
-        };
-    }
+    @Override Point evaluate(Double t);
     
-    @Override default FuzzyPoint apply(Double t) {
-        if(!getDomain().includes(t))
-            throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
-        
-        return evaluate(t);
-    }
-
-    @Override FuzzyPoint evaluate(Double t);
-    
-    default Array<FuzzyPoint> evaluateAllByArcLengthParams(Integer n){
+    default Array<Point> evaluateAllByArcLengthParams(Integer n){
         return Polyline.approximate(this, n, Polyline.DEFAULT_ABSOLUTE_ACCURACY)
                 .evaluateAllByArcLengthParams(n);
     }
@@ -50,7 +31,7 @@ public interface FuzzyCurve extends Curve{
 
     default Grade possibility(FuzzyCurve other, Integer fmps){
         return evaluateAllByArcLengthParams(fmps)
-                .zipWith(other.evaluateAllByArcLengthParams(fmps), FuzzyPoint::possibility)
+                .zipWith(other.evaluateAllByArcLengthParams(fmps), Point::possibility)
                 .fold(Grade.TRUE, (a, b) -> a.and(b));
     }
     
@@ -60,7 +41,7 @@ public interface FuzzyCurve extends Curve{
     
     default Grade necessity(FuzzyCurve other, Integer fmps){
         return evaluateAllByArcLengthParams(fmps)
-                .zipWith(other.evaluateAllByArcLengthParams(fmps), FuzzyPoint::necessity)
+                .zipWith(other.evaluateAllByArcLengthParams(fmps), Point::necessity)
                 .fold(Grade.TRUE, (a, b) -> a.and(b));
     }
 }

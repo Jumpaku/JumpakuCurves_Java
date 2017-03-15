@@ -16,6 +16,12 @@ import static org.jumpaku.affine.FuzzyPointMatcher.fuzzyPointOf;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.jumpaku.affine.FuzzyPointMatcher.fuzzyPointOf;
+import static org.jumpaku.affine.FuzzyPointMatcher.fuzzyPointOf;
+import static org.jumpaku.affine.FuzzyPointMatcher.fuzzyPointOf;
+import static org.jumpaku.affine.FuzzyPointMatcher.fuzzyPointOf;
+import static org.jumpaku.affine.FuzzyPointMatcher.fuzzyPointOf;
+import static org.jumpaku.affine.FuzzyPointMatcher.fuzzyPointOf;
+import static org.jumpaku.affine.FuzzyPointMatcher.fuzzyPointOf;
 
 /**
  *

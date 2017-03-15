@@ -10,7 +10,7 @@ import org.jumpaku.affine.FuzzyPoint;
 
 /**
  *
- * @author tomohiko
+ * @author jumpaku
  */
 public class WeightedPoint implements Divideable<WeightedPoint>{
     

@@ -14,14 +14,14 @@ import org.jumpaku.affine.Vector;
  */
 public interface Derivative extends Function<Double, Vector>, Restrictable<Derivative>{
 
-    @Override default Vector apply(Double t) {
+    @Override default Vector.Crisp apply(Double t) {
         if(!getDomain().includes(t))
             throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
 
         return evaluate(t);
     }
     
-    Vector evaluate(Double t);
+    Vector.Crisp evaluate(Double t);
 
     Interval getDomain();
     
@@ -30,7 +30,7 @@ public interface Derivative extends Function<Double, Vector>, Restrictable<Deriv
             throw new IllegalArgumentException("i must be in " + getDomain() + ", but i = " + i);
 
         return new Derivative() {
-            @Override public Vector evaluate(Double t) {
+            @Override public Vector.Crisp evaluate(Double t) {
                 if(!i.includes(t))
                     throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
                 

@@ -10,7 +10,7 @@ import javaslang.Tuple2;
 import javaslang.collection.Array;
 import javaslang.collection.List;
 import javaslang.collection.Stream;
-import org.jumpaku.affine.FuzzyPoint;
+import org.jumpaku.affine.Point;
 import org.jumpaku.affine.Vector;
 import org.jumpaku.curve.Interval;
 
@@ -20,24 +20,24 @@ import org.jumpaku.curve.Interval;
  */
 public final class Decasteljau implements Bezier{
 
-    private final Array<FuzzyPoint> controlPoints;
+    private final Array<Point> controlPoints;
     
     private final Interval domain;
 
-    public Decasteljau(Iterable<? extends FuzzyPoint> controlPoints, Interval domain) {
+    public Decasteljau(Iterable<? extends Point> controlPoints, Interval domain) {
         this.controlPoints = Array.ofAll(controlPoints);
         this.domain = domain;
     }
     
-    public static Array<FuzzyPoint> decasteljau(Double t, Array<FuzzyPoint> cps){
+    public static Array<Point> decasteljau(Double t, Array<Point> cps){
         return cps.zipWith(cps.tail(), (p0, p1) -> p0.divide(t, p1));
     }
 
-    @Override public final FuzzyPoint evaluate(Double t) {
+    @Override public final Point evaluate(Double t) {
         if(!getDomain().includes(t))
             throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
 
-        Array<FuzzyPoint> cps = getControlPoints();
+        Array<Point> cps = getControlPoints();
         while(cps.size() > 1){
             cps = decasteljau(t, cps);
         }
@@ -48,13 +48,13 @@ public final class Decasteljau implements Bezier{
         return domain;
     }
     
-    @Override public final Vector differentiate(Double t) {
+    @Override public final Vector.Crisp differentiate(Double t) {
         return Bezier.super.differentiate(t);
     }
 
     @Override public final BezierDerivative differentiate() {
-        Array<? extends FuzzyPoint> cp = getControlPoints();
-        Array<Vector> vs = cp.zipWith(cp.tail(), (pre, post) -> post.diff(pre).scale(getDegree().doubleValue()));
+        Array<? extends Point.Crisp> cp = getControlPoints().map(Point::toCrisp);
+        Array<Vector.Crisp> vs = cp.zipWith(cp.tail(), (pre, post) -> post.diff(pre).scale(getDegree().doubleValue()));
         return BezierDerivative.create(getDomain(), vs);
     }
 
@@ -74,7 +74,7 @@ public final class Decasteljau implements Bezier{
                 getControlPoints().reverse());
     }
 
-    @Override public final Array<FuzzyPoint> getControlPoints() {
+    @Override public final Array<Point> getControlPoints() {
         return controlPoints;
     }
 
@@ -82,9 +82,9 @@ public final class Decasteljau implements Bezier{
         return Bezier.create(getDomain(), createElevatedControlPoints());
     }
     
-    private Array<FuzzyPoint> createElevatedControlPoints() {
+    private Array<Point> createElevatedControlPoints() {
         Integer n = getDegree();
-        Array<FuzzyPoint> cp = getControlPoints();
+        Array<Point> cp = getControlPoints();
         
         return Stream.rangeClosed(0, n+1)
                 .map(i ->
@@ -101,11 +101,11 @@ public final class Decasteljau implements Bezier{
         return Bezier.create(getDomain(), createReducedControlPoints());
     }
     
-    private Array<FuzzyPoint> createReducedControlPoints() {
+    private Array<Point> createReducedControlPoints() {
         int n = getControlPoints().size() - 1;
         int m = n + 1;
             
-        Array<FuzzyPoint> cp = getControlPoints();
+        Array<Point> cp = getControlPoints();
         
         if(m == 2){
             return Array.of(cp.get(0).divide(0.5, cp.get(1)));
@@ -113,23 +113,23 @@ public final class Decasteljau implements Bezier{
         else if(m%2==0){
             int r = (m-2)/2;
             
-            Array<FuzzyPoint> first = Stream.iterate(Tuple.of(cp.head(), 0), 
+            Array<Point> first = Stream.iterate(Tuple.of(cp.head(), 0), 
                             qi -> Tuple.of(
                                     cp.get(qi._2()).divide(1-1/(1.0-qi._2()/n), qi._1()),
                                     qi._2()+1))
                     .take(r).map(Tuple2::_1).toArray();
                     
-            Array<FuzzyPoint> second = Stream.iterate(Tuple.of(cp.last(), n-1),
+            Array<Point> second = Stream.iterate(Tuple.of(cp.last(), n-1),
                             qi -> Tuple.of(
                                     cp.get(qi._2()).divide(1-1.0/qi._2()/n, qi._1()),
                                     qi._2()-1))
                     .take(r).map(Tuple2::_1).reverse().toArray();
             
             double al = r/(m-1.0);
-            FuzzyPoint pl = cp.get(r).divide(-al/(1.0-al), first.last());
+            Point pl = cp.get(r).divide(-al/(1.0-al), first.last());
             double ar = (r+1)/(m-1.0);
-            FuzzyPoint pr = cp.get(r+1).divide((-1.0+ar)/ar, second.head());
-            Stream<FuzzyPoint> middle = Stream.of(pl.divide(0.5, pr));
+            Point pr = cp.get(r+1).divide((-1.0+ar)/ar, second.head());
+            Stream<Point> middle = Stream.of(pl.divide(0.5, pr));
             
             return Stream.concat(first, middle, second).toArray();
         }
@@ -163,10 +163,10 @@ public final class Decasteljau implements Bezier{
                         cp -> Bezier.create(Interval.of(0.0, getDomain().getEnd()*t), cp));
     }
     
-    private Tuple2<Array<FuzzyPoint>, Array<FuzzyPoint>> createDividedControlPointsArray(Double t) {
-        Array<FuzzyPoint> cp = getControlPoints();
-        List<FuzzyPoint> first = List.of(cp.head());
-        List<FuzzyPoint> second = List.of(cp.last());
+    private Tuple2<Array<Point>, Array<Point>> createDividedControlPointsArray(Double t) {
+        Array<Point> cp = getControlPoints();
+        List<Point> first = List.of(cp.head());
+        List<Point> second = List.of(cp.last());
 
         while(cp.size() > 1){
             cp = decasteljau(t, cp);

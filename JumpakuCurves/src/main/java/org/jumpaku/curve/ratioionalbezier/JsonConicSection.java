@@ -12,7 +12,7 @@ import org.jumpaku.json.Converter;
 
 /**
  *
- * @author tomohiko
+ * @author jumpaku
  */
 public class JsonConicSection implements Converter<ConicSection>{
 

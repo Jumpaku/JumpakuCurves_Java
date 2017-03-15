@@ -10,10 +10,10 @@ import org.jumpaku.json.Converter;
 
 /**
  *
- * @author Jumpaku
+ * @author jumpaku
  */
-public final class JsonPoint implements Converter<Point>{
-
+public class JsonPoint implements Converter<Point>{
+    
     @Override public Type getTemporaryType() {
         return Data.class;
     }
@@ -29,15 +29,18 @@ public final class JsonPoint implements Converter<Point>{
         private final Double y;
 
         private final Double z;
+        
+        private final Double r;
 
         public Data(Point p) {
             this.x = p.getX();
             this.y = p.getY();
             this.z = p.getZ();
+            this.r = p.getR();
         }
 
         @Override public Point newInstance() {
-            return Point.of(x, y, z);
+            return Point.fuzzy(x, y, z, r);
         }
     }
     

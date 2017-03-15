@@ -5,6 +5,8 @@
  */
 package org.jumpaku.affine;
 
+import static org.hamcrest.core.Is.is;
+import static org.jumpaku.affine.VectorMatcher.vectorOf;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -24,7 +26,8 @@ public class JsonVectorTest {
     public void testToJson() {
         System.out.println("toJson");
         JsonVector instance = new JsonVector();
-        assertTrue(Vector.equals(Vector.of(1.23, 4.56, -7.89), instance.fromJson(instance.toJson(Vector.of(1.23, 4.56, -7.89))).get(), 1.0e-10));
+        assertThat(instance.fromJson(instance.toJson(Vector.fuzzy(1.23, 4.56, -7.89, 10.0))).get(),
+                is(vectorOf(1.23, 4.56, -7.89, 10.0)));
     }
 
     /**
@@ -34,7 +37,8 @@ public class JsonVectorTest {
     public void testFromJson() {
         System.out.println("fromJson");
         JsonVector instance = new JsonVector();
-        assertTrue(Vector.equals(Vector.of(1.23, 4.56, -7.89), instance.fromJson("{x:1.23, y:4.56, z:-7.89}").get(), 1.0e-10));
+        assertThat(instance.fromJson("{x:1.23, y:4.56, z:-7.89,r:10.0}").get(), 
+                is(vectorOf(1.23, 4.56, -7.89, 10.0)));
         assertTrue(instance.fromJson("{x:1.23, y:4.56}").isEmpty());
     }
     
@@ -53,7 +57,7 @@ public class JsonVectorTest {
     @Test
     public void testToTemporary() {
         System.out.println("toTemporary");
-        assertTrue(Vector.equals(Vector.of(5.4, -4.2, 1.5e-35),
-                new JsonVector().toTemporary(Vector.of(5.4, -4.2, 1.5e-35)).newInstance(), 1.0e-10));
+        assertThat(new JsonVector().toTemporary(Vector.fuzzy(5.4, -4.2, 1.5e-35, 1.0)).newInstance(),
+                is(vectorOf(5.4, -4.2, 1.5e-35, 1.0)));
     }
 }

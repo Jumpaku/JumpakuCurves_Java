@@ -9,7 +9,7 @@ import javaslang.Tuple2;
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import javaslang.control.Option;
-import org.jumpaku.affine.FuzzyPoint;
+import org.jumpaku.affine.Point;
 import org.jumpaku.curve.Interval;
 import org.jumpaku.curve.Differentiable;
 import org.jumpaku.curve.FuzzyCurve;
@@ -22,9 +22,7 @@ import org.jumpaku.curve.Reverseable;
 public interface Bezier extends FuzzyCurve, Differentiable, Reverseable<Bezier>{
     
     public static Bezier create(Interval domain, Iterable<? extends org.jumpaku.affine.Point> controlPoints){
-        Array<FuzzyPoint> cps = Stream.ofAll(controlPoints)
-                .map(p -> p instanceof FuzzyPoint ? (FuzzyPoint)p : FuzzyPoint.crisp(p))
-                .toArray();
+        Array<Point> cps = Stream.ofAll(controlPoints).toArray();
         
         if(cps.isEmpty())
             throw new IllegalArgumentException("control points are empty");
@@ -35,15 +33,15 @@ public interface Bezier extends FuzzyCurve, Differentiable, Reverseable<Bezier>{
         return new Decasteljau(cps, domain);
     }
     
-    static Bezier create(Interval domain, org.jumpaku.affine.Point... controlPoints){
+    static Bezier create(Interval domain, Point... controlPoints){
         return create(domain, Array.of(controlPoints));
     }
     
-    static Bezier create(Iterable<? extends org.jumpaku.affine.Point> controlPoints){
+    static Bezier create(Iterable<? extends Point> controlPoints){
         return create(Interval.ZERO_ONE, controlPoints);
     }
 
-    static Bezier create(org.jumpaku.affine.Point... controlPoints){
+    static Bezier create(Point... controlPoints){
         return create(Interval.ZERO_ONE, controlPoints);
     }
 
@@ -57,7 +55,7 @@ public interface Bezier extends FuzzyCurve, Differentiable, Reverseable<Bezier>{
     
     @Override Interval getDomain();
     
-    @Override FuzzyPoint evaluate(Double t);
+    @Override Point evaluate(Double t);
 
     @Override BezierDerivative differentiate();
 
@@ -69,7 +67,7 @@ public interface Bezier extends FuzzyCurve, Differentiable, Reverseable<Bezier>{
 
     @Override Bezier reverse();
 
-    Array<FuzzyPoint> getControlPoints();
+    Array<Point> getControlPoints();
 
     default Integer getDegree(){
         return getControlPoints().size() - 1;

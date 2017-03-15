@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author tomohiko
+ * @author jumpaku
  */
 public class PolylineTest {
     

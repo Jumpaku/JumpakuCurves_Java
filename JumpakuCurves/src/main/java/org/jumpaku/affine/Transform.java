@@ -16,7 +16,7 @@ import org.apache.commons.math3.util.FastMath;
  *
  * @author Jumpaku
  */
-public interface Transform extends UnaryOperator<Point>{
+public interface Transform extends UnaryOperator<Point.Crisp>{
 
     public static final class Matrix implements Transform{
 
@@ -26,9 +26,9 @@ public interface Transform extends UnaryOperator<Point>{
             this.matrix = matrix;
         }
         
-        @Override public Point apply(Point p) {
+        @Override public Point.Crisp apply(Point.Crisp p) {
             double[] array = matrix.operate(new double[]{p.getX(), p.getY(), p.getZ(), 1.0});
-            return Point.of(array[0], array[1], array[2]);
+            return Point.crisp(array[0], array[1], array[2]);
         }
 
         @Override public Transform invert() {
@@ -42,7 +42,7 @@ public interface Transform extends UnaryOperator<Point>{
         }
     }
     
-    static Transform translation(Vector v){
+    static Transform translation(Vector.Crisp v){
         return of(MatrixUtils.createRealMatrix(new double[][]{
             { 1, 0, 0, v.getX() },
             { 0, 1, 0, v.getY() },
@@ -51,7 +51,7 @@ public interface Transform extends UnaryOperator<Point>{
         }));
     }
         
-    static Transform rotation(Vector axis, Double radian){
+    static Transform rotation(Vector.Crisp axis, Double radian){
         axis = axis.normalize();
         Double x = axis.getX();
         Double y = axis.getY();
@@ -80,14 +80,14 @@ public interface Transform extends UnaryOperator<Point>{
         return IDENTITY;
     }
     
-    static Transform similarity(Tuple2<Point, Point> ab, Tuple2<Point, Point> cd){
-        Vector a = ab._2().diff(ab._1());
-        Vector b = cd._2().diff(cd._1());
-        Vector ac = cd._1().diff(ab._1());
+    static Transform similarity(Tuple2<Point.Crisp, Point.Crisp> ab, Tuple2<Point.Crisp, Point.Crisp> cd){
+        Vector.Crisp a = ab._2().diff(ab._1());
+        Vector.Crisp b = cd._2().diff(cd._1());
+        Vector.Crisp ac = cd._1().diff(ab._1());
         return id().rotateAt(ab._1(), a, b).scaleAt(ab._1(), b.length()/a.length()).translate(ac);
     }
     
-    static Transform cariblate(Tuple4<Point, Point, Point, Point> befor, Tuple4<Point, Point, Point, Point> after){
+    static Transform cariblate(Tuple4<Point.Crisp, Point.Crisp, Point.Crisp, Point.Crisp> befor, Tuple4<Point.Crisp, Point.Crisp, Point.Crisp, Point.Crisp> after){
         RealMatrix a = MatrixUtils.createRealMatrix(new double[][]{
             {befor._1().getX(), befor._1().getY(), befor._1().getZ(), 1},
             {befor._2().getX(), befor._2().getY(), befor._2().getZ(), 1},
@@ -102,11 +102,11 @@ public interface Transform extends UnaryOperator<Point>{
         return of(b.multiply(MatrixUtils.inverse(a)));
     }
     
-    static Transform transformationAt(Point p, Transform a){
+    static Transform transformationAt(Point.Crisp p, Transform a){
         return translation(p.toVector().negate()).concatnate(a).translate(p.toVector());
     }
     
-    default Transform transformAt(Point p, Transform a){
+    default Transform transformAt(Point.Crisp p, Transform a){
         return concatnate(transformationAt(p, a));
     }
     
@@ -118,51 +118,51 @@ public interface Transform extends UnaryOperator<Point>{
         return scale(scale, scale, scale);
     }
     
-    default Transform scaleAt(Point center, Double x, Double y, Double z){
+    default Transform scaleAt(Point.Crisp center, Double x, Double y, Double z){
         return transformAt(center, scaling(x, y, z));
     }
     
-    default Transform scaleAt(Point center, Double scale){
+    default Transform scaleAt(Point.Crisp center, Double scale){
         return scaleAt(center, scale, scale, scale);
     }
     
-    default Transform rotate(Vector axis, Double radian){
+    default Transform rotate(Vector.Crisp axis, Double radian){
         return concatnate(rotation(axis, radian));
     }
 
-    default Transform rotate(Point axisInitial, Point axisTerminal, Double radian){
+    default Transform rotate(Point.Crisp axisInitial, Point.Crisp axisTerminal, Double radian){
         return rotate(axisTerminal.diff(axisInitial), radian);
     }
  
-    default Transform rotateAt(Point center, Vector axis, Double radian){
+    default Transform rotateAt(Point.Crisp center, Vector.Crisp axis, Double radian){
         return transformAt(center, rotation(axis, radian));
     }
     
-    default Transform rotate(Vector from, Vector to, Double radian){
+    default Transform rotate(Vector.Crisp from, Vector.Crisp to, Double radian){
         return rotate(from.cross(to), radian);
     }
     
-    default Transform rotate(Vector from, Vector to){
+    default Transform rotate(Vector.Crisp from, Vector.Crisp to){
         return rotate(from, to, from.angle(to));
     }
     
-    default Transform rotateAt(Point p, Vector from, Vector to, Double radian){
+    default Transform rotateAt(Point.Crisp p, Vector.Crisp from, Vector.Crisp to, Double radian){
         return transformAt(p, rotation(from.cross(to), radian));
     }
     
-    default Transform rotateAt(Point p, Vector from, Vector to){
+    default Transform rotateAt(Point.Crisp p, Vector.Crisp from, Vector.Crisp to){
         return rotateAt(p, from, to, from.angle(to));
     }
 
-    default Transform translate(Vector v){
+    default Transform translate(Vector.Crisp v){
         return concatnate(translation(v));
     }
     
     default Transform translate(Double x, Double y, Double z){
-        return translate(Vector.of(x, y, z));
+        return translate(Vector.crisp(x, y, z));
     }
 
-    @Override Point apply(Point t);
+    @Override Point.Crisp.Crisp apply(Point.Crisp t);
     
     Transform invert();
     
@@ -174,7 +174,7 @@ public interface Transform extends UnaryOperator<Point>{
      */
     static Transform concatnate(Transform a, Transform b){
         return new Transform() {
-            @Override public Point apply(Point p) {
+            @Override public Point.Crisp apply(Point.Crisp p) {
                 return a.andThen(b).apply(p);
             }
 

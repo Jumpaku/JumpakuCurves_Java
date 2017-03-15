@@ -17,13 +17,17 @@ import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Interval;
 
 /**
- * @author tomohiko
+ * @author jumpaku
  */
 public interface ConicSection extends RationalBezier{
     
     public static final class ByRepresentPoints implements ConicSection{
     
-        private final Array<FuzzyPoint> representPoints;
+        private final FuzzyPoint rp0;
+
+        private final FuzzyPoint rp1;
+
+        private final FuzzyPoint rp2;
 
         private final Double weight;
 
@@ -31,7 +35,9 @@ public interface ConicSection extends RationalBezier{
 
         public ByRepresentPoints(Interval domain, Double weight,
                 FuzzyPoint representPoint0, FuzzyPoint representPoint1, FuzzyPoint representPoint2) {
-            this.representPoints = Array.of(representPoint0, representPoint1, representPoint2);
+            this.rp0 = representPoint0;
+            this.rp1 = representPoint1;
+            this.rp2 = representPoint2;
             this.weight = weight;
             this.domain = domain;
         }
@@ -44,17 +50,17 @@ public interface ConicSection extends RationalBezier{
             if(!getDomain().includes(t))
                 throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
 
-            FuzzyVector[] rp = getRepresentPoints()
-                    .map(FuzzyPoint::toVector)
-                    .toJavaArray(FuzzyVector.class);
+            FuzzyVector rv0 = rp0.toVector();
+            FuzzyVector rv1 = rp1.toVector();
+            FuzzyVector rv2 = rp2.toVector();
 
             Double wt = Decasteljau.weightBezier(t, Array.of(1.0, getWeight(), 1.0));
-            Point p = Point.of(rp[0].scale((1-t)*(1-2*t)/wt)
-                    .add(2*(getWeight()+1)*(1-2*t)/wt, rp[1])
-                    .add(t*(2*t-1)/wt, rp[2]));
-            Double r = rp[0].getR()*(1-t)*(1-2*t)/wt
-                    + rp[1].getR()*2*(getWeight()+1)*(1-2*t)/wt
-                    + rp[2].getR()*t*(2*t-1)/wt;
+            Point p = Point.of(rv0.scale((1-t)*(1-2*t)/wt)
+                    .add(2*(getWeight()+1)*(1-2*t)/wt, rv1)
+                    .add(t*(2*t-1)/wt, rv2));
+            Double r = rv0.getR()*(1-t)*(1-2*t)/wt
+                    + rv1.getR()*2*(getWeight()+1)*(1-2*t)/wt
+                    + rv2.getR()*t*(2*t-1)/wt;
 
             return FuzzyPoint.of(p, FastMath.abs(r));
         }
@@ -65,8 +71,11 @@ public interface ConicSection extends RationalBezier{
                     if(!getDomain().includes(t))
                         throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
 
-                    Vector[] vs = getRepresentPoints().map(FuzzyPoint::toVector).toJavaArray(FuzzyVector.class);
-                    return vs[0].scale(4*t-3).add((getWeight()+1)*(-4*t+2), vs[1]).add(4*t-1, vs[2]);
+                    FuzzyVector rv0 = rp0.toVector();
+                    FuzzyVector rv1 = rp1.toVector();
+                    FuzzyVector rv2 = rp2.toVector();
+
+                    return rv0.scale(4*t-3).add((getWeight()+1)*(-4*t+2), rv1).add(4*t-1, rv2);
                 }
 
                 @Override public Interval getDomain() {
@@ -76,14 +85,12 @@ public interface ConicSection extends RationalBezier{
         }
 
         @Override public ByRepresentPoints restrict(Interval i) {
-            FuzzyPoint[] rp = getRepresentPoints().toJavaArray(FuzzyPoint.class);
-            return new ByRepresentPoints(i, getWeight(), rp[0], rp[1], rp[2]);
+            return new ByRepresentPoints(i, getWeight(), rp0, rp1, rp2);
         }
 
         @Override public ByRepresentPoints reverse() {
-            FuzzyPoint[] rp = getRepresentPoints().toJavaArray(FuzzyPoint.class);
             return new ByRepresentPoints(Interval.of(1-getDomain().getEnd(), 1-getDomain().getBegin()),
-                    getWeight(), rp[0], rp[1], rp[2]);
+                    getWeight(), rp2, rp1, rp0);
         }
 
         @Override
@@ -105,7 +112,7 @@ public interface ConicSection extends RationalBezier{
         }
 
         @Override public Array<FuzzyPoint> getRepresentPoints() {
-            return representPoints;
+            return Array.of(rp0, rp1, rp2);
         }
 
 
@@ -119,15 +126,19 @@ public interface ConicSection extends RationalBezier{
 
             Vector[] rvs = representPoint.map(FuzzyPoint::toVector).toJavaArray(FuzzyVector.class);
             FuzzyPoint[] cps = new FuzzyPoint[]{
-                FuzzyPoint.crisp(Point.of(rvs[0])),
-                FuzzyPoint.crisp(Point.of(rvs[0].scale(-0.5/weight).add(1+1/weight, rvs[1]).add(-0.5/weight, rvs[2]))),
-                FuzzyPoint.crisp(Point.of(rvs[2]))
+                FuzzyPoint.of(rvs[0]),
+                FuzzyPoint.of(rvs[0].scale(-0.5/weight).add(1+1/weight, rvs[1]).add(-0.5/weight, rvs[2])),
+                FuzzyPoint.of(rvs[2])
             };
             return Array.of(1.0, weight, 1.0).zipWith(Stream.of(cps), WeightedPoint::new);
         }
 
         @Override public Double getWeight() {
             return weight;
+        }
+
+        @Override public String toString() {
+            return JsonConicSection.CONVERTER.toJson(this);
         }
     }
     

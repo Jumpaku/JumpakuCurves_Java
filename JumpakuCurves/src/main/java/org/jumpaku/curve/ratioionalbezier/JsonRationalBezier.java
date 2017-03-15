@@ -11,7 +11,7 @@ import org.jumpaku.json.Converter;
 
 /**
  *
- * @author tomohiko
+ * @author jumpaku
  */
 
 public final class JsonRationalBezier implements Converter<RationalBezier>{

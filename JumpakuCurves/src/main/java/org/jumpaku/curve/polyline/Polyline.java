@@ -20,7 +20,7 @@ import org.jumpaku.curve.Interval;
 
 /**
  *
- * @author tomohiko
+ * @author jumpaku
  */
 
 public interface Polyline extends FuzzyCurve{

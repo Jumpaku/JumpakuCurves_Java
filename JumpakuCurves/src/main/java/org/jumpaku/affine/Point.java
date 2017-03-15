@@ -6,39 +6,52 @@
 package org.jumpaku.affine;
 
 import javaslang.control.Option;
+import org.apache.commons.math3.util.FastMath;
+import org.jumpaku.fuzzy.Grade;
+import org.jumpaku.fuzzy.Membership;
 
 /**
  *
  * @author Jumaku
  */
-public interface Point extends Divideable<Point>{
-
-    static Boolean equals(Point a, Point b, Double eps){
-        return Vector.equals(a.toVector(), b.toVector(), eps);
+public interface Point extends Membership<Point, Point.Crisp>, Divideable<Point>{
+    
+    static Fuzzy fuzzy(Crisp p, Double r){
+        return new Fuzzy(p.toVector(), r);
     }
 
-    static Point of(Vector v){
-        return new Point() {
-            @Override public Vector toVector() {
-                return v;
-            }
-            
-            @Override public String toString(){
-                return Point.toJson(this);
-            }
-        };
-    }    
-    
-    static Point of(Double x, Double y, Double z){
-        return Point.of(Vector.of(x, y, z));
+    static Fuzzy fuzzy(Double x, Double y, Double z, Double r){
+        return fuzzy(crisp(x, y, z), r);
     }
+        
+    static Fuzzy fuzzy(Double x, Double y, Double r){
+        return fuzzy(x, y, 0.0, r);
+    } 
     
-    static Point of(Double x, Double y){
-        return Point.of(x, y, 0.0);
+    static Fuzzy fuzzy(Double x, Double r){
+        return fuzzy(x, 0.0, r);
     }
+
+    static Fuzzy zero(Double r){
+        return fuzzy(ZERO, r);
+    }
+
+    static Crisp crisp(Double x, Double y, Double z){
+        return new Crisp(Vector.crisp(x, y, z));
+    }
+        
+    static Crisp crisp(Double x, Double y){
+        return crisp(x, y, 0.0);
+    } 
     
-    static Point of(Double x){
-        return Point.of(x, 0.0);
+    static Crisp crisp(Double x){
+        return crisp(x, 0.0);
+    }
+
+    static final Crisp ZERO = crisp(0.0);
+    
+    static Crisp zero(){
+        return ZERO;
     }
     
     static String toJson(Point p){
@@ -51,6 +64,10 @@ public interface Point extends Divideable<Point>{
     
     Vector toVector();
     
+    default Crisp toCrisp(){
+        return new Crisp(toVector().toCrisp());
+    }
+    
     default Double getX(){
         return toVector().getX();
     }
@@ -61,41 +78,22 @@ public interface Point extends Divideable<Point>{
     
     default Double getZ(){
         return toVector().getZ();
-    }        
+    }
     
-    default Point move(Vector v){
-        return Point.of(toVector().add(v));
+    default Double getR(){
+        return toVector().getR();
+    }
+    
+    @Override default Grade membership(Crisp p){
+        return toVector().membership(p.toVector());
     }
 
-    /**
-     * 
-     * @param p
-     * @return this - p
-     */
-    default Vector diff(Point p){
-        return toVector().sub(p.toVector());
+    @Override default Grade possibility(Point p){
+        return toVector().possibility(p.toVector());
     }
-    
-    default Double dist(Point p){
-        return diff(p).length();
-    }
-    
-    /**
-     * distance between this point and line ab. 
-     * @param a
-     * @param b
-     * @return 
-     */
-    default Double dist(Point a, Point b){
-        Point p = this;
-        Vector ap = p.diff(a);
-        Vector ab = b.diff(a);
-        Point h = a.move(ab.scale(ap.dot(ab)/ab.square()));
-        return p.dist(h);
-    }
-    
-    default Double distSquare(Point p){
-        return diff(p).square();
+
+    @Override default Grade necessity(Point p){
+        return toVector().necessity(p.toVector());
     }
     
     /**
@@ -104,42 +102,125 @@ public interface Point extends Divideable<Point>{
      * @param p
      * @return this+t*(p-this) = (1-t)*this + t*p 
      */
-    @Override default Point divide(Double t, Point p) {
-        return Point.of(Vector.add(1-t, toVector(), t, p.toVector()));
+    @Override default Point divide(Double t, Point p){
+        return new Fuzzy(toVector().scale(1-t).add(t, p.toVector()).toCrisp(),
+                FastMath.abs(1-t)*getR()+FastMath.abs(t)*p.getR());
     }
     
-    /**
-     * 
-     * @param p1
-     * @param p2
-     * @return area of a triangle (this, p1, p2) 
-     */
-    default Double area(Point p1, Point p2){
-        return diff(p1).cross(diff(p2)).length()/2.0;
+    public static final class Fuzzy implements Point{
+
+        private final Vector.Fuzzy vector;
+
+        public Fuzzy(Vector.Crisp vector, Double r) {
+            this.vector = new Vector.Fuzzy(vector, r);
+        }
+        
+        @Override public Vector.Fuzzy toVector() {
+            return vector;
+        }
+        
+        @Override public Crisp toCrisp() {
+            return new Crisp(vector.toCrisp());
+        }
+
+        @Override public String toString() {
+            return toJson(this);
+        }
     }
     
-    /**
-     * 
-     * @param p1
-     * @param p2
-     * @param p3
-     * @return volume of a Tetrahedron (this, p1, p2, p3)
-     */
-    default Double volume(Point p1, Point p2, Point p3){
-        return diff(p1).cross(diff(p2)).dot(diff(p3))/6.0;
-    }
-    
-    /**
-     * 
-     * @param p1
-     * @param p2
-     * @return (p1-this)x(p2-this)/|(p1-this)x(p2-this)|
-     */
-    default Vector normal(Point p1, Point p2){
-        return p1.diff(this).cross(p2.diff(this)).normalize();
-    }
-    
-    default Point transform(Transform a){
-        return a.apply(this);
+    public static final class Crisp implements Point{
+        
+        private final Vector.Crisp vector;
+
+        public Crisp(Vector.Crisp vector) {
+            this.vector = vector;
+        }
+        
+        @Override public Vector.Crisp toVector() {
+            return vector;
+        }
+
+        @Override public Crisp toCrisp() {
+            return this;
+        }
+
+        @Override public String toString() {
+            return toJson(this);
+        }
+
+        /**
+         * 
+         * @param v
+         * @return this + v
+         */
+        public Crisp move(Vector.Crisp v){
+            return new Crisp(toVector().add(v).toCrisp());
+        }
+
+        /**
+         * 
+         * @param p
+         * @return this - p
+         */
+        public Vector.Crisp diff(Crisp p){
+            return toVector().sub(p.toVector()).toCrisp();
+        }
+
+        public Double dist(Crisp p){
+            return diff(p).length();
+        }
+
+        /**
+         * distance between this point and line ab. 
+         * @param a
+         * @param b
+         * @return 
+         */
+        public Double dist(Crisp a, Crisp b){
+            Crisp p = this;
+            Vector.Crisp ap = p.diff(a);
+            Vector.Crisp ab = b.diff(a);
+            Crisp h = a.move(ab.scale(ap.dot(ab)/ab.square()));
+            return p.dist(h);
+        }
+
+        public Double distSquare(Crisp p){
+            return diff(p).square();
+        }
+
+        /**
+         * 
+         * @param p1
+         * @param p2
+         * @return area of a triangle (this, p1, p2) 
+         */
+        public Double area(Crisp p1, Crisp p2){
+            return diff(p1).cross(diff(p2)).length()/2.0;
+        }
+
+        /**
+         * 
+         * @param p1
+         * @param p2
+         * @param p3
+         * @return volume of a Tetrahedron (this, p1, p2, p3)
+         */
+        public Double volume(Crisp p1, Crisp p2, Crisp p3){
+            return diff(p1).cross(diff(p2)).dot(diff(p3))/6.0;
+        }
+
+        /**
+         * 
+         * @param p1
+         * @param p2
+         * @return (p1-this)x(p2-this)/|(p1-this)x(p2-this)|
+         */
+        public Vector normal(Crisp p1, Crisp p2){
+            return p1.diff(this).cross(p2.diff(this)).normalize();
+        }
+
+        public Crisp transform(Transform a){
+            return a.apply(this);
+        }
     }
 }

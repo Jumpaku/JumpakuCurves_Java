@@ -7,7 +7,7 @@ package org.jumpaku.affine;
 
 /**
  *
- * @author tomohiko
+ * @author jumpaku
  */
 public interface Divideable<P>{
     Divideable<P> divide(Double t, P p);
