@@ -7,11 +7,11 @@ package org.jumpaku.curve.nurbs;
 
 import javaslang.Tuple2;
 import javaslang.collection.Array;
-import org.jumpaku.affine.FuzzyPoint;
 import org.jumpaku.affine.Point;
 import org.jumpaku.curve.Curve;
 import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Differentiable;
+import org.jumpaku.curve.FuzzyCurve;
 import org.jumpaku.curve.Interval;
 import org.jumpaku.curve.ratioionalbezier.RationalBezier;
 
@@ -19,7 +19,7 @@ import org.jumpaku.curve.ratioionalbezier.RationalBezier;
  *
  * @author Jumpaku
  */
-public interface Nurbs extends Curve, Differentiable {
+public interface Nurbs extends FuzzyCurve, Differentiable {
         
     @Override Interval getDomain();
     
@@ -31,11 +31,11 @@ public interface Nurbs extends Curve, Differentiable {
 
     Nurbs reverse();
 
-    Array<FuzzyPoint> getControlPoints();
+    Array<Point> getControlPoints();
 
     Array<Double> getWeights();
     
-    Array<Tuple2<FuzzyPoint, Double>> getWeightedPoints();
+    Array<Tuple2<Point, Double>> getWeightedPoints();
     
     Array<Double> getKnots();
     

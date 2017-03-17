@@ -5,7 +5,7 @@
  */
 package org.jumpaku.curve.polyline;
 
-import org.jumpaku.affine.FuzzyPoint;
+import org.jumpaku.affine.Point;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -23,7 +23,7 @@ public class JsonPolylineTest {
     @Test
     public void testToJson() {
         System.out.println("toJson");
-        Polyline pl = Polyline.create(FuzzyPoint.of(1.0, 2.0, 3.0, 2.0), FuzzyPoint.of(-1.0, -2.0, -3.0, 1.0), FuzzyPoint.of(1.0, 1.0, 1.0, 0.0));
+        Polyline pl = Polyline.create(Point.fuzzy(1.0, 2.0, 3.0, 2.0), Point.fuzzy(-1.0, -2.0, -3.0, 1.0), Point.fuzzy(1.0, 1.0, 1.0, 0.0));
         Polyline instance = new JsonPolyline().fromJson(pl.toString()).get();
         assertThat(instance, PolylineMatcher.polylineOf(pl));
     }
@@ -34,7 +34,7 @@ public class JsonPolylineTest {
     @Test
     public void testFromJson() {
         System.out.println("fromJson");
-        Polyline pl = Polyline.create(FuzzyPoint.of(1.0, 2.0, 3.0, 2.0), FuzzyPoint.of(-1.0, -2.0, -3.0, 1.0), FuzzyPoint.of(1.0, 1.0, 1.0, 0.0));
+        Polyline pl = Polyline.create(Point.fuzzy(1.0, 2.0, 3.0, 2.0), Point.fuzzy(-1.0, -2.0, -3.0, 1.0), Point.fuzzy(1.0, 1.0, 1.0, 0.0));
         Polyline instance = new JsonPolyline().fromJson("{points:[{x:1.0,y:2.0,z:3.0,r:2.0},{x:-1.0,y:-2.0,z:-3.0,r:1.0},{x:1.0,y:1.0,z:1.0,r:0.0}]}").get();
         assertThat(instance, PolylineMatcher.polylineOf(pl));
     }
@@ -54,7 +54,7 @@ public class JsonPolylineTest {
     @Test
     public void testToTemporary() {
         System.out.println("toTemporary");
-        Polyline expected = Polyline.create(FuzzyPoint.of(1.0, 2.0, 3.0, 2.0), FuzzyPoint.of(-1.0, -2.0, -3.0, 1.0), FuzzyPoint.of(1.0, 1.0, 1.0, 0.0));
+        Polyline expected = Polyline.create(Point.fuzzy(1.0, 2.0, 3.0, 2.0), Point.fuzzy(-1.0, -2.0, -3.0, 1.0), Point.fuzzy(1.0, 1.0, 1.0, 0.0));
         Polyline result = new JsonPolyline().toTemporary(expected).newInstance();
         assertThat(result, PolylineMatcher.polylineOf(expected));
     }

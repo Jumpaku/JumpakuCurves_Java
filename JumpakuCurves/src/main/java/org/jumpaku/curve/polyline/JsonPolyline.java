@@ -7,7 +7,7 @@ package org.jumpaku.curve.polyline;
 
 import java.lang.reflect.Type;
 import javaslang.collection.Array;
-import org.jumpaku.affine.JsonFuzzyPoint;
+import org.jumpaku.affine.JsonPoint;
 import org.jumpaku.json.Converter;
 
 /**
@@ -25,14 +25,14 @@ public final class JsonPolyline implements Converter<Polyline>{
     }
 
     public static final class Data implements Converter.Temporary<Polyline>{
-        private final JsonFuzzyPoint.Data[] points;
+        private final JsonPoint.Data[] points;
 
         public Data(Polyline polyline) {
-            this.points = polyline.getPoints().map(JsonFuzzyPoint.Data::new).toJavaArray(JsonFuzzyPoint.Data.class);
+            this.points = polyline.getPoints().map(JsonPoint.Data::new).toJavaArray(JsonPoint.Data.class);
         }
 
         @Override public Polyline newInstance() {
-            return Polyline.create(Array.of(points).map(JsonFuzzyPoint.Data::newInstance));
+            return Polyline.create(Array.of(points).map(JsonPoint.Data::newInstance));
         }
     }
     

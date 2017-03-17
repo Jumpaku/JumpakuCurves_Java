@@ -6,7 +6,7 @@
 package org.jumpaku.curve.ratioionalbezier;
 
 import org.jumpaku.affine.Divideable;
-import org.jumpaku.affine.FuzzyPoint;
+import org.jumpaku.affine.Point;
 
 /**
  *
@@ -14,26 +14,26 @@ import org.jumpaku.affine.FuzzyPoint;
  */
 public class WeightedPoint implements Divideable<WeightedPoint>{
     
-        private final Double w;
+        private final Double weight;
         
-        private final FuzzyPoint point;
+        private final Point point;
 
-        public WeightedPoint(Double w, FuzzyPoint point) {
-            this.w = w;
+        public WeightedPoint(Double weight, Point point) {
+            this.weight = weight;
             this.point = point;
         }
         
-        public Double getW(){
-            return w;
+        public Double getWeight(){
+            return weight;
         }
         
-        public FuzzyPoint getPoint(){
+        public Point getPoint(){
             return point;
         }
         
         @Override
         public WeightedPoint divide(Double t, WeightedPoint wp){
-            double w = (1-t)*getW() + t*wp.getW();
-            return new WeightedPoint(w, getPoint().divide(t*wp.getW()/w, wp.getPoint()));
+            double w = (1-t)*getWeight() + t*wp.getWeight();
+            return new WeightedPoint(w, getPoint().divide(t*wp.getWeight()/w, wp.getPoint()));
         }
     }

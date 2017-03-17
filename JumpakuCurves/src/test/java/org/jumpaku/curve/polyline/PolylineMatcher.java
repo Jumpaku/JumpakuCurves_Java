@@ -5,11 +5,12 @@
  */
 package org.jumpaku.curve.polyline;
 
+import org.apache.commons.math3.util.Precision;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.jumpaku.affine.Point;
+import org.jumpaku.affine.Vector;
 
 /**
  *
@@ -28,7 +29,10 @@ public class PolylineMatcher extends TypeSafeMatcher<Polyline>{
     }
     
     @Override protected boolean matchesSafely(Polyline item) {
-        return expected.getPoints().zipWith(item.getPoints(), (e, a)->Point.equals(e, a, 1.0e-10)).forAll(b->b)
+        return expected.getPoints().zipWith(item.getPoints(), (e, a)->{
+            return Vector.equals(e.toVector().toCrisp(), a.toVector().toCrisp(), 1.0e-10) &&
+                    Precision.equals(e.getR(), a.getR(), 1.0e-10); 
+                }).forAll(b->b)
                 && expected.getPoints().size() == item.getPoints().size();
     }
 

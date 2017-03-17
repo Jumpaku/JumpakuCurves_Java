@@ -5,16 +5,18 @@
  */
 package org.jumpaku.curve.ratioionalbezier;
 
-import javaslang.Tuple2;
 import javaslang.collection.Array;
-import javaslang.control.Option;
-import org.jumpaku.affine.FuzzyPoint;
+import static org.hamcrest.core.Is.is;
 import org.jumpaku.affine.Point;
-import org.jumpaku.curve.Derivative;
+import org.jumpaku.affine.PointMatcher;
 import org.jumpaku.curve.Interval;
 import org.jumpaku.curve.bezier.Bezier;
+import static org.jumpaku.curve.ratioionalbezier.ConicSectionMatcher.conicSectionOf;
+import static org.jumpaku.curve.ratioionalbezier.RationalBezierMatcher.rationalBezierOf;
+import static org.jumpaku.curve.ratioionalbezier.WeightedPointMatcher.weightedPointOf;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.jumpaku.curve.ratioionalbezier.WeightedPointMatcher.weightedPointOf;
 
 /**
  *
@@ -31,12 +33,19 @@ public class RationalBezierTest {
     @Test
     public void testCreate_Iterable() {
         System.out.println("create");
-        Iterable<WeightedPoint> weightedControlPoints = null;
-        RationalBezier expResult = null;
-        RationalBezier result = RationalBezier.create(weightedControlPoints);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Array<WeightedPoint> points = Array.of(
+                new WeightedPoint(1.0, Point.fuzzy(0.0, 0.0)),
+                new WeightedPoint(2.0, Point.fuzzy(0.0, 1.0)),
+                new WeightedPoint(3.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(4.0, Point.fuzzy(1.0, 1.0)));
+        RationalBezier result = RationalBezier.create(points);
+        assertThat(result.getWeightedControlPoints().get(0), is(weightedPointOf(points.get(0))));
+        assertThat(result.getWeightedControlPoints().get(1), is(weightedPointOf(points.get(1))));
+        assertThat(result.getWeightedControlPoints().get(2), is(weightedPointOf(points.get(2))));
+        assertThat(result.getWeightedControlPoints().get(3), is(weightedPointOf(points.get(3))));
+        assertEquals(4, result.getWeightedControlPoints().size());
+        assertEquals(0.0, result.getDomain().getBegin(), 1.0e-10);
+        assertEquals(1.0, result.getDomain().getEnd(), 1.0e-10);
     }
 
     /**
@@ -45,13 +54,19 @@ public class RationalBezierTest {
     @Test
     public void testCreate_Interval_Iterable() {
         System.out.println("create");
-        Interval i = null;
-        Iterable<WeightedPoint> weightedControlPoints = null;
-        RationalBezier expResult = null;
-        RationalBezier result = RationalBezier.create(i, weightedControlPoints);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Array<WeightedPoint> points = Array.of(
+                new WeightedPoint(1.0, Point.fuzzy(0.0, 0.0)),
+                new WeightedPoint(2.0, Point.fuzzy(0.0, 1.0)),
+                new WeightedPoint(3.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(4.0, Point.fuzzy(1.0, 1.0)));
+        RationalBezier result = RationalBezier.create(Interval.of(0.2, 0.9), points);
+        assertThat(result.getWeightedControlPoints().get(0), is(weightedPointOf(points.get(0))));
+        assertThat(result.getWeightedControlPoints().get(1), is(weightedPointOf(points.get(1))));
+        assertThat(result.getWeightedControlPoints().get(2), is(weightedPointOf(points.get(2))));
+        assertThat(result.getWeightedControlPoints().get(3), is(weightedPointOf(points.get(3))));
+        assertEquals(4, result.getWeightedControlPoints().size());
+        assertEquals(0.2, result.getDomain().getBegin(), 1.0e-10);
+        assertEquals(0.9, result.getDomain().getEnd(), 1.0e-10);
     }
 
     /**
@@ -60,12 +75,18 @@ public class RationalBezierTest {
     @Test
     public void testCreate_WeightedPointArr() {
         System.out.println("create");
-        WeightedPoint[] weightedControlPoints = null;
-        RationalBezier expResult = null;
-        RationalBezier result = RationalBezier.create(weightedControlPoints);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        RationalBezier result = RationalBezier.create(
+                new WeightedPoint(1.0, Point.fuzzy(0.0, 0.0)),
+                new WeightedPoint(2.0, Point.fuzzy(0.0, 1.0)),
+                new WeightedPoint(3.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(4.0, Point.fuzzy(1.0, 1.0)));
+        assertThat(result.getWeightedControlPoints().get(0), is(weightedPointOf(new WeightedPoint(1.0, Point.fuzzy(0.0, 0.0)))));
+        assertThat(result.getWeightedControlPoints().get(1), is(weightedPointOf(new WeightedPoint(2.0, Point.fuzzy(0.0, 1.0)))));
+        assertThat(result.getWeightedControlPoints().get(2), is(weightedPointOf(new WeightedPoint(3.0, Point.fuzzy(1.0, 0.0)))));
+        assertThat(result.getWeightedControlPoints().get(3), is(weightedPointOf(new WeightedPoint(4.0, Point.fuzzy(1.0, 1.0)))));
+        assertEquals(4, result.getWeightedControlPoints().size());
+        assertEquals(0.0, result.getDomain().getBegin(), 1.0e-10);
+        assertEquals(1.0, result.getDomain().getEnd(), 1.0e-10);
     }
 
     /**
@@ -74,13 +95,19 @@ public class RationalBezierTest {
     @Test
     public void testCreate_Interval_WeightedPointArr() {
         System.out.println("create");
-        Interval i = null;
-        WeightedPoint[] weightedControlPoints = null;
-        RationalBezier expResult = null;
-        RationalBezier result = RationalBezier.create(i, weightedControlPoints);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        RationalBezier result = RationalBezier.create(
+                Interval.of(0.2, 0.9), 
+                new WeightedPoint(1.0, Point.fuzzy(0.0, 0.0)),
+                new WeightedPoint(2.0, Point.fuzzy(0.0, 1.0)),
+                new WeightedPoint(3.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(4.0, Point.fuzzy(1.0, 1.0)));
+        assertThat(result.getWeightedControlPoints().get(0), is(weightedPointOf(new WeightedPoint(1.0, Point.fuzzy(0.0, 0.0)))));
+        assertThat(result.getWeightedControlPoints().get(1), is(weightedPointOf(new WeightedPoint(2.0, Point.fuzzy(0.0, 1.0)))));
+        assertThat(result.getWeightedControlPoints().get(2), is(weightedPointOf(new WeightedPoint(3.0, Point.fuzzy(1.0, 0.0)))));
+        assertThat(result.getWeightedControlPoints().get(3), is(weightedPointOf(new WeightedPoint(4.0, Point.fuzzy(1.0, 1.0)))));
+        assertEquals(4, result.getWeightedControlPoints().size());
+        assertEquals(0.2, result.getDomain().getBegin(), 1.0e-10);
+        assertEquals(0.9, result.getDomain().getEnd(), 1.0e-10);
     }
 
     /**
@@ -89,13 +116,19 @@ public class RationalBezierTest {
     @Test
     public void testCreate_Iterable_Iterable() {
         System.out.println("create");
-        Iterable<? extends Point> controlPoints = null;
-        Iterable<Double> weights = null;
-        RationalBezier expResult = null;
-        RationalBezier result = RationalBezier.create(controlPoints, weights);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Array<WeightedPoint> points = Array.of(
+                new WeightedPoint(1.0, Point.fuzzy(0.0, 0.0)),
+                new WeightedPoint(2.0, Point.fuzzy(0.0, 1.0)),
+                new WeightedPoint(3.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(4.0, Point.fuzzy(1.0, 1.0)));
+        RationalBezier result = RationalBezier.create(points.map(WeightedPoint::getPoint), points.map(WeightedPoint::getWeight));
+        assertThat(result.getWeightedControlPoints().get(0), is(weightedPointOf(points.get(0))));
+        assertThat(result.getWeightedControlPoints().get(1), is(weightedPointOf(points.get(1))));
+        assertThat(result.getWeightedControlPoints().get(2), is(weightedPointOf(points.get(2))));
+        assertThat(result.getWeightedControlPoints().get(3), is(weightedPointOf(points.get(3))));
+        assertEquals(4, result.getWeightedControlPoints().size());
+        assertEquals(0.0, result.getDomain().getBegin(), 1.0e-10);
+        assertEquals(1.0, result.getDomain().getEnd(), 1.0e-10);
     }
 
     /**
@@ -104,14 +137,21 @@ public class RationalBezierTest {
     @Test
     public void testCreate_3args() {
         System.out.println("create");
-        Interval i = null;
-        Iterable<? extends Point> controlPoints = null;
-        Iterable<Double> weights = null;
-        RationalBezier expResult = null;
-        RationalBezier result = RationalBezier.create(i, controlPoints, weights);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Array<WeightedPoint> points = Array.of(
+                new WeightedPoint(1.0, Point.fuzzy(0.0, 0.0)),
+                new WeightedPoint(2.0, Point.fuzzy(0.0, 1.0)),
+                new WeightedPoint(3.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(4.0, Point.fuzzy(1.0, 1.0)));
+        RationalBezier result = RationalBezier.create(
+                Interval.of(0.2, 0.9),
+                points.map(WeightedPoint::getPoint), points.map(WeightedPoint::getWeight));
+        assertThat(result.getWeightedControlPoints().get(0), is(weightedPointOf(points.get(0))));
+        assertThat(result.getWeightedControlPoints().get(1), is(weightedPointOf(points.get(1))));
+        assertThat(result.getWeightedControlPoints().get(2), is(weightedPointOf(points.get(2))));
+        assertThat(result.getWeightedControlPoints().get(3), is(weightedPointOf(points.get(3))));
+        assertEquals(4, result.getWeightedControlPoints().size());
+        assertEquals(0.2, result.getDomain().getBegin(), 1.0e-10);
+        assertEquals(0.9, result.getDomain().getEnd(), 1.0e-10);
     }
 
     /**
@@ -119,16 +159,19 @@ public class RationalBezierTest {
      */
     @Test
     public void testByRepresentPoints_4args() {
-        System.out.println("fromRepresentPoints");
-        Double weight = null;
-        Point rp0 = null;
-        Point rp1 = null;
-        Point rp2 = null;
-        ConicSection.ByRepresentPoints expResult = null;
-        ConicSection.ByRepresentPoints result = RationalBezier.byRepresentPoints(weight, rp0, rp1, rp2);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        System.out.println("byRepresentPoints");
+        ConicSection result = RationalBezier.byRepresentPoints(
+                Math.sqrt(2.0)/2, 
+                Point.fuzzy(1.0, 0.0, 1.0),
+                Point.fuzzy(0.5/(1+Math.sqrt(2.0)/2), 0.5/(1+Math.sqrt(2.0)/2), 2.0),
+                Point.fuzzy(0.0, 1.0, 1.0));
+        assertThat(result.getRepresentPoints().get(0), is(PointMatcher.pointOf(1.0, 0.0, 0.0, 1.0)));
+        assertThat(result.getRepresentPoints().get(1), is(PointMatcher.pointOf(0.5/(1+Math.sqrt(2.0)/2), 0.5/(1+Math.sqrt(2.0)/2), 0.0, 2.0)));
+        assertThat(result.getRepresentPoints().get(2), is(PointMatcher.pointOf(Point.fuzzy(0.0, 1.0, 0.0, 1.0))));
+        assertEquals(3, result.getRepresentPoints().size());
+        assertEquals(Math.sqrt(2.0)/2, result.getWeight(), 1.0e-10);
+        assertEquals(0.0, result.getDomain().getBegin(), 1.0e-10);
+        assertEquals(1.0, result.getDomain().getEnd(), 1.0e-10);
     }
 
     /**
@@ -137,16 +180,19 @@ public class RationalBezierTest {
     @Test
     public void testByRepresentPoints_5args() {
         System.out.println("byRepresentPoints");
-        Interval i = null;
-        Double weight = null;
-        Point rp0 = null;
-        Point rp1 = null;
-        Point rp2 = null;
-        ConicSection.ByRepresentPoints expResult = null;
-        ConicSection.ByRepresentPoints result = RationalBezier.byRepresentPoints(i, weight, rp0, rp1, rp2);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        ConicSection result = RationalBezier.byRepresentPoints(
+                Interval.of(0.2, 0.9),
+                Math.sqrt(2.0)/2, 
+                Point.fuzzy(1.0, 0.0, 1.0),
+                Point.fuzzy(0.5/(1+Math.sqrt(2.0)/2), 0.5/(1+Math.sqrt(2.0)/2), 2.0),
+                Point.fuzzy(0.0, 1.0, 1.0));
+        assertThat(result.getRepresentPoints().get(0), is(PointMatcher.pointOf(1.0, 0.0, 0.0, 1.0)));
+        assertThat(result.getRepresentPoints().get(1), is(PointMatcher.pointOf(0.5/(1+Math.sqrt(2.0)/2), 0.5/(1+Math.sqrt(2.0)/2), 0.0, 2.0)));
+        assertThat(result.getRepresentPoints().get(2), is(PointMatcher.pointOf(Point.fuzzy(0.0, 1.0, 0.0, 1.0))));
+        assertEquals(3, result.getRepresentPoints().size());
+        assertEquals(Math.sqrt(2.0)/2, result.getWeight(), 1.0e-10);
+        assertEquals(0.2, result.getDomain().getBegin(), 1.0e-10);
+        assertEquals(0.9, result.getDomain().getEnd(), 1.0e-10);
     }
 
     /**
@@ -155,12 +201,19 @@ public class RationalBezierTest {
     @Test
     public void testFromBezier() {
         System.out.println("fromBezier");
-        Bezier bezier = null;
-        RationalBezier expResult = null;
-        RationalBezier result = RationalBezier.fromBezier(bezier);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Array<WeightedPoint> points = Array.of(
+                new WeightedPoint(1.0, Point.fuzzy(0.0, 0.0)),
+                new WeightedPoint(1.0, Point.fuzzy(0.0, 1.0)),
+                new WeightedPoint(1.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(1.0, Point.fuzzy(1.0, 1.0)));
+        RationalBezier result = RationalBezier.fromBezier(Bezier.create(Interval.of(0.2, 0.9), points.map(WeightedPoint::getPoint)));
+        assertThat(result.getWeightedControlPoints().get(0), is(weightedPointOf(points.get(0))));
+        assertThat(result.getWeightedControlPoints().get(1), is(weightedPointOf(points.get(1))));
+        assertThat(result.getWeightedControlPoints().get(2), is(weightedPointOf(points.get(2))));
+        assertThat(result.getWeightedControlPoints().get(3), is(weightedPointOf(points.get(3))));
+        assertEquals(4, result.getWeightedControlPoints().size());
+        assertEquals(0.2, result.getDomain().getBegin(), 1.0e-10);
+        assertEquals(0.9, result.getDomain().getEnd(), 1.0e-10);
     }
 
     /**
@@ -169,12 +222,14 @@ public class RationalBezierTest {
     @Test
     public void testToJson() {
         System.out.println("toJson");
-        RationalBezier bezier = null;
-        String expResult = "";
-        String result = RationalBezier.toJson(bezier);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        RationalBezier expected = RationalBezier.create(
+                Interval.of(0.2, 0.9),
+                new WeightedPoint(1.0, Point.fuzzy(0.0, 0.0)),
+                new WeightedPoint(2.0, Point.fuzzy(0.0, 1.0)),
+                new WeightedPoint(3.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(4.0, Point.fuzzy(1.0, 1.0)));
+        RationalBezier actual = RationalBezier.fromJson(RationalBezier.toJson(expected)).get();
+        assertThat(actual, is(rationalBezierOf(expected)));
     }
 
     /**
@@ -183,11 +238,16 @@ public class RationalBezierTest {
     @Test
     public void testFromJson() {
         System.out.println("fromJson");
-        String json = "";
-        Option<RationalBezier> expResult = null;
-        Option<RationalBezier> result = RationalBezier.fromJson(json);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        RationalBezier actual = RationalBezier.fromJson(
+                "{interval:{begin:0.2,end:0.9},"
+                        + "controlPoints:[{x:0.0,y:0.0,z:0.0,r:1.0},{x:0.0,y:1.0,z:0.0,r:0.5},{x:1.0,y:0.0,z:0.0,r:2.0},{x:1.0,y:1.0,z:0.0,r:0.0}],"
+                        + "weights:[1.0,2.0,3.0,4.0]}").get();
+        RationalBezier expected = RationalBezier.create(
+                Interval.of(0.2, 0.9),
+                new WeightedPoint(1.0, Point.zero(1.0)),
+                new WeightedPoint(2.0, Point.fuzzy(0.0, 1.0, 0.5)),
+                new WeightedPoint(3.0, Point.fuzzy(1.0, 0.0, 2.0)),
+                new WeightedPoint(4.0, Point.crisp(1.0, 1.0)));
+        assertThat(actual, is(rationalBezierOf(expected)));
     }
 }

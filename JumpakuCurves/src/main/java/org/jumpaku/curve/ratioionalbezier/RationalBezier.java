@@ -9,7 +9,6 @@ import javaslang.Tuple2;
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import javaslang.control.Option;
-import org.jumpaku.affine.FuzzyPoint;
 import org.jumpaku.affine.Point;
 import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Differentiable;
@@ -46,11 +45,12 @@ public interface RationalBezier extends FuzzyCurve, Differentiable, Reverseable<
     
     public static RationalBezier create(Interval i, Iterable<? extends Point> controlPoints, Iterable<Double> weights){
         Array<Double> ws = Array.ofAll(weights);
-        Array<FuzzyPoint> cps = Array.ofAll(controlPoints)
-                .map(p -> p instanceof FuzzyPoint ? (FuzzyPoint)p : FuzzyPoint.crisp(p));
+        Array<Point> cps = Array.ofAll(controlPoints);
+
         if(ws.size() != cps.size())
             throw new IllegalArgumentException("size of weights must equal to size of controlPoints,"
                             + " but size of weights = "+ws.size()+", size of controlPoints = "+cps.size());
+
         if(ws.isEmpty() || cps.isEmpty())
             throw new IllegalArgumentException("weights and controlPoints mustn't be empty");
         
@@ -62,10 +62,7 @@ public interface RationalBezier extends FuzzyCurve, Differentiable, Reverseable<
     }
     
     public static ConicSection.ByRepresentPoints byRepresentPoints(Interval i, Double weight, Point rp0, Point rp1, Point rp2){
-        return new ConicSection.ByRepresentPoints(i, weight,
-                rp0 instanceof FuzzyPoint ? (FuzzyPoint)rp0 : FuzzyPoint.crisp(rp0),
-                rp1 instanceof FuzzyPoint ? (FuzzyPoint)rp1 : FuzzyPoint.crisp(rp1),
-                rp2 instanceof FuzzyPoint ? (FuzzyPoint)rp2 : FuzzyPoint.crisp(rp2));
+        return new ConicSection.ByRepresentPoints(i, weight, rp0, rp1, rp2);
     }
     
     public static RationalBezier fromBezier(Bezier bezier){
@@ -82,7 +79,7 @@ public interface RationalBezier extends FuzzyCurve, Differentiable, Reverseable<
 
     @Override Interval getDomain();
     
-    @Override FuzzyPoint evaluate(Double t);
+    @Override Point evaluate(Double t);
 
     @Override Derivative differentiate();
 
@@ -94,12 +91,12 @@ public interface RationalBezier extends FuzzyCurve, Differentiable, Reverseable<
 
     @Override RationalBezier reverse();
 
-    default Array<FuzzyPoint> getControlPoints(){
+    default Array<Point> getControlPoints(){
         return getWeightedControlPoints().map(WeightedPoint::getPoint);
     }
     
     default Array<Double> getWeights(){
-        return getWeightedControlPoints().map(WeightedPoint::getW);
+        return getWeightedControlPoints().map(WeightedPoint::getWeight);
     }
 
     default Integer getDegree(){

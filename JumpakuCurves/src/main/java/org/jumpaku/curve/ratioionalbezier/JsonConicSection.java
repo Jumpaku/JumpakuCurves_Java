@@ -6,7 +6,7 @@
 package org.jumpaku.curve.ratioionalbezier;
 
 import java.lang.reflect.Type;
-import org.jumpaku.affine.JsonFuzzyPoint;
+import org.jumpaku.affine.JsonPoint;
 import org.jumpaku.curve.JsonInterval;
 import org.jumpaku.json.Converter;
 
@@ -25,13 +25,13 @@ public class JsonConicSection implements Converter<ConicSection>{
     }
     
     public static final class Data implements Converter.Temporary<ConicSection>{
-        private final JsonFuzzyPoint.Data[] representPoints;
+        private final JsonPoint.Data[] representPoints;
         private final Double weight;
         private final JsonInterval.Data interval;
 
         public Data(ConicSection bezier) {
             this.representPoints = bezier.getRepresentPoints()
-                    .map(JsonFuzzyPoint.Data::new).toJavaArray(JsonFuzzyPoint.Data.class);
+                    .map(JsonPoint.Data::new).toJavaArray(JsonPoint.Data.class);
             this.weight = bezier.getWeight();
             this.interval = new JsonInterval.Data(bezier.getDomain());
         }

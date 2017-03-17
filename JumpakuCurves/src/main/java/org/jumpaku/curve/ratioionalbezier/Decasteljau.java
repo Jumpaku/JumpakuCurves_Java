@@ -10,7 +10,7 @@ import javaslang.Tuple2;
 import javaslang.collection.Array;
 import javaslang.collection.List;
 import javaslang.collection.Stream;
-import org.jumpaku.affine.FuzzyPoint;
+import org.jumpaku.affine.Point;
 import org.jumpaku.affine.Vector;
 import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Interval;
@@ -31,7 +31,7 @@ public class Decasteljau implements RationalBezier{
         this.domain = domain;
     }
     
-    @Override public FuzzyPoint evaluate(Double t){
+    @Override public Point evaluate(Double t){
         if(!getDomain().includes(t))
             throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
         
@@ -62,10 +62,10 @@ public class Decasteljau implements RationalBezier{
         Array<Double> ws = getWeights();
         Array<Double> dws = getWeights().zipWith(ws.tail(), (a, b)->n*(b-a));
         BezierDerivative dp = BezierDerivative.create(getDomain(), 
-                getWeightedControlPoints().map(wp -> wp.getPoint().toVector().scale(wp.getW())));
+                getWeightedControlPoints().map(wp -> wp.getPoint().toVector().scale(wp.getWeight()).toCrisp()));
         
         return new Derivative() {
-            @Override public Vector evaluate(Double t) {
+            @Override public Vector.Crisp evaluate(Double t) {
                 if(!getDomain().includes(t))
                     throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
             
@@ -74,7 +74,7 @@ public class Decasteljau implements RationalBezier{
                 Vector dpt = dp.evaluate(t);
                 Vector rt = Decasteljau.this.evaluate(t).toVector();
                 
-                return dpt.sub(dwt, rt).scale(1/wt);
+                return dpt.sub(dwt, rt).scale(1/wt).toCrisp();
             }
 
             @Override public Interval getDomain() {

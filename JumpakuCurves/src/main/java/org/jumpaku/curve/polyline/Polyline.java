@@ -13,7 +13,7 @@ import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import javaslang.control.Option;
 import org.apache.commons.math3.util.FastMath;
-import org.jumpaku.affine.FuzzyPoint;
+import org.jumpaku.affine.Point;
 import org.jumpaku.curve.Curve;
 import org.jumpaku.curve.FuzzyCurve;
 import org.jumpaku.curve.Interval;
@@ -27,11 +27,11 @@ public interface Polyline extends FuzzyCurve{
     
     public static final Double DEFAULT_ABSOLUTE_ACCURACY = 1.0;
     
-    public static Polyline create(FuzzyPoint... ps){
+    public static Polyline create(Point... ps){
         return create(Stream.of(ps));
     }
     
-    public static Polyline create(Iterable<? extends FuzzyPoint> ps){
+    public static Polyline create(Iterable<? extends Point> ps){
         if(Stream.ofAll(ps).isEmpty())
             throw new IllegalArgumentException("ps must contain some elements");
         
@@ -40,25 +40,24 @@ public interface Polyline extends FuzzyCurve{
     }
     
     public static Polyline approximate(Curve curve, Integer n, Double accuracy){
-        FuzzyCurve fuzzy = curve instanceof FuzzyCurve ? (FuzzyCurve)curve : FuzzyCurve.crisp(curve);
         Array<Double> ts = curve.getDomain().sample(n);
-        LinkedList<FuzzyPoint> points = new LinkedList<>();
+        LinkedList<Point> points = new LinkedList<>();
         for (Tuple2<Double, Double> seg : ts.zip(ts.tail())) {
             double a = seg._1();
             double b = seg._2();
-            FuzzyPoint pa = fuzzy.evaluate(a);
-            FuzzyPoint pb = fuzzy.evaluate(b);
-            points.addAll(toLines(fuzzy, pa, a, pb, b, accuracy));
+            Point pa = curve.evaluate(a);
+            Point pb = curve.evaluate(b);
+            points.addAll(toLines(curve, pa, a, pb, b, accuracy));
         }
-        points.add(fuzzy.evaluate(ts.last()));
+        points.add(curve.evaluate(ts.last()));
         return create(points);
     }
 
-    public static LinkedList<FuzzyPoint> toLines(FuzzyCurve curve, FuzzyPoint pa, Double a, FuzzyPoint pb, Double b, Double accuracy){
+    public static LinkedList<Point> toLines(Curve curve, Point pa, Double a, Point pb, Double b, Double accuracy){
         double c = a + (b - a)/2;
-        FuzzyPoint pc = curve.evaluate(c);
-        LinkedList<FuzzyPoint> points = new LinkedList<>();
-        if(pc.dist(pa, pb) <= accuracy){
+        Point pc = curve.evaluate(c);
+        LinkedList<Point> points = new LinkedList<>();
+        if(pc.toCrisp().dist(pa.toCrisp(), pb.toCrisp()) <= accuracy){
             points.add(pa);
             points.add(pb);
             return points;
@@ -79,7 +78,7 @@ public interface Polyline extends FuzzyCurve{
         return JsonPolyline.CONVERTER.fromJson(json);
     }
 
-    Array<? extends FuzzyPoint> getPoints();
+    Array<? extends Point> getPoints();
     
     public static final class PolylineImpl implements Polyline{
 
@@ -87,22 +86,22 @@ public interface Polyline extends FuzzyCurve{
         
         private final Interval interval;
         
-        private final Array<FuzzyPoint> points;
+        private final Array<Point> points;
 
-        public PolylineImpl(Iterable<? extends FuzzyPoint> ps) {
+        public PolylineImpl(Iterable<? extends Point> ps) {
             this.points = Array.ofAll(ps);
 
             Double[] params = new Double[points.size()];
             params[0] = 0.0;
             for (int i = 1; i < points.size(); ++i) {
-                params[i] = params[i-1] + points.get(i).dist(points.get(i-1));
+                params[i] = params[i-1] + points.get(i).toCrisp().dist(points.get(i-1).toCrisp());
             }
 
             this.parameters = Array.of(params);
             this.interval = Interval.of(0.0, parameters.last());
         }
         
-        @Override public Array<FuzzyPoint> getPoints(){
+        @Override public Array<Point> getPoints(){
             return points;
         }
 
@@ -114,11 +113,11 @@ public interface Polyline extends FuzzyCurve{
             return toJson(this);
         }
         
-        @Override public FuzzyPoint evaluate(Double s) {
+        @Override public Point evaluate(Double s) {
             if(!getDomain().includes(s))
                 throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + s);
 
-            Array<FuzzyPoint> ps = getPoints();
+            Array<Point> ps = getPoints();
             int a = 0;
             int b = parameters.size()-1;
             while(b-a > 1){
@@ -138,14 +137,14 @@ public interface Polyline extends FuzzyCurve{
         }
 
         @Override
-        public Array<FuzzyPoint> evaluateAllByArcLengthParams(Integer n) {
-            Array<FuzzyPoint> ps = getPoints();
+        public Array<Point> evaluateAllByArcLengthParams(Integer n) {
+            Array<Point> ps = getPoints();
             if(points.isSingleValued()){
                 return Stream.continually(ps.head()).take(n).toArray();
             }
 
             Array<Double> ss = getDomain().sample(n);
-            Stream<FuzzyPoint> evaluated = Stream.of();
+            Stream<Point> evaluated = Stream.of();
             int indexP = 1;
             for(Double s : ss.init()){
                 indexP = parameters.indexWhere(param -> s < param, indexP);
