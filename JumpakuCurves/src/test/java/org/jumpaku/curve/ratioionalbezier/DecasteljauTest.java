@@ -12,6 +12,7 @@ import org.jumpaku.affine.Point;
 import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Interval;
 import static org.jumpaku.curve.ratioionalbezier.RationalBezierMatcher.rationalBezierOf;
+import static org.jumpaku.curve.ratioionalbezier.WeightedPointMatcher.weightedPointOf;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -45,12 +46,14 @@ public class DecasteljauTest {
     @Test
     public void testGetDomain() {
         System.out.println("getDomain");
-        Decasteljau instance = null;
-        Interval expResult = null;
-        Interval result = instance.getDomain();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Interval result = RationalBezier.create(
+                Interval.of(0.2, 0.9),
+                new WeightedPoint(1.0, Point.fuzzy(0.0, 0.0)),
+                new WeightedPoint(2.0, Point.fuzzy(0.0, 1.0)),
+                new WeightedPoint(3.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(4.0, Point.fuzzy(1.0, 1.0))).getDomain();
+        assertEquals(0.2, result.getBegin(), 1.0e-10);
+        assertEquals(0.9, result.getEnd(), 1.0e-10);
     }
 
     /**
@@ -103,13 +106,14 @@ public class DecasteljauTest {
     @Test
     public void testRestrict_Interval() {
         System.out.println("restrict");
-        Interval i = null;
-        Decasteljau instance = null;
-        RationalBezier expResult = null;
-        RationalBezier result = instance.restrict(i);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Array<WeightedPoint> points = Array.of(
+                new WeightedPoint(1.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(2.0, Point.fuzzy(2.0, 1.0)),
+                new WeightedPoint(3.0, Point.fuzzy(4.0, 0.0)),
+                new WeightedPoint(4.0, Point.fuzzy(8.0, 1.0)));
+        RationalBezier result = RationalBezier.create(Interval.of(0.2, 0.9), points).restrict(Interval.of(0.3, 0.8));
+        assertThat(result, is(rationalBezierOf(
+                RationalBezier.create(Interval.of(0.3, 0.8), points))));
     }
 
     /**
@@ -118,14 +122,14 @@ public class DecasteljauTest {
     @Test
     public void testRestrict_Double_Double() {
         System.out.println("restrict");
-        Double begin = null;
-        Double end = null;
-        Decasteljau instance = null;
-        RationalBezier expResult = null;
-        RationalBezier result = instance.restrict(begin, end);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Array<WeightedPoint> points = Array.of(
+                new WeightedPoint(1.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(2.0, Point.fuzzy(2.0, 1.0)),
+                new WeightedPoint(3.0, Point.fuzzy(4.0, 0.0)),
+                new WeightedPoint(4.0, Point.fuzzy(8.0, 1.0)));
+        RationalBezier result = RationalBezier.create(Interval.of(0.2, 0.9), points).restrict(0.3, 0.8);
+        assertThat(result, is(rationalBezierOf(
+                RationalBezier.create(Interval.of(0.3, 0.8), points))));
     }
 
     /**
@@ -134,12 +138,14 @@ public class DecasteljauTest {
     @Test
     public void testReverse() {
         System.out.println("reverse");
-        Decasteljau instance = null;
-        RationalBezier expResult = null;
-        RationalBezier result = instance.reverse();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Array<WeightedPoint> points = Array.of(
+                new WeightedPoint(1.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(2.0, Point.fuzzy(2.0, 1.0)),
+                new WeightedPoint(3.0, Point.fuzzy(4.0, 0.0)),
+                new WeightedPoint(4.0, Point.fuzzy(8.0, 1.0)));
+        RationalBezier result = RationalBezier.create(Interval.of(0.2, 0.9), points).reverse();
+        assertThat(result, is(rationalBezierOf(
+                RationalBezier.create(Interval.of(0.1, 0.8), points.reverse()))));
     }
 
     /**
@@ -148,12 +154,17 @@ public class DecasteljauTest {
     @Test
     public void testGetWeightedControlPoints() {
         System.out.println("getWeightedControlPoints");
-        Decasteljau instance = null;
-        Array<WeightedPoint> expResult = null;
-        Array<WeightedPoint> result = instance.getWeightedControlPoints();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Array<WeightedPoint> points = Array.of(
+                new WeightedPoint(1.0, Point.fuzzy(0.0, 0.0)),
+                new WeightedPoint(2.0, Point.fuzzy(0.0, 1.0)),
+                new WeightedPoint(3.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(4.0, Point.fuzzy(1.0, 1.0)));
+        RationalBezier result = RationalBezier.create(points);
+        assertThat(result.getWeightedControlPoints().get(0), is(weightedPointOf(points.get(0))));
+        assertThat(result.getWeightedControlPoints().get(1), is(weightedPointOf(points.get(1))));
+        assertThat(result.getWeightedControlPoints().get(2), is(weightedPointOf(points.get(2))));
+        assertThat(result.getWeightedControlPoints().get(3), is(weightedPointOf(points.get(3))));
+        assertEquals(4, result.getWeightedControlPoints().size());
     }
 
     /**
@@ -204,12 +215,13 @@ public class DecasteljauTest {
     @Test
     public void testGetDegree() {
         System.out.println("getDegree");
-        ConicSection instance = new ConicSectionImpl();
-        Integer expResult = null;
-        Integer result = instance.getDegree();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Array<WeightedPoint> points = Array.of(
+                new WeightedPoint(1.0, Point.fuzzy(0.0, 0.0)),
+                new WeightedPoint(2.0, Point.fuzzy(0.0, 1.0)),
+                new WeightedPoint(3.0, Point.fuzzy(1.0, 0.0)),
+                new WeightedPoint(4.0, Point.fuzzy(1.0, 1.0)));
+        int result = RationalBezier.create(points).getDegree();
+        assertEquals(3, result);
     }
 
 
