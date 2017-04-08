@@ -10,9 +10,11 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-/JumpakuCurves/target/
-*._.DS_Store
-*._.gitignore
 
+JumpakuCurves/target/
 JumpakuCurves/nbproject
-/JumpakuCurves/nbproject/
+JumpakuCurves/.idea/
+*.iml
+
+*.DS_Store
+
