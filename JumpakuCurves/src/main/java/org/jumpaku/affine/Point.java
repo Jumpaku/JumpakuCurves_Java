@@ -48,7 +48,7 @@ public interface Point extends Membership<Point, Point.Crisp>, Divideable<Point>
         return crisp(x, 0.0);
     }
 
-    static final Crisp ZERO = crisp(0.0);
+    Crisp ZERO = crisp(0.0);
     
     static Crisp zero(){
         return ZERO;

@@ -129,7 +129,7 @@ public interface ConicSection extends RationalBezier{
                 new Point.Crisp(rvs[0].scale(-0.5/weight).add(1+1/weight, rvs[1]).add(-0.5/weight, rvs[2]).toCrisp()),
                 new Point.Crisp(rvs[2])
             };
-            return Array.of(1.0, weight, 1.0).zipWith(Stream.of(cps), WeightedPoint::new);
+            return Stream.of(cps).zipWith(Stream.of(1.0, weight, 1.0), WeightedPoint::new).toArray();
         }
 
         @Override public Double getWeight() {

@@ -180,8 +180,8 @@ public class DecasteljauTest {
         Bezier instance = Bezier.create(Interval.of(0.2, 0.9), Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(1.0, 1.0));
         Bezier first = instance.subdivide(t)._1();
         Bezier second = instance.subdivide(t)._2();
-        assertThat(first, is(bezierOf(Bezier.create(Interval.of(1.0/20, 1.0), Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 0.25), Point.fuzzy(1/16.0, 3/8.0), Point.fuzzy(5/32.0, 7/16.0)))));
-        assertThat(second, is(bezierOf(Bezier.create(Interval.of(0.0, 9.0/40), Point.fuzzy(5/32.0, 7/16.0), Point.fuzzy(7/16.0, 5/8.0), Point.fuzzy(1.0, 0.250), Point.fuzzy(1.0, 1.0)))));
+        assertThat(first, is(bezierOf(Bezier.create(Interval.of(0.8, 1.0), Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 0.25), Point.fuzzy(1/16.0, 3/8.0), Point.fuzzy(5/32.0, 7/16.0)))));
+        assertThat(second, is(bezierOf(Bezier.create(Interval.of(0.0, 13/15.0), Point.fuzzy(5/32.0, 7/16.0), Point.fuzzy(7/16.0, 5/8.0), Point.fuzzy(1.0, 0.250), Point.fuzzy(1.0, 1.0)))));
     }
 
     /**

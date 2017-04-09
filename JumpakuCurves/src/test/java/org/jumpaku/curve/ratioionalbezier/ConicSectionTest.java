@@ -175,7 +175,7 @@ public class ConicSectionTest {
     @Test
     public void testGetDegree() {
         System.out.println("getDegree");
-        ConicSection instance = new ConicSectionImpl();
+        ConicSection instance = null;//new ConicSectionImpl();
         Integer expResult = null;
         Integer result = instance.getDegree();
         assertEquals(expResult, result);
@@ -205,7 +205,7 @@ public class ConicSectionTest {
     @Test
     public void testGetRepresentPoints() {
         System.out.println("getRepresentPoints");
-        ConicSection instance = new ConicSectionImpl();
+        ConicSection instance = null;//new ConicSectionImpl();
         Array<Point> expResult = null;
         Array<Point> result = instance.getRepresentPoints();
         assertEquals(expResult, result);
@@ -219,7 +219,7 @@ public class ConicSectionTest {
     @Test
     public void testGetWeight() {
         System.out.println("getWeight");
-        ConicSection instance = new ConicSectionImpl();
+        ConicSection instance = null;//new ConicSectionImpl();
         Double expResult = null;
         Double result = instance.getWeight();
         assertEquals(expResult, result);
@@ -233,7 +233,7 @@ public class ConicSectionTest {
     @Test
     public void testComplement() {
         System.out.println("complement");
-        ConicSection instance = new ConicSectionImpl();
+        ConicSection instance = null;//new ConicSectionImpl();
         ConicSection expResult = null;
         ConicSection result = instance.complement();
         assertEquals(expResult, result);

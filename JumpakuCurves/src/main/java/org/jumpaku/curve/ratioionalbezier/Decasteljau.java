@@ -60,9 +60,11 @@ public class Decasteljau implements RationalBezier{
     @Override public final Derivative differentiate() {
         int n = getDegree();
         Array<Double> ws = getWeights();
-        Array<Double> dws = getWeights().zipWith(ws.tail(), (a, b)->n*(b-a));
+        Array<Double> dws = ws.zipWith(ws.tail(), (a, b)->n*(b-a));
         BezierDerivative dp = BezierDerivative.create(getDomain(), 
-                getWeightedControlPoints().map(wp -> wp.getPoint().toVector().scale(wp.getWeight()).toCrisp()));
+                getWeightedControlPoints().map(
+                        wp -> wp.getPoint().toVector().scale(wp.getWeight()).toCrisp()))
+                .differentiate();
         
         return new Derivative() {
             @Override public Vector.Crisp evaluate(Double t) {
@@ -184,8 +186,8 @@ public class Decasteljau implements RationalBezier{
             throw new IllegalArgumentException("t must be in " + getDomain().toString() + ", but t = ");
         
         return createDividedControlPointsArray(t)
-                .map(cp -> RationalBezier.create(Interval.of(getDomain().getBegin()*t, 1.0), cp),
-                        cp -> RationalBezier.create(Interval.of(0.0, getDomain().getEnd()*t), cp));
+                .map(cp -> RationalBezier.create(Interval.of(getDomain().getBegin()/t, 1.0), cp),
+                        cp -> RationalBezier.create(Interval.of(0.0, (getDomain().getEnd()-t)/(1-t)), cp));
     }
     
     private Tuple2<Array<WeightedPoint>, Array<WeightedPoint>> createDividedControlPointsArray(Double t) {

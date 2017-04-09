@@ -65,7 +65,7 @@ public interface BezierDerivative extends Derivative, Differentiable, Reverseabl
             }
 
             @Override public String toString() {
-                return super.toString(); 
+                return JsonBezierDerivative.CONVERTER.toJson(this);
             }
         };
     }

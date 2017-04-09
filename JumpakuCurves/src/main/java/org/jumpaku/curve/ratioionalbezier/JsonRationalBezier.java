@@ -38,8 +38,7 @@ public final class JsonRationalBezier implements Converter<RationalBezier>{
         @Override public RationalBezier newInstance() {
             return RationalBezier.create(interval.newInstance(),
                     Array.of(controlPoints).map(JsonPoint.Data::newInstance)
-                            .zipWith(Stream.of(weights),
-                                    (p, w)->new WeightedPoint(w, p)));
+                            .zipWith(Stream.of(weights), WeightedPoint::new));
         }
     }
     

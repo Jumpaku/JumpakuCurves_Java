@@ -54,7 +54,7 @@ public interface RationalBezier extends FuzzyCurve, Differentiable, Reverseable<
         if(ws.isEmpty() || cps.isEmpty())
             throw new IllegalArgumentException("weights and controlPoints mustn't be empty");
         
-        return create(i, ws.zipWith(cps, WeightedPoint::new));
+        return create(i, cps.zipWith(ws, WeightedPoint::new));
     }
     
     public static ConicSection.ByRepresentPoints byRepresentPoints(Double weight, Point rp0, Point rp1, Point rp2){

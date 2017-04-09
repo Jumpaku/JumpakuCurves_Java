@@ -159,8 +159,8 @@ public final class Decasteljau implements Bezier{
             throw new IllegalArgumentException("t must be in " + getDomain().toString() + ", but t = ");
         
         return createDividedControlPointsArray(t)
-                .map(cp -> Bezier.create(Interval.of(getDomain().getBegin()*t, 1.0), cp),
-                        cp -> Bezier.create(Interval.of(0.0, getDomain().getEnd()*t), cp));
+                .map(cp -> Bezier.create(Interval.of(getDomain().getBegin()/t, 1.0), cp),
+                        cp -> Bezier.create(Interval.of(0.0, (getDomain().getEnd()-t)/(1-t)), cp));
     }
     
     private Tuple2<Array<Point>, Array<Point>> createDividedControlPointsArray(Double t) {

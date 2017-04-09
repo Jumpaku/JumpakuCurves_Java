@@ -196,7 +196,18 @@ public class BezierDerivativeTest {
         BezierDerivative instance = BezierDerivative.create(Interval.of(0.2, 0.9), Array.of(Vector.crisp(0.0, 0.0), Vector.crisp(0.0, 1.0), Vector.crisp(1.0, 0.0), Vector.crisp(1.0, 1.0)));
         BezierDerivative first = instance.subdivide(t)._1();
         BezierDerivative second = instance.subdivide(t)._2();
-        assertThat(first, is(bezierDerivativeOf(BezierDerivative.create(Interval.of(1.0/20, 1.0), Array.of(Vector.crisp(0.0, 0.0), Vector.crisp(0.0, 0.25), Vector.crisp(1/16.0, 3/8.0), Vector.crisp(5/32.0, 7/16.0))))));
-        assertThat(second, is(bezierDerivativeOf(BezierDerivative.create(Interval.of(0.0, 9.0/40), Array.of(Vector.crisp(5/32.0, 7/16.0), Vector.crisp(7/16.0, 5/8.0), Vector.crisp(1.0, 0.250), Vector.crisp(1.0, 1.0))))));
+        assertThat(first, is(bezierDerivativeOf(BezierDerivative.create(Interval.of(0.8, 1.0), Array.of(Vector.crisp(0.0, 0.0), Vector.crisp(0.0, 0.25), Vector.crisp(1/16.0, 3/8.0), Vector.crisp(5/32.0, 7/16.0))))));
+        assertThat(second, is(bezierDerivativeOf(BezierDerivative.create(Interval.of(0.0, 13/15.0), Array.of(Vector.crisp(5/32.0, 7/16.0), Vector.crisp(7/16.0, 5/8.0), Vector.crisp(1.0, 0.250), Vector.crisp(1.0, 1.0))))));
+    }
+
+    /**
+     * Test of toString method, of class BezierDerivative.
+     */
+    @Test
+    public void testToString() {
+        System.out.println("toString");
+        BezierDerivative expected = BezierDerivative.create(Bezier.create(Point.crisp(0.0, 0.0), Point.crisp(0.0, 1.0), Point.crisp(1.0, 0.0), Point.crisp(1.0, 1.0)));
+        BezierDerivative actual = new JsonBezierDerivative().fromJson(expected.toString()).get();
+        assertThat(actual, is(bezierDerivativeOf(expected)));
     }
 }

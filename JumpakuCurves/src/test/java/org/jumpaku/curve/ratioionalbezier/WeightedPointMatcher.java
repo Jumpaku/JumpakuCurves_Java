@@ -21,8 +21,8 @@ public class WeightedPointMatcher extends TypeSafeMatcher<WeightedPoint>{
     
     private final WeightedPoint expected;
     
-    @Factory public static Matcher<WeightedPoint> weightedPointOf(Double weight, Point p){
-        return new WeightedPointMatcher(new WeightedPoint(weight, p));
+    @Factory public static Matcher<WeightedPoint> weightedPointOf(Point p, Double weight){
+        return new WeightedPointMatcher(new WeightedPoint(p, weight));
     }
     
     @Factory public static Matcher<WeightedPoint> weightedPointOf(WeightedPoint wp){
