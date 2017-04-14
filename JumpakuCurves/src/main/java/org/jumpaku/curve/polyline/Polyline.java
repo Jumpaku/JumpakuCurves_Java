@@ -5,8 +5,6 @@
  */
 package org.jumpaku.curve.polyline;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import javaslang.Tuple2;
 import javaslang.collection.Array;
@@ -17,13 +15,14 @@ import org.jumpaku.affine.Point;
 import org.jumpaku.curve.Curve;
 import org.jumpaku.curve.FuzzyCurve;
 import org.jumpaku.curve.Interval;
+import org.jumpaku.curve.Reverseable;
 
 /**
  *
  * @author jumpaku
  */
 
-public interface Polyline extends FuzzyCurve{
+public final class Polyline implements FuzzyCurve, Reverseable<Polyline> {
     
     public static final Double DEFAULT_ABSOLUTE_ACCURACY = 1.0;
     
@@ -35,7 +34,7 @@ public interface Polyline extends FuzzyCurve{
         if(Stream.ofAll(ps).isEmpty())
             throw new IllegalArgumentException("ps must contain some elements");
         
-        return new PolylineImpl(ps);
+        return new Polyline(ps);
 
     }
     
@@ -78,82 +77,84 @@ public interface Polyline extends FuzzyCurve{
         return JsonPolyline.CONVERTER.fromJson(json);
     }
 
-    Array<? extends Point> getPoints();
-    
-    public static final class PolylineImpl implements Polyline{
+    private final Array<Double> parameters;
 
-        private final Array<Double> parameters;
-        
-        private final Interval interval;
-        
-        private final Array<Point> points;
+    private final Interval interval;
 
-        public PolylineImpl(Iterable<? extends Point> ps) {
-            this.points = Array.ofAll(ps);
+    private final Array<Point> points;
 
-            Double[] params = new Double[points.size()];
-            params[0] = 0.0;
-            for (int i = 1; i < points.size(); ++i) {
-                params[i] = params[i-1] + points.get(i).toCrisp().dist(points.get(i-1).toCrisp());
-            }
+    public Polyline(Iterable<? extends Point> ps) {
+        this.points = Array.ofAll(ps);
 
-            this.parameters = Array.of(params);
-            this.interval = Interval.of(0.0, parameters.last());
+        Double[] params = new Double[points.size()];
+        params[0] = 0.0;
+        for (int i = 1; i < points.size(); ++i) {
+            params[i] = params[i-1] + points.get(i).toCrisp().dist(points.get(i-1).toCrisp());
         }
-        
-        @Override public Array<Point> getPoints(){
+
+        this.parameters = Array.of(params);
+        this.interval = Interval.of(0.0, parameters.last());
+    }
+
+    public Array<Point> getPoints(){
             return points;
         }
 
-        @Override public Interval getDomain() {
+    public Interval getDomain() {
             return interval;
         }
         
-        @Override public String toString(){
+    @Override
+    public String toString(){
             return toJson(this);
         }
         
-        @Override public Point evaluate(Double s) {
-            if(!getDomain().includes(s))
-                throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + s);
+    @Override
+    public Point evaluate(Double s) {
+        if(!getDomain().includes(s))
+            throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + s);
 
-            Array<Point> ps = getPoints();
-            int a = 0;
-            int b = parameters.size()-1;
-            while(b-a > 1){
-                int c = a + FastMath.floorDiv(b - a, 2);
-                if(s < parameters.get(c)){
-                    b = c;
-                }
-                else if(parameters.get(c) <= s){
-                    a = c;
-                }
+        Array<Point> ps = getPoints();
+        int a = 0;
+        int b = parameters.size()-1;
+        while(b-a > 1){
+            int c = a + FastMath.floorDiv(b - a, 2);
+            if(s < parameters.get(c)){
+                b = c;
             }
-
-            double begin = parameters.get(a);
-            double end = parameters.get(b);
-
-            return ps.get(a).divide((s - begin)/(end-begin), ps.get(b));
+            else if(parameters.get(c) <= s){
+                a = c;
+            }
         }
 
-        @Override
-        public Array<Point> evaluateAllByArcLengthParams(Integer n) {
-            Array<Point> ps = getPoints();
-            if(points.isSingleValued()){
-                return Stream.continually(ps.head()).take(n).toArray();
-            }
+        double begin = parameters.get(a);
+        double end = parameters.get(b);
 
-            Array<Double> ss = getDomain().sample(n);
-            Stream<Point> evaluated = Stream.of();
-            int indexP = 1;
-            for(Double s : ss.init()){
-                indexP = parameters.indexWhere(param -> s < param, indexP);
-                double r = (s - parameters.get(indexP-1))/(parameters.get(indexP)-parameters.get(indexP-1));
-                evaluated = evaluated.append(ps.get(indexP-1).divide(r, ps.get(indexP)));
-            }
-            evaluated = evaluated.append(ps.last());
+        return ps.get(a).divide((s - begin)/(end-begin), ps.get(b));
+    }
 
-            return evaluated.toArray();
+    @Override
+    public Array<Point> evaluateAllByArcLengthParams(Integer n) {
+        Array<Point> ps = getPoints();
+        if(points.isSingleValued()){
+            return Stream.continually(ps.head()).take(n).toArray();
         }
+
+        Array<Double> ss = getDomain().sample(n);
+        Stream<Point> evaluated = Stream.of();
+        int indexP = 1;
+        for(Double s : ss.init()){
+            indexP = parameters.indexWhere(param -> s < param, indexP);
+            double r = (s - parameters.get(indexP-1))/(parameters.get(indexP)-parameters.get(indexP-1));
+            evaluated = evaluated.append(ps.get(indexP-1).divide(r, ps.get(indexP)));
+        }
+        evaluated = evaluated.append(ps.last());
+
+        return evaluated.toArray();
+    }
+
+    @Override
+    public Polyline reverse() {
+        return create(getPoints().reverse());
     }
 }

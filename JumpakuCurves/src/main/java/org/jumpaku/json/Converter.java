@@ -16,11 +16,11 @@ import javaslang.control.Option;
  */
 public interface Converter<D> {
     
-    static interface Temporary<D>{
+    interface Temporary<D>{
         D newInstance();
     }
     
-    static final Gson GSON = new Gson();
+    Gson GSON = new Gson();
     
     default String toJson(D d){
         return GSON.toJson(toTemporary(d));

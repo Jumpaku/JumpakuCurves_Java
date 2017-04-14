@@ -5,12 +5,11 @@
  */
 package org.jumpaku.curve.ratioionalbezier;
 
-import java.lang.reflect.Type;
 import static org.hamcrest.core.Is.is;
 import org.jumpaku.affine.Point;
 import org.jumpaku.curve.Interval;
-import static org.jumpaku.curve.ratioionalbezier.ConicSectionMatcher.conicSectionOf;
-import org.jumpaku.json.Converter;
+import static org.jumpaku.curve.ratioionalbezier.ByRepresentPointsMatcher.conicSectionOf;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -18,32 +17,32 @@ import static org.junit.Assert.*;
  *
  * @author tomohiko
  */
-public class JsonConicSectionTest {
+public class JsonByRepresentPointsTest {
     
-    public JsonConicSectionTest() {
+    public JsonByRepresentPointsTest() {
     }
 
     @Test
     public void testToJson(){
         System.out.println("toJson");
-        ConicSection expected = RationalBezier.byRepresentPoints(
+        ByRepresentPoints expected = new ByRepresentPoints(
                 Interval.of(0.2, 0.9),
                 Math.sqrt(2.0)/2, 
                 Point.fuzzy(1.0, 0.0, 1.0),
                 Point.fuzzy(0.5/(1+Math.sqrt(2.0)/2), 0.5/(1+Math.sqrt(2.0)/2), 2.0),
                 Point.fuzzy(0.0, 1.0, 1.0));
-        ConicSection actual = new JsonConicSection().fromJson(new JsonConicSection().toJson(expected)).get();
+        ByRepresentPoints actual = new JsonByRepresentPoints().fromJson(new JsonByRepresentPoints().toJson(expected)).get();
         assertThat(actual, is(conicSectionOf(expected)));
     }
     
     @Test
     public void testFromJson(){
         System.out.println("fromJson");
-        ConicSection actual = new JsonConicSection().fromJson(
+        ByRepresentPoints actual = new JsonByRepresentPoints().fromJson(
                 "{interval:{begin:0.2,end:0.9},"
                         + "representPoints:[{x:1.0,y:0.0,z:0.0,r:1.0},{x:0.2928932188134525,y:0.2928932188134525,z:0.0,r:2.0},{x:0.0,y:1.0,z:0.0,r:1.0}],"
                         + "weight:0.7071067811865476}").get();
-        ConicSection expected = RationalBezier.byRepresentPoints(
+        ByRepresentPoints expected = new ByRepresentPoints(
                 Interval.of(0.2, 0.9),
                 Math.sqrt(2.0)/2, 
                 Point.fuzzy(1.0, 0.0, 1.0),
@@ -53,26 +52,26 @@ public class JsonConicSectionTest {
     }
 
     /**
-     * Test of getTemporaryType method, of class JsonConicSection.
+     * Test of getTemporaryType method, of class JsonByRepresentPoints.
      */
     @Test
     public void testGetTemporaryType() {
         System.out.println("getTemporaryType");
-        assertEquals(JsonConicSection.Data.class, new JsonConicSection().getTemporaryType());
+        assertEquals(JsonByRepresentPoints.Data.class, new JsonByRepresentPoints().getTemporaryType());
     }
 
     /**
-     * Test of toTemporary method, of class JsonConicSection.
+     * Test of toTemporary method, of class JsonByRepresentPoints.
      */
     @Test
     public void testToTemporary() {
         System.out.println("toTemporary");
-        ConicSection instance = RationalBezier.byRepresentPoints(
+        ByRepresentPoints instance = new ByRepresentPoints(
                 Interval.of(0.2, 0.9),
                 Math.sqrt(2.0)/2, 
                 Point.fuzzy(1.0, 0.0, 1.0),
                 Point.fuzzy(0.5/(1+Math.sqrt(2.0)/2), 0.5/(1+Math.sqrt(2.0)/2), 2.0),
                 Point.fuzzy(0.0, 1.0, 1.0));
-        assertThat(new JsonConicSection().toTemporary(instance).newInstance(), is(conicSectionOf(instance)));
+        assertThat(new JsonByRepresentPoints().toTemporary(instance).newInstance(), is(conicSectionOf(instance)));
     }
 }

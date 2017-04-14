@@ -5,13 +5,12 @@
  */
 package org.jumpaku.curve.ratioionalbezier;
 
-import javaslang.Tuple2;
 import javaslang.collection.Array;
 import static org.hamcrest.core.Is.is;
 import org.jumpaku.affine.Point;
 import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Interval;
-import static org.jumpaku.curve.ratioionalbezier.ConicSectionMatcher.conicSectionOf;
+import static org.jumpaku.curve.ratioionalbezier.ByRepresentPointsMatcher.conicSectionOf;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -19,9 +18,9 @@ import static org.junit.Assert.*;
  *
  * @author tomohiko
  */
-public class ConicSectionTest {
+public class ByRepresentPointsTest {
     
-    public ConicSectionTest() {
+    public ByRepresentPointsTest() {
     }
     /**
      * Test of evaluate method, of class ConicSection.
@@ -30,7 +29,7 @@ public class ConicSectionTest {
     public void testEvaluate() {
         System.out.println("evaluate");
         Double t = null;
-        ConicSection instance = null;
+        ByRepresentPoints instance = null;
         Point expResult = null;
         Point result = instance.evaluate(t);
         assertEquals(expResult, result);
@@ -39,12 +38,12 @@ public class ConicSectionTest {
     }
 
     /**
-     * Test of getDomain method, of class ConicSection.
+     * Test of getDomain method, of class ByRepresentPoints.
      */
     @Test
     public void testGetDomain() {
         System.out.println("getDomain");
-        ConicSection instance = null;
+        ByRepresentPoints instance = null;
         Interval expResult = null;
         Interval result = instance.getDomain();
         assertEquals(expResult, result);
@@ -53,12 +52,12 @@ public class ConicSectionTest {
     }
 
     /**
-     * Test of differentiate method, of class ConicSection.
+     * Test of differentiate method, of class ByRepresentPoints.
      */
     @Test
     public void testDifferentiate() {
         System.out.println("differentiate");
-        ConicSection instance = null;
+        ByRepresentPoints instance = null;
         Derivative expResult = null;
         Derivative result = instance.differentiate();
         assertEquals(expResult, result);
@@ -67,15 +66,15 @@ public class ConicSectionTest {
     }
 
     /**
-     * Test of restrict method, of class ConicSection.
+     * Test of restrict method, of class ByRepresentPoints.
      */
     @Test
     public void testRestrict_Interval() {
         System.out.println("restrict");
         Interval i = null;
-        ConicSection instance = null;
-        RationalBezier expResult = null;
-        RationalBezier result = instance.restrict(i);
+        ByRepresentPoints instance = null;
+        ByRepresentPoints expResult = null;
+        ByRepresentPoints result = instance.restrict(i);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -83,99 +82,42 @@ public class ConicSectionTest {
 
 
     /**
-     * Test of restrict method, of class ConicSection.
+     * Test of restrict method, of class ByRepresentPoints.
      */
     @Test
     public void testRestrict_Double_Double() {
         System.out.println("restrict");
         Double begin = null;
         Double end = null;
-        ConicSection instance = null;
-        RationalBezier expResult = null;
-        RationalBezier result = instance.restrict(begin, end);
+        ByRepresentPoints instance = null;
+        ByRepresentPoints expResult = null;
+        ByRepresentPoints result = instance.restrict(begin, end);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of reverse method, of class ConicSection.
+     * Test of reverse method, of class ByRepresentPoints.
      */
     @Test
     public void testReverse() {
         System.out.println("reverse");
-        ConicSection instance = null;
-        RationalBezier expResult = null;
-        RationalBezier result = instance.reverse();
+        ByRepresentPoints instance = null;
+        ByRepresentPoints expResult = null;
+        ByRepresentPoints result = instance.reverse();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of getWeightedControlPoints method, of class ConicSection.
-     */
-    @Test
-    public void testGetWeightedControlPoints() {
-        System.out.println("getWeightedControlPoints");
-        ConicSection instance = null;
-        Array<WeightedPoint> expResult = null;
-        Array<WeightedPoint> result = instance.getWeightedControlPoints();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of elevate method, of class ConicSection.
-     */
-    @Test
-    public void testElevate() {
-        System.out.println("elevate");
-        ConicSection instance = null;
-        RationalBezier expResult = null;
-        RationalBezier result = instance.elevate();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of reduce method, of class ConicSection.
-     */
-    @Test
-    public void testReduce() {
-        System.out.println("reduce");
-        ConicSection instance = null;
-        RationalBezier expResult = null;
-        RationalBezier result = instance.reduce();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of subdivide method, of class ConicSection.
-     */
-    @Test
-    public void testSubdivide() {
-        System.out.println("subdivide");
-        Double t = null;
-        ConicSection instance = null;
-        Tuple2<RationalBezier, RationalBezier> expResult = null;
-        Tuple2<RationalBezier, RationalBezier> result = instance.subdivide(t);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getDegree method, of class ConicSection.
+     * Test of getDegree method, of class ByRepresentPoints.
      */
     @Test
     public void testGetDegree() {
         System.out.println("getDegree");
-        ConicSection instance = null;//new ConicSectionImpl();
+        ByRepresentPoints instance = null;//new ByRepresentPointsImpl();
         Integer expResult = null;
         Integer result = instance.getDegree();
         assertEquals(expResult, result);
@@ -184,28 +126,28 @@ public class ConicSectionTest {
     }
 
     /**
-     * Test of toString method, of class ConicSection.
+     * Test of toString method, of class ByRepresentPoints.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        ConicSection expected = RationalBezier.byRepresentPoints(
+        ByRepresentPoints expected = new ByRepresentPoints(
                 Interval.of(0.2, 0.9),
                 Math.sqrt(2.0)/2, 
                 Point.fuzzy(1.0, 0.0, 1.0),
                 Point.fuzzy(0.5/(1+Math.sqrt(2.0)/2), 0.5/(1+Math.sqrt(2.0)/2), 2.0),
                 Point.fuzzy(0.0, 1.0, 1.0));
-        ConicSection actual = new JsonConicSection().fromJson(expected.toString()).get();
+        ByRepresentPoints actual = new JsonByRepresentPoints().fromJson(expected.toString()).get();
         assertThat(actual, is(conicSectionOf(expected)));
     }
     
     /**
-     * Test of getRepresentPoints method, of class ConicSection.
+     * Test of getRepresentPoints method, of class ByRepresentPoints.
      */
     @Test
     public void testGetRepresentPoints() {
         System.out.println("getRepresentPoints");
-        ConicSection instance = null;//new ConicSectionImpl();
+        ByRepresentPoints instance = null;//new ByRepresentPointsImpl();
         Array<Point> expResult = null;
         Array<Point> result = instance.getRepresentPoints();
         assertEquals(expResult, result);
@@ -214,12 +156,40 @@ public class ConicSectionTest {
     }
 
     /**
-     * Test of getWeight method, of class ConicSection.
+     * Test of toCrispRationalBezier method, of class ByRepresentPoints.
+     */
+    @Test
+    public void testToCrispRationalBezier() {
+        System.out.println("toCrispRationalBezier");
+        ByRepresentPoints instance = null;
+        ByRepresentPoints expResult = null;
+        ByRepresentPoints result = instance.reverse();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of createCrispRationalBezier method, of class ByRepresentPoints.
+     */
+    @Test
+    public void testCreateCrispControlPoints() {
+        System.out.println("createCrispControlPoints");
+        ByRepresentPoints instance = null;
+        ByRepresentPoints expResult = null;
+        ByRepresentPoints result = instance.reverse();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getWeight method, of class ByRepresentPoints.
      */
     @Test
     public void testGetWeight() {
         System.out.println("getWeight");
-        ConicSection instance = null;//new ConicSectionImpl();
+        ByRepresentPoints instance = null;//new ByRepresentPointsImpl();
         Double expResult = null;
         Double result = instance.getWeight();
         assertEquals(expResult, result);
@@ -228,14 +198,14 @@ public class ConicSectionTest {
     }
 
     /**
-     * Test of complement method, of class ConicSection.
+     * Test of complement method, of class ByRepresentPoints.
      */
     @Test
     public void testComplement() {
         System.out.println("complement");
-        ConicSection instance = null;//new ConicSectionImpl();
-        ConicSection expResult = null;
-        ConicSection result = instance.complement();
+        ByRepresentPoints instance = null;//new ByRepresentPointsImpl();
+        ByRepresentPoints expResult = null;
+        ByRepresentPoints result = instance.complement();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

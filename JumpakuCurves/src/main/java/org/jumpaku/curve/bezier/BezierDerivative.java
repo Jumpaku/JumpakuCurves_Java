@@ -70,15 +70,15 @@ public interface BezierDerivative extends Derivative, Differentiable, Reverseabl
         };
     }
 
-    public static BezierDerivative create(Interval domain, Array<? extends Vector.Crisp> vs){
+    static BezierDerivative create(Interval domain, Array<? extends Vector.Crisp> vs){
         return create(Bezier.create(domain, vs.map(Point.Crisp::new)));
     }
     
-    public static String toJson(BezierDerivative db){
+    static String toJson(BezierDerivative db){
         return JsonBezierDerivative.CONVERTER.toJson(db);
     }
     
-    public static Option<BezierDerivative> fromJson(String json){
+    static Option<BezierDerivative> fromJson(String json){
         return JsonBezierDerivative.CONVERTER.fromJson(json);
     }
 

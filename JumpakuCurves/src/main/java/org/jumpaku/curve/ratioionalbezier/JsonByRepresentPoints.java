@@ -14,33 +14,33 @@ import org.jumpaku.json.Converter;
  *
  * @author jumpaku
  */
-public class JsonConicSection implements Converter<ConicSection>{
+public class JsonByRepresentPoints implements Converter<ByRepresentPoints>{
 
     @Override public Type getTemporaryType() {
         return Data.class;
     }
 
-    @Override public Temporary<ConicSection> toTemporary(ConicSection bezier) {
+    @Override public Temporary<ByRepresentPoints> toTemporary(ByRepresentPoints bezier) {
         return new Data(bezier);
     }
     
-    public static final class Data implements Converter.Temporary<ConicSection>{
+    public static final class Data implements Converter.Temporary<ByRepresentPoints>{
         private final JsonPoint.Data[] representPoints;
         private final Double weight;
         private final JsonInterval.Data interval;
 
-        public Data(ConicSection bezier) {
+        public Data(ByRepresentPoints bezier) {
             this.representPoints = bezier.getRepresentPoints()
                     .map(JsonPoint.Data::new).toJavaArray(JsonPoint.Data.class);
             this.weight = bezier.getWeight();
             this.interval = new JsonInterval.Data(bezier.getDomain());
         }
 
-        @Override public ConicSection.ByRepresentPoints newInstance() {
-            return RationalBezier.byRepresentPoints(interval.newInstance(), weight, 
+        @Override public ByRepresentPoints newInstance() {
+            return new ByRepresentPoints(interval.newInstance(), weight,
                     representPoints[0].newInstance(), representPoints[1].newInstance(), representPoints[2].newInstance());
         }
     }
     
-    public static final JsonConicSection CONVERTER = new JsonConicSection();
+    public static final JsonByRepresentPoints CONVERTER = new JsonByRepresentPoints();
 }

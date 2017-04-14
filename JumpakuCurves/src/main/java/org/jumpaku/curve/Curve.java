@@ -30,7 +30,7 @@ public interface Curve extends Function<Double, Point>, Restrictable<Curve>{
 
     Interval getDomain();
 
-    @Override public default Curve restrict(Interval i) {
+    @Override default Curve restrict(Interval i) {
         if(!getDomain().includes(i))
             throw new IllegalArgumentException("i must be in " + getDomain() + ", but i = " + i);
 
