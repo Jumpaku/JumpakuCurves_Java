@@ -3,10 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curve.ratioionalbezier;
-
-import org.jumpaku.affine.Divideable;
-import org.jumpaku.affine.Point;
+package org.jumpaku.affine;
 
 /**
  *

@@ -15,7 +15,7 @@ import org.jumpaku.curve.bezier.Bezier;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
 public class RationalBezierMatcher extends TypeSafeMatcher<RationalBezier>{
     

@@ -13,6 +13,7 @@ import javaslang.collection.Stream;
 import javaslang.control.Option;
 import org.jumpaku.affine.Point;
 import org.jumpaku.affine.Vector;
+import org.jumpaku.affine.WeightedPoint;
 import org.jumpaku.curve.*;
 import org.jumpaku.curve.bezier.Bezier;
 import org.jumpaku.curve.bezier.BezierDerivative;

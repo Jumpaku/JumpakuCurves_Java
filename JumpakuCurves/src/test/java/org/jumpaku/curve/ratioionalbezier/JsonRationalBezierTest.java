@@ -1,9 +1,8 @@
 
 package org.jumpaku.curve.ratioionalbezier;
 
-import java.lang.reflect.Type;
 import org.jumpaku.affine.Point;
-import org.jumpaku.json.Converter;
+import org.jumpaku.affine.WeightedPoint;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.jumpaku.curve.ratioionalbezier.RationalBezierMatcher.rationalBezierOf;
@@ -12,7 +11,7 @@ import org.jumpaku.curve.Interval;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
 public class JsonRationalBezierTest {
     

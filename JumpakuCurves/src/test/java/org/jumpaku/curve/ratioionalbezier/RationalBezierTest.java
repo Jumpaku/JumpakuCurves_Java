@@ -9,7 +9,7 @@ import javaslang.Tuple2;
 import javaslang.collection.Array;
 import static org.hamcrest.core.Is.is;
 import org.jumpaku.affine.Point;
-import org.jumpaku.affine.PointMatcher;
+import org.jumpaku.affine.WeightedPoint;
 import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Interval;
 import org.jumpaku.curve.bezier.Bezier;
@@ -19,7 +19,7 @@ import static org.jumpaku.affine.VectorMatcher.vectorOf;
 import static org.jumpaku.curve.ratioionalbezier.RationalBezierMatcher.rationalBezierOf;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static org.jumpaku.curve.ratioionalbezier.WeightedPointMatcher.weightedPointOf;
+import static org.jumpaku.affine.WeightedPointMatcher.weightedPointOf;
 
 /**
  *

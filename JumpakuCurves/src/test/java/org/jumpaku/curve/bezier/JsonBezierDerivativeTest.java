@@ -8,7 +8,7 @@ import static org.jumpaku.curve.bezier.BezierDerivativeMatcher.bezierDerivativeO
 import static org.junit.Assert.*;
 
 /**
- * Created by tomohiko on 2017/04/09.
+ * Created by Jumpaku on 2017/04/09.
  */
 public class JsonBezierDerivativeTest {
 

@@ -3,19 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jumpaku.curve.ratioionalbezier;
+package org.jumpaku.affine;
 
 import org.apache.commons.math3.util.Precision;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.jumpaku.affine.Point;
-import org.jumpaku.affine.Vector;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
 public class WeightedPointMatcher extends TypeSafeMatcher<WeightedPoint>{
     

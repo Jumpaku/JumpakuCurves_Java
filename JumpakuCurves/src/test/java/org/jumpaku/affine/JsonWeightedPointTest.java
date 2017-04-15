@@ -1,11 +1,9 @@
-package org.jumpaku.curve.ratioionalbezier;
+package org.jumpaku.affine;
 
-import org.jumpaku.affine.Point;
-import org.jumpaku.curve.Interval;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
-import static org.jumpaku.curve.ratioionalbezier.WeightedPointMatcher.weightedPointOf;
+import static org.jumpaku.affine.WeightedPointMatcher.weightedPointOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 

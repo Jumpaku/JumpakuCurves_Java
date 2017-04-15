@@ -1,12 +1,14 @@
 
-package org.jumpaku.curve.ratioionalbezier;
+package org.jumpaku.affine;
 
+import org.jumpaku.affine.JsonWeightedPoint;
 import org.jumpaku.affine.Point;
+import org.jumpaku.affine.WeightedPoint;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.is;
 import static org.jumpaku.affine.PointMatcher.pointOf;
-import static org.jumpaku.curve.ratioionalbezier.WeightedPointMatcher.weightedPointOf;
+import static org.jumpaku.affine.WeightedPointMatcher.weightedPointOf;
 
 /**
  *

@@ -14,21 +14,21 @@ import org.jumpaku.affine.Vector;
 
 /**
  *
- * @author tomohiko
+ * @author Jumpaku
  */
-public class ByRepresentPointsMatcher extends TypeSafeMatcher<ByRepresentPoints>{
+public class QuadraticByRepresentPointsMatcher extends TypeSafeMatcher<QuadraticByRepresentPoints>{
     
-    private final ByRepresentPoints expected;
+    private final QuadraticByRepresentPoints expected;
     
-    @Factory public static Matcher<ByRepresentPoints> conicSectionOf(ByRepresentPoints b){
-        return new ByRepresentPointsMatcher(b);
+    @Factory public static Matcher<QuadraticByRepresentPoints> quadraticByRepresentPointOf(QuadraticByRepresentPoints b){
+        return new QuadraticByRepresentPointsMatcher(b);
     }
     
-    ByRepresentPointsMatcher(ByRepresentPoints b){
+    QuadraticByRepresentPointsMatcher(QuadraticByRepresentPoints b){
         this.expected = b;
     }
     
-    @Override protected boolean matchesSafely(ByRepresentPoints item) {
+    @Override protected boolean matchesSafely(QuadraticByRepresentPoints item) {
         return expected.getRepresentPoints().zipWith(item.getRepresentPoints(),
                 (e, a)->{
                     return Vector.equals(e.toVector().toCrisp(), a.toVector().toCrisp(), 1.0e-10)
@@ -44,7 +44,7 @@ public class ByRepresentPointsMatcher extends TypeSafeMatcher<ByRepresentPoints>
         description.appendValue(this.expected);
     }
 
-    @Override protected void describeMismatchSafely(ByRepresentPoints item, Description mismatchDescription) {
+    @Override protected void describeMismatchSafely(QuadraticByRepresentPoints item, Description mismatchDescription) {
         super.describeMismatchSafely(item, mismatchDescription);
     }
 }
