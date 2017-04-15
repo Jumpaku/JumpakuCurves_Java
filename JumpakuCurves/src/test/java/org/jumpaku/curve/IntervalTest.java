@@ -52,8 +52,8 @@ public class IntervalTest {
      * Test of getBegin method, of class Interval.
      */
     @Test
-    public void testGetbegin() {
-        System.out.println("getbegin");
+    public void testGetBegin() {
+        System.out.println("getBegin");
         Interval instance = Interval.of(-2.3, 3.4);
         assertEquals(-2.3, instance.getBegin(), 1.0e-10);
     }

@@ -18,7 +18,7 @@ import org.apache.commons.math3.util.FastMath;
  */
 public interface Transform extends UnaryOperator<Point.Crisp>{
 
-    public static final class Matrix implements Transform{
+    final class Matrix implements Transform{
 
         private final RealMatrix matrix;
 
@@ -26,19 +26,21 @@ public interface Transform extends UnaryOperator<Point.Crisp>{
             this.matrix = matrix;
         }
         
-        @Override public Point.Crisp apply(Point.Crisp p) {
+        @Override
+        public Point.Crisp apply(Point.Crisp p) {
             double[] array = matrix.operate(new double[]{p.getX(), p.getY(), p.getZ(), 1.0});
             return Point.crisp(array[0], array[1], array[2]);
         }
 
-        @Override public Transform invert() {
+        @Override
+        public Transform invert() {
             return new Matrix(MatrixUtils.inverse(matrix));
         }
 
         @Override
-        public Transform concatnate(Transform a) {
+        public Transform concatenate(Transform a) {
             return a instanceof Matrix ?
-                    new Matrix(((Matrix)a).matrix.multiply(matrix)) : Transform.super.concatnate(a);
+                    new Matrix(((Matrix)a).matrix.multiply(matrix)) : Transform.super.concatenate(a);
         }
     }
     
@@ -74,7 +76,7 @@ public interface Transform extends UnaryOperator<Point.Crisp>{
         return new Matrix(m);
     }
     
-    static Transform IDENTITY = of(MatrixUtils.createRealIdentityMatrix(4));
+    Transform IDENTITY = of(MatrixUtils.createRealIdentityMatrix(4));
     
     static Transform id(){
         return IDENTITY;
@@ -87,12 +89,12 @@ public interface Transform extends UnaryOperator<Point.Crisp>{
         return id().rotateAt(ab._1(), a, b).scaleAt(ab._1(), b.length()/a.length()).translate(ac);
     }
     
-    static Transform cariblate(Tuple4<Point.Crisp, Point.Crisp, Point.Crisp, Point.Crisp> befor, Tuple4<Point.Crisp, Point.Crisp, Point.Crisp, Point.Crisp> after){
+    static Transform calibrate(Tuple4<Point.Crisp, Point.Crisp, Point.Crisp, Point.Crisp> before, Tuple4<Point.Crisp, Point.Crisp, Point.Crisp, Point.Crisp> after){
         RealMatrix a = MatrixUtils.createRealMatrix(new double[][]{
-            {befor._1().getX(), befor._1().getY(), befor._1().getZ(), 1},
-            {befor._2().getX(), befor._2().getY(), befor._2().getZ(), 1},
-            {befor._3().getX(), befor._3().getY(), befor._3().getZ(), 1},
-            {befor._4().getX(), befor._4().getY(), befor._4().getZ(), 1}}).transpose();
+            {before._1().getX(), before._1().getY(), before._1().getZ(), 1},
+            {before._2().getX(), before._2().getY(), before._2().getZ(), 1},
+            {before._3().getX(), before._3().getY(), before._3().getZ(), 1},
+            {before._4().getX(), before._4().getY(), before._4().getZ(), 1}}).transpose();
         RealMatrix b = MatrixUtils.createRealMatrix(new double[][]{
             {after._1().getX(), after._1().getY(), after._1().getZ(), 1},
             {after._2().getX(), after._2().getY(), after._2().getZ(), 1},
@@ -103,15 +105,15 @@ public interface Transform extends UnaryOperator<Point.Crisp>{
     }
     
     static Transform transformationAt(Point.Crisp p, Transform a){
-        return translation(p.toVector().negate()).concatnate(a).translate(p.toVector());
+        return translation(p.toVector().negate()).concatenate(a).translate(p.toVector());
     }
     
     default Transform transformAt(Point.Crisp p, Transform a){
-        return concatnate(transformationAt(p, a));
+        return concatenate(transformationAt(p, a));
     }
     
     default Transform scale(Double x, Double y, Double z){
-        return concatnate(scaling(x, y, z));
+        return concatenate(scaling(x, y, z));
     }
     
     default Transform scale(Double scale){
@@ -127,7 +129,7 @@ public interface Transform extends UnaryOperator<Point.Crisp>{
     }
     
     default Transform rotate(Vector.Crisp axis, Double radian){
-        return concatnate(rotation(axis, radian));
+        return concatenate(rotation(axis, radian));
     }
 
     default Transform rotate(Point.Crisp axisInitial, Point.Crisp axisTerminal, Double radian){
@@ -155,7 +157,7 @@ public interface Transform extends UnaryOperator<Point.Crisp>{
     }
 
     default Transform translate(Vector.Crisp v){
-        return concatnate(translation(v));
+        return concatenate(translation(v));
     }
     
     default Transform translate(Double x, Double y, Double z){
@@ -172,18 +174,21 @@ public interface Transform extends UnaryOperator<Point.Crisp>{
      * @param b
      * @return 
      */
-    static Transform concatnate(Transform a, Transform b){
+    static Transform concatenate(Transform a, Transform b){
         return new Transform() {
-            @Override public Point.Crisp apply(Point.Crisp p) {
+            @Override
+            public Point.Crisp apply(Point.Crisp p) {
                 return a.andThen(b).apply(p);
             }
 
-            @Override public Transform invert() {
-                return Transform.concatnate(b.invert(), a.invert());
+            @Override
+            public Transform invert() {
+                return Transform.concatenate(b.invert(), a.invert());
             }
 
-            @Override public Transform concatnate(Transform c) {
-                return Transform.concatnate(Transform.concatnate(a, b), c);
+            @Override
+            public Transform concatenate(Transform c) {
+                return Transform.concatenate(Transform.concatenate(a, b), c);
             }
         };
     }
@@ -193,7 +198,7 @@ public interface Transform extends UnaryOperator<Point.Crisp>{
      * @param a
      * @return 
      */
-    default Transform concatnate(Transform a){
-        return concatnate(this, a);
+    default Transform concatenate(Transform a){
+        return concatenate(this, a);
     }
 }

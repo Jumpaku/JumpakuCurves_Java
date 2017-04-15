@@ -62,7 +62,6 @@ public class PolylineTest {
     public void testToLines() {
         System.out.println("toLines");
         Curve curve = Polyline.create(Point.crisp(-1.0), Point.crisp(-1.0, 1.0), Point.crisp(1.0, 1.0), Point.crisp(1.0));
-        Double a = 0.0;
         Array<Point> expected = Array.of(Point.crisp(-1.0), Point.crisp(-1.0, 1.0), Point.crisp(0.0, 1.0), Point.crisp(1.0, 1.0), Point.crisp(1.0));
         LinkedList<Point> result = Polyline.toLines(curve, Point.crisp(-1.0), 0.0, Point.crisp(1.0), 4.0, 1.0e-10);
         assertThat(result.get(0), is(pointOf(expected.get(0))));

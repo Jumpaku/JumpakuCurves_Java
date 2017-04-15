@@ -6,19 +6,17 @@
 package org.jumpaku.curve.bezier;
 
 import javaslang.collection.Array;
-import static org.hamcrest.core.Is.is;
 import org.jumpaku.affine.Point;
 import org.jumpaku.affine.PointMatcher;
-import org.jumpaku.affine.Point;
 import org.jumpaku.affine.Vector;
 import org.jumpaku.curve.Interval;
+import org.junit.Test;
 
+import static org.hamcrest.core.Is.is;
+import static org.jumpaku.affine.PointMatcher.pointOf;
 import static org.jumpaku.curve.bezier.BezierDerivativeMatcher.bezierDerivativeOf;
 import static org.jumpaku.curve.bezier.BezierMatcher.bezierOf;
-import static org.jumpaku.affine.PointMatcher.pointOf;
-import org.junit.Test;
 import static org.junit.Assert.*;
-import static org.jumpaku.affine.PointMatcher.pointOf;
 
 /**
  *

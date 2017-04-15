@@ -22,7 +22,7 @@ import org.jumpaku.curve.bezier.BezierDerivative;
  *
  * @author jumpaku
  */
-public final class RationalBezier implements FuzzyCurve, Differentiable, Reverseable<RationalBezier> {
+public final class RationalBezier implements FuzzyCurve, Differentiable, Reversible<RationalBezier> {
 
     public static Array<WeightedPoint> decasteljau(Double t,  Array<WeightedPoint> wcps){
         return wcps.zipWith(wcps.tail(), (wcp0, wcp1)->wcp0.divide(t, wcp1));

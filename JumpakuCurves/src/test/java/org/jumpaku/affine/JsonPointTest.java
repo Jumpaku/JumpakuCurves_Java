@@ -5,11 +5,11 @@
  */
 package org.jumpaku.affine;
 
-import java.lang.reflect.Type;
-import static org.hamcrest.core.Is.is;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.hamcrest.core.Is.is;
 import static org.jumpaku.affine.PointMatcher.pointOf;
+import static org.junit.Assert.*;
 /**
  *
  * @author Jumpaku

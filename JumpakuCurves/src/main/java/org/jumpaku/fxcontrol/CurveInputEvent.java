@@ -6,7 +6,7 @@ import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javaslang.collection.Array;
-import org.jumpaku.old.curves.TimeSeriesData;
+import main.old.curves.TimeSeriesData;
 
 /** 曲線入力イベント. */
 public class CurveInputEvent extends Event{

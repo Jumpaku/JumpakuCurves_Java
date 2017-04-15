@@ -17,7 +17,7 @@ import org.apache.commons.math3.util.FastMath;
  */
 public interface Interval extends Domain{
     
-    static Interval ZERO_ONE = Interval.of(0.0, 1.0);
+    Interval ZERO_ONE = Interval.of(0.0, 1.0);
     
     static Interval of(Double begin, Double end){
         return new Interval() {

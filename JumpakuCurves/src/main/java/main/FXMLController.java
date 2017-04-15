@@ -18,22 +18,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javaslang.Tuple2;
-import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import javax.imageio.ImageIO;
-import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.jumpaku.old.curves.bezier.Bezier2D;
-import org.jumpaku.old.curves.bezier.RationalBezierFast;
-import org.jumpaku.old.curves.interpolation.Average;
-import org.jumpaku.old.curves.interpolation.BSplineInterpolater;
-import org.jumpaku.old.curves.interpolation.Data;
-import org.jumpaku.old.curves.interpolation.KnotGenerator;
-import org.jumpaku.old.curves.spline.BSpline2D;
-import org.jumpaku.old.curves.vector.Point2D;
-import org.jumpaku.old.curves.vector.Vec2;
-import org.jumpaku.old.curves.bezier.RationalBezier;
-import org.jumpaku.old.curves.spline.Spline;
+
+import main.old.curves.bezier.Bezier2D;
+import main.old.curves.vector.Point2D;
+import main.old.curves.bezier.RationalBezier;
 
 public class FXMLController implements Initializable {
     

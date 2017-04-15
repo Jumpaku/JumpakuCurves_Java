@@ -91,22 +91,22 @@ public class AffineTest {
     }
 
     /**
-     * Test of cariblate method, of class Transform.
+     * Test of calibrate method, of class Transform.
      */
     @Test
-    public void testCariblate() {
-        System.out.println("cariblate");
-        Tuple4<Point.Crisp, Point.Crisp, Point.Crisp, Point.Crisp> befor = Tuple.of(Point.crisp(1.0, 0.0, 0.0), Point.crisp(0.0, 1.0, 0.0), Point.crisp(0.0, 0.0, 1.0), Point.crisp(-1.0, -1.0, -1.0));
+    public void testCalibrate() {
+        System.out.println("calibrate");
+        Tuple4<Point.Crisp, Point.Crisp, Point.Crisp, Point.Crisp> before = Tuple.of(Point.crisp(1.0, 0.0, 0.0), Point.crisp(0.0, 1.0, 0.0), Point.crisp(0.0, 0.0, 1.0), Point.crisp(-1.0, -1.0, -1.0));
         Tuple4<Point.Crisp, Point.Crisp, Point.Crisp, Point.Crisp> after = Tuple.of(Point.crisp(1.0,-1.0, 1.0), Point.crisp(1.0, 1.0,-1.0), Point.crisp(-1.0, 1.0, 1.0), Point.crisp( 1.0,  1.0,  1.0));
-        assertThat(Transform.cariblate(befor, after).apply(Point.crisp(1.0, 0.0, 0.0)),
+        assertThat(Transform.calibrate(before, after).apply(Point.crisp(1.0, 0.0, 0.0)),
                 is(pointOf(1.0,-1.0, 1.0, 0.0)));
-        assertThat(Transform.cariblate(befor, after).apply(Point.crisp(0.0, 1.0, 0.0)), 
+        assertThat(Transform.calibrate(before, after).apply(Point.crisp(0.0, 1.0, 0.0)),
                 is(pointOf(1.0, 1.0,-1.0, 0.0)));
-        assertThat(Transform.cariblate(befor, after).apply(Point.crisp(0.0, 0.0, 1.0)), 
+        assertThat(Transform.calibrate(before, after).apply(Point.crisp(0.0, 0.0, 1.0)),
                 is(pointOf(-1.0, 1.0,1.0, 0.0)));
-        assertThat(Transform.cariblate(befor, after).apply(Point.crisp(-1.0,-1.0,-1.0)),
+        assertThat(Transform.calibrate(before, after).apply(Point.crisp(-1.0,-1.0,-1.0)),
                 is(pointOf( 1.0, 1.0,1.0, 0.0)));
-        assertThat(Transform.cariblate(befor, after).apply(Point.crisp(0.0, 0.0, 0.0)),
+        assertThat(Transform.calibrate(before, after).apply(Point.crisp(0.0, 0.0, 0.0)),
                 is(pointOf(0.5, 0.5, 0.5, 0.0)));
     }
 
@@ -303,25 +303,25 @@ public class AffineTest {
     }
 
     /**
-     * Test of concatnate method, of class Transform.
+     * Test of concatenate method, of class Transform.
      */
     @Test
-    public void testConcatnate_2args() {
-        System.out.println("concatnate");
-        assertThat(Transform.concatnate(Transform.translation(Vector.crisp(-2.0, 5.0, 1.0)), Transform.rotation(Vector.crisp(1.0, 1.0, 1.0), Math.PI*2.0/3.0))
+    public void testConcatenate_2args() {
+        System.out.println("concatenate");
+        assertThat(Transform.concatenate(Transform.translation(Vector.crisp(-2.0, 5.0, 1.0)), Transform.rotation(Vector.crisp(1.0, 1.0, 1.0), Math.PI*2.0/3.0))
                         .apply(Point.crisp(3.0, -2.0, -1.0)),
                 is(pointOf(0.0, 1.0, 3.0, 0.0)));
     }
 
     /**
-     * Test of concatnate method, of class Transform.
+     * Test of concatenate method, of class Transform.
      */
     @Test
-    public void testConcatnate() {
+    public void testConcatenate() {
         System.out.println("concatenate");
         assertThat(Transform.id()
-                        .concatnate(Transform.translation(Vector.crisp(-2.0, 5.0, 1.0)))
-                        .concatnate(Transform.rotation(Vector.crisp(1.0, 1.0, 1.0), Math.PI*2.0/3.0))
+                        .concatenate(Transform.translation(Vector.crisp(-2.0, 5.0, 1.0)))
+                        .concatenate(Transform.rotation(Vector.crisp(1.0, 1.0, 1.0), Math.PI*2.0/3.0))
                         .apply(Point.crisp(3.0, -2.0, -1.0)), 
                 is(pointOf(0.0, 1.0, 3.0, 0.0)));
     }

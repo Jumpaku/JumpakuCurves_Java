@@ -16,7 +16,7 @@ import org.jumpaku.fuzzy.Grade;
  */
 public interface FuzzyCurve extends Curve{
 
-    public static final Integer DEFAULT_FUZZY_MATCHING_POINTS = 30;
+    Integer DEFAULT_FUZZY_MATCHING_POINTS = 30;
     
     @Override Point evaluate(Double t);
     

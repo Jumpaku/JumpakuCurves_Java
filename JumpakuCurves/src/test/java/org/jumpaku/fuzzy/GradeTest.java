@@ -72,24 +72,6 @@ public class GradeTest {
     }
 
     /**
-     * Test of tureValue method, of class Grade.
-     */
-    @Test
-    public void testTrueValue() {
-        System.out.println("trueValue");
-        assertEquals(1.0, Grade.trueValue().getValue(), 1.0e-10);
-    }
-
-    /**
-     * Test of falseValue method, of class Grade.
-     */
-    @Test
-    public void testFalseValue() {
-        System.out.println("falseValue");
-        assertEquals(0.0, Grade.falseValue().getValue(), 1.0e-10);
-    }
-
-    /**
      * Test of and method, of class Grade.
      */
     @Test

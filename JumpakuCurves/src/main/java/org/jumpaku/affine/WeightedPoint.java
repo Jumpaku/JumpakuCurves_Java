@@ -9,7 +9,7 @@ package org.jumpaku.affine;
  *
  * @author jumpaku
  */
-public final class WeightedPoint implements Divideable<WeightedPoint>{
+public final class WeightedPoint implements Dividable<WeightedPoint> {
     
     private final Double weight;
 

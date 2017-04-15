@@ -16,13 +16,15 @@ import org.jumpaku.affine.Vector;
 import org.jumpaku.curve.Interval;
 import org.jumpaku.curve.Differentiable;
 import org.jumpaku.curve.FuzzyCurve;
-import org.jumpaku.curve.Reverseable;
+import org.jumpaku.curve.Reversible;
+
+import java.util.Objects;
 
 /**
  *
  * @author Jumpaku
  */
-public final class Bezier implements FuzzyCurve, Differentiable, Reverseable<Bezier>{
+public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Bezier> {
     
     public static Bezier create(Interval domain, Iterable<? extends org.jumpaku.affine.Point> controlPoints){
         Array<? extends Point> cps = Stream.ofAll(controlPoints).toArray();
@@ -30,7 +32,7 @@ public final class Bezier implements FuzzyCurve, Differentiable, Reverseable<Bez
         if(cps.isEmpty())
             throw new IllegalArgumentException("control points are empty");
         
-        if(cps.exists(p -> p == null))
+        if(cps.exists(Objects::isNull))
             throw new IllegalArgumentException("control points contain null");
      
         return new Bezier(cps, domain);

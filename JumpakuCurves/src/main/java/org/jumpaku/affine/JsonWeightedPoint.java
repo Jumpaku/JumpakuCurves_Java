@@ -13,11 +13,15 @@ import org.jumpaku.json.Converter;
 
 public final class JsonWeightedPoint implements Converter<WeightedPoint>{
 
-    @Override public Type getTemporaryType() {
+    public static final JsonWeightedPoint CONVERTER = new JsonWeightedPoint();
+
+    @Override
+    public Type getTemporaryType() {
         return Data.class;
     }
 
-    @Override public Temporary<WeightedPoint> toTemporary(WeightedPoint bezier) {
+    @Override
+    public Temporary<WeightedPoint> toTemporary(WeightedPoint bezier) {
         return new Data(bezier);
     }
 
@@ -34,6 +38,4 @@ public final class JsonWeightedPoint implements Converter<WeightedPoint>{
             return new WeightedPoint(point.newInstance(), weight);
         }
     }
-
-    public static final JsonWeightedPoint CONVERTER = new JsonWeightedPoint();
 }

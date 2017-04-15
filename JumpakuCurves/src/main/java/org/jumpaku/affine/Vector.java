@@ -56,11 +56,7 @@ public interface Vector extends Membership<Vector, Vector.Crisp>{
         return crisp(x, 0.0);
     }
 
-    static final Crisp ZERO = crisp(0.0);
-    
-    static Crisp zero(){
-        return ZERO;
-    }
+    Crisp ZERO = crisp(0.0);
     
     static String toJson(Vector v){
         return JsonVector.CONVERTER.toJson(v);
@@ -123,10 +119,10 @@ public interface Vector extends Membership<Vector, Vector.Crisp>{
         double d = sub(v).toCrisp().length();
         return !Double.isFinite(d/(ra + rb)) ? Grade.of(Vector.equals(toCrisp(), v.toCrisp(), 1.0e-10)) : 
                d < rb                        ? Grade.of(FastMath.min(1-(ra - d)/(ra + rb), 1-(ra + d)/(ra + rb))) :
-                                               Grade.falseValue();
+                                               Grade.FALSE;
     }
         
-    static final class Fuzzy implements Vector{
+    final class Fuzzy implements Vector{
         
         private final Crisp crisp;
         
@@ -166,7 +162,7 @@ public interface Vector extends Membership<Vector, Vector.Crisp>{
         }
     }
     
-    static final class Crisp implements Vector{
+    final class Crisp implements Vector{
         
         public static Crisp add(Double a, Crisp v1, Double b, Crisp v2){
             return new Crisp(new Vector3D(a, v1.vector, b, v2.vector));

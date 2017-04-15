@@ -15,7 +15,8 @@ import java.util.function.Function;
  */
 public interface Membership<M extends Membership<M, T>, T> extends Function<T, Grade>{
 
-    @Override public default Grade apply(T t) {
+    @Override
+    default Grade apply(T t) {
         return membership(t);
     }
     

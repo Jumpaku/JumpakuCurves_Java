@@ -130,7 +130,7 @@ public class PointTest {
     @Test
     public void testZero_0args() {
         System.out.println("zero");
-        Point.Crisp p = Point.zero();
+        Point.Crisp p = Point.ZERO;
         assertEquals(0.0, p.getX(), 1.0e-10);
         assertEquals(0.0, p.getY(), 1.0e-10);
         assertEquals(0.0, p.getZ(), 1.0e-10);
@@ -225,7 +225,7 @@ public class PointTest {
     @Test
     public void testMembership() {
         System.out.println("membership");
-        Point.Crisp p0 = Point.zero();
+        Point.Crisp p0 = Point.ZERO;
         Point.Crisp p1 = Point.crisp(1.0);
         Point.Crisp p2 = Point.crisp(2.0);
         Point.Crisp p3 = Point.crisp(3.0);
@@ -236,7 +236,7 @@ public class PointTest {
         assertEquals(0.0, instance1.membership(p2).getValue(), 1.0e-10);
         assertEquals(0.0, instance1.membership(p3).getValue(), 1.0e-10);
         
-        Point instance2 = Point.zero();
+        Point instance2 = Point.ZERO;
         assertEquals(1.0, instance2.membership(p0).getValue(), 1.0e-10);
         assertEquals(0.0, instance2.membership(p1).getValue(), 1.0e-10);
         assertEquals(0.0, instance2.membership(p2).getValue(), 1.0e-10);
@@ -257,7 +257,7 @@ public class PointTest {
         Point p5 = Point.fuzzy(2.0, 4.0);
         Point p6 = Point.fuzzy(3.0, 1.0);
         Point p7 = Point.fuzzy(3.0, 8.0);
-        Point p8 = Point.zero();
+        Point p8 = Point.ZERO;
         Point p9 = Point.crisp(1.0);
         Point p10 = Point.crisp(2.0);
         Point p11 = Point.crisp(3.0);
@@ -276,7 +276,7 @@ public class PointTest {
         assertEquals(0.0, instance1.possibility(p10).getValue(), 1.0e-10);
         assertEquals(0.0, instance1.possibility(p11).getValue(), 1.0e-10);
         
-        Point instance2 = Point.zero();
+        Point instance2 = Point.ZERO;
         assertEquals(1.0, instance2.possibility(p0).getValue(), 1.0e-10);
         assertEquals(1.0, instance2.possibility(p1).getValue(), 1.0e-10);
         assertEquals(0.0, instance2.possibility(p2).getValue(), 1.0e-10);
@@ -305,7 +305,7 @@ public class PointTest {
         Point p5 = Point.fuzzy(2.0, 4.0);
         Point p6 = Point.fuzzy(3.0, 1.0);
         Point p7 = Point.fuzzy(3.0, 8.0);
-        Point p8 = Point.zero();
+        Point p8 = Point.ZERO;
         Point p9 = Point.crisp(1.0);
         Point p10 = Point.crisp(2.0);
         Point p11 = Point.crisp(3.0);
@@ -324,7 +324,7 @@ public class PointTest {
         assertEquals(0.0, instance1.necessity(p10).getValue(), 1.0e-10);
         assertEquals(0.0, instance1.necessity(p11).getValue(), 1.0e-10);
         
-        Point instance2 = Point.zero();
+        Point instance2 = Point.ZERO;
         assertEquals(1.0, instance2.necessity(p0).getValue(), 1.0e-10);
         assertEquals(1.0, instance2.necessity(p1).getValue(), 1.0e-10);
         assertEquals(0.0, instance2.necessity(p2).getValue(), 1.0e-10);

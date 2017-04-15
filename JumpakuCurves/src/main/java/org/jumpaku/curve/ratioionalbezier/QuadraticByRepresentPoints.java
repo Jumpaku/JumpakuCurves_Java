@@ -17,7 +17,7 @@ import org.jumpaku.curve.*;
  * @author jumpaku
  */
 
-public final class QuadraticByRepresentPoints implements FuzzyCurve, Differentiable, Reverseable<QuadraticByRepresentPoints> {
+public final class QuadraticByRepresentPoints implements FuzzyCurve, Differentiable, Reversible<QuadraticByRepresentPoints> {
 
     public static Array<WeightedPoint> createCrispControlPoints(Double weight, Iterable<Point> representPoint){
         if(!Double.isFinite(1.0/weight))

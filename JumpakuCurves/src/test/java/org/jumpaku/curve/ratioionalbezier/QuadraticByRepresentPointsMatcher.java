@@ -30,14 +30,12 @@ public class QuadraticByRepresentPointsMatcher extends TypeSafeMatcher<Quadratic
     
     @Override protected boolean matchesSafely(QuadraticByRepresentPoints item) {
         return expected.getRepresentPoints().zipWith(item.getRepresentPoints(),
-                (e, a)->{
-                    return Vector.equals(e.toVector().toCrisp(), a.toVector().toCrisp(), 1.0e-10)
-                            && Precision.equals(e.getR(), a.getR(), 1.0e-10);
-                        }).forAll(b->b)
-                && expected.getRepresentPoints().size() == item.getRepresentPoints().size()
-                && Precision.equals(expected.getWeight(), item.getWeight(), 1.0e-10)
-                && Precision.equals(expected.getDomain().getBegin(), item.getDomain().getBegin(), 1.0e-10)
-                && Precision.equals(expected.getDomain().getEnd(), item.getDomain().getEnd(), 1.0e-10);
+                (e, a)-> Vector.equals(e.toVector().toCrisp(), a.toVector().toCrisp(), 1.0e-10)
+                        && Precision.equals(e.getR(), a.getR(), 1.0e-10)).forAll(b->b)
+                        && expected.getRepresentPoints().size() == item.getRepresentPoints().size()
+                        && Precision.equals(expected.getWeight(), item.getWeight(), 1.0e-10)
+                        && Precision.equals(expected.getDomain().getBegin(), item.getDomain().getBegin(), 1.0e-10)
+                        && Precision.equals(expected.getDomain().getEnd(), item.getDomain().getEnd(), 1.0e-10);
     }
 
     @Override public void describeTo(Description description) {

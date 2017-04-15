@@ -29,10 +29,8 @@ public class PolylineMatcher extends TypeSafeMatcher<Polyline>{
     }
     
     @Override protected boolean matchesSafely(Polyline item) {
-        return expected.getPoints().zipWith(item.getPoints(), (e, a)->{
-            return Vector.equals(e.toVector().toCrisp(), a.toVector().toCrisp(), 1.0e-10) &&
-                    Precision.equals(e.getR(), a.getR(), 1.0e-10); 
-                }).forAll(b->b)
+        return expected.getPoints().zipWith(item.getPoints(), (e, a)-> Vector.equals(e.toVector().toCrisp(), a.toVector().toCrisp(), 1.0e-10)
+                && Precision.equals(e.getR(), a.getR(), 1.0e-10)).forAll(b->b)
                 && expected.getPoints().size() == item.getPoints().size();
     }
 

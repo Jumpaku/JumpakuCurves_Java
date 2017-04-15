@@ -29,10 +29,9 @@ public class BezierDerivativeMatcher extends TypeSafeMatcher<BezierDerivative>{
     }
     
     @Override protected boolean matchesSafely(BezierDerivative item) {
-        return expected.getControlVectors().zipWith(item.getControlVectors(), (e, a)->{
-            return Vector.equals(e.toCrisp(), a.toCrisp(), 1.0e-10) &&
-                    Precision.equals(e.getR(), a.getR(), 1.0e-10);
-                }).forAll(b->b)
+        return expected.getControlVectors().zipWith(item.getControlVectors(), (e, a)->
+                Vector.equals(e.toCrisp(), a.toCrisp(), 1.0e-10)
+                && Precision.equals(e.getR(), a.getR(), 1.0e-10)).forAll(b->b)
                 && expected.getControlVectors().size() == item.getControlVectors().size()
                 && Precision.equals(expected.getDomain().getBegin(), item.getDomain().getBegin(), 1.0e-10)
                 && Precision.equals(expected.getDomain().getEnd(), item.getDomain().getEnd(), 1.0e-10);

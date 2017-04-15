@@ -5,12 +5,13 @@
  */
 package org.jumpaku.curve.bezier;
 
-import static org.hamcrest.core.Is.is;
-import org.jumpaku.affine.Point;
-import static org.jumpaku.curve.bezier.BezierMatcher.bezierOf;
 import org.jumpaku.affine.Point;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.hamcrest.core.Is.is;
+import static org.jumpaku.curve.bezier.BezierMatcher.bezierOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 /**
  *

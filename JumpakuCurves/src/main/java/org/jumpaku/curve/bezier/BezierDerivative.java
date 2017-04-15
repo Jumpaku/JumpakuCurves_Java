@@ -13,13 +13,13 @@ import org.jumpaku.affine.Vector;
 import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Differentiable;
 import org.jumpaku.curve.Interval;
-import org.jumpaku.curve.Reverseable;
+import org.jumpaku.curve.Reversible;
 
 /**
  *
  * @author Jumpaku
  */
-public interface BezierDerivative extends Derivative, Differentiable, Reverseable<BezierDerivative>{
+public interface BezierDerivative extends Derivative, Differentiable, Reversible<BezierDerivative> {
 
     static BezierDerivative create(Bezier bezier){
         return new BezierDerivative() {

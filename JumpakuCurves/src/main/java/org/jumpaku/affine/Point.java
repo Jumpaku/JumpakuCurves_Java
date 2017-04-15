@@ -14,7 +14,7 @@ import org.jumpaku.fuzzy.Membership;
  *
  * @author Jumaku
  */
-public interface Point extends Membership<Point, Point.Crisp>, Divideable<Point>{
+public interface Point extends Membership<Point, Point.Crisp>, Dividable<Point> {
     
     static Fuzzy fuzzy(Crisp p, Double r){
         return new Fuzzy(p.toVector(), r);
@@ -49,11 +49,7 @@ public interface Point extends Membership<Point, Point.Crisp>, Divideable<Point>
     }
 
     Crisp ZERO = crisp(0.0);
-    
-    static Crisp zero(){
-        return ZERO;
-    }
-    
+
     static String toJson(Point p){
         return JsonPoint.CONVERTER.toJson(p);
     }
@@ -107,7 +103,7 @@ public interface Point extends Membership<Point, Point.Crisp>, Divideable<Point>
                 FastMath.abs(1-t)*getR()+FastMath.abs(t)*p.getR());
     }
     
-    public static final class Fuzzy implements Point{
+    final class Fuzzy implements Point{
 
         private final Vector.Fuzzy vector;
 
@@ -128,7 +124,7 @@ public interface Point extends Membership<Point, Point.Crisp>, Divideable<Point>
         }
     }
     
-    public static final class Crisp implements Point{
+    final class Crisp implements Point{
         
         private final Vector.Crisp vector;
 

@@ -25,7 +25,8 @@ public interface Derivative extends Function<Double, Vector>, Restrictable<Deriv
 
     Interval getDomain();
     
-    @Override public default Derivative restrict(Interval i) {
+    @Override
+    default Derivative restrict(Interval i) {
         if(!getDomain().includes(i))
             throw new IllegalArgumentException("i must be in " + getDomain() + ", but i = " + i);
 

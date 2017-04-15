@@ -15,14 +15,14 @@ import org.jumpaku.affine.Point;
 import org.jumpaku.curve.Curve;
 import org.jumpaku.curve.FuzzyCurve;
 import org.jumpaku.curve.Interval;
-import org.jumpaku.curve.Reverseable;
+import org.jumpaku.curve.Reversible;
 
 /**
  *
  * @author jumpaku
  */
 
-public final class Polyline implements FuzzyCurve, Reverseable<Polyline> {
+public final class Polyline implements FuzzyCurve, Reversible<Polyline> {
     
     public static final Double DEFAULT_ABSOLUTE_ACCURACY = 1.0;
     

@@ -12,7 +12,7 @@ import org.jumpaku.json.Converter;
  *
  * @author jumpaku
  */
-public class JsonVector implements Converter<Vector>{
+public final class JsonVector implements Converter<Vector>{
 
     public static final JsonVector CONVERTER = new JsonVector();
 

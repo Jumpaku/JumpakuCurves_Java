@@ -5,10 +5,9 @@
  */
 package org.jumpaku.affine;
 
-import javaslang.control.Option;
 import static org.hamcrest.core.Is.is;
 import static org.jumpaku.affine.VectorMatcher.vectorOf;
-import org.jumpaku.old.curves.vector.Vec;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -34,7 +33,7 @@ public class VectorTest {
         Vector.Crisp d = Vector.crisp(1.0, -0.5, 100.4524);
         assertEquals(false, Vector.equals(c, d, 1.0e-10));
         Vector.Crisp e = Vector.crisp(0.0, 0.0, 0.0);
-        Vector.Crisp f = Vector.zero();
+        Vector.Crisp f = Vector.ZERO;
         assertEquals(true, Vector.equals(e, f, 1.0e-10));
     }
     /**
@@ -147,7 +146,7 @@ public class VectorTest {
     @Test
     public void testZero_0args() {
         System.out.println("zero");
-        Vector.Crisp v = Vector.zero();
+        Vector.Crisp v = Vector.ZERO;
         assertEquals(0.0, v.getX(), 1.0e-10);
         assertEquals(0.0, v.getY(), 1.0e-10);
         assertEquals(0.0, v.getZ(), 1.0e-10);
@@ -351,7 +350,7 @@ public class VectorTest {
     @Test
     public void testMembership() {
         System.out.println("membership");
-        Vector.Crisp p0 = Vector.zero();
+        Vector.Crisp p0 = Vector.ZERO;
         Vector.Crisp p1 = Vector.crisp(1.0);
         Vector.Crisp p2 = Vector.crisp(2.0);
         Vector.Crisp p3 = Vector.crisp(3.0);
@@ -362,7 +361,7 @@ public class VectorTest {
         assertEquals(0.0, instance1.membership(p2).getValue(), 1.0e-10);
         assertEquals(0.0, instance1.membership(p3).getValue(), 1.0e-10);
         
-        Vector instance2 = Vector.zero();
+        Vector instance2 = Vector.ZERO;
         assertEquals(1.0, instance2.membership(p0).getValue(), 1.0e-10);
         assertEquals(0.0, instance2.membership(p1).getValue(), 1.0e-10);
         assertEquals(0.0, instance2.membership(p2).getValue(), 1.0e-10);
@@ -383,7 +382,7 @@ public class VectorTest {
         Vector p5 = Vector.fuzzy(2.0, 4.0);
         Vector p6 = Vector.fuzzy(3.0, 1.0);
         Vector p7 = Vector.fuzzy(3.0, 8.0);
-        Vector p8 = Vector.zero();
+        Vector p8 = Vector.ZERO;
         Vector p9 = Vector.crisp(1.0);
         Vector p10 = Vector.crisp(2.0);
         Vector p11 = Vector.crisp(3.0);
@@ -402,7 +401,7 @@ public class VectorTest {
         assertEquals(0.0, instance1.possibility(p10).getValue(), 1.0e-10);
         assertEquals(0.0, instance1.possibility(p11).getValue(), 1.0e-10);
         
-        Vector instance2 = Vector.zero();
+        Vector instance2 = Vector.ZERO;
         assertEquals(1.0, instance2.possibility(p0).getValue(), 1.0e-10);
         assertEquals(1.0, instance2.possibility(p1).getValue(), 1.0e-10);
         assertEquals(0.0, instance2.possibility(p2).getValue(), 1.0e-10);
@@ -431,7 +430,7 @@ public class VectorTest {
         Vector p5 = Vector.fuzzy(2.0, 4.0);
         Vector p6 = Vector.fuzzy(3.0, 1.0);
         Vector p7 = Vector.fuzzy(3.0, 8.0);
-        Vector p8 = Vector.zero();
+        Vector p8 = Vector.ZERO;
         Vector p9 = Vector.crisp(1.0);
         Vector p10 = Vector.crisp(2.0);
         Vector p11 = Vector.crisp(3.0);
@@ -450,7 +449,7 @@ public class VectorTest {
         assertEquals(0.0, instance1.necessity(p10).getValue(), 1.0e-10);
         assertEquals(0.0, instance1.necessity(p11).getValue(), 1.0e-10);
         
-        Vector instance2 = Vector.zero();
+        Vector instance2 = Vector.ZERO;
         assertEquals(1.0, instance2.necessity(p0).getValue(), 1.0e-10);
         assertEquals(1.0, instance2.necessity(p1).getValue(), 1.0e-10);
         assertEquals(0.0, instance2.necessity(p2).getValue(), 1.0e-10);

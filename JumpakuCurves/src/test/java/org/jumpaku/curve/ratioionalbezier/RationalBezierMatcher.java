@@ -11,7 +11,6 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.jumpaku.affine.Vector;
-import org.jumpaku.curve.bezier.Bezier;
 
 /**
  *
@@ -31,16 +30,14 @@ public class RationalBezierMatcher extends TypeSafeMatcher<RationalBezier>{
     
     @Override protected boolean matchesSafely(RationalBezier item) {
         return expected.getControlPoints().zipWith(item.getControlPoints(),
-                (e, a)->{
-                    return Vector.equals(e.toVector().toCrisp(), a.toVector().toCrisp(), 1.0e-10)
-                            && Precision.equals(e.getR(), a.getR(), 1.0e-10);
-                        }).forAll(b->b)
-                && expected.getControlPoints().size() == item.getControlPoints().size()
-                && expected.getWeights().zipWith(item.getWeights(),
-                        (e, a)->Precision.equals(e, a, 1.0e-10)).forAll(b->b)
-                && expected.getWeights().size() == item.getWeights().size()
-                && Precision.equals(expected.getDomain().getBegin(), item.getDomain().getBegin(), 1.0e-10)
-                && Precision.equals(expected.getDomain().getEnd(), item.getDomain().getEnd(), 1.0e-10);
+                (e, a)-> Vector.equals(e.toVector().toCrisp(), a.toVector().toCrisp(), 1.0e-10)
+                        && Precision.equals(e.getR(), a.getR(), 1.0e-10)).forAll(b->b)
+                        && expected.getControlPoints().size() == item.getControlPoints().size()
+                        && expected.getWeights().zipWith(item.getWeights(),
+                                (e, a)->Precision.equals(e, a, 1.0e-10)).forAll(b->b)
+                        && expected.getWeights().size() == item.getWeights().size()
+                        && Precision.equals(expected.getDomain().getBegin(), item.getDomain().getBegin(), 1.0e-10)
+                        && Precision.equals(expected.getDomain().getEnd(), item.getDomain().getEnd(), 1.0e-10);
     }
 
     @Override public void describeTo(Description description) {
