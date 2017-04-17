@@ -28,7 +28,8 @@ public final class RationalBezier implements FuzzyCurve, Differentiable, Reversi
         return wcps.zipWith(wcps.tail(), (wcp0, wcp1)->wcp0.divide(t, wcp1));
     }
 
-    public static Double weightBezier(Double t, Array<Double> ws){
+    public static Double weightBezier(Double t, Array<Double> weights){
+        Array<Double> ws = weights;
         while(ws.size() > 1){
             ws = ws.zipWith(ws.tail(), (w0, w1) -> (1-t)*w0 + t*w1);
         }
@@ -59,12 +60,14 @@ public final class RationalBezier implements FuzzyCurve, Differentiable, Reversi
         Array<Double> ws = Array.ofAll(weights);
         Array<Point> cps = Array.ofAll(controlPoints);
 
-        if(ws.size() != cps.size())
+        if(ws.size() != cps.size()) {
             throw new IllegalArgumentException("size of weights must equal to size of controlPoints,"
-                    + " but size of weights = "+ws.size()+", size of controlPoints = "+cps.size());
+                    + " but size of weights = " + ws.size() + ", size of controlPoints = " + cps.size());
+        }
 
-        if(ws.isEmpty() || cps.isEmpty())
+        if(ws.isEmpty() || cps.isEmpty()) {
             throw new IllegalArgumentException("weights and controlPoints mustn't be empty");
+        }
 
         return create(i, cps.zipWith(ws, WeightedPoint::new));
     }
@@ -92,8 +95,9 @@ public final class RationalBezier implements FuzzyCurve, Differentiable, Reversi
     
     @Override
     public Point evaluate(Double t){
-        if(!getDomain().includes(t))
+        if(!getDomain().includes(t)) {
             throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
+        }
         
         Array<WeightedPoint> wcps = getWeightedControlPoints();
         while(wcps.size() > 1){
@@ -103,12 +107,12 @@ public final class RationalBezier implements FuzzyCurve, Differentiable, Reversi
     }
 
     @Override
-    public final Interval getDomain() {
+    public Interval getDomain() {
         return domain;
     }
     
     @Override
-    public final Derivative differentiate() {
+    public Derivative differentiate() {
         int n = getDegree();
         Array<Double> ws = getWeights();
         Array<Double> dws = ws.zipWith(ws.tail(), (a, b)->n*(b-a));
@@ -119,8 +123,9 @@ public final class RationalBezier implements FuzzyCurve, Differentiable, Reversi
         
         return new Derivative() {
             @Override public Vector.Crisp evaluate(Double t) {
-                if(!getDomain().includes(t))
+                if(!getDomain().includes(t)) {
                     throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
+                }
             
                 double wt = weightBezier(t, ws);
                 double dwt = weightBezier(t, dws);
@@ -137,9 +142,10 @@ public final class RationalBezier implements FuzzyCurve, Differentiable, Reversi
     }
 
     @Override
-    public final RationalBezier restrict(Interval i) {
-        if(!getDomain().includes(i))
+    public RationalBezier restrict(Interval i) {
+        if(!getDomain().includes(i)) {
             throw new IllegalArgumentException("Interval i must be a subset of this domain");
+        }
         
         return RationalBezier.create(i, getWeightedControlPoints());
     }
@@ -151,7 +157,7 @@ public final class RationalBezier implements FuzzyCurve, Differentiable, Reversi
 
     
     @Override
-    public final RationalBezier reverse() {
+    public RationalBezier reverse() {
         return RationalBezier.create(Interval.of(1-getDomain().getEnd(), 1-getDomain().getBegin()),
                 getWeightedControlPoints().reverse());
     }
@@ -189,8 +195,9 @@ public final class RationalBezier implements FuzzyCurve, Differentiable, Reversi
     }
 
     public RationalBezier reduce(){
-        if(getDegree() < 1)
+        if(getDegree() < 1) {
             throw new IllegalStateException("degree is too small");
+        }
         
         return RationalBezier.create(getDomain(), createReducedControlPoints());
     }
@@ -248,8 +255,9 @@ public final class RationalBezier implements FuzzyCurve, Differentiable, Reversi
     }
     
     public Tuple2<RationalBezier, RationalBezier> subdivide(Double t) {
-        if(!getDomain().includes(t))
+        if(!getDomain().includes(t)) {
             throw new IllegalArgumentException("t must be in " + getDomain().toString() + ", but t = ");
+        }
         
         return createDividedControlPointsArray(t)
                 .map(cp -> RationalBezier.create(Interval.of(getDomain().getBegin()/t, 1.0), cp),

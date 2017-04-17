@@ -20,9 +20,6 @@ import static org.junit.Assert.*;
  */
 public class PolylineTest {
     
-    public PolylineTest() {
-    }
-
     /**
      * Test create create method, create class Polyline.
      */

@@ -9,6 +9,7 @@ import javaslang.control.Option;
 import org.apache.commons.math3.util.FastMath;
 import org.jumpaku.fuzzy.Grade;
 import org.jumpaku.fuzzy.Membership;
+import org.jumpaku.json.Converter;
 
 /**
  *
@@ -23,7 +24,7 @@ public interface Point extends Membership<Point, Point.Crisp>, Dividable<Point> 
     static Fuzzy fuzzy(Double x, Double y, Double z, Double r){
         return fuzzy(crisp(x, y, z), r);
     }
-        
+
     static Fuzzy fuzzy(Double x, Double y, Double r){
         return fuzzy(x, y, 0.0, r);
     } 
@@ -50,12 +51,14 @@ public interface Point extends Membership<Point, Point.Crisp>, Dividable<Point> 
 
     Crisp ZERO = crisp(0.0);
 
+    Converter<Point> CONVERTER = new JsonPoint();
+
     static String toJson(Point p){
-        return JsonPoint.CONVERTER.toJson(p);
+        return CONVERTER.toJson(p);
     }
     
     static Option<Point> fromJson(String json){
-        return JsonPoint.CONVERTER.fromJson(json);
+        return CONVERTER.fromJson(json);
     }
     
     Vector toVector();
@@ -102,7 +105,7 @@ public interface Point extends Membership<Point, Point.Crisp>, Dividable<Point> 
         return new Fuzzy(toVector().scale(1-t).add(t, p.toVector()).toCrisp(),
                 FastMath.abs(1-t)*getR()+FastMath.abs(t)*p.getR());
     }
-    
+
     final class Fuzzy implements Point{
 
         private final Vector.Fuzzy vector;
@@ -211,7 +214,7 @@ public interface Point extends Membership<Point, Point.Crisp>, Dividable<Point> 
          * @param p2
          * @return (p1-this)x(p2-this)/|(p1-this)x(p2-this)|
          */
-        public Vector normal(Crisp p1, Crisp p2){
+        public Vector.Crisp normal(Crisp p1, Crisp p2){
             return p1.diff(this).cross(p2.diff(this)).normalize();
         }
 

@@ -20,8 +20,9 @@ import org.jumpaku.curve.*;
 public final class QuadraticByRepresentPoints implements FuzzyCurve, Differentiable, Reversible<QuadraticByRepresentPoints> {
 
     public static Array<WeightedPoint> createCrispControlPoints(Double weight, Iterable<Point> representPoint){
-        if(!Double.isFinite(1.0/weight))
+        if(!Double.isFinite(1.0/weight)) {
             throw new IllegalArgumentException("weight must be non zero.");
+        }
 
         Vector.Crisp[] rvs = Stream.ofAll(representPoint)
                 .map(p -> p.toCrisp().toVector()).toJavaArray(Vector.Crisp.class);
@@ -54,8 +55,9 @@ public final class QuadraticByRepresentPoints implements FuzzyCurve, Differentia
 
     @Override
     public Point evaluate(Double t) {
-        if(!getDomain().includes(t))
+        if(!getDomain().includes(t)) {
             throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
+        }
 
         Point.Crisp p = crispRationalBezier.evaluate(t).toCrisp();
 

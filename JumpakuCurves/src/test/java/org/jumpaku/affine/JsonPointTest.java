@@ -16,9 +16,6 @@ import static org.junit.Assert.*;
  */
 public class JsonPointTest {
     
-    public JsonPointTest() {
-    }
-
     /**
      * Test of toJson method, of class JsonPoint.
      */

@@ -54,10 +54,10 @@ public interface Transform extends UnaryOperator<Point.Crisp>{
     }
         
     static Transform rotation(Vector.Crisp axis, Double radian){
-        axis = axis.normalize();
-        Double x = axis.getX();
-        Double y = axis.getY();
-        Double z = axis.getZ();
+        Vector.Crisp normalized = axis.normalize();
+        Double x = normalized.getX();
+        Double y = normalized.getY();
+        Double z = normalized.getZ();
         Double cos = FastMath.cos(radian);
         Double sin = FastMath.sin(radian);
         return of(MatrixUtils.createRealMatrix(new double[][]{

@@ -17,9 +17,6 @@ import static org.junit.Assert.*;
  */
 public class PointTest {
     
-    public PointTest() {
-    }
-
     /**
      * Test of fuzzy method, of class Point.
      */

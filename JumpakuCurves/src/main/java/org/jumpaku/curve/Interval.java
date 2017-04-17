@@ -48,8 +48,9 @@ public interface Interval extends Domain{
     }
     
     default Array<Double> sample(Integer n){
-        if(n < 2)
+        if(n < 2) {
             throw new IllegalArgumentException("n must be grater than 1, but n = " + n);
+        }
         
         return Stream.range(0, n)
                 .map(i -> (n-1-i)/(n.doubleValue()-1.0)*getBegin() + i/(n.doubleValue()-1.0)*getEnd())

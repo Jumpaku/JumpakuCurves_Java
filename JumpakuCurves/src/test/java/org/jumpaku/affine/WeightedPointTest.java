@@ -15,9 +15,6 @@ import static org.junit.Assert.assertThat;
  */
 public class WeightedPointTest {
     
-    public WeightedPointTest() {
-    }
-
     /**
      * Test of getW method, of class WeightedPoint.
      */

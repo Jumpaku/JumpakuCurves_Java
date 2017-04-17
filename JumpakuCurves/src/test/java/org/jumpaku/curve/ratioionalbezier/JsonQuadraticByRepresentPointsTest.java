@@ -19,9 +19,6 @@ import static org.junit.Assert.*;
  */
 public class JsonQuadraticByRepresentPointsTest {
     
-    public JsonQuadraticByRepresentPointsTest() {
-    }
-
     @Test
     public void testToJson(){
         System.out.println("toJson");

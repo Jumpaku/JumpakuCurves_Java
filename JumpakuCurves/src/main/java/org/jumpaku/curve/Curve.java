@@ -15,8 +15,9 @@ import org.jumpaku.affine.Point;
 public interface Curve extends Function<Double, Point>, Restrictable<Curve>{
 
     @Override default Point apply(Double t) {
-        if(!getDomain().includes(t))
+        if(!getDomain().includes(t)) {
             throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
+        }
         
         return evaluate(t);
     }
@@ -31,13 +32,15 @@ public interface Curve extends Function<Double, Point>, Restrictable<Curve>{
     Interval getDomain();
 
     @Override default Curve restrict(Interval i) {
-        if(!getDomain().includes(i))
+        if(!getDomain().includes(i)) {
             throw new IllegalArgumentException("i must be in " + getDomain() + ", but i = " + i);
+        }
 
         return new Curve() {
             @Override public Point evaluate(Double t) {
-                if(!i.includes(t))
+                if(!i.includes(t)) {
                     throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
+                }
                 
                 return Curve.this.evaluate(t);
             }

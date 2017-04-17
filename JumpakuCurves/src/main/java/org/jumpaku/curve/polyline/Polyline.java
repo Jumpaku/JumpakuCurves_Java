@@ -31,8 +31,9 @@ public final class Polyline implements FuzzyCurve, Reversible<Polyline> {
     }
     
     public static Polyline create(Iterable<? extends Point> ps){
-        if(Stream.ofAll(ps).isEmpty())
+        if(Stream.ofAll(ps).isEmpty()) {
             throw new IllegalArgumentException("ps must contain some elements");
+        }
         
         return new Polyline(ps);
 
@@ -111,8 +112,9 @@ public final class Polyline implements FuzzyCurve, Reversible<Polyline> {
         
     @Override
     public Point evaluate(Double s) {
-        if(!getDomain().includes(s))
+        if(!getDomain().includes(s)) {
             throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + s);
+        }
 
         Array<Point> ps = getPoints();
         int a = 0;

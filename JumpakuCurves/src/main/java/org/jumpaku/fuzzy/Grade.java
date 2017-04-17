@@ -60,8 +60,9 @@ public final class Grade implements Comparable<Grade> {
     private final Double value;
 
     public Grade(Double value) {
-        if((!Double.isFinite(value)) ||  value.compareTo(0.0) < 0 || value.compareTo(1.0) > 0)
+        if((!Double.isFinite(value)) ||  value.compareTo(0.0) < 0 || value.compareTo(1.0) > 0) {
             throw new IllegalArgumentException("d must be in [0.0, 1.0].");
+        }
 
         this.value = value;
     }

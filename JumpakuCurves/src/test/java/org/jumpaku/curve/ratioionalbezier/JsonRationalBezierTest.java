@@ -15,10 +15,6 @@ import org.jumpaku.curve.Interval;
  */
 public class JsonRationalBezierTest {
     
-    public JsonRationalBezierTest() {
-    }
-
-    
     @Test
     public void testToJson(){
         System.out.println("toJson");

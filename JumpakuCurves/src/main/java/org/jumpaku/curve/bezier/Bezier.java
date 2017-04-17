@@ -29,11 +29,13 @@ public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Bezi
     public static Bezier create(Interval domain, Iterable<? extends org.jumpaku.affine.Point> controlPoints){
         Array<? extends Point> cps = Stream.ofAll(controlPoints).toArray();
         
-        if(cps.isEmpty())
+        if(cps.isEmpty()) {
             throw new IllegalArgumentException("control points are empty");
+        }
         
-        if(cps.exists(Objects::isNull))
+        if(cps.exists(Objects::isNull)) {
             throw new IllegalArgumentException("control points contain null");
+        }
      
         return new Bezier(cps, domain);
     }
@@ -79,8 +81,9 @@ public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Bezi
 
     @Override
     public Point evaluate(Double t) {
-        if(!getDomain().includes(t))
+        if(!getDomain().includes(t)) {
             throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
+        }
 
         Array<Point> cps = getControlPoints();
         while(cps.size() > 1){
@@ -103,8 +106,9 @@ public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Bezi
 
     @Override
     public Bezier restrict(Interval i) {
-        if(!getDomain().includes(i))
+        if(!getDomain().includes(i)) {
             throw new IllegalArgumentException("Interval i must be a subset of this domain");
+        }
 
         return Bezier.create(i, getControlPoints());
     }
@@ -141,8 +145,9 @@ public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Bezi
     }
 
     public Bezier reduce(){
-        if(getDegree() < 1)
+        if(getDegree() < 1) {
             throw new IllegalStateException("degree is too small");
+        }
 
         return Bezier.create(getDomain(), createReducedControlPoints());
     }
@@ -200,8 +205,9 @@ public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Bezi
     }
 
     public Tuple2<Bezier, Bezier> subdivide(Double t) {
-        if(!getDomain().includes(t))
+        if(!getDomain().includes(t)) {
             throw new IllegalArgumentException("t must be in " + getDomain().toString() + ", but t = ");
+        }
 
         return createDividedControlPointsArray(t)
                 .map(cp -> Bezier.create(Interval.of(getDomain().getBegin()/t, 1.0), cp),

@@ -15,9 +15,6 @@ import static org.junit.Assert.*;
  * @author Jumpaku
  */
 public class JsonVectorTest {
-    
-    public JsonVectorTest() {
-    }
 
     /**
      * Test of toJson method, of class JsonVector.

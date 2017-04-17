@@ -14,9 +14,6 @@ import static org.junit.Assert.*;
  */
 public class GradeTest {
     
-    public GradeTest() {
-    }
-
     /**
      * Test of of method, of class Grade.
      */

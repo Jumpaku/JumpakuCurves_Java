@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.jumpaku.affine.PointMatcher.pointOf;
+import static org.jumpaku.affine.VectorMatcher.vectorOf;
 import static org.jumpaku.curve.bezier.BezierDerivativeMatcher.bezierDerivativeOf;
 import static org.jumpaku.curve.bezier.BezierMatcher.bezierOf;
 import static org.junit.Assert.*;
@@ -24,9 +25,6 @@ import static org.junit.Assert.*;
  */
 public class BezierTest {
     
-    public BezierTest() {
-    }
-
     /**
      * Test of create method, of class Bezier.
      */
@@ -156,9 +154,9 @@ public class BezierTest {
     public void testDifferentiate_Double() {
         System.out.println("differentiate");
         Bezier instance = Bezier.create(Point.fuzzy(0.0, 0.0, 1.0), Point.fuzzy(0.0, 1.0, 2.0), Point.fuzzy(1.0, 0.0, 3.0), Point.fuzzy(1.0, 1.0, 4.0));
-        assertTrue(Vector.equals(Vector.crisp(0.0, 3.0), instance.differentiate(0.0), 1.0e-10));
-        assertTrue(Vector.equals(Vector.crisp(1.5, 0.0), instance.differentiate(0.5), 1.0e-10));
-        assertTrue(Vector.equals(Vector.crisp(0.0, 3.0), instance.differentiate(1.0), 1.0e-10));
+        assertThat(instance.differentiate(0.0), is(vectorOf(Vector.crisp(0.0, 3.0))));
+        assertThat(instance.differentiate(0.5), is(vectorOf(Vector.crisp(1.5, 0.0))));
+        assertThat(instance.differentiate(1.0), is(vectorOf(Vector.crisp(0.0, 3.0))));
     }
 
     /**

@@ -15,8 +15,6 @@ import static org.junit.Assert.*;
  */
 public class JsonPolylineTest {
     
-    public JsonPolylineTest() {
-    }
     /**
      * Test of toJson method, of class JsonInterval.
      */

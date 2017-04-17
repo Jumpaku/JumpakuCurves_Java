@@ -27,9 +27,6 @@ import static org.jumpaku.affine.WeightedPointMatcher.weightedPointOf;
  */
 public class RationalBezierTest {
     
-    public RationalBezierTest() {
-    }
-
     /**
      * Test of create method, of class RationalBezier.
      */

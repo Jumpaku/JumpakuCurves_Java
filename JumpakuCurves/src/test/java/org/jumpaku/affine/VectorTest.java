@@ -17,9 +17,6 @@ import static org.junit.Assert.*;
  */
 public class VectorTest {
     
-    public VectorTest() {
-    }
-    
     /**
      * Test of equals method, of class Vector.
      */
@@ -28,13 +25,13 @@ public class VectorTest {
         System.out.println("equals");
         Vector.Crisp a = Vector.crisp(1.0, -0.5, 100.4523);
         Vector.Crisp b = Vector.crisp(1.0, -0.5, 100.4523);
-        assertEquals(true, Vector.equals(a, b, 1.0e-10));
+        assertTrue(Vector.equals(a, b, 1.0e-10));
         Vector.Crisp c = Vector.crisp(1.0, -0.5, 100.4523);
         Vector.Crisp d = Vector.crisp(1.0, -0.5, 100.4524);
-        assertEquals(false, Vector.equals(c, d, 1.0e-10));
+        assertFalse(Vector.equals(c, d, 1.0e-10));
         Vector.Crisp e = Vector.crisp(0.0, 0.0, 0.0);
         Vector.Crisp f = Vector.ZERO;
-        assertEquals(true, Vector.equals(e, f, 1.0e-10));
+        assertTrue(Vector.equals(e, f, 1.0e-10));
     }
     /**
      * Test of fuzzy method, of class Vector.

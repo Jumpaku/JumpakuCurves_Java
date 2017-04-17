@@ -28,9 +28,6 @@ import static org.junit.Assert.*;
  */
 public class QuadraticByRepresentPointsTest {
     
-    public QuadraticByRepresentPointsTest() {
-    }
-
     private static final Double R2 = Math.sqrt(2);
     /**
      * Test of evaluate method, of class ConicSection.

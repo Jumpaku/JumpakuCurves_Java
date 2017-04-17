@@ -19,9 +19,6 @@ import static org.jumpaku.affine.PointMatcher.pointOf;
  * @author Jumpaku
  */
 public class AffineTest {
-    
-    public AffineTest() {
-    }
 
     /**
      * Test of translation method, of class Transform.

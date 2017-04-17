@@ -14,9 +14,6 @@ import static org.junit.Assert.*;
  */
 public class JsonIntervalTest {
     
-    public JsonIntervalTest() {
-    }
-
     /**
      * Test of toJson method, of class JsonInterval.
      */
