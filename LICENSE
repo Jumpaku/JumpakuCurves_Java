@@ -47,3 +47,10 @@ Copyright 2010-2012 CS Systèmes d'Information
 
 ---
 
+This project depends on JDT Annotations for Enhanced Null Analysis.
+This library is licensed under the Eclipse Public License - v 1.0.
+You can get a copy of t he license at
+
+http://www.eclipse.org/legal/epl-v10.html
+
+---
