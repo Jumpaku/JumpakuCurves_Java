@@ -21,6 +21,7 @@ hs_err_pid*
 JumpakuCurves/.gradle/
 JumpakuCurves/build/
 JumpakuCurves/classes/
+JumpakuCurves/gradle/
 JumpakuCurves/gradlew
 JumpakuCurves/gradlew.bat
 
