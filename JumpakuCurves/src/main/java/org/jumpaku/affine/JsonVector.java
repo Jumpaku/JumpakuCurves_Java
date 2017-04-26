@@ -10,7 +10,7 @@ import org.jumpaku.json.Converter;
 
 /**
  *
- * @author Jumpaku
+ * @author jumpaku
  */
 public final class JsonVector implements Converter<Vector>{
 
@@ -20,7 +20,7 @@ public final class JsonVector implements Converter<Vector>{
         return Data.class;
     }
 
-    @Override public Temporary<Vector> toTemporary(Vector v) {
+    @Override public Converter.Temporary<Vector> toTemporary(Vector v) {
         return new Data(v); 
     }
     
@@ -31,15 +31,18 @@ public final class JsonVector implements Converter<Vector>{
         private final Double y;
 
         private final Double z;
+        
+        private final Double r;
 
         public Data(Vector v) {
             this.x = v.getX();
             this.y = v.getY();
             this.z = v.getZ();
+            this.r = v.getR();
         }
 
         @Override public Vector newInstance() {
-            return Vector.of(x, y, z);
+            return Vector.fuzzy(x, y, z, r);
         }
     }
 }

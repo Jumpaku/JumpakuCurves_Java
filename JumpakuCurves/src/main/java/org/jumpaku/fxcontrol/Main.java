@@ -8,11 +8,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
-import org.jumpaku.old.curves.TimeSeriesData;
-import org.jumpaku.old.curves.fitting.SplineFitting;
-import org.jumpaku.old.curves.spline.BSpline;
-import org.jumpaku.old.curves.spline.Spline;
-import org.jumpaku.old.curves.vector.Point;
+import main.old.curves.TimeSeriesData;
+import main.old.curves.fitting.SplineFitting;
+import main.old.curves.spline.BSpline;
+import main.old.curves.spline.Spline;
+import main.old.curves.vector.Point;
 
 public class Main extends Application {
     

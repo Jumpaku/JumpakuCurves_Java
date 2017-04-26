@@ -10,7 +10,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.jumpaku.affine.Point;
+import org.jumpaku.affine.Vector;
 
 /**
  *
@@ -29,10 +29,12 @@ public class BezierMatcher extends TypeSafeMatcher<Bezier>{
     }
     
     @Override protected boolean matchesSafely(Bezier item) {
-        return expected.getControlPoints().zipWith(item.getControlPoints(), (e, a)->Point.equals(e, a, 1.0e-10)).forAll(b->b)
-                && expected.getControlPoints().size() == item.getControlPoints().size()
-                && Precision.equals(expected.getDomain().getBegin(), item.getDomain().getBegin(), 1.0e-10)
-                && Precision.equals(expected.getDomain().getEnd(), item.getDomain().getEnd(), 1.0e-10);
+        return expected.getControlPoints().zipWith(item.getControlPoints(),
+                (e, a)-> Vector.equals(e.toVector().toCrisp(), a.toVector().toCrisp(), 1.0e-10)
+                        && Precision.equals(e.getR(), a.getR(), 1.0e-10)).forAll(b->b)
+                        && expected.getControlPoints().size() == item.getControlPoints().size()
+                        && Precision.equals(expected.getDomain().getBegin(), item.getDomain().getBegin(), 1.0e-10)
+                        && Precision.equals(expected.getDomain().getEnd(), item.getDomain().getEnd(), 1.0e-10);
     }
 
     @Override public void describeTo(Description description) {

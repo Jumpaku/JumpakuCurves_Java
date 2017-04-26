@@ -5,7 +5,9 @@
  */
 package org.jumpaku.affine;
 
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import static org.hamcrest.core.Is.is;
+import static org.jumpaku.affine.VectorMatcher.vectorOf;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -15,94 +17,158 @@ import static org.junit.Assert.*;
  */
 public class VectorTest {
     
-    public VectorTest() {
-    }
-    
     /**
      * Test of equals method, of class Vector.
      */
     @Test
     public void testEquals() {
         System.out.println("equals");
-        Vector a = Vector.of(1.0, -0.5, 100.4523);
-        Vector b = Vector.of(1.0, -0.5, 100.4523);
-        assertEquals(true, Vector.equals(a, b, 1.0e-10));
-        Vector c = Vector.of(1.0, -0.5, 100.4523);
-        Vector d = Vector.of(1.0, -0.5, 100.4524);
-        assertEquals(false, Vector.equals(c, d, 1.0e-10));
-        Vector e = Vector.of(0.0, 0.0, 0.0);
-        Vector f = Vector.zero();
-        assertEquals(true, Vector.equals(e, f, 1.0e-10));
+        Vector.Crisp a = Vector.crisp(1.0, -0.5, 100.4523);
+        Vector.Crisp b = Vector.crisp(1.0, -0.5, 100.4523);
+        assertTrue(Vector.equals(a, b, 1.0e-10));
+        Vector.Crisp c = Vector.crisp(1.0, -0.5, 100.4523);
+        Vector.Crisp d = Vector.crisp(1.0, -0.5, 100.4524);
+        assertFalse(Vector.equals(c, d, 1.0e-10));
+        Vector.Crisp e = Vector.crisp(0.0, 0.0, 0.0);
+        Vector.Crisp f = Vector.ZERO;
+        assertTrue(Vector.equals(e, f, 1.0e-10));
     }
-    
+    /**
+     * Test of fuzzy method, of class Vector.
+     */
     @Test
-    public void testAxiom(){
-        System.out.println("axiom");
-        Vector zero = Vector.zero();
-        Vector a = Vector.of(1.2, 1.3, -2000.4567);
-        Vector b = Vector.of(0.34, -0.222294, 100043.004);
-        Vector c = Vector.of(3425.2, 315526.1, -3542.12435);
-        Double u = 2.0632;
-        Double v = -0.3642;
-        
-        assertTrue(Vector.equals(a.add(b), b.add(a), 1.0e-10));
-        assertTrue(Vector.equals(a.add(b).add(c), a.add(b.add(c)), 1.0e-10));
-        assertTrue(Vector.equals(a.scale(u).add(b.scale(u)), a.add(b).scale(u), 1.0e-10));
-        assertTrue(Vector.equals(a.scale(u).add(a.scale(v)), a.scale(u+v), 1.0e-10));
+    public void testFuzzy_VectorCrisp_Double() {
+        System.out.println("fuzzy");
+        Vector.Fuzzy v = Vector.fuzzy(Vector.crisp(1.0, 2.0, -3.0), 10.0);
+        assertEquals(1.0, v.getX(), 1.0e-10);
+        assertEquals(2.0, v.getY(), 1.0e-10);
+        assertEquals(-3.0, v.getZ(), 1.0e-10);
+        assertEquals(10.0, v.getR(), 1.0e-10);
+    }
 
-        assertTrue(Vector.equals(Vector.of(0.0, 0.0, 0.0), zero, 1.0e-10));
-        assertTrue(Vector.equals(a.scale(0.0), zero, 1.0e-10));
-        assertTrue(Vector.equals(zero.add(a), a, 1.0e-10));
-        assertTrue(Vector.equals(a.sub(a), zero, 1.0e-10));
+    /**
+     * Test of fuzzy method, of class Vector.
+     */
+    @Test
+    public void testFuzzy_4args() {
+        System.out.println("fuzzy");
+        Vector.Fuzzy v = Vector.fuzzy(1.0, 2.0, -3.0, 10.0);
+        assertEquals(1.0, v.getX(), 1.0e-10);
+        assertEquals(2.0, v.getY(), 1.0e-10);
+        assertEquals(-3.0, v.getZ(), 1.0e-10);
+        assertEquals(10.0, v.getR(), 1.0e-10);
+    }
+
+    /**
+     * Test of fuzzy method, of class Vector.
+     */
+    @Test
+    public void testFuzzy_3args() {
+        System.out.println("fuzzy");
+        Vector.Fuzzy v = Vector.fuzzy(1.0, 2.0, 10.0);
+        assertEquals(1.0, v.getX(), 1.0e-10);
+        assertEquals(2.0, v.getY(), 1.0e-10);
+        assertEquals(0.0, v.getZ(), 1.0e-10);
+        assertEquals(10.0, v.getR(), 1.0e-10);
+    }
+
+    /**
+     * Test of fuzzy method, of class Vector.
+     */
+    @Test
+    public void testFuzzy_Double_Double() {
+        System.out.println("fuzzy");
+        Vector.Fuzzy v = Vector.fuzzy(1.0, 10.0);
+        assertEquals(1.0, v.getX(), 1.0e-10);
+        assertEquals(0.0, v.getY(), 1.0e-10);
+        assertEquals(0.0, v.getZ(), 1.0e-10);
+        assertEquals(10.0, v.getR(), 1.0e-10);
     }
 
     /**
      * Test of zero method, of class Vector.
      */
     @Test
-    public void testZero() {
+    public void testZero_Double() {
         System.out.println("zero");
-        assertTrue(Vector.equals(Vector.of(0.0, 0.0, 0.0), Vector.zero(), 1.0e-10));
-    }   
-
-    /**
-     * Test of of method, of class Vector.
-     */
-    @Test
-    public void testOf_Vector3D() {
-        System.out.println("of");
-        assertTrue(Vector.equals(Vector.of(1.0, 2.0, 3.0), Vector.of(new Vector3D(1, 2, 3)), 1.0e-10));
+        Vector.Fuzzy v = Vector.zero(10.0);
+        assertEquals(0.0, v.getX(), 1.0e-10);
+        assertEquals(0.0, v.getY(), 1.0e-10);
+        assertEquals(0.0, v.getZ(), 1.0e-10);
+        assertEquals(10.0, v.getR(), 1.0e-10);
     }
 
     /**
-     * Test of of method, of class Vector.
+     * Test of crisp method, of class Vector.
      */
     @Test
-    public void testOf_3args() {
-        System.out.println("of");
-        Vector v = Vector.of(1.0, 3.0, -0.43);
+    public void testCrisp_3args() {
+        System.out.println("crisp");
+        Vector.Crisp v = Vector.crisp(1.0, 2.0, -3.0);
         assertEquals(1.0, v.getX(), 1.0e-10);
-        assertEquals(3.0, v.getY(), 1.0e-10);
-        assertEquals(-0.43, v.getZ(), 1.0e-10);
+        assertEquals(2.0, v.getY(), 1.0e-10);
+        assertEquals(-3.0, v.getZ(), 1.0e-10);
+        assertEquals(0.0, v.getR(), 1.0e-10);
     }
 
     /**
-     * Test of of method, of class Vector.
+     * Test of crisp method, of class Vector.
      */
     @Test
-    public void testOf_2args() {
-        System.out.println("of");
-        assertTrue(Vector.equals(Vector.of(-0.4345, 120095.13531, 0.0), Vector.of(-0.4345, 120095.13531), 1.0e-10));
+    public void testCrisp_Double_Double() {
+        System.out.println("crisp");
+        Vector.Crisp v = Vector.crisp(1.0, 2.0);
+        assertEquals(1.0, v.getX(), 1.0e-10);
+        assertEquals(2.0, v.getY(), 1.0e-10);
+        assertEquals(0.0, v.getZ(), 1.0e-10);
+        assertEquals(0.0, v.getR(), 1.0e-10);
     }
 
     /**
-     * Test of of method, of class Vector.
+     * Test of crisp method, of class Vector.
      */
     @Test
-    public void testOf() {
-        System.out.println("of");
-        assertTrue(Vector.equals(Vector.of(-0.4345, 0.0, 0.0), Vector.of(-0.4345), 1.0e-10));
+    public void testCrisp_Double() {
+        System.out.println("crisp");
+        Vector.Crisp v = Vector.crisp(1.0);
+        assertEquals(1.0, v.getX(), 1.0e-10);
+        assertEquals(0.0, v.getY(), 1.0e-10);
+        assertEquals(0.0, v.getZ(), 1.0e-10);
+        assertEquals(0.0, v.getR(), 1.0e-10);
+    }
 
+    /**
+     * Test of zero method, of class Vector.
+     */
+    @Test
+    public void testZero_0args() {
+        System.out.println("zero");
+        Vector.Crisp v = Vector.ZERO;
+        assertEquals(0.0, v.getX(), 1.0e-10);
+        assertEquals(0.0, v.getY(), 1.0e-10);
+        assertEquals(0.0, v.getZ(), 1.0e-10);
+        assertEquals(0.0, v.getR(), 1.0e-10);
+    }
+
+    /**
+     * Test of toJson method, of class Vector.
+     */
+    @Test
+    public void testToJson() {
+        System.out.println("toJson");
+        assertThat(Vector.fromJson(Vector.toJson(Vector.fuzzy(1.23, 4.56, -7.89, 10.0))).get(),
+                is(vectorOf(1.23, 4.56, -7.89, 10.0)));
+    }
+
+    /**
+     * Test of fromJson method, of class Vector.
+     */
+    @Test
+    public void testFromJson() {
+        System.out.println("fromJson");
+        assertThat(Vector.fromJson("{x:1.23, y:4.56, z:-7.89,r:10.0}").get(), 
+                is(vectorOf(1.23, 4.56, -7.89, 10.0)));
+        assertTrue(Vector.fromJson("{x:1.23, y:4.56}").isEmpty());
     }
 
     /**
@@ -111,9 +177,14 @@ public class VectorTest {
     @Test
     public void testAdd_Vector() {
         System.out.println("add");
-        assertTrue(Vector.equals(
-                Vector.of(-0.4345, 4264.246, 35220.035).add(Vector.of(0.4645, 0.62523, -3425.4)),
-                Vector.of(0.03, 4264.87123, 31794.635), 1.0e-10));
+        assertThat(Vector.crisp(-0.4345, 4264.246, 35220.035).add(Vector.crisp(0.4645, 0.62523, -3425.4)),
+                is(vectorOf(Vector.crisp(0.03, 4264.87123, 31794.635))));
+        assertThat(Vector.fuzzy(-0.4345, 4264.246, 35220.035, 100.0).add(Vector.crisp(0.4645, 0.62523, -3425.4)),
+                is(vectorOf(0.03, 4264.87123, 31794.635, 100.0)));
+        assertThat(Vector.crisp(-0.4345, 4264.246, 35220.035).add(Vector.fuzzy(0.4645, 0.62523, -3425.4, 100.0)),
+                is(vectorOf(0.03, 4264.87123, 31794.635, 100.0)));
+        assertThat(Vector.fuzzy(-0.4345, 4264.246, 35220.035, 200.0).add(Vector.fuzzy(0.4645, 0.62523, -3425.4, 100.0)),
+                is(vectorOf(0.03, 4264.87123, 31794.635, 300.0)));
     }
 
     /**
@@ -122,19 +193,12 @@ public class VectorTest {
     @Test
     public void testScale() {
         System.out.println("scale");
-        assertTrue(Vector.equals(
-                Vector.of(-0.4345, 42.6, 352.5).scale(-3.0),
-                Vector.of(1.3035, -127.8, -1057.5), 1.0e-10));
-    }
-
-    /**
-     * Test of dot method, of class Vector.
-     */
-    @Test
-    public void testDot() {
-        System.out.println("dot");
-        assertEquals(
-                7.53, Vector.of(-3.0, 4.5, -0.3).dot(Vector.of(2.0, 3.0, -0.1)), 1.0e-10);
+        assertThat(Vector.crisp(-0.4345, 42.6, 352.5).scale(-3.0),
+                is(vectorOf(Vector.crisp(1.3035, -127.8, -1057.5))));
+        assertThat(Vector.fuzzy(-0.4345, 42.6, 352.5, 3.0).scale(-3.0),
+                is(vectorOf(1.3035, -127.8, -1057.5, 9.0)));
+        assertThat(Vector.fuzzy(-0.4345, 42.6, 352.5, 3.0).scale(3.0),
+                is(vectorOf(-1.3035, 127.8, 1057.5, 9.0)));
     }
 
     /**
@@ -143,8 +207,8 @@ public class VectorTest {
     @Test
     public void testGetX() {
         System.out.println("getX");
-        assertEquals(
-                -3.0, Vector.of(-3.0, 4.5, -0.3).getX(), 1.0e-10);
+        assertEquals(-3.0, Vector.crisp(-3.0, 4.5, -0.3).getX(), 1.0e-10);
+        assertEquals(-3.0, Vector.fuzzy(-3.0, 4.5, -0.3, 4.0).getX(), 1.0e-10);
     }
 
     /**
@@ -153,8 +217,8 @@ public class VectorTest {
     @Test
     public void testGetY() {
         System.out.println("getY");
-        assertEquals(
-                4.5, Vector.of(-3.0, 4.5, -0.3).getY(), 1.0e-10);
+        assertEquals(4.5, Vector.crisp(-3.0, 4.5, -0.3).getY(), 1.0e-10);
+        assertEquals(4.5, Vector.fuzzy(-3.0, 4.5, -0.3, 10.0).getY(), 1.0e-10);
      }
 
     /**
@@ -163,18 +227,28 @@ public class VectorTest {
     @Test
     public void testGetZ() {
         System.out.println("getZ");
-        assertEquals(
-                -0.3, Vector.of(-3.0, 4.5, -0.3).getZ(), 1.0e-10);
+        assertEquals(-0.3, Vector.crisp(-3.0, 4.5, -0.3).getZ(), 1.0e-10);
+        assertEquals(-0.3, Vector.fuzzy(-3.0, 4.5, -0.3, 100.0).getZ(), 1.0e-10);
      }
+
+    /**
+     * Test of getR method, of class Vector.
+     */
+    @Test
+    public void testGetR() {
+        System.out.println("getR");
+        assertEquals(0.0, Vector.crisp(-3.0, 4.5, -0.3).getR(), 1.0e-10);
+        assertEquals(100.0, Vector.fuzzy(-3.0, 4.5, -0.3, 100.0).getR(), 1.0e-10);
+    }
 
     /**
      * Test of add method, of class Vector.
      */
     @Test
-    public void testAdd_4args() {
-        System.out.println("add");
-        assertTrue(Vector.equals(Vector.of(1.3, 1.6, -2.6),
-                Vector.add(0.7, Vector.of(1.0, 1.0, -2.0), 0.3, Vector.of(2.0, 3.0, -4.0)), 1.0e-10));
+    public void testCrispAdd_4args() {
+        System.out.println("Crisp.add");
+        assertThat(Vector.Crisp.add(0.7, Vector.crisp(1.0, 1.0, -2.0), 0.3, Vector.crisp(2.0, 3.0, -4.0)), 
+                is(vectorOf(Vector.crisp(1.3, 1.6, -2.6))));
     }
 
     /**
@@ -183,8 +257,14 @@ public class VectorTest {
     @Test
     public void testSub_Vector() {
         System.out.println("sub");
-        assertTrue(Vector.equals(Vector.of(0.99, 4.6, -5.604),
-                Vector.of(1.3, 0.3, -0.004).sub(Vector.of(0.31, -4.3, 5.6)), 1.0e-10));
+        assertThat(Vector.crisp(1.3, 0.3, -0.004).sub(Vector.crisp(0.31, -4.3, 5.6)), 
+                is(vectorOf(Vector.crisp(0.99, 4.6, -5.604))));
+        assertThat(Vector.fuzzy(1.3, 0.3, -0.004, 10.0).sub(Vector.crisp(0.31, -4.3, 5.6)), 
+                is(vectorOf(Vector.fuzzy(0.99, 4.6, -5.604, 10.0))));
+        assertThat(Vector.crisp(1.3, 0.3, -0.004).sub(Vector.fuzzy(0.31, -4.3, 5.6, 10.0)), 
+                is(vectorOf(Vector.fuzzy(0.99, 4.6, -5.604, 10.0))));
+        assertThat(Vector.fuzzy(1.3, 0.3, -0.004, 10.0).sub(Vector.fuzzy(0.31, -4.3, 5.6, 20.0)), 
+                is(vectorOf(Vector.fuzzy(0.99, 4.6, -5.604, 30.0))));
     }
 
     /**
@@ -193,38 +273,48 @@ public class VectorTest {
     @Test
     public void testSub_Double_Vector() {
         System.out.println("sub");
-        assertTrue(Vector.equals(Vector.of(0.7, 8.9, -11.6),
-                Vector.of(1.3, 0.3, -0.4).sub(2.0, Vector.of(0.3, -4.3, 5.6)), 1.0e-10));
+        assertThat(Vector.crisp(1.3, 0.3, -0.4).sub(2.0, Vector.crisp(0.3, -4.3, 5.6)),
+                is(vectorOf(Vector.crisp(0.7, 8.9, -11.6))));
+        assertThat(Vector.fuzzy(1.3, 0.3, -0.4, 10.0).sub(2.0, Vector.crisp(0.3, -4.3, 5.6)),
+                is(vectorOf(Vector.fuzzy(0.7, 8.9, -11.6, 10.0))));
+        assertThat(Vector.crisp(1.3, 0.3, -0.4).sub(2.0, Vector.fuzzy(0.3, -4.3, 5.6, 10.0)),
+                is(vectorOf(Vector.fuzzy(0.7, 8.9, -11.6, 20.0))));
+        assertThat(Vector.fuzzy(1.3, 0.3, -0.4, 10.0).sub(2.0, Vector.fuzzy(0.3, -4.3, 5.6, 20.0)),
+                is(vectorOf(Vector.fuzzy(0.7, 8.9, -11.6, 50.0))));
+        
+        assertThat(Vector.crisp(1.3, 0.3, -0.4).sub(-2.0, Vector.crisp(0.3, -4.3, 5.6)),
+                is(vectorOf(Vector.crisp(1.9, -8.3, 10.8))));
+        assertThat(Vector.fuzzy(1.3, 0.3, -0.4, 10.0).sub(-2.0, Vector.crisp(0.3, -4.3, 5.6)),
+                is(vectorOf(Vector.fuzzy(1.9, -8.3, 10.8, 10.0))));
+        assertThat(Vector.crisp(1.3, 0.3, -0.4).sub(-2.0, Vector.fuzzy(0.3, -4.3, 5.6, 10.0)),
+                is(vectorOf(Vector.fuzzy(1.9, -8.3, 10.8, 20.0))));
+        assertThat(Vector.fuzzy(1.3, 0.3, -0.4, 10.0).sub(-2.0, Vector.fuzzy(0.3, -4.3, 5.6, 20.0)),
+                is(vectorOf(Vector.fuzzy(1.9, -8.3, 10.8, 50.0))));
     }
-
+    
     /**
      * Test of add method, of class Vector.
      */
     @Test
     public void testAdd_Double_Vector() {
         System.out.println("add");
-        assertTrue(Vector.equals(Vector.of(0.7, 8.9, -11.6),
-                Vector.of(1.3, 0.3, -0.4).add(-2.0, Vector.of(0.3, -4.3, 5.6)), 1.0e-10));
-    }
-
-    /**
-     * Test of square method, of class Vector.
-     */
-    @Test
-    public void testSquare() {
-        System.out.println("square");
-        assertEquals(
-                9.34, Vector.of(-3.0, 0.5, -0.3).square(), 1.0e-10);
-    }
-
-    /**
-     * Test of length method, of class Vector.
-     */
-    @Test
-    public void testLength() {
-        System.out.println("length");
-        assertEquals(
-                3.05614135799, Vector.of(-3.0, 0.5, -0.3).length(), 1.0e-10);
+        assertThat(Vector.crisp(1.3, 0.3, -0.4).add(-2.0, Vector.crisp(0.3, -4.3, 5.6)),
+                is(vectorOf(Vector.crisp(0.7, 8.9, -11.6))));
+        assertThat(Vector.fuzzy(1.3, 0.3, -0.4, 10.0).add(-2.0, Vector.crisp(0.3, -4.3, 5.6)),
+                is(vectorOf(Vector.fuzzy(0.7, 8.9, -11.6, 10.0))));
+        assertThat(Vector.crisp(1.3, 0.3, -0.4).add(-2.0, Vector.fuzzy(0.3, -4.3, 5.6, 10.0)),
+                is(vectorOf(Vector.fuzzy(0.7, 8.9, -11.6, 20.0))));
+        assertThat(Vector.fuzzy(1.3, 0.3, -0.4, 10.0).add(-2.0, Vector.fuzzy(0.3, -4.3, 5.6, 20.0)),
+                is(vectorOf(Vector.fuzzy(0.7, 8.9, -11.6, 50.0))));
+        
+        assertThat(Vector.crisp(1.3, 0.3, -0.4).add(2.0, Vector.crisp(0.3, -4.3, 5.6)),
+                is(vectorOf(Vector.crisp(1.9, -8.3, 10.8))));
+        assertThat(Vector.fuzzy(1.3, 0.3, -0.4, 10.0).add(2.0, Vector.crisp(0.3, -4.3, 5.6)),
+                is(vectorOf(Vector.fuzzy(1.9, -8.3, 10.8, 10.0))));
+        assertThat(Vector.crisp(1.3, 0.3, -0.4).add(2.0, Vector.fuzzy(0.3, -4.3, 5.6, 10.0)),
+                is(vectorOf(Vector.fuzzy(1.9, -8.3, 10.8, 20.0))));
+        assertThat(Vector.fuzzy(1.3, 0.3, -0.4, 10.0).add(2.0, Vector.fuzzy(0.3, -4.3, 5.6, 20.0)),
+                is(vectorOf(Vector.fuzzy(1.9, -8.3, 10.8, 50.0))));
     }
 
     /**
@@ -233,8 +323,142 @@ public class VectorTest {
     @Test
     public void testNegate() {
         System.out.println("negate");
-        assertTrue(Vector.equals(Vector.of(-1.3, -0.3, 0.4),
-                Vector.of(1.3, 0.3, -0.4).negate(), 1.0e-10));
+        assertThat(Vector.crisp(1.3, 0.3, -0.4).negate(), 
+                is(vectorOf(Vector.crisp(-1.3, -0.3, 0.4))));
+        assertThat(Vector.fuzzy(1.3, 0.3, -0.4, 5.0).negate(), 
+                is(vectorOf(Vector.fuzzy(-1.3, -0.3, 0.4, 5.0))));
+    }
+
+    /**
+     * Test of toCrisp method, of class Vector.
+     */
+    @Test
+    public void testToCrisp() {
+        System.out.println("toCrisp");
+        assertThat(Vector.fuzzy(-1.0, 2.0, -3.0, 4.0).toCrisp(),
+                is(vectorOf(-1.0, 2.0, -3.0, 0.0)));
+        assertThat(Vector.crisp(-1.0, 2.0, -3.0).toCrisp(),
+                is(vectorOf(-1.0, 2.0, -3.0, 0.0)));
+    }
+
+    /**
+     * Test of membership method, of class Vector.
+     */
+    @Test
+    public void testMembership() {
+        System.out.println("membership");
+        Vector.Crisp p0 = Vector.ZERO;
+        Vector.Crisp p1 = Vector.crisp(1.0);
+        Vector.Crisp p2 = Vector.crisp(2.0);
+        Vector.Crisp p3 = Vector.crisp(3.0);
+        
+        Vector instance1 = Vector.zero(2.0);
+        assertEquals(1.0, instance1.membership(p0).getValue(), 1.0e-10);
+        assertEquals(0.5, instance1.membership(p1).getValue(), 1.0e-10);
+        assertEquals(0.0, instance1.membership(p2).getValue(), 1.0e-10);
+        assertEquals(0.0, instance1.membership(p3).getValue(), 1.0e-10);
+        
+        Vector instance2 = Vector.ZERO;
+        assertEquals(1.0, instance2.membership(p0).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.membership(p1).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.membership(p2).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.membership(p3).getValue(), 1.0e-10);
+    }
+
+    /**
+     * Test of possibility method, of class Vector.
+     */
+    @Test
+    public void testPossibility() {
+        System.out.println("possibility");
+        Vector p0 = Vector.fuzzy(0.0, 1.0);
+        Vector p1 = Vector.fuzzy(0.0, 2.0);
+        Vector p2 = Vector.fuzzy(1.0, 0.5);
+        Vector p3 = Vector.fuzzy(1.0, 2.0);
+        Vector p4 = Vector.fuzzy(2.0, 1.0);
+        Vector p5 = Vector.fuzzy(2.0, 4.0);
+        Vector p6 = Vector.fuzzy(3.0, 1.0);
+        Vector p7 = Vector.fuzzy(3.0, 8.0);
+        Vector p8 = Vector.ZERO;
+        Vector p9 = Vector.crisp(1.0);
+        Vector p10 = Vector.crisp(2.0);
+        Vector p11 = Vector.crisp(3.0);
+        
+        Vector instance1 = Vector.zero(2.0);
+        assertEquals(1.0, instance1.possibility(p0).getValue(), 1.0e-10);
+        assertEquals(1.0, instance1.possibility(p1).getValue(), 1.0e-10);
+        assertEquals(3.0/5, instance1.possibility(p2).getValue(), 1.0e-10);
+        assertEquals(0.75, instance1.possibility(p3).getValue(), 1.0e-10);
+        assertEquals(1.0/3, instance1.possibility(p4).getValue(), 1.0e-10);
+        assertEquals(2.0/3, instance1.possibility(p5).getValue(), 1.0e-10);
+        assertEquals(0.0, instance1.possibility(p6).getValue(), 1.0e-10);
+        assertEquals(0.7, instance1.possibility(p7).getValue(), 1.0e-10);
+        assertEquals(1.0, instance1.possibility(p8).getValue(), 1.0e-10);
+        assertEquals(0.5, instance1.possibility(p9).getValue(), 1.0e-10);
+        assertEquals(0.0, instance1.possibility(p10).getValue(), 1.0e-10);
+        assertEquals(0.0, instance1.possibility(p11).getValue(), 1.0e-10);
+        
+        Vector instance2 = Vector.ZERO;
+        assertEquals(1.0, instance2.possibility(p0).getValue(), 1.0e-10);
+        assertEquals(1.0, instance2.possibility(p1).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.possibility(p2).getValue(), 1.0e-10);
+        assertEquals(0.5, instance2.possibility(p3).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.possibility(p4).getValue(), 1.0e-10);
+        assertEquals(0.5, instance2.possibility(p5).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.possibility(p6).getValue(), 1.0e-10);
+        assertEquals(5.0/8, instance2.possibility(p7).getValue(), 1.0e-10);
+        assertEquals(1.0, instance2.possibility(p8).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.possibility(p9).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.possibility(p10).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.possibility(p11).getValue(), 1.0e-10);
+    }
+
+    /**
+     * Test of necessity method, of class Vector.
+     */
+    @Test
+    public void testNecessity() {
+        System.out.println("necessity");
+        Vector p0 = Vector.fuzzy(0.0, 1.0);
+        Vector p1 = Vector.fuzzy(0.0, 2.0);
+        Vector p2 = Vector.fuzzy(1.0, 0.5);
+        Vector p3 = Vector.fuzzy(1.0, 2.0);
+        Vector p4 = Vector.fuzzy(2.0, 1.0);
+        Vector p5 = Vector.fuzzy(2.0, 4.0);
+        Vector p6 = Vector.fuzzy(3.0, 1.0);
+        Vector p7 = Vector.fuzzy(3.0, 8.0);
+        Vector p8 = Vector.ZERO;
+        Vector p9 = Vector.crisp(1.0);
+        Vector p10 = Vector.crisp(2.0);
+        Vector p11 = Vector.crisp(3.0);
+        
+        Vector instance1 = Vector.zero(2.0);
+        assertEquals(1.0/3, instance1.necessity(p0).getValue(), 1.0e-10);
+        assertEquals(0.5, instance1.necessity(p1).getValue(), 1.0e-10);
+        assertEquals(0.0, instance1.necessity(p2).getValue(), 1.0e-10);
+        assertEquals(0.25, instance1.necessity(p3).getValue(), 1.0e-10);
+        assertEquals(0.0, instance1.necessity(p4).getValue(), 1.0e-10);
+        assertEquals(1.0/3, instance1.necessity(p5).getValue(), 1.0e-10);
+        assertEquals(0.0, instance1.necessity(p6).getValue(), 1.0e-10);
+        assertEquals(0.5, instance1.necessity(p7).getValue(), 1.0e-10);
+        assertEquals(0.0, instance1.necessity(p8).getValue(), 1.0e-10);
+        assertEquals(0.0, instance1.necessity(p9).getValue(), 1.0e-10);
+        assertEquals(0.0, instance1.necessity(p10).getValue(), 1.0e-10);
+        assertEquals(0.0, instance1.necessity(p11).getValue(), 1.0e-10);
+        
+        Vector instance2 = Vector.ZERO;
+        assertEquals(1.0, instance2.necessity(p0).getValue(), 1.0e-10);
+        assertEquals(1.0, instance2.necessity(p1).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.necessity(p2).getValue(), 1.0e-10);
+        assertEquals(0.5, instance2.necessity(p3).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.necessity(p4).getValue(), 1.0e-10);
+        assertEquals(0.5, instance2.necessity(p5).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.necessity(p6).getValue(), 1.0e-10);
+        assertEquals(5.0/8, instance2.necessity(p7).getValue(), 1.0e-10);
+        assertEquals(1.0, instance2.necessity(p8).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.necessity(p9).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.necessity(p10).getValue(), 1.0e-10);
+        assertEquals(0.0, instance2.necessity(p11).getValue(), 1.0e-10);
     }
 
     /**
@@ -243,7 +467,8 @@ public class VectorTest {
     @Test
     public void testNormalize() {
         System.out.println("normalize");
-        assertTrue(Vector.equals(Vector.of(-1.0/3.0, 2.0/3.0, -2.0/3.0), Vector.of(-1.0, 2.0, -2.0).normalize(), 1.0e-10));
+        assertThat(Vector.crisp(-1.0, 2.0, -2.0).normalize(), 
+                is(vectorOf(Vector.crisp(-1.0/3.0, 2.0/3.0, -2.0/3.0))));
     }
 
     /**
@@ -252,7 +477,38 @@ public class VectorTest {
     @Test
     public void testResize() {
         System.out.println("resize");
-        assertTrue(Vector.equals(Vector.of(-2.0/3.0, 4.0/3.0, -4.0/3.0), Vector.of(-1.0, 2.0, -2.0).resize(2.0), 1.0e-10));
+        assertThat(Vector.crisp(-1.0, 2.0, -2.0).resize(2.0), 
+                is(vectorOf(Vector.crisp(-2.0/3.0, 4.0/3.0, -4.0/3.0))));
+    }
+    
+    /**
+     * Test of dot method, of class Vector.
+     */
+    @Test
+    public void testDot() {
+        System.out.println("dot");
+        assertEquals(7.53,
+                Vector.crisp(-3.0, 4.5, -0.3).dot(Vector.crisp(2.0, 3.0, -0.1)), 1.0e-10);
+    }
+
+    /**
+     * Test of square method, of class Vector.
+     */
+    @Test
+    public void testSquare() {
+        System.out.println("square");
+        assertEquals(9.34,
+                Vector.crisp(-3.0, 0.5, -0.3).square(), 1.0e-10);
+    }
+
+    /**
+     * Test of length method, of class Vector.
+     */
+    @Test
+    public void testLength() {
+        System.out.println("length");
+        assertEquals(3.05614135799,
+                Vector.crisp(-3.0, 0.5, -0.3).length(), 1.0e-10);
     }
     
     /**
@@ -261,7 +517,8 @@ public class VectorTest {
     @Test
     public void testCross() {
         System.out.println("cross");
-        assertTrue(Vector.equals(Vector.of(-5.0, 4.0, 1.0), Vector.of(1.0, 1.0, 1.0).cross(Vector.of(1.0, 2.0, -3.0)), 1.0e-10));
+        assertThat(Vector.crisp(1.0, 1.0, 1.0).cross(Vector.crisp(1.0, 2.0, -3.0)),
+                is(vectorOf(Vector.crisp(-5.0, 4.0, 1.0))));
     }
 
     /**
@@ -270,14 +527,19 @@ public class VectorTest {
     @Test
     public void testAngle() {
         System.out.println("angle");
-        assertEquals(
-                Math.PI/2.0, Vector.of(1.0, 1.0, 0.0).angle(Vector.of(1.0, -1.0, 0.0)), 1.0e-10);
+        assertEquals(Math.PI/2.0,
+                Vector.crisp(1.0, 1.0, 0.0).angle(Vector.crisp(1.0, -1.0, 0.0)), 1.0e-10);
     }
     
+    /**
+     * Test of toString method, of class Vector.
+     */
     @Test
     public void testToString(){
         System.out.println("toString");
-        JsonVector instance = new JsonVector();
-        assertTrue(Vector.equals(Vector.of(1.23, 4.56, -7.89), instance.fromJson(Vector.toJson(Vector.of(1.23, 4.56, -7.89))).get(), 1.0e-10));
+        assertThat(Vector.fromJson(Vector.fuzzy(1.23, 4.56, -7.89, 1.0).toString()).get(),
+                is(vectorOf(1.23, 4.56, -7.89, 1.0)));
+        assertThat(Vector.fromJson(Vector.crisp(1.23, 4.56, -7.89).toString()).get(),
+                is(vectorOf(1.23, 4.56, -7.89, 0.0)));
     }
 }

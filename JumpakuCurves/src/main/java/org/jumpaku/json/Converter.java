@@ -7,6 +7,8 @@ package org.jumpaku.json;
 
 import com.google.gson.Gson;
 import java.lang.reflect.Type;
+
+import com.google.gson.JsonSyntaxException;
 import javaslang.control.Option;
 
 /**
@@ -16,11 +18,11 @@ import javaslang.control.Option;
  */
 public interface Converter<D> {
     
-    static interface Temporary<D>{
+    interface Temporary<D>{
         D newInstance();
     }
     
-    static final Gson GSON = new Gson();
+    Gson GSON = new Gson();
     
     default String toJson(D d){
         return GSON.toJson(toTemporary(d));
@@ -30,7 +32,7 @@ public interface Converter<D> {
         try{
             return Option.of(((Temporary<D>)GSON.fromJson(json, getTemporaryType()))
                     .newInstance());
-        }catch(Exception e){
+        }catch(JsonSyntaxException|ClassCastException|NullPointerException e){
             return Option.none();
         }
     }

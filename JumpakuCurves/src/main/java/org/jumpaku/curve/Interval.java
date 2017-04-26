@@ -17,7 +17,7 @@ import org.apache.commons.math3.util.FastMath;
  */
 public interface Interval extends Domain{
     
-    static Interval ZERO_ONE = Interval.of(0.0, 1.0);
+    Interval ZERO_ONE = Interval.of(0.0, 1.0);
     
     static Interval of(Double begin, Double end){
         return new Interval() {
@@ -48,8 +48,9 @@ public interface Interval extends Domain{
     }
     
     default Array<Double> sample(Integer n){
-        if(n < 2)
+        if(n < 2) {
             throw new IllegalArgumentException("n must be grater than 1, but n = " + n);
+        }
         
         return Stream.range(0, n)
                 .map(i -> (n-1-i)/(n.doubleValue()-1.0)*getBegin() + i/(n.doubleValue()-1.0)*getEnd())
@@ -63,7 +64,7 @@ public interface Interval extends Domain{
     @Override Boolean includes(Double t);
     
     default Boolean includes(Interval i){
-        return getBegin().compareTo(i.getBegin()) <= 0 && getEnd().compareTo(i.getEnd()) >= 0;
+        return getBegin() <= i.getBegin() && i.getEnd() <= getEnd();
     }
     
     Double getBegin();

@@ -1,7 +1,5 @@
 package org.jumpaku.fxcontrol;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,7 +9,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
-import org.jumpaku.old.curves.TimeSeriesData;
+import main.old.curves.TimeSeriesData;
 
 /** Model の機能を定義します. */
 /*package private*/ interface CurveInputModel {

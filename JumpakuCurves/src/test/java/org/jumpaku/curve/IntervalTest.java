@@ -14,9 +14,6 @@ import static org.junit.Assert.*;
  */
 public class IntervalTest {
     
-    public IntervalTest() {
-    }
-
     /**
      * Test of closed method, of class Interval.
      */
@@ -52,8 +49,8 @@ public class IntervalTest {
      * Test of getBegin method, of class Interval.
      */
     @Test
-    public void testGetbegin() {
-        System.out.println("getbegin");
+    public void testGetBegin() {
+        System.out.println("getBegin");
         Interval instance = Interval.of(-2.3, 3.4);
         assertEquals(-2.3, instance.getBegin(), 1.0e-10);
     }
@@ -75,11 +72,11 @@ public class IntervalTest {
     public void testIncludes() {
         System.out.println("getEnd");
         Interval instance = Interval.of(-2.3, 3.4);
-        assertEquals(true, instance.includes(-2.3));
-        assertEquals(true, instance.includes( 3.4));
-        assertEquals(true, instance.includes( 1.0));
-        assertEquals(false,instance.includes(-3.0));
-        assertEquals(false,instance.includes( 4.0));
+        assertTrue(instance.includes(-2.3));
+        assertTrue(instance.includes( 3.4));
+        assertTrue(instance.includes( 1.0));
+        assertFalse(instance.includes(-3.0));
+        assertFalse(instance.includes( 4.0));
     }
     
     /**

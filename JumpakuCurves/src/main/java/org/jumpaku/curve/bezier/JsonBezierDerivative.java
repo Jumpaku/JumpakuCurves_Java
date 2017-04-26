@@ -8,6 +8,7 @@ package org.jumpaku.curve.bezier;
 import java.lang.reflect.Type;
 import javaslang.collection.Array;
 import org.jumpaku.affine.JsonVector;
+import org.jumpaku.affine.Vector;
 import org.jumpaku.curve.JsonInterval;
 import org.jumpaku.json.Converter;
 
@@ -20,11 +21,11 @@ public final class JsonBezierDerivative implements Converter<BezierDerivative>{
     public static final Converter<BezierDerivative> CONVERTER = new JsonBezierDerivative();
     
     @Override public Type getTemporaryType() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return JsonBezierDerivative.Data.class;
     }
 
     @Override public Temporary<BezierDerivative> toTemporary(BezierDerivative d) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Data(d);
     }
     
     public static final class Data implements Converter.Temporary<BezierDerivative> {
@@ -39,8 +40,10 @@ public final class JsonBezierDerivative implements Converter<BezierDerivative>{
         }
         
         @Override public BezierDerivative newInstance() {
-            return BezierDerivative.create(
-                    Array.of(controlVectors).map(JsonVector.Data::newInstance), interval.newInstance());
+            return BezierDerivative.create(interval.newInstance(), 
+                    Array.of(controlVectors)
+                            .map(JsonVector.Data::newInstance)
+                            .map(Vector::toCrisp));
         }
     }
 }

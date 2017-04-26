@@ -6,19 +6,22 @@
 package org.jumpaku.affine;
 
 import java.lang.reflect.Type;
+
+import com.sun.istack.internal.NotNull;
 import org.jumpaku.json.Converter;
 
 /**
  *
- * @author Jumpaku
+ * @author jumpaku
  */
 public final class JsonPoint implements Converter<Point>{
-
-    @Override public Type getTemporaryType() {
+    @Override
+    public Type getTemporaryType() {
         return Data.class;
     }
 
-    @Override public Converter.Temporary<Point> toTemporary(Point p) {
+    @Override
+    public Converter.Temporary<Point> toTemporary(Point p) {
         return new Data(p);
     }
     
@@ -30,16 +33,18 @@ public final class JsonPoint implements Converter<Point>{
 
         private final Double z;
 
+        private final Double r;
+
         public Data(Point p) {
             this.x = p.getX();
             this.y = p.getY();
             this.z = p.getZ();
+            this.r = p.getR();
         }
 
         @Override public Point newInstance() {
-            return Point.of(x, y, z);
+            return Point.fuzzy(x, y, z, r);
         }
     }
     
-    public static final Converter<Point> CONVERTER = new JsonPoint();
 }

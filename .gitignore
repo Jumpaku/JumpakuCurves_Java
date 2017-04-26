@@ -13,10 +13,9 @@ hs_err_pid*
 
 *._.DS_Store
 *._.gitignore
+*.DS_Store
 
 JumpakuCurves/target/
 JumpakuCurves/nbproject
 JumpakuCurves/.idea/
 *.iml
-
-*.DS_Store

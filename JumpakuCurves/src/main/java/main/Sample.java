@@ -6,14 +6,14 @@
 package main;
 
 import javaslang.collection.Array;
-import org.jumpaku.old.curves.interpolation.Average;
-import org.jumpaku.old.curves.interpolation.Centripetal;
-import org.jumpaku.old.curves.interpolation.Chordal;
-import org.jumpaku.old.curves.interpolation.Data;
-import org.jumpaku.old.curves.interpolation.Uniformly;
-import org.jumpaku.old.curves.interpolation.UniformlySpaced;
-import org.jumpaku.old.curves.interpolation.Universal;
-import org.jumpaku.old.curves.vector.Point2D;
+import main.old.curves.interpolation.Average;
+import main.old.curves.interpolation.Centripetal;
+import main.old.curves.interpolation.Chordal;
+import main.old.curves.interpolation.Data;
+import main.old.curves.interpolation.Uniformly;
+import main.old.curves.interpolation.UniformlySpaced;
+import main.old.curves.interpolation.Universal;
+import main.old.curves.vector.Point2D;
 
 /**
  *

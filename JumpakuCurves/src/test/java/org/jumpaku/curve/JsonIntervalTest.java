@@ -14,9 +14,6 @@ import static org.junit.Assert.*;
  */
 public class JsonIntervalTest {
     
-    public JsonIntervalTest() {
-    }
-
     /**
      * Test of toJson method, of class JsonInterval.
      */
@@ -37,6 +34,8 @@ public class JsonIntervalTest {
         Interval instance = new JsonInterval().fromJson("{begin: -2.3, end: 3.4}").get();
         assertEquals(-2.3, instance.getBegin(), 1.0e-10);
         assertEquals(3.4, instance.getEnd(), 1.0e-10);
+
+        //assertTrue(JsonInterval.CONVERTER.fromJson("{}").isEmpty());
     }
     
     /**

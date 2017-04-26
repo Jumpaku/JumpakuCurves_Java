@@ -8,18 +8,17 @@ package org.jumpaku.curve.nurbs;
 import javaslang.Tuple2;
 import javaslang.collection.Array;
 import org.jumpaku.affine.Point;
-import org.jumpaku.curve.Curve;
-import org.jumpaku.curve.DefinedOnInterval;
 import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Differentiable;
+import org.jumpaku.curve.FuzzyCurve;
 import org.jumpaku.curve.Interval;
-import org.jumpaku.curve.ratioional.RationalBezier;
+import org.jumpaku.curve.ratioionalbezier.RationalBezier;
 
 /**
  *
  * @author Jumpaku
  */
-public interface Nurbs extends Curve, Differentiable, DefinedOnInterval<Nurbs>{
+public interface Nurbs extends FuzzyCurve, Differentiable {
         
     @Override Interval getDomain();
     
@@ -29,7 +28,7 @@ public interface Nurbs extends Curve, Differentiable, DefinedOnInterval<Nurbs>{
 
     @Override Nurbs restrict(Interval i);
 
-    @Override Nurbs reverse();
+    Nurbs reverse();
 
     Array<Point> getControlPoints();
 
@@ -45,5 +44,5 @@ public interface Nurbs extends Curve, Differentiable, DefinedOnInterval<Nurbs>{
     
     Array<RationalBezier> toRationalBeziers();
     
-    Tuple2<? extends RationalBezier, ? extends RationalBezier> subdivide(Double t);
+    Tuple2<Nurbs, Nurbs> subdivide(Double t);
 }

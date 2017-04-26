@@ -35,7 +35,7 @@ public final class JsonBezier implements Converter<Bezier>{
         }
 
         @Override public Bezier newInstance() {
-            return Bezier.create(Array.of(controlPoints).map(JsonPoint.Data::newInstance), interval.newInstance());
+            return Bezier.create(interval.newInstance(), Array.of(controlPoints).map(JsonPoint.Data::newInstance));
         }
     }
     

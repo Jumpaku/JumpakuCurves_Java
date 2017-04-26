@@ -33,14 +33,6 @@ public final class Grade implements Comparable<Grade> {
     
     public static final Grade FALSE = of(0.0);
     
-    public static Grade trueValue(){
-        return TRUE;
-    }
-    
-    public static Grade falseValue(){
-        return FALSE;
-    }
-    
     public static Grade and(Grade g1, Grade g2){
         return g1.compareTo(g2) <= 0 ? g1 : g2;
     }
@@ -68,8 +60,10 @@ public final class Grade implements Comparable<Grade> {
     private final Double value;
 
     public Grade(Double value) {
-        if((!Double.isFinite(value)) ||  value.compareTo(0.0) < 0 || value.compareTo(1.0) > 0)
+        if((!Double.isFinite(value)) ||  value.compareTo(0.0) < 0 || value.compareTo(1.0) > 0) {
             throw new IllegalArgumentException("d must be in [0.0, 1.0].");
+        }
+
         this.value = value;
     }
     

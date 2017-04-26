@@ -10,16 +10,16 @@ import javaslang.collection.Array;
 import javaslang.control.Option;
 import org.jumpaku.affine.Point;
 import org.jumpaku.affine.Vector;
-import org.jumpaku.curve.DefinedOnInterval;
 import org.jumpaku.curve.Derivative;
 import org.jumpaku.curve.Differentiable;
 import org.jumpaku.curve.Interval;
+import org.jumpaku.curve.Reversible;
 
 /**
  *
  * @author Jumpaku
  */
-public interface BezierDerivative extends Derivative, Differentiable, DefinedOnInterval<BezierDerivative>{
+public interface BezierDerivative extends Derivative, Differentiable, Reversible<BezierDerivative> {
 
     static BezierDerivative create(Bezier bezier){
         return new BezierDerivative() {
@@ -27,8 +27,8 @@ public interface BezierDerivative extends Derivative, Differentiable, DefinedOnI
                 return bezier.getDomain();
             }
 
-            @Override public Vector evaluate(Double t) {
-                return bezier.evaluate(t).getVector();
+            @Override public Vector.Crisp evaluate(Double t) {
+                return bezier.evaluate(t).toVector().toCrisp();
             }
             
             @Override public BezierDerivative differentiate() {
@@ -36,7 +36,6 @@ public interface BezierDerivative extends Derivative, Differentiable, DefinedOnI
             }
 
             @Override public BezierDerivative restrict(Interval i) {
-                
                 return create(bezier.restrict(i));
             }
 
@@ -45,7 +44,7 @@ public interface BezierDerivative extends Derivative, Differentiable, DefinedOnI
             }
 
             @Override public Array<Vector> getControlVectors() {
-                return bezier.getControlPoints().map(Point::getVector);
+                return bezier.getControlPoints().map(Point::toVector);
             }
 
             @Override public Integer getDegree() {
@@ -61,35 +60,39 @@ public interface BezierDerivative extends Derivative, Differentiable, DefinedOnI
             }
 
             @Override
-            public Tuple2<? extends BezierDerivative, ? extends BezierDerivative> subdivide(Double t) {
+            public Tuple2<BezierDerivative, BezierDerivative> subdivide(Double t) {
                 return bezier.subdivide(t).map(BezierDerivative::create, BezierDerivative::create);
             }
 
             @Override public String toString() {
-                return super.toString(); 
+                return JsonBezierDerivative.CONVERTER.toJson(this);
             }
         };
     }
 
-    public static BezierDerivative create(Array<? extends Vector> vs, Interval domain){
-        return create(Bezier.create(vs.map(Point::of),domain));
+    static BezierDerivative create(Interval domain, Array<? extends Vector.Crisp> vs){
+        return create(Bezier.create(domain, vs.map(Point.Crisp::new)));
     }
     
-    public static String toJson(BezierDerivative db){
+    static String toJson(BezierDerivative db){
         return JsonBezierDerivative.CONVERTER.toJson(db);
     }
     
-    public static Option<BezierDerivative> fromJson(String json){
+    static Option<BezierDerivative> fromJson(String json){
         return JsonBezierDerivative.CONVERTER.fromJson(json);
     }
 
     @Override Interval getDomain();
     
-    @Override Vector evaluate(Double t);
+    @Override Vector.Crisp evaluate(Double t);
 
     @Override BezierDerivative differentiate();
 
     @Override BezierDerivative restrict(Interval i);
+
+    @Override default BezierDerivative restrict(Double begin, Double end){
+        return restrict(Interval.of(begin, end));
+    }
 
     @Override BezierDerivative reverse();
 
@@ -101,5 +104,5 @@ public interface BezierDerivative extends Derivative, Differentiable, DefinedOnI
     
     BezierDerivative reduce();
     
-    Tuple2<? extends BezierDerivative, ? extends BezierDerivative> subdivide(Double t);    
+    Tuple2<BezierDerivative, BezierDerivative> subdivide(Double t);    
 }
