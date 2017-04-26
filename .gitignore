@@ -11,11 +11,23 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+# OS
 *._.DS_Store
 *._.gitignore
 *.DS_Store
+*Thumbs.db
+
+# gradle
+JumpakuCurves/.gradle/
+JumpakuCurves/build/
+JumpakuCurves/classes/
+JumpakuCurves/gradle/
+JumpakuCurves/gradlew
+JumpakuCurves/gradlew.bat
+
+# IDE
+JumpakuCurves/nbproject/
+JumpakuCurves/.idea/
 
 JumpakuCurves/target/
-JumpakuCurves/nbproject
-JumpakuCurves/.idea/
 *.iml
