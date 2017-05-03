@@ -29,7 +29,9 @@ public class BSplineDerivativeMatcher extends TypeSafeMatcher<BSplineDerivative>
                         (e, a)-> Vector.equals(e.toCrisp(), a.toCrisp(), 1.0e-10)
                                 && Precision.equals(e.getR(), a.getR(), 1.0e-10)).forAll(b->b)
                 && expected.getKnots().zipWith(item.getKnots(),
-                (e, a)-> Precision.equals(e, a, 1.0e-10)).forAll(b->b)
+                (e, a)-> Precision.equals(e.getValue(), a.getValue(), 1.0e-10)
+                        && e.getMultiplicity().equals(a.getMultiplicity()))
+                                .forAll(b->b)
                 && expected.getControlVectors().size() == item.getControlVectors().size()
                 && Precision.equals(expected.getDomain().getBegin(), item.getDomain().getBegin(), 1.0e-10)
                 && Precision.equals(expected.getDomain().getEnd(), item.getDomain().getEnd(), 1.0e-10)

@@ -36,7 +36,7 @@ public class QuadraticByRepresentPointsTest {
     public void testEvaluate() {
         System.out.println("evaluate");
         QuadraticByRepresentPoints instance = new QuadraticByRepresentPoints(
-                Interval.ZERO_ONE, R2/2,
+                R2/2,
                 Point.fuzzy(0.0, 1.0, 1.0),
                 Point.fuzzy(R2/2, R2/2, 2.0),
                 Point.fuzzy(1.0, 0.0, 3.0));
@@ -55,13 +55,13 @@ public class QuadraticByRepresentPointsTest {
     public void testGetDomain() {
         System.out.println("getDomain");
         Interval result = new QuadraticByRepresentPoints(
-                Interval.of(0.2, 0.9), -R2,
+                -R2,
                 Point.fuzzy(0.0, 1.0, 1.0),
                 Point.fuzzy(R2/2, R2/2, 2.0),
                 Point.fuzzy(1.0, 0.0, 3.0))
                 .getDomain();
-        assertEquals(0.2, result.getBegin(), 1.0e-10);
-        assertEquals(0.9, result.getEnd(), 1.0e-10);
+        assertEquals(0.0, result.getBegin(), 1.0e-10);
+        assertEquals(1.0, result.getEnd(), 1.0e-10);
     }
 
     /**
@@ -76,8 +76,7 @@ public class QuadraticByRepresentPointsTest {
                 Point.fuzzy(1.0, 0.0, 3.0)
         };
 
-        Derivative derivative = new QuadraticByRepresentPoints(
-                Interval.of(0.0, 1.0), R2/2, ps[0], ps[1], ps[2])
+        Derivative derivative = new QuadraticByRepresentPoints(R2/2, ps[0], ps[1], ps[2])
                 .differentiate();
 
         assertThat(derivative.evaluate(0.0),  is(vectorOf(R2,                                0.0,                           0.0, 0.0)));
@@ -85,57 +84,6 @@ public class QuadraticByRepresentPointsTest {
         assertThat(derivative.evaluate(0.5),  is(vectorOf(4-2*R2,                         -4+2*R2,                       0.0, 0.0)));
         assertThat(derivative.evaluate(0.75), is(vectorOf(-(40-12*R2)*(-54+8*R2)/(41*41), -(40-12*R2)*(6+72*R2)/(41*41), 0.0, 0.0)));
         assertThat(derivative.evaluate(1.0),  is(vectorOf(0.0,                            -R2,                              0.0, 0.0)));
-
-        Interval interval = new QuadraticByRepresentPoints(
-                Interval.of(0.2, 0.9), R2/2, ps[0], ps[1], ps[2])
-                .differentiate().getDomain();
-        assertEquals(0.2, interval.getBegin(), 1.0e-10);
-        assertEquals(0.9, interval.getEnd(), 1.0e-10);
-    }
-
-    /**
-     * Test of restrict method, of class QuadraticByRepresentPoints.
-     */
-    @Test
-    public void testRestrict_Interval() {
-        System.out.println("restrict");
-        QuadraticByRepresentPoints result = new QuadraticByRepresentPoints(
-                Interval.of(0.2, 0.9),
-                R2/2,
-                Point.fuzzy(0.0, 1.0, 1.0),
-                Point.fuzzy(R2/2, R2/2, 2.0),
-                Point.fuzzy(1.0, 0.0, 3.0))
-                .restrict(Interval.of(0.3, 0.5));
-        QuadraticByRepresentPoints expResult = new QuadraticByRepresentPoints(
-                Interval.of(0.3, 0.5),
-                R2/2,
-                Point.fuzzy(0.0, 1.0, 1.0),
-                Point.fuzzy(R2/2, R2/2, 2.0),
-                Point.fuzzy(1.0, 0.0, 3.0));
-        assertThat(result, is(quadraticByRepresentPointOf(expResult)));
-    }
-
-
-    /**
-     * Test of restrict method, of class QuadraticByRepresentPoints.
-     */
-    @Test
-    public void testRestrict_Double_Double() {
-        System.out.println("restrict");
-        QuadraticByRepresentPoints result = new QuadraticByRepresentPoints(
-                Interval.of(0.2, 0.9),
-                R2/2,
-                Point.fuzzy(0.0, 1.0, 1.0),
-                Point.fuzzy(R2/2, R2/2, 2.0),
-                Point.fuzzy(1.0, 0.0, 3.0))
-                .restrict(0.3, 0.5);
-        QuadraticByRepresentPoints expResult = new QuadraticByRepresentPoints(
-                Interval.of(0.3, 0.5),
-                R2/2,
-                Point.fuzzy(0.0, 1.0, 1.0),
-                Point.fuzzy(R2/2, R2/2, 2.0),
-                Point.fuzzy(1.0, 0.0, 3.0));
-        assertThat(result, is(quadraticByRepresentPointOf(expResult)));
     }
 
     /**
@@ -145,13 +93,11 @@ public class QuadraticByRepresentPointsTest {
     public void testReverse() {
         System.out.println("reverse");
         QuadraticByRepresentPoints instance = new QuadraticByRepresentPoints(
-                Interval.of(0.2, 0.9),
                 R2/2,
                 Point.fuzzy(0.0, 1.0, 1.0),
                 Point.fuzzy(R2/2, R2/2, 2.0),
                 Point.fuzzy(1.0, 0.0, 3.0));
         QuadraticByRepresentPoints expResult = new QuadraticByRepresentPoints(
-                Interval.of(0.1, 0.8),
                 R2/2,
                 Point.fuzzy(1.0, 0.0, 3.0),
                 Point.fuzzy(R2/2, R2/2, 2.0),
@@ -167,8 +113,7 @@ public class QuadraticByRepresentPointsTest {
     public void testGetDegree() {
         System.out.println("getDegree");
         int result = new QuadraticByRepresentPoints(
-            Interval.ZERO_ONE,
-            R2/2,
+                R2/2,
                 Point.fuzzy(0.0, 1.0, 1.0),
                 Point.fuzzy(R2/2, R2/2, 2.0),
                 Point.fuzzy(1.0, 0.0, 3.0)).getDegree();
@@ -182,8 +127,7 @@ public class QuadraticByRepresentPointsTest {
     public void testToString() {
         System.out.println("toString");
         QuadraticByRepresentPoints expected = new QuadraticByRepresentPoints(
-                Interval.of(0.2, 0.9),
-                Math.sqrt(2.0)/2, 
+                Math.sqrt(2.0)/2,
                 Point.fuzzy(1.0, 0.0, 1.0),
                 Point.fuzzy(0.5/(1+Math.sqrt(2.0)/2), 0.5/(1+Math.sqrt(2.0)/2), 2.0),
                 Point.fuzzy(0.0, 1.0, 1.0));
@@ -203,8 +147,7 @@ public class QuadraticByRepresentPointsTest {
                 Point.fuzzy(1.0, 0.0, 3.0)
         };
 
-        Array<Point> rp = new QuadraticByRepresentPoints(
-                Interval.of(0.0, 1.0), R2/2, ps[0], ps[1], ps[2])
+        Array<Point> rp = new QuadraticByRepresentPoints(R2/2, ps[0], ps[1], ps[2])
                 .getRepresentPoints();
 
         assertThat(rp.get(0), is(pointOf(ps[0])));
@@ -220,13 +163,12 @@ public class QuadraticByRepresentPointsTest {
     public void testToCrispRationalBezier() {
         System.out.println("toCrispRationalBezier");
         RationalBezier result = new QuadraticByRepresentPoints(
-                Interval.of(0.2, 0.9),
                 R2/2,
                 Point.fuzzy(0.0, 1.0, 1.0),
                 Point.fuzzy(R2/2, R2/2, 2.0),
                 Point.fuzzy(1.0, 0.0, 3.0))
                 .toCrispRationalBezier();
-        RationalBezier expected = RationalBezier.create(Interval.of(0.2, 0.9),
+        RationalBezier expected = RationalBezier.create(
                 new WeightedPoint(Point.fuzzy(0.0, 1.0, 0.0), 1.0),
                 new WeightedPoint(Point.fuzzy(1.0, 1.0, 0.0), R2/2),
                 new WeightedPoint(Point.fuzzy(1.0, 0.0, 0.0), 1.0));
@@ -260,7 +202,6 @@ public class QuadraticByRepresentPointsTest {
     public void testGetWeight() {
         System.out.println("getWeight");
         double result = new QuadraticByRepresentPoints(
-                Interval.ZERO_ONE,
                 R2/2,
                 Point.fuzzy(0.0, 1.0, 1.0),
                 Point.fuzzy(R2/2, R2/2, 2.0),
@@ -275,13 +216,11 @@ public class QuadraticByRepresentPointsTest {
     public void testComplement() {
         System.out.println("complement");
         QuadraticByRepresentPoints instance = new QuadraticByRepresentPoints(
-                Interval.ZERO_ONE,
                 R2/2,
                 Point.fuzzy(0.0, 1.0, 1.0),
                 Point.fuzzy(R2/2, R2/2, 2.0),
                 Point.fuzzy(1.0, 0.0, 3.0));
         QuadraticByRepresentPoints expResult = new QuadraticByRepresentPoints(
-                Interval.ZERO_ONE,
                 -R2/2,
                 Point.fuzzy(0.0, 1.0, 1.0),
                 Point.fuzzy(R2/2, R2/2, 2.0),

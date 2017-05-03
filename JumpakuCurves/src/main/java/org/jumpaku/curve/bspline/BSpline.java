@@ -61,20 +61,20 @@ public final class BSpline implements FuzzyCurve, Differentiable, Reversible<Cur
 
     public static BSpline create(Integer degree, Iterable<? extends Point> controlPoints, Iterable<Knot> knots){
         Array<Point> cps = Array.ofAll(controlPoints);
-        Array<Knot> ts = Array.ofAll(knots);
+        Array<Knot> ks = Array.ofAll(knots);
 
-        if(ts.exists(Objects::isNull))
+        if(ks.exists(Objects::isNull))
             throw new IllegalArgumentException("knots contains null");
 
         if(cps.exists(Objects::isNull))
             throw new IllegalArgumentException("control points contains null");
 
-        for(int i = 0; i < ts.size()-1; ++i){
-            if(ts.get(i).getValue() > ts.get(i+1).getValue())
+        for(int i = 0; i < ks.size()-1; ++i){
+            if(ks.get(i).getValue() > ks.get(i+1).getValue())
                 throw new IllegalArgumentException("knots must be in ascending order, but knot[" + i +  "] > knot[" + (i+1)+ "]");
         }
 
-        if(!(ts.head().getMultiplicity().equals(degree+1) && ts.last().getMultiplicity().equals(degree+1))){
+        if(!(ks.head().getMultiplicity().equals(degree+1) && ks.last().getMultiplicity().equals(degree+1))){
             throw new IllegalArgumentException("first and last knots must be degree+1 multiple to clamp");
         }
 
@@ -84,10 +84,10 @@ public final class BSpline implements FuzzyCurve, Differentiable, Reversible<Cur
         if(degree < 0)
             throw new IllegalArgumentException("degree must be positive or 0");
 
-        if(cps.size() != ts.map(Knot::getMultiplicity).sum().intValue() - degree - 1)
+        if(cps.size() != ks.map(Knot::getMultiplicity).sum().intValue() - degree - 1)
             throw new IllegalArgumentException("the number of control points or knots, or degree are wrong");
 
-        return new BSpline(Interval.of(ts.head().getValue(), ts.last().getValue()), degree, cps, ts);
+        return new BSpline(Interval.of(ks.head().getValue(), ks.last().getValue()), degree, cps, ks);
     }
 
     private final Interval domain;
@@ -154,7 +154,7 @@ public final class BSpline implements FuzzyCurve, Differentiable, Reversible<Cur
                 .zipWith(getControlPoints().tail(), (a, b) -> b.toCrisp().diff(a.toCrisp()))
                 .zipWithIndex((v, i) -> v.scale(d/(ts.get(d+i+1) - ts.get(i+1))));
 
-        return BSplineDerivative.create(getDomain(), d-1, cvs, knots);
+        return BSplineDerivative.create(d-1, cvs, knots);
     }
 
     @Override

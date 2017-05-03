@@ -19,7 +19,6 @@ public class JsonRationalBezierTest {
     public void testToJson(){
         System.out.println("toJson");
         RationalBezier expected = RationalBezier.create(
-                Interval.of(0.2, 0.9),
                 new WeightedPoint(Point.fuzzy(0.0, 0.0), 1.0),
                 new WeightedPoint(Point.fuzzy(0.0, 1.0), 2.0),
                 new WeightedPoint(Point.fuzzy(1.0, 0.0), 3.0),
@@ -32,11 +31,9 @@ public class JsonRationalBezierTest {
     public void testFromJson(){
         System.out.println("fromJson");
         RationalBezier actual = new JsonRationalBezier().fromJson(
-                "{interval:{begin:0.2,end:0.9},"
-                        + "controlPoints:[{x:0.0,y:0.0,z:0.0,r:1.0},{x:0.0,y:1.0,z:0.0,r:2.0},{x:1.0,y:0.0,z:0.0,r:3.0},{x:1.0,y:1.0,z:0.0,r:4.0}],"
+                "{controlPoints:[{x:0.0,y:0.0,z:0.0,r:1.0},{x:0.0,y:1.0,z:0.0,r:2.0},{x:1.0,y:0.0,z:0.0,r:3.0},{x:1.0,y:1.0,z:0.0,r:4.0}],"
                         + "weights:[1.0,2.0,3.0,4.0]}").get();
         RationalBezier expected = RationalBezier.create(
-                Interval.of(0.2, 0.9),
                 new WeightedPoint(Point.fuzzy(0.0, 0.0, 1.0), 1.0),
                 new WeightedPoint(Point.fuzzy(0.0, 1.0, 2.0), 2.0),
                 new WeightedPoint(Point.fuzzy(1.0, 0.0, 3.0), 3.0),
@@ -60,7 +57,6 @@ public class JsonRationalBezierTest {
     public void testToTemporary() {
         System.out.println("toTemporary");
         RationalBezier instance = RationalBezier.create(
-                Interval.of(0.2, 0.9),
                 new WeightedPoint(Point.fuzzy(0.0, 0.0), 1.0),
                 new WeightedPoint(Point.fuzzy(0.0, 1.0), 2.0),
                 new WeightedPoint(Point.fuzzy(1.0, 0.0), 3.0),

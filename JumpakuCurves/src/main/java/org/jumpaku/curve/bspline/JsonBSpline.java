@@ -22,8 +22,8 @@ public final class JsonBSpline  implements Converter<BSpline> {
     }
 
     @Override
-    public Temporary<BSpline> toTemporary(BSpline bezier) {
-        return new Data(bezier);
+    public Temporary<BSpline> toTemporary(BSpline bSpline) {
+        return new Data(bSpline);
     }
 
     public static final class KnotData{

@@ -15,6 +15,13 @@ public final class Knot implements Comparable<Knot> {
         return new Knot(value, multiple);
     }
 
+    public static Array<Knot> createClampedUniformKnots(Integer degree, Integer numOfControlPoints){
+        int middle = numOfControlPoints + degree + 1 - 2*(degree+1);
+        return Stream.of(Knot.of(0.0, degree+1))
+                .appendAll(Stream.rangeBy(1.0, middle+1.0, 1.0).map(t->Knot.of(t, 1)))
+                .appendAll(Stream.of(Knot.of(middle+1.0, degree+1)))
+                .toArray();
+    }
 
     private final Double value;
 

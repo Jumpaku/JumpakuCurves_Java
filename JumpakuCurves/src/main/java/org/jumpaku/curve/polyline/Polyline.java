@@ -40,7 +40,7 @@ public final class Polyline implements FuzzyCurve, Reversible<Curve>, Restrictab
         }
         Array<Double> params = Array.ofAll(ss);
 
-        return new Polyline(Interval.of(0.0, params.sum().doubleValue()), params, ps);
+        return new Polyline(Interval.of(0.0, params.last()), params, ps);
     }
     
     public static Polyline approximate(Curve curve, Integer n){
@@ -78,8 +78,20 @@ public final class Polyline implements FuzzyCurve, Reversible<Curve>, Restrictab
             throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + s);
         }
 
-        int i = parameters.indexWhere(param -> s < param);
-        return getPoints().get(i-1).divide((s - parameters.get(i-1))/(parameters.get(i) - parameters.get(i-1)), getPoints().get(i));
+        int a = 0;
+        int b = parameters.size()-1;
+        while(b-a > 1){
+            int c = a + FastMath.floorDiv(b - a, 2);
+            if(s < parameters.get(c)){
+                b = c;
+            }
+            else if(parameters.get(c) <= s){
+                a = c;
+            }
+        }
+
+        return getPoints().get(a).divide(
+                (s - parameters.get(a))/(parameters.get(b) - parameters.get(a)), getPoints().get(b));
     }
 
     @Override
@@ -97,6 +109,7 @@ public final class Polyline implements FuzzyCurve, Reversible<Curve>, Restrictab
             double r = (s - parameters.get(i-1))/(parameters.get(i)-parameters.get(i-1));
             evaluated.add(ps.get(i-1).divide(r, ps.get(i)));
         }
+        evaluated.add(ps.last());
 
         return Array.ofAll(evaluated);
     }
