@@ -31,16 +31,14 @@ public final class JsonBezier implements Converter<Bezier>{
 
     public static final class Data implements Converter.Temporary<Bezier>{
         private final JsonPoint.Data[] controlPoints;
-        private final JsonInterval.Data interval;
 
         public Data(Bezier bezier) {
             this.controlPoints = bezier.getControlPoints().map(JsonPoint.Data::new).toJavaArray(JsonPoint.Data.class);
-            this.interval = new JsonInterval.Data(bezier.getDomain());
         }
 
         @Override
         public Bezier newInstance() {
-            return Bezier.create(interval.newInstance(), Array.of(controlPoints).map(JsonPoint.Data::newInstance));
+            return Bezier.create(Array.of(controlPoints).map(JsonPoint.Data::newInstance));
         }
     }
 }

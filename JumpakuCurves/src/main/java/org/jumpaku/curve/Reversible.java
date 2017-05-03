@@ -5,10 +5,13 @@
  */
 package org.jumpaku.curve;
 
+import java.util.function.Function;
+
 /**
- *
+ * this is a function from [a, b].
+ * satisfies this.reverse().apply(t) equals this.apply(b-(t-a))
  * @author jumpaku
  */
-public interface Reversible<C> {
+public interface Reversible<C extends Function> {
     C reverse();
 }

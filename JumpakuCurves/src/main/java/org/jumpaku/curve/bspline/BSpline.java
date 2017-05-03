@@ -23,7 +23,7 @@ import java.util.Objects;
  * </p>
  * @author Jumpaku
  */
-public final class BSpline implements FuzzyCurve, Differentiable, Reversible<BSpline> {
+public final class BSpline implements FuzzyCurve, Differentiable, Reversible<Curve>, Restrictable<Curve> {
 
     public static String toJson(BSpline bSpline){
         return JsonBSpline.CONVERTER.toJson(bSpline);
@@ -159,21 +159,25 @@ public final class BSpline implements FuzzyCurve, Differentiable, Reversible<BSp
 
     @Override
     public BSpline restrict(Double begin, Double end) {
-        return restrict(Interval.of(begin, end));
+        if(!getDomain().includes(Interval.of(begin, end))){
+            throw new IllegalArgumentException("Interval i must be a subset of this domain");
+        }
+
+        return subdivide(end)._1().subdivide(begin)._2();
     }
 
     @Override
     public BSpline restrict(Interval i){
-        if(!getDomain().includes(i)){
-            throw new IllegalArgumentException("Interval i must be a subset of this domain");
-        }
-
-        return create(getDegree(), getControlPoints(), getKnots());
+        return restrict(i.getBegin(), i.getEnd());
     }
 
     @Override
     public BSpline reverse(){
-        return new BSpline(getDomain(), getDegree(), getControlPoints().reverse(), getKnots());
+        Array<Knot> ks = getKnots()
+                .reverse()
+                .map(k -> Knot.of(getKnots().last().getValue() - k.getValue() + getKnots().head().getValue(), k.getMultiplicity()));
+
+        return new BSpline(getDomain(), getDegree(), getControlPoints().reverse(), ks);
     }
 
     @Override

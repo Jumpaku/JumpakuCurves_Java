@@ -21,16 +21,34 @@ import org.jumpaku.curve.Reversible;
  */
 public final class BezierDerivative implements Derivative, Differentiable, Reversible<BezierDerivative> {
 
+    public static BezierDerivative create(Bezier bezier){
+        return new BezierDerivative(bezier);
+    }
+
+    public static BezierDerivative create(Iterable<? extends Vector.Crisp> vs){
+        return create(Bezier.create(Array.ofAll(vs).map(Point.Crisp::new)));
+    }
+
+    public static String toJson(BezierDerivative db){
+        return JsonBezierDerivative.CONVERTER.toJson(db);
+    }
+
+    public static Option<BezierDerivative> fromJson(String json){
+        return JsonBezierDerivative.CONVERTER.fromJson(json);
+    }
+
     private final Bezier bezier;
 
     public BezierDerivative(Bezier bezier){
         this.bezier = bezier;
     }
 
+    @Override
     public Interval getDomain() {
         return bezier.getDomain();
     }
 
+    @Override
     public Vector.Crisp evaluate(Double t) {
         return bezier.evaluate(t).toVector().toCrisp();
     }
@@ -46,9 +64,19 @@ public final class BezierDerivative implements Derivative, Differentiable, Rever
     }
 
     @Override
+    public BezierDerivative restrict(Double begin, Double end){
+        return create(bezier.restrict(begin, end));
+    }
+
+    @Override
     public BezierDerivative reverse() {
                 return create(bezier.reverse());
             }
+
+    @Override
+    public String toString() {
+        return JsonBezierDerivative.CONVERTER.toJson(this);
+    }
 
     public Array<Vector> getControlVectors() {
         return bezier.getControlPoints().map(Point::toVector);
@@ -70,30 +98,7 @@ public final class BezierDerivative implements Derivative, Differentiable, Rever
         return bezier.subdivide(t).map(BezierDerivative::create, BezierDerivative::create);
     }
 
-    @Override
-    public String toString() {
-                return JsonBezierDerivative.CONVERTER.toJson(this);
-            }
-
-
-    public static BezierDerivative create(Bezier bezier){
-        return new BezierDerivative(bezier);
-    }
-
-    public static BezierDerivative create(Interval domain, Iterable<? extends Vector.Crisp> vs){
-        return create(Bezier.create(domain, Array.ofAll(vs).map(Point.Crisp::new)));
-    }
-    
-    public static String toJson(BezierDerivative db){
-        return JsonBezierDerivative.CONVERTER.toJson(db);
-    }
-    
-    public static Option<BezierDerivative> fromJson(String json){
-        return JsonBezierDerivative.CONVERTER.fromJson(json);
-    }
-
-    @Override
-    public BezierDerivative restrict(Double begin, Double end){
-        return restrict(Interval.of(begin, end));
+    public Bezier toBezier() {
+        return bezier;
     }
 }

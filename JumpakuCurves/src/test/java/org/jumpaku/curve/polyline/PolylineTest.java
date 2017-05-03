@@ -103,9 +103,9 @@ public class PolylineTest {
      */
     @Test
     public void testEvaluateAllByArcLengthParams() {
-        System.out.println("evaluateAllByArcLengthParams");
+        System.out.println("evaluateAllArcLength");
         Polyline instance = Polyline.create(Point.fuzzy(-1.0, 1.0, 2.0), Point.fuzzy(1.0, 1.0, 1.0), Point.fuzzy(1.0, -3.0, 3.0), Point.fuzzy(1.0, -3.0, 1.5, 2.0));
-        Array<? extends Point> result = instance.evaluateAllByArcLengthParams(6);
+        Array<? extends Point> result = instance.evaluateAllArcLength(6);
         assertThat(result.get(0), is(pointOf(-1.0, 1.0, 0.0, 2.0)));
         assertThat(result.get(1), is(pointOf(0.5, 1.0, 0.0, 1.25)));
         assertThat(result.get(2), is(pointOf(1.0, 0.0, 0.0, 1.5)));

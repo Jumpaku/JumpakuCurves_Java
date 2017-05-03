@@ -5,12 +5,14 @@
  */
 package org.jumpaku.curve;
 
+import java.util.function.Function;
+
 /**
  *
  * @author Jumpaku
  * @param <C>
  */
-public interface Restrictable<C> {
+public interface Restrictable<C extends Function> {
     
     C restrict(Interval i);
     

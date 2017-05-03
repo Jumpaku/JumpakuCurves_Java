@@ -17,7 +17,7 @@ import org.jumpaku.curve.*;
  * @author jumpaku
  */
 
-public final class QuadraticByRepresentPoints implements FuzzyCurve, Differentiable, Reversible<QuadraticByRepresentPoints> {
+public final class QuadraticByRepresentPoints implements FuzzyCurve, Differentiable, Reversible<Curve> {
 
     public static Array<WeightedPoint> createCrispControlPoints(Double weight, Iterable<Point> representPoint){
         if(!Double.isFinite(1.0/weight)) {
@@ -38,10 +38,9 @@ public final class QuadraticByRepresentPoints implements FuzzyCurve, Differentia
 
     private final Array<Point> representPoints;
 
-    public QuadraticByRepresentPoints(Interval domain, Double weight,
+    public QuadraticByRepresentPoints(Double weight,
                                       Point representPoint0, Point representPoint1, Point representPoint2) {
         this.crispRationalBezier = RationalBezier.create(
-                domain,
                 createCrispControlPoints(
                     weight,
                     Stream.of(representPoint0, representPoint1, representPoint2)));
@@ -76,22 +75,9 @@ public final class QuadraticByRepresentPoints implements FuzzyCurve, Differentia
         return crispRationalBezier.differentiate();
     }
 
-    @Override public QuadraticByRepresentPoints restrict(Interval i) {
-
-        return new QuadraticByRepresentPoints(i, getWeight(),
-                getRepresentPoints().get(0),
-                getRepresentPoints().get(1),
-                getRepresentPoints().get(2));
-    }
-
-    @Override
-    public QuadraticByRepresentPoints restrict(Double begin, Double end) {
-        return restrict(Interval.of(begin, end));
-    }
-
     @Override
     public QuadraticByRepresentPoints reverse() {
-        return new QuadraticByRepresentPoints(Interval.of(1-getDomain().getEnd(), 1-getDomain().getBegin()),
+        return new QuadraticByRepresentPoints(
                 getWeight(),
                 getRepresentPoints().get(2),
                 getRepresentPoints().get(1),
@@ -118,7 +104,7 @@ public final class QuadraticByRepresentPoints implements FuzzyCurve, Differentia
 
     public QuadraticByRepresentPoints complement() {
         return new QuadraticByRepresentPoints(
-                getDomain(), getWeight()*-1,
+                getWeight()*-1,
                 getRepresentPoints().get(0),
                 getRepresentPoints().get(1),
                 getRepresentPoints().get(2));

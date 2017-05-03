@@ -16,8 +16,8 @@ public class BSplineDerivative implements Derivative, Differentiable, Reversible
         return new BSplineDerivative(bSpline);
     }
 
-    public static BSplineDerivative create(Interval domain, Integer degree, Iterable<? extends Vector.Crisp> controlVectors, Iterable<Knot> knots){
-        return create(BSpline.create(domain, degree, Array.ofAll(controlVectors).map(Point.Crisp::new), knots));
+    public static BSplineDerivative create(Integer degree, Iterable<? extends Vector.Crisp> controlVectors, Iterable<Knot> knots){
+        return create(BSpline.create(degree, Array.ofAll(controlVectors).map(Point.Crisp::new), knots));
     }
 
     private final BSpline bSpline;

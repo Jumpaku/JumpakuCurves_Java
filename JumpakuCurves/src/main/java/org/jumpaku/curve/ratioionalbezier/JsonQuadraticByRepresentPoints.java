@@ -16,31 +16,33 @@ import org.jumpaku.json.Converter;
  */
 public class JsonQuadraticByRepresentPoints implements Converter<QuadraticByRepresentPoints>{
 
-    @Override public Type getTemporaryType() {
+    public static final JsonQuadraticByRepresentPoints CONVERTER = new JsonQuadraticByRepresentPoints();
+
+    @Override
+    public Type getTemporaryType() {
         return Data.class;
     }
 
-    @Override public Temporary<QuadraticByRepresentPoints> toTemporary(QuadraticByRepresentPoints bezier) {
+    @Override
+    public Temporary<QuadraticByRepresentPoints> toTemporary(QuadraticByRepresentPoints bezier) {
         return new Data(bezier);
     }
     
     public static final class Data implements Converter.Temporary<QuadraticByRepresentPoints>{
         private final JsonPoint.Data[] representPoints;
         private final Double weight;
-        private final JsonInterval.Data interval;
 
         public Data(QuadraticByRepresentPoints bezier) {
             this.representPoints = bezier.getRepresentPoints()
                     .map(JsonPoint.Data::new).toJavaArray(JsonPoint.Data.class);
             this.weight = bezier.getWeight();
-            this.interval = new JsonInterval.Data(bezier.getDomain());
         }
 
-        @Override public QuadraticByRepresentPoints newInstance() {
-            return new QuadraticByRepresentPoints(interval.newInstance(), weight,
+        @Override
+        public QuadraticByRepresentPoints newInstance() {
+            return new QuadraticByRepresentPoints(
+                    weight,
                     representPoints[0].newInstance(), representPoints[1].newInstance(), representPoints[2].newInstance());
         }
     }
-    
-    public static final JsonQuadraticByRepresentPoints CONVERTER = new JsonQuadraticByRepresentPoints();
 }
