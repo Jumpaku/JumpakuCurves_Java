@@ -17,11 +17,15 @@ import org.jumpaku.json.Converter;
  */
 public final class JsonBezier implements Converter<Bezier>{
 
-    @Override public Type getTemporaryType() {
+    public static final JsonBezier CONVERTER = new JsonBezier();
+
+    @Override
+    public Type getTemporaryType() {
         return Data.class;
     }
 
-    @Override public Temporary<Bezier> toTemporary(Bezier bezier) {
+    @Override
+    public Temporary<Bezier> toTemporary(Bezier bezier) {
         return new Data(bezier);
     }
 
@@ -34,10 +38,9 @@ public final class JsonBezier implements Converter<Bezier>{
             this.interval = new JsonInterval.Data(bezier.getDomain());
         }
 
-        @Override public Bezier newInstance() {
+        @Override
+        public Bezier newInstance() {
             return Bezier.create(interval.newInstance(), Array.of(controlPoints).map(JsonPoint.Data::newInstance));
         }
     }
-    
-    public static final JsonBezier CONVERTER = new JsonBezier();
 }

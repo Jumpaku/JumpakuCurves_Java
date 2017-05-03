@@ -20,11 +20,13 @@ public final class JsonBezierDerivative implements Converter<BezierDerivative>{
 
     public static final Converter<BezierDerivative> CONVERTER = new JsonBezierDerivative();
     
-    @Override public Type getTemporaryType() {
+    @Override
+    public Type getTemporaryType() {
         return JsonBezierDerivative.Data.class;
     }
 
-    @Override public Temporary<BezierDerivative> toTemporary(BezierDerivative d) {
+    @Override
+    public Temporary<BezierDerivative> toTemporary(BezierDerivative d) {
         return new Data(d);
     }
     
@@ -39,7 +41,8 @@ public final class JsonBezierDerivative implements Converter<BezierDerivative>{
             this.interval = new JsonInterval.Data(db.getDomain());
         }
         
-        @Override public BezierDerivative newInstance() {
+        @Override
+        public BezierDerivative newInstance() {
             return BezierDerivative.create(interval.newInstance(), 
                     Array.of(controlVectors)
                             .map(JsonVector.Data::newInstance)
