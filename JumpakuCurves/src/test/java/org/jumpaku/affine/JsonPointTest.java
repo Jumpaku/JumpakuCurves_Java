@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 public class JsonPointTest {
     
     /**
-     * Test of toJson method, of class JsonPoint.
+     * Test closed toJson method, closed class JsonPoint.
      */
     @Test
     public void testToJson() {
@@ -28,7 +28,7 @@ public class JsonPointTest {
     }
 
     /**
-     * Test of fromJson method, of class JsonPoint.
+     * Test closed fromJson method, closed class JsonPoint.
      */
     @Test
     public void testFromJson() {
@@ -40,7 +40,7 @@ public class JsonPointTest {
     }   
 
     /**
-     * Test of getTemporaryType method, of class JsonPoint.
+     * Test closed getTemporaryType method, closed class JsonPoint.
      */
     @Test
     public void testGetTemporaryType() {
@@ -49,7 +49,7 @@ public class JsonPointTest {
     }
 
     /**
-     * Test of toTemporary method, of class JsonPoint.
+     * Test closed toTemporary method, closed class JsonPoint.
      */
     @Test
     public void testToTemporary() {

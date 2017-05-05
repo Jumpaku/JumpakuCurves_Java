@@ -25,7 +25,7 @@ public class BezierBernstein extends AbstractBezier {
     @Override
     public final Point evaluate(Double t) {
         if(!getDomain().contains(t))
-            throw new IllegalArgumentException("Parameter t out of domain [0,1]");
+            throw new IllegalArgumentException("Parameter t out closed domain [0,1]");
         
         Array<Point> cps = getControlPoints();
         Integer degree = getDegree();

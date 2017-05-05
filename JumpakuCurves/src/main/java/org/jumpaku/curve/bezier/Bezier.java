@@ -13,10 +13,7 @@ import javaslang.collection.Stream;
 import javaslang.control.Option;
 import org.jumpaku.affine.Point;
 import org.jumpaku.affine.Vector;
-import org.jumpaku.curve.Interval;
-import org.jumpaku.curve.Differentiable;
-import org.jumpaku.curve.FuzzyCurve;
-import org.jumpaku.curve.Reversible;
+import org.jumpaku.curve.*;
 
 import java.util.Objects;
 
@@ -24,9 +21,9 @@ import java.util.Objects;
  *
  * @author Jumpaku
  */
-public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Bezier> {
+public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Curve>, Restrictable<Curve> {
     
-    public static Bezier create(Interval domain, Iterable<? extends org.jumpaku.affine.Point> controlPoints){
+    public static Bezier create(Iterable<? extends Point> controlPoints){
         Array<? extends Point> cps = Stream.ofAll(controlPoints).toArray();
         
         if(cps.isEmpty()) {
@@ -37,19 +34,11 @@ public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Bezi
             throw new IllegalArgumentException("control points contain null");
         }
      
-        return new Bezier(cps, domain);
+        return new Bezier(cps);
     }
     
-    public static Bezier create(Interval domain, Point... controlPoints){
-        return create(domain, Array.of(controlPoints));
-    }
-    
-    public static Bezier create(Iterable<? extends Point> controlPoints){
-        return create(Interval.ZERO_ONE, controlPoints);
-    }
-
     public static Bezier create(Point... controlPoints){
-        return create(Interval.ZERO_ONE, controlPoints);
+        return create(Stream.of(controlPoints));
     }
 
     public static String toJson(Bezier bezier){
@@ -66,11 +55,8 @@ public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Bezi
 
     private final Array<Point> controlPoints;
 
-    private final Interval domain;
-
-    public Bezier(Iterable<? extends Point> controlPoints, Interval domain) {
+    public Bezier(Iterable<? extends Point> controlPoints) {
         this.controlPoints = Array.ofAll(controlPoints);
-        this.domain = domain;
     }
 
 
@@ -94,34 +80,33 @@ public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Bezi
 
     @Override
     public Interval getDomain() {
-        return domain;
+        return Interval.ZERO_ONE;
     }
 
     @Override
     public BezierDerivative differentiate() {
-        Array<? extends Point.Crisp> cp = getControlPoints().map(Point::toCrisp);
+        Array<Point.Crisp> cp = getControlPoints().map(Point::toCrisp);
         Array<Vector.Crisp> vs = cp.zipWith(cp.tail(), (pre, post) -> post.diff(pre).scale(getDegree().doubleValue()));
-        return BezierDerivative.create(getDomain(), vs);
+        return BezierDerivative.create(vs);
     }
 
     @Override
     public Bezier restrict(Interval i) {
-        if(!getDomain().includes(i)) {
-            throw new IllegalArgumentException("Interval i must be a subset of this domain");
-        }
-
-        return Bezier.create(i, getControlPoints());
+        return restrict(i.getBegin(), i.getEnd());
     }
 
     @Override
     public Bezier restrict(Double begin, Double end){
-        return restrict(Interval.of(begin, end));
+        if(!getDomain().includes(Interval.closed(begin, end))) {
+            throw new IllegalArgumentException("Interval i must be a subset of this domain");
+        }
+
+        return subdivide(end)._1().subdivide(begin/end)._2();
     }
 
     @Override
     public Bezier reverse() {
-        return Bezier.create(Interval.of(1-getDomain().getEnd(), 1-getDomain().getBegin()),
-                getControlPoints().reverse());
+        return Bezier.create(getControlPoints().reverse());
     }
 
     public Array<Point> getControlPoints() {
@@ -129,7 +114,7 @@ public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Bezi
     }
 
     public Bezier elevate(){
-        return Bezier.create(getDomain(), createElevatedControlPoints());
+        return Bezier.create(createElevatedControlPoints());
     }
 
     private Array<Point> createElevatedControlPoints() {
@@ -149,7 +134,7 @@ public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Bezi
             throw new IllegalStateException("degree is too small");
         }
 
-        return Bezier.create(getDomain(), createReducedControlPoints());
+        return Bezier.create(createReducedControlPoints());
     }
 
     private Array<Point> createReducedControlPoints() {
@@ -210,8 +195,7 @@ public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Bezi
         }
 
         return createDividedControlPointsArray(t)
-                .map(cp -> Bezier.create(Interval.of(getDomain().getBegin()/t, 1.0), cp),
-                        cp -> Bezier.create(Interval.of(0.0, (getDomain().getEnd()-t)/(1-t)), cp));
+                .map(Bezier::create, Bezier::create);
     }
 
     private Tuple2<Array<Point>, Array<Point>> createDividedControlPointsArray(Double t) {

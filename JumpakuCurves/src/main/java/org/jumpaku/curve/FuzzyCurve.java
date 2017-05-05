@@ -18,11 +18,12 @@ public interface FuzzyCurve extends Curve{
 
     Integer DEFAULT_FUZZY_MATCHING_POINTS = 30;
     
-    @Override Point evaluate(Double t);
+    @Override
+    Point evaluate(Double t);
     
-    default Array<Point> evaluateAllByArcLengthParams(Integer n){
-        return Polyline.approximate(this, n, Polyline.DEFAULT_ABSOLUTE_ACCURACY)
-                .evaluateAllByArcLengthParams(n);
+    default Array<Point> evaluateAllArcLength(Integer n){
+        return Polyline.approximate(this, n)
+                .evaluateAllArcLength(n);
     }
     
     default Grade possibility(FuzzyCurve other){
@@ -30,8 +31,8 @@ public interface FuzzyCurve extends Curve{
     }
 
     default Grade possibility(FuzzyCurve other, Integer fmps){
-        return evaluateAllByArcLengthParams(fmps)
-                .zipWith(other.evaluateAllByArcLengthParams(fmps), Point::possibility)
+        return evaluateAllArcLength(fmps)
+                .zipWith(other.evaluateAllArcLength(fmps), Point::possibility)
                 .fold(Grade.TRUE, (a, b) -> a.and(b));
     }
     
@@ -40,8 +41,8 @@ public interface FuzzyCurve extends Curve{
     }
     
     default Grade necessity(FuzzyCurve other, Integer fmps){
-        return evaluateAllByArcLengthParams(fmps)
-                .zipWith(other.evaluateAllByArcLengthParams(fmps), Point::necessity)
+        return evaluateAllArcLength(fmps)
+                .zipWith(other.evaluateAllArcLength(fmps), Point::necessity)
                 .fold(Grade.TRUE, (a, b) -> a.and(b));
     }
 }

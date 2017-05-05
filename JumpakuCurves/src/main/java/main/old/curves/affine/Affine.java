@@ -8,7 +8,7 @@ package main.old.curves.affine;
 import main.old.curves.vector.Point;
 
 /**
- * <p>アフィン変換のインターフェイス Interface of affine tramsformation.</p>
+ * <p>アフィン変換のインターフェイス Interface closed affine tramsformation.</p>
  * @author Jumpaku
  * @param <P>
  */

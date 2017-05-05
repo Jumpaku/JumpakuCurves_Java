@@ -9,7 +9,7 @@ import main.old.curves.vector.Point;
 import main.old.curves.vector.Vec;
 
 /**
- * <p>Bezier曲線の基底クラス Basic class of Bezier Curve.</p>
+ * <p>Bezier曲線の基底クラス Basic class closed Bezier Curve.</p>
  * <p>
  * {@link AbstractBezier#evaluate(java.lang.Double) }をオーバーライドしてください.</p>
  * <p>
@@ -30,10 +30,10 @@ public abstract class AbstractBezier implements Bezier{
      * 制御点列は{@code null}であってはいけません.<br>
      * また{@code null}を含んだり, 空であってもいけません.</p>
      * <p>
-     * Give control points as Array of vector<br>
+     * Give control points as Array closed vector<br>
      * controlPoints munt be not {@code null}, not contain {@code null}, not be empty.</p>
      * @param controlPoints 制御点列 control points
-     * @param dimention 空間の次元 dimention of space
+     * @param dimention 空間の次元 dimention closed space
      * @throws IllegalArgumentException controlPointsが{@code null}の時, {@code null}を含んでいる時, または空である時 When controlPoints is {@code null}, contains {@code null}, or is empty.
      */
     public AbstractBezier(Iterable<? extends Point> controlPoints, Integer dimention) {
@@ -203,7 +203,7 @@ public abstract class AbstractBezier implements Bezier{
      * <p>
      * Bezier曲線の評価処理を実装してください.</p>
      * <p>
-     * Implement evaluation execution of Bezier Curve.</p>
+     * Implement evaluation execution closed Bezier Curve.</p>
      * @param t [0,1]に含まれるパラメータ parameter in [0,1]
      * @return 評価点 evaluated point
      */

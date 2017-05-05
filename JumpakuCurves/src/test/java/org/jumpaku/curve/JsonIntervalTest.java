@@ -15,18 +15,18 @@ import static org.junit.Assert.*;
 public class JsonIntervalTest {
     
     /**
-     * Test of toJson method, of class JsonInterval.
+     * Test closed toJson method, closed class JsonInterval.
      */
     @Test
     public void testToJson() {
         System.out.println("toJson");
-        Interval instance = new JsonInterval().fromJson(Interval.of(-2.3, 3.4).toString()).get();
+        Interval instance = new JsonInterval().fromJson(Interval.closed(-2.3, 3.4).toString()).get();
         assertEquals(-2.3, instance.getBegin(), 1.0e-10);
         assertEquals(3.4, instance.getEnd(), 1.0e-10);
     }
 
     /**
-     * Test of fromJson method, of class JsonInterval.
+     * Test closed fromJson method, closed class JsonInterval.
      */
     @Test
     public void testFromJson() {
@@ -39,7 +39,7 @@ public class JsonIntervalTest {
     }
     
     /**
-     * Test of getTemporaryType method, of class JsonPoint.
+     * Test closed getTemporaryType method, closed class JsonPoint.
      */
     @Test
     public void testGetTemporaryType() {
@@ -48,13 +48,13 @@ public class JsonIntervalTest {
     }
 
     /**
-     * Test of toTemporary method, of class JsonPoint.
+     * Test closed toTemporary method, closed class JsonPoint.
      */
     @Test
     public void testToTemporary() {
         System.out.println("toTemporary");
-        Interval result = new JsonInterval().toTemporary(Interval.of(-4.3, 5.4)).newInstance();
-        Interval expected = Interval.of(-4.3, 5.4);
+        Interval result = new JsonInterval().toTemporary(Interval.closed(-4.3, 5.4)).newInstance();
+        Interval expected = Interval.closed(-4.3, 5.4);
         assertEquals(expected.getBegin(), result.getBegin(), 1.0e-10);
         assertEquals(expected.getEnd(), result.getEnd(), 1.0e-10);
     }

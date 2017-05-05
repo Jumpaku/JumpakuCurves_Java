@@ -6,7 +6,7 @@
 package main.old.curves.domain;
 
 /**
- * <p>関数の定義域を表します Represents domain of function.</p>
+ * <p>関数の定義域を表します Represents domain closed function.</p>
  * @author Jumpaku
  */
 @FunctionalInterface

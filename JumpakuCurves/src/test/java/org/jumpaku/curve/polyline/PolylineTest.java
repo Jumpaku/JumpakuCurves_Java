@@ -33,7 +33,7 @@ public class PolylineTest {
         assertThat(points.get(2), is(pointOf(instance.getPoints().get(2))));
         assertEquals(3, instance.getPoints().size());
         assertEquals(0.0, instance.getDomain().getBegin(), 1.0e-10);
-        assertEquals(Math.pow(56, 0.5)+Math.pow(29, 0.5), instance.getDomain().getEnd(), 1.0e-10);
+        assertEquals(Math.sqrt(56)+Math.sqrt(29), instance.getDomain().getEnd(), 1.0e-10);
     }
 
     /**
@@ -50,23 +50,6 @@ public class PolylineTest {
         assertEquals(3, instance.getPoints().size());
         assertEquals(0.0, instance.getDomain().getBegin(), 1.0e-10);
         assertEquals(Math.pow(56, 0.5)+Math.pow(29, 0.5), instance.getDomain().getEnd(), 1.0e-10);
-    }
-
-    /**
-     * Test create toLines method, create class Polyline.
-     */
-    @Test
-    public void testToLines() {
-        System.out.println("toLines");
-        Curve curve = Polyline.create(Point.crisp(-1.0), Point.crisp(-1.0, 1.0), Point.crisp(1.0, 1.0), Point.crisp(1.0));
-        Array<Point> expected = Array.of(Point.crisp(-1.0), Point.crisp(-1.0, 1.0), Point.crisp(0.0, 1.0), Point.crisp(1.0, 1.0), Point.crisp(1.0));
-        LinkedList<Point> result = Polyline.toLines(curve, Point.crisp(-1.0), 0.0, Point.crisp(1.0), 4.0, 1.0e-10);
-        assertThat(result.get(0), is(pointOf(expected.get(0))));
-        assertThat(result.get(1), is(pointOf(expected.get(1))));
-        assertThat(result.get(2), is(pointOf(expected.get(2))));
-        assertThat(result.get(3), is(pointOf(expected.get(3))));
-        assertThat(result.get(4), is(pointOf(expected.get(4))));
-        assertEquals(result.size(), expected.size());
     }
 
     /**
@@ -92,10 +75,10 @@ public class PolylineTest {
         System.out.println("evaluate");
         Polyline instance = Polyline.create(Point.fuzzy(1.0, 1.0, 2.0), Point.fuzzy(-1.0, -1.0, 1.0), Point.fuzzy(-1.0, -1.0, 1.0, 0.0));
         assertThat(instance.evaluate(0.0), is(pointOf(1.0, 1.0, 0.0, 2.0)));
-        assertThat(instance.evaluate(Math.pow(2, 0.5)), is(pointOf(0.0, 0.0, 0.0, 1.5)));
-        assertThat(instance.evaluate(2*Math.pow(2, 0.5)), is(pointOf(-1.0, -1.0, 0.0, 1.0)));
-        assertThat(instance.evaluate(2*Math.pow(2, 0.5)+0.5), is(pointOf(-1.0, -1.0, 0.5, 0.5)));
-        assertThat(instance.evaluate(2*Math.pow(2, 0.5)+1), is(pointOf(-1.0, -1.0, 1.0, 0.0)));
+        assertThat(instance.evaluate(Math.sqrt(2)), is(pointOf(0.0, 0.0, 0.0, 1.5)));
+        assertThat(instance.evaluate(2*Math.sqrt(2)), is(pointOf(-1.0, -1.0, 0.0, 1.0)));
+        assertThat(instance.evaluate(2*Math.sqrt(2)+0.5), is(pointOf(-1.0, -1.0, 0.5, 0.5)));
+        assertThat(instance.evaluate(2*Math.sqrt(2)+1), is(pointOf(-1.0, -1.0, 1.0, 0.0)));
     }
     
     /**
@@ -103,9 +86,9 @@ public class PolylineTest {
      */
     @Test
     public void testEvaluateAllByArcLengthParams() {
-        System.out.println("evaluateAllByArcLengthParams");
+        System.out.println("evaluateAllArcLength");
         Polyline instance = Polyline.create(Point.fuzzy(-1.0, 1.0, 2.0), Point.fuzzy(1.0, 1.0, 1.0), Point.fuzzy(1.0, -3.0, 3.0), Point.fuzzy(1.0, -3.0, 1.5, 2.0));
-        Array<? extends Point> result = instance.evaluateAllByArcLengthParams(6);
+        Array<? extends Point> result = instance.evaluateAllArcLength(6);
         assertThat(result.get(0), is(pointOf(-1.0, 1.0, 0.0, 2.0)));
         assertThat(result.get(1), is(pointOf(0.5, 1.0, 0.0, 1.25)));
         assertThat(result.get(2), is(pointOf(1.0, 0.0, 0.0, 1.5)));
@@ -115,7 +98,7 @@ public class PolylineTest {
     }
 
     /**
-     * Test of toJson method, of class Polyline.
+     * Test closed toJson method, closed class Polyline.
      */
     @Test
     public void testToJson() {
@@ -126,7 +109,7 @@ public class PolylineTest {
     }
 
     /**
-     * Test of toJson method, of class Polyline.
+     * Test closed toJson method, closed class Polyline.
      */
     @Test
     public void testToString() {
@@ -137,7 +120,7 @@ public class PolylineTest {
     }
 
     /**
-     * Test of fromJson method, of class Polyline.
+     * Test closed fromJson method, closed class Polyline.
      */
     @Test
     public void testFromJson() {

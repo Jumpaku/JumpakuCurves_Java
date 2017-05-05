@@ -8,17 +8,14 @@ package org.jumpaku.curve.nurbs;
 import javaslang.Tuple2;
 import javaslang.collection.Array;
 import org.jumpaku.affine.Point;
-import org.jumpaku.curve.Derivative;
-import org.jumpaku.curve.Differentiable;
-import org.jumpaku.curve.FuzzyCurve;
-import org.jumpaku.curve.Interval;
+import org.jumpaku.curve.*;
 import org.jumpaku.curve.ratioionalbezier.RationalBezier;
 
 /**
  *
  * @author Jumpaku
  */
-public interface Nurbs extends FuzzyCurve, Differentiable {
+public interface Nurbs extends FuzzyCurve, Differentiable, Reversible<Curve>, Restrictable<Curve> {
         
     @Override Interval getDomain();
     

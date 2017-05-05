@@ -37,7 +37,7 @@ public final class JsonInterval implements Converter<Interval>{
 
         @Override
         public Interval newInstance() {
-            return Interval.of(begin, end);
+            return Interval.closed(begin, end);
         }
     }
 }

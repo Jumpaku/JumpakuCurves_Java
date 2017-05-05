@@ -30,7 +30,7 @@ public class JsonWeightedPointTest {
     }
 
     /**
-     * Test of getTemporaryType method, of class JsonWeightedPoint.
+     * Test closed getTemporaryType method, closed class JsonWeightedPoint.
      */
     @Test
     public void testGetTemporaryType() {
@@ -39,7 +39,7 @@ public class JsonWeightedPointTest {
     }
 
     /**
-     * Test of toTemporary method, of class JsonWeightedPoint.
+     * Test closed toTemporary method, closed class JsonWeightedPoint.
      */
     @Test
     public void testToTemporary() {

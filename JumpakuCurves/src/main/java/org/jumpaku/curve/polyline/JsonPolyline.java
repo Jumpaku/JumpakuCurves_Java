@@ -16,11 +16,15 @@ import org.jumpaku.json.Converter;
  */
 public final class JsonPolyline implements Converter<Polyline>{
 
-    @Override public Type getTemporaryType() {
+    public static final JsonPolyline CONVERTER = new JsonPolyline();
+
+    @Override
+    public Type getTemporaryType() {
         return Data.class;
     }
 
-    @Override public Temporary<Polyline> toTemporary(Polyline polyline) {
+    @Override
+    public Temporary<Polyline> toTemporary(Polyline polyline) {
         return new Data(polyline);
     }
 
@@ -31,11 +35,10 @@ public final class JsonPolyline implements Converter<Polyline>{
             this.points = polyline.getPoints().map(JsonPoint.Data::new).toJavaArray(JsonPoint.Data.class);
         }
 
-        @Override public Polyline newInstance() {
+        @Override
+        public Polyline newInstance() {
             return Polyline.create(Array.of(points).map(JsonPoint.Data::newInstance));
         }
     }
-    
-    public static final JsonPolyline CONVERTER = new JsonPolyline();
 }
 

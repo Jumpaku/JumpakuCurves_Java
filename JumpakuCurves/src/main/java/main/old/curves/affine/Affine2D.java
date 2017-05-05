@@ -10,7 +10,7 @@ import main.old.curves.vector.Vec;
 import main.old.curves.vector.Vec2;
 
 /**
- * <p>2次のアフィン変換のインターフェイスを定義します Defines interface of affine transformation in 2D plane.</p>
+ * <p>2次のアフィン変換のインターフェイスを定義します Defines interface closed affine transformation in 2D plane.</p>
  * @author Jumpaku
  */
 public interface Affine2D extends Affine<Point2D>{
@@ -23,7 +23,7 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates scaling transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Center of scaling is the origin, magnification rates for x-axis and y-axis are given.</p>
+     * Center closed scaling is the origin, magnification rates for x-axis and y-axis are given.</p>
      * @param x x-軸方向の拡大率(0であってはいけない) magnification rate for x-axis(not 0)
      * @param y y-軸方向の拡大率(0であってはいけない) magnification rate for y-axis(not 0)
      * @return 拡大縮小変換を追加したアフィン変換 Affine concatenated Scaling
@@ -39,7 +39,7 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates scaling transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Center of scaling is the origin, magnification rate for x-axis and y-axis are the same value which is specified by the argument.</p>
+     * Center closed scaling is the origin, magnification rate for x-axis and y-axis are the same value which is specified by the argument.</p>
      * @param scale 拡大率(0であってはいけない) magnification rate (not 0)
      * @return 拡大縮小変換を追加したアフィン変換 Affine concatenated Scaling
      */
@@ -56,8 +56,8 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates scaling transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Center of scaling is specified, magnification rates for x-axis and y-axis are given.</p>
-     * @param center 拡大縮小の中心 center of Scaling
+     * Center closed scaling is specified, magnification rates for x-axis and y-axis are given.</p>
+     * @param center 拡大縮小の中心 center closed Scaling
      * @param x x-軸方向の拡大率(0であってはいけない) scaling rate for x-axis(not 0)
      * @param y y-軸方向の拡大率(0であってはいけない) scaling rate for y-axis(not 0)
      * @return 拡大縮小変換を追加したアフィン変換 Affine concatenated Scaling
@@ -75,8 +75,8 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates scaling transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Center of scaling is the origin, magnification rates for x-axis and y-axis are given.</p>
-     * @param center 拡大縮小の中心 center of scaling
+     * Center closed scaling is the origin, magnification rates for x-axis and y-axis are given.</p>
+     * @param center 拡大縮小の中心 center closed scaling
      * @param scale 拡大率(0であってはいけない) magnification rate
      * @return 拡大縮小変換を追加したアフィン変換 Affine concatenated Scaling
      */
@@ -94,7 +94,7 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates shearing transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Center of squeezeing is origin.<br>
+     * Center closed squeezeing is origin.<br>
      * Let k be given parameter, squeezing scales k times for x-axis and 1/k times for y-axis.</p>
      * @param k パラメータ parameter
      * @return スクイーズ変換を追加したアフィン変換 Affine concatenated squeezing
@@ -112,7 +112,7 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates shearing transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Center of squeezeing is specified.<br>
+     * Center closed squeezeing is specified.<br>
      * Let k be given parameter, squeezing scales k times for x-axis and 1/k times for y-axis.</p>
      * @param center 中心 center
      * @param k パラメータ parameter
@@ -148,7 +148,7 @@ public interface Affine2D extends Affine<Point2D>{
      * This method concatenates refrection transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
      * This refrection is point-symmetrical transformation about specified center.</p>
-     * @param center 点対称の中心 center of refrection
+     * @param center 点対称の中心 center closed refrection
      * @return 鏡映変換を追加したアフィン変換 Affine concatenated refrection
      */
     default Affine2D refrectAt(Point2D center){
@@ -196,7 +196,7 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates rotation transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Axis of rotation is the origin, angle is given.</p>
+     * Axis closed rotation is the origin, angle is given.</p>
      * @param radian 角度 angle
      * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
      */
@@ -212,8 +212,8 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates rotation transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Axis of rotation and angle are given.</p>
-     * @param axis 回転軸 point of axis
+     * Axis closed rotation and angle are given.</p>
+     * @param axis 回転軸 point closed axis
      * @param radian 回転角 angle
      * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
      */
@@ -231,7 +231,7 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates rotation transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Axis of rotation is the origin, angle of rotation is between first vector and second vector.</p>
+     * Axis closed rotation is the origin, angle closed rotation is between first vector and second vector.</p>
      * @param from 1つ目のベクトル first vector
      * @param to 2つ目のベクトル second vector
      * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
@@ -249,7 +249,7 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates rotation transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Axis of rotation is specified, angle of rotation is between first vector and second vector.</p>
+     * Axis closed rotation is specified, angle closed rotation is between first vector and second vector.</p>
      * @param axis 回転軸 axis
      * @param from first vector
      * @param to second vector
@@ -319,7 +319,7 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates shearing transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Pivot of shearing is the origin, parameters for x-axis and y-axis are given.</p>
+     * Pivot closed shearing is the origin, parameters for x-axis and y-axis are given.</p>
      * @param x x-軸方向の剪断パラメータ parameter for x-axis
      * @param y y-軸方向の剪断パラメータ parameter for y-axis
      * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
@@ -335,7 +335,7 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates shearing transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Pivot of shearing is the origin, parameter for x-axis is given.</p>
+     * Pivot closed shearing is the origin, parameter for x-axis is given.</p>
      * @param x x軸方向のパラメータ parameter for x-axis
      * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
      */
@@ -352,7 +352,7 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates shearing transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Pivot of shearing is the origin, parameter for y-axis is given.</p>
+     * Pivot closed shearing is the origin, parameter for y-axis is given.</p>
      * @param y y軸方向のパラメータ parameter for y-axis
      * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
      */
@@ -369,7 +369,7 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates shearing transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Pivot of shearing and parameters for x-axis and y-axis are given.</p>
+     * Pivot closed shearing and parameters for x-axis and y-axis are given.</p>
      * @param pivot
      * @param x x軸方向のパラメータ parameter for x-axis
      * @param y y軸方向のパラメータ parameter for y-axis
@@ -388,8 +388,8 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates shearing transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Pivot of shearing and parameter for x-axis are given.</p>
-     * @param pivot 剪断変換(シャーリング)の軸 pivot of shearing
+     * Pivot closed shearing and parameter for x-axis are given.</p>
+     * @param pivot 剪断変換(シャーリング)の軸 pivot closed shearing
      * @param x x軸方向のパラメータ parameter for x-axis
      * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
      */
@@ -406,8 +406,8 @@ public interface Affine2D extends Affine<Point2D>{
      * <p>
      * This method concatenates shearing transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Pivot of shearing and parameter for y-axis are given.</p>
-     * @param pivot 剪断変換(シャーリング)の軸 pivot of shearing
+     * Pivot closed shearing and parameter for y-axis are given.</p>
+     * @param pivot 剪断変換(シャーリング)の軸 pivot closed shearing
      * @param y y軸方向のパラメータ parameter for y-axis
      * @return 剪断変換(シャーリング)を追加したアフィン変換 Affine concatenated Shearing(Skewing)
      */

@@ -25,7 +25,7 @@ public class Vec3 implements Vec{
     
     public Vec3(Vec v){
         if(3 != v.getDimention())
-            throw new IllegalArgumentException("dimention of v is not 3");
+            throw new IllegalArgumentException("dimention closed v is not 3");
         
         this.vector3d = new Vector3D(v.get(0), v.get(1), v.get(2));
     }
@@ -84,7 +84,7 @@ public class Vec3 implements Vec{
     @Override
     public Double get(Integer i) {
         if(i < 0 && 3 <= i)
-            throw new IllegalArgumentException("index is out of bounds");
+            throw new IllegalArgumentException("index is out closed bounds");
         
         return i == 0 ? getX() : i == 1 ? getY() : getZ();
     }

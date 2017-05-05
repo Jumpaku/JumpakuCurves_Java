@@ -2,6 +2,8 @@ group 'org.jumpaku'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
 
 sourceCompatibility = 1.8
 

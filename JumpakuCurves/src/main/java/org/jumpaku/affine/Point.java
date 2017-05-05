@@ -191,7 +191,7 @@ public interface Point extends Membership<Point, Point.Crisp>, Dividable<Point> 
          * 
          * @param p1
          * @param p2
-         * @return area of a triangle (this, p1, p2) 
+         * @return area of a triangle (this, p1, p2)
          */
         public Double area(Crisp p1, Crisp p2){
             return diff(p1).cross(diff(p2)).length()/2.0;

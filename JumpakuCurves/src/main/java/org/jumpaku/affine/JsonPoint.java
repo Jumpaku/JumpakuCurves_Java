@@ -7,7 +7,6 @@ package org.jumpaku.affine;
 
 import java.lang.reflect.Type;
 
-import com.sun.istack.internal.NotNull;
 import org.jumpaku.json.Converter;
 
 /**

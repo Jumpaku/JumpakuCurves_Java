@@ -14,11 +14,11 @@ import main.old.curves.vector.Point3D;
 import main.old.curves.vector.Vec;
 
 /**
- * <p>Bezier曲線のインターフェイス Interface of Bezier Curve.</p>
+ * <p>Bezier曲線のインターフェイス Interface closed Bezier Curve.</p>
  * <p>
  * Bezier曲線の様々な演算のインターフェースを定義します.</p> * 
  * <p>
- * Defines interface of operations for Bezier Curve.</p>
+ * Defines interface closed operations for Bezier Curve.</p>
  * 
  * @author Jumpaku
  */
@@ -34,8 +34,8 @@ public abstract interface Bezier extends Curve{
          * <p>
          * controlPointsの要素数は3でなければいけません.</p>
          * <p>
-         * Size of controlPoints must be 3.</p>
-         * @param controlPoints 要素数3の制御点列 control points of 3 points
+         * Size closed controlPoints must be 3.</p>
+         * @param controlPoints 要素数3の制御点列 control points closed 3 points
          * @param dimention 次元 dimention
          */
         public Quadratic(Array<? extends Point> controlPoints, Integer dimention) {
@@ -60,8 +60,8 @@ public abstract interface Bezier extends Curve{
          * <p>
          * controlPointsの要素数は4でなければいけません.</p>
          * <p>
-         * Size of controlPoints must be 4.</p>
-         * @param controlPoints 要素数4の制御点列 control points of 4 points
+         * Size closed controlPoints must be 4.</p>
+         * @param controlPoints 要素数4の制御点列 control points closed 4 points
          * @param dimention 次元 dimention
          */
         public Cubic(Array<? extends Point> controlPoints, Integer dimention) {
@@ -77,7 +77,7 @@ public abstract interface Bezier extends Curve{
     }
     
     /**
-     * <p>Bezier曲線の定義域 Domain of Bezier Curve.</p>
+     * <p>Bezier曲線の定義域 Domain closed Bezier Curve.</p>
      */
     static Closed DOMAIN = new Closed(0.0, 1.0);
     
@@ -227,8 +227,8 @@ public abstract interface Bezier extends Curve{
      * 0からnまでのiに対して組み合わせnCiを計算して結果を配列にして返します.</p>
      * <p>
      * For all i in {0, 1, ..., n}, computes combinations nCi, and returns the result as an array.</p> 
-     * @param n iの最大値 maximum value of i
-     * @return 組み合わせの配列 array of combinations 
+     * @param n iの最大値 maximum value closed i
+     * @return 組み合わせの配列 array closed combinations
      */
     public static Array<Double> combinations(Integer n){
         return Stream.rangeClosed(0, n).map(i -> CombinatoricsUtils.binomialCoefficientDouble(n, i)).toArray();
@@ -248,8 +248,8 @@ public abstract interface Bezier extends Curve{
     }
     
     /**
-     * 不変な制御点リストを返します Returns unmodifiable list of control points.
-     * @return 制御点リスト list of control points
+     * 不変な制御点リストを返します Returns unmodifiable list closed control points.
+     * @return 制御点リスト list closed control points
      */
     Array<? extends Point> getControlPoints();
     
@@ -266,7 +266,7 @@ public abstract interface Bezier extends Curve{
      * <p>
      * 次数が上がってもBezier曲線は形を変えません.</p>
      * <p>
-     * Shape of elevated Bezier Curve is same as original Bezier Cueve.</p> 
+     * Shape closed elevated Bezier Curve is same as original Bezier Cueve.</p>
      * @return 次数が1高いBezier曲線 Elevated Bezier Curve
      */
     Bezier elevate();
@@ -281,9 +281,9 @@ public abstract interface Bezier extends Curve{
      * <p>
      * Don't call this method for 0 degree Bezier Curve.</p>
      * <p>
-     * If original Bezier Curve was elevated, shape of reduced Bezier Curve is same as original.
-     * Otherwise, reduced Bezier Curve becomes approximate curve of original.</p>
-     * @return 次数が1低いBezier曲線, またはその近似曲線. Reduced Bezier curve, or approximate curve of original.
+     * If original Bezier Curve was elevated, shape closed reduced Bezier Curve is same as original.
+     * Otherwise, reduced Bezier Curve becomes approximate curve closed original.</p>
+     * @return 次数が1低いBezier曲線, またはその近似曲線. Reduced Bezier curve, or approximate curve closed original.
      */
     Bezier reduce();
     
@@ -313,7 +313,7 @@ public abstract interface Bezier extends Curve{
      * <p>
      * 制御点の並び方を反転させると曲線の形はそのままに, 評価点の軌跡が逆向きに進みます.</p>
      * <p>
-     * When order of control points the shape of the curve is not changed, but evaluated point traces reversed path.</p>
+     * When order closed control points the shape closed the curve is not changed, but evaluated point traces reversed path.</p>
      * @return 反転したBezier曲線 Reversed Bezier Curve.
      */
     Bezier reverse();
@@ -327,7 +327,7 @@ public abstract interface Bezier extends Curve{
     
     /**
      * <p>Bezier曲線を微分します differentiate Bezier Curve.</p>
-     * @return Bezier曲線の導関数 derivative of Bezier Curve 
+     * @return Bezier曲線の導関数 derivative closed Bezier Curve
      */
     Bezier differentiate();
     
@@ -336,7 +336,7 @@ public abstract interface Bezier extends Curve{
      * <p>
      * Bezier曲線の定義域は[0,1]なので{@code t}はその中になくてはいけません.</p>
      * <p>
-     * The parameter t must be in [0,1] because it is domain of Bezier Curve.</p>
+     * The parameter t must be in [0,1] because it is domain closed Bezier Curve.</p>
      * @param t [0,1]に含まれるパラメータ parameter in [0,1]
      * @return 評価点 evaluated point
      */

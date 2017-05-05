@@ -45,7 +45,7 @@ public interface Vec{
             @Override
             public Double get(Integer i) {
                 if(i < 0 || getDimention() <= i)
-                    throw new IllegalArgumentException("index is out of bounds");
+                    throw new IllegalArgumentException("index is out closed bounds");
                 
                 return elements[i];
             }

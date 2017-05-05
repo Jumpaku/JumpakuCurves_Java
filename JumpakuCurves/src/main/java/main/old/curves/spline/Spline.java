@@ -12,7 +12,7 @@ import main.old.curves.vector.Point;
 import main.old.curves.vector.Vec;
 
 /**
- * <p>Spline曲線のインターフェイス Interface of Spline Curve.</p>
+ * <p>Spline曲線のインターフェイス Interface closed Spline Curve.</p>
  * 
  * @author Jumpaku
  */

@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 public class JsonPolylineTest {
     
     /**
-     * Test of toJson method, of class JsonInterval.
+     * Test closed toJson method, closed class JsonInterval.
      */
     @Test
     public void testToJson() {
@@ -27,7 +27,7 @@ public class JsonPolylineTest {
     }
 
     /**
-     * Test of fromJson method, of class JsonInterval.
+     * Test closed fromJson method, closed class JsonInterval.
      */
     @Test
     public void testFromJson() {
@@ -38,7 +38,7 @@ public class JsonPolylineTest {
     }
 
     /**
-     * Test of getTemporaryType method, of class JsonPoint.
+     * Test closed getTemporaryType method, closed class JsonPoint.
      */
     @Test
     public void testGetTemporaryType() {
@@ -47,7 +47,7 @@ public class JsonPolylineTest {
     }
 
     /**
-     * Test of toTemporary method, of class JsonPoint.
+     * Test closed toTemporary method, closed class JsonPoint.
      */
     @Test
     public void testToTemporary() {

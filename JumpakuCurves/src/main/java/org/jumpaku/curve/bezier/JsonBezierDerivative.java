@@ -9,7 +9,6 @@ import java.lang.reflect.Type;
 import javaslang.collection.Array;
 import org.jumpaku.affine.JsonVector;
 import org.jumpaku.affine.Vector;
-import org.jumpaku.curve.JsonInterval;
 import org.jumpaku.json.Converter;
 
 /**
@@ -19,7 +18,7 @@ import org.jumpaku.json.Converter;
 public final class JsonBezierDerivative implements Converter<BezierDerivative>{
 
     public static final Converter<BezierDerivative> CONVERTER = new JsonBezierDerivative();
-    
+
     @Override public Type getTemporaryType() {
         return JsonBezierDerivative.Data.class;
     }
@@ -32,15 +31,12 @@ public final class JsonBezierDerivative implements Converter<BezierDerivative>{
 
         private final JsonVector.Data[] controlVectors;
         
-        private final JsonInterval.Data interval;
-
         public Data(BezierDerivative db) {
             this.controlVectors = db.getControlVectors().map(JsonVector.Data::new).toJavaArray(JsonVector.Data.class);
-            this.interval = new JsonInterval.Data(db.getDomain());
         }
         
         @Override public BezierDerivative newInstance() {
-            return BezierDerivative.create(interval.newInstance(), 
+            return BezierDerivative.create(
                     Array.of(controlVectors)
                             .map(JsonVector.Data::newInstance)
                             .map(Vector::toCrisp));

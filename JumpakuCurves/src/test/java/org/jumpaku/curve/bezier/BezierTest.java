@@ -15,7 +15,7 @@ import org.junit.Test;
 import static org.hamcrest.core.Is.is;
 import static org.jumpaku.affine.PointMatcher.pointOf;
 import static org.jumpaku.affine.VectorMatcher.vectorOf;
-import static org.jumpaku.curve.bezier.BezierDerivativeMatcher.bezierDerivativeOf;
+import static org.jumpaku.curve.bezier.BezierMatcher.bezierOf;
 import static org.jumpaku.curve.bezier.BezierMatcher.bezierOf;
 import static org.junit.Assert.*;
 
@@ -26,25 +26,22 @@ import static org.junit.Assert.*;
 public class BezierTest {
     
     /**
-     * Test of create method, of class Bezier.
+     * Test closed create method, closed class Bezier.
      */
     @Test
     public void testCreate_Array_Interval() {
         System.out.println("create");
         Array<Point> controlPoints = Array.of(Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(1.0, 1.0));
-        Interval domain = Interval.of(0.2, 0.9);
-        Bezier result = Bezier.create(domain, controlPoints);
+        Bezier result = Bezier.create(controlPoints);
         assertThat(result.getControlPoints().get(0), is(pointOf(controlPoints.get(0))));
         assertThat(result.getControlPoints().get(1), is(pointOf(controlPoints.get(1))));
         assertThat(result.getControlPoints().get(2), is(pointOf(controlPoints.get(2))));
         assertThat(result.getControlPoints().get(3), is(pointOf(controlPoints.get(3))));
         assertEquals(result.getControlPoints().size(), controlPoints.size());
-        assertEquals(domain.getBegin(), result.getDomain().getBegin(), 1.0e-10);
-        assertEquals(domain.getEnd(), result.getDomain().getEnd(), 1.0e-10);
     }
 
     /**
-     * Test of create method, of class Bezier.
+     * Test closed create method, closed class Bezier.
      */
     @Test
     public void testCreate_PointArr() {
@@ -60,7 +57,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of toJson method, of class Bezier.
+     * Test closed toJson method, closed class Bezier.
      */
     @Test
     public void testToJson() {
@@ -71,19 +68,19 @@ public class BezierTest {
     }
 
     /**
-     * Test of toJson method, of class Bezier.
+     * Test closed toJson method, closed class Bezier.
      */
     @Test
     public void testFromJson() {
         System.out.println("fromJson");
         Bezier actual = Bezier.fromJson(
-                "{interval:{begin:0.0,end:1.0}, controlPoints:[{x:0.0,y:0.0,z:0.0,r:1.0},{x:0.0,y:1.0,z:0.0,r:0.5},{x:1.0,y:0.0,z:0.0,r:2.0},{x:1.0,y:1.0,z:0.0,r:0.0}]}").get();
+                "{controlPoints:[{x:0.0,y:0.0,z:0.0,r:1.0},{x:0.0,y:1.0,z:0.0,r:0.5},{x:1.0,y:0.0,z:0.0,r:2.0},{x:1.0,y:1.0,z:0.0,r:0.0}]}").get();
         Bezier expected = Bezier.create(Point.fuzzy(0.0, 0.0, 1.0), Point.fuzzy(0.0, 1.0, 0.5), Point.fuzzy(1.0, 0.0, 2.0), Point.crisp(1.0, 1.0));
         assertThat(actual, is(bezierOf(expected)));
     }
 
     /**
-     * Test of evaluate method, of class Bezier.
+     * Test closed evaluate method, closed class Bezier.
      */
     @Test
     public void testEvaluate() {
@@ -98,18 +95,18 @@ public class BezierTest {
     
 
     /**
-     * Test of evaluate method, of class Bezier.
+     * Test closed evaluate method, closed class Bezier.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testEvaluateException() {
         System.out.println("evaluate");    
-        Bezier.create(Interval.of(0.2, 0.9), Point.fuzzy(-2.0, 0.0, 1.0), Point.fuzzy(-1.0, 0.0, 2.0), Point.crisp(0.0, 2.0), Point.fuzzy(1.0, 0.0, 2.0), Point.fuzzy(2.0, 0.0, 1.0))
-                .evaluate(0.1);
+        Bezier.create(Point.fuzzy(-2.0, 0.0, 1.0), Point.fuzzy(-1.0, 0.0, 2.0), Point.crisp(0.0, 2.0), Point.fuzzy(1.0, 0.0, 2.0), Point.fuzzy(2.0, 0.0, 1.0))
+                .evaluate(-0.1);
     }
 
 
     /**
-     * Test of decasteljau method, of class Bezier.
+     * Test closed decasteljau method, closed class Bezier.
      */
     @Test
     public void testDecasteljau() {
@@ -123,32 +120,30 @@ public class BezierTest {
     }
 
     /**
-     * Test of getDomain method, of class Bezier.
+     * Test closed getDomain method, closed class Bezier.
      */
     @Test
     public void testGetDomain() {
         System.out.println("getDomain");
         Array<Point> controlPoints = Array.of(Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(1.0, 1.0));
-        Interval domain = Interval.of(0.2, 0.9);
-        Bezier result = Bezier.create(domain, controlPoints);
-        assertEquals(domain.getBegin(), result.getDomain().getBegin(), 1.0e-10);
-        assertEquals(domain.getEnd(), result.getDomain().getEnd(), 1.0e-10);
+        Bezier result = Bezier.create(controlPoints);
+        assertEquals(0, result.getDomain().getBegin(), 1.0e-10);
+        assertEquals(1, result.getDomain().getEnd(), 1.0e-10);
     }
 
     /**
-     * Test of getDegree method, of class Bezier.
+     * Test closed getDegree method, closed class Bezier.
      */
     @Test
     public void testGetDegree() {
         System.out.println("getDegree");
         Array<Point> controlPoints = Array.of(Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(1.0, 1.0));
-        Interval domain = Interval.of(0.2, 0.8);
-        Bezier result = Bezier.create(domain, controlPoints);
+        Bezier result = Bezier.create(controlPoints);
         assertEquals(3, result.getDegree().intValue());
     }
 
     /**
-     * Test of differentiate method, of class Bezier.
+     * Test closed differentiate method, closed class Bezier.
      */
     @Test
     public void testDifferentiate_Double() {
@@ -160,57 +155,56 @@ public class BezierTest {
     }
 
     /**
-     * Test of differentiate method, of class Bezier.
+     * Test closed differentiate method, closed class Bezier.
      */
     @Test
     public void testDifferentiate_0args() {
         System.out.println("differentiate");
-        Bezier instance = Bezier.create(Interval.of(0.2, 0.8), Point.fuzzy(0.0, 0.0, 1.0), Point.fuzzy(0.0, 1.0, 2.0), Point.fuzzy(1.0, 0.0, 3.0), Point.fuzzy(1.0, 1.0, 4.0));
-        BezierDerivative expResult = BezierDerivative.create(Interval.of(0.2, 0.8), Array.of(Vector.crisp(0.0, 3.0), Vector.crisp(3.0, -3.0), Vector.crisp(0.0, 3.0)));
-        assertThat(instance.differentiate(), is(bezierDerivativeOf(expResult)));
+        Bezier instance = Bezier.create(Point.fuzzy(0.0, 0.0, 1.0), Point.fuzzy(0.0, 1.0, 2.0), Point.fuzzy(1.0, 0.0, 3.0), Point.fuzzy(1.0, 1.0, 4.0));
+        BezierDerivative expResult = BezierDerivative.create(Array.of(Vector.crisp(0.0, 3.0), Vector.crisp(3.0, -3.0), Vector.crisp(0.0, 3.0)));
+        assertThat(instance.differentiate().toBezier(), is(bezierOf(expResult.toBezier())));
     }
 
     /**
-     * Test of restrict method, of class Bezier.
+     * Test closed restrict method, closed class Bezier.
      */
     @Test
     public void testRestrict() {
         System.out.println("restrict");
-        Bezier instance = Bezier.create(Interval.of(0.2, 0.8), Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(1.0, 1.0));
-        Bezier expResult = Bezier.create(Interval.of(0.2, 0.5), Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(1.0, 1.0));
-        assertThat(instance.restrict(0.2, 0.5), is(bezierOf(expResult)));
+        Bezier instance = Bezier.create(Point.crisp(0.0, 0.0), Point.crisp(0.0, 1.0), Point.crisp(1.0, 0.0), Point.crisp(1.0, 1.0));
+        Bezier expResult = Bezier.create(Point.crisp(0.0, 0.0), Point.crisp(0.0, 0.5), Point.crisp(0.25, 0.5), Point.crisp(0.5, 0.5));
+        assertThat(instance.restrict(0.0, 0.5), is(bezierOf(expResult)));
     }
 
     /**
-     * Test of restrict method, of class Bezier.
+     * Test closed restrict method, closed class Bezier.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testRestrictException() {
         System.out.println("restrict");
-        Bezier.create(Interval.of(0.2, 0.9), Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(1.0, 1.0))
-                .restrict(0.1, 0.9);
+        Bezier.create(Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(1.0, 1.0))
+                .restrict(-0.1, 0.9);
     }
 
     /**
-     * Test of reverse method, of class Bezier.
+     * Test closed reverse method, closed class Bezier.
      */
     @Test
     public void testReverse() {
         System.out.println("reverse");
-        Bezier instance = Bezier.create(Interval.of(0.3, 0.9), Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(1.0, 1.0));
-        Bezier expResult = Bezier.create(Interval.of(0.1, 0.7), Point.fuzzy(1.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(0.0, 0.0));
+        Bezier instance = Bezier.create(Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(1.0, 1.0));
+        Bezier expResult = Bezier.create(Point.fuzzy(1.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(0.0, 0.0));
         assertThat(instance.reverse(), is(bezierOf(expResult)));
     }
 
     /**
-     * Test of getControlPoints method, of class Bezier.
+     * Test closed getControlPoints method, closed class Bezier.
      */
     @Test
     public void testGetControlPoints() {
         System.out.println("getControlPoints");
         Array<Point> controlPoints = Array.of(Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(1.0, 1.0));
-        Interval domain = Interval.of(0.2, 0.9);
-        Bezier result = Bezier.create(domain, controlPoints);
+        Bezier result = Bezier.create(controlPoints);
         assertThat(result.getControlPoints().get(0), is(PointMatcher.pointOf(controlPoints.get(0))));
         assertThat(result.getControlPoints().get(1), is(PointMatcher.pointOf(controlPoints.get(1))));
         assertThat(result.getControlPoints().get(2), is(PointMatcher.pointOf(controlPoints.get(2))));
@@ -219,60 +213,60 @@ public class BezierTest {
     }
 
     /**
-     * Test of elevate method, of class Bezier.
+     * Test closed elevate method, closed class Bezier.
      */
     @Test
     public void testElevate() {
         System.out.println("elevate");
-        Bezier instance = Bezier.create(Interval.of(0.2, 0.9), Point.fuzzy(-1.0, 0.0), Point.fuzzy(0.0, 2.0), Point.fuzzy(1.0, 0.0));
-        Bezier expected = Bezier.create(Interval.of(0.2, 0.9), Point.fuzzy(-1.0, 0.0), Point.fuzzy(-1/3.0, 4/3.0), Point.fuzzy(1/3.0, 4/3.0), Point.fuzzy(1.0, 0.0));
+        Bezier instance = Bezier.create(Point.fuzzy(-1.0, 0.0), Point.fuzzy(0.0, 2.0), Point.fuzzy(1.0, 0.0));
+        Bezier expected = Bezier.create(Point.fuzzy(-1.0, 0.0), Point.fuzzy(-1/3.0, 4/3.0), Point.fuzzy(1/3.0, 4/3.0), Point.fuzzy(1.0, 0.0));
         assertThat(instance.elevate(), is(bezierOf(expected)));
     }
 
     /**
-     * Test of reduce method, of class Bezier.
+     * Test closed reduce method, closed class Bezier.
      */
     @Test
     public void testReduce() {
         System.out.println("reduce");
-        Bezier b1 = Bezier.create(Interval.of(0.2, 0.9), Point.fuzzy(-1.0, -1.0), Point.fuzzy(1.0, 1.0));
-        Bezier e1 = Bezier.create(Interval.of(0.2, 0.9), Point.fuzzy(0.0, 0.0));
+        Bezier b1 = Bezier.create(Point.fuzzy(-1.0, -1.0), Point.fuzzy(1.0, 1.0));
+        Bezier e1 = Bezier.create(Point.fuzzy(0.0, 0.0));
         assertThat(b1.reduce(), is(bezierOf(e1)));
 
-        Bezier b2 = Bezier.create(Interval.of(0.2, 0.9), Point.fuzzy(-1.0, 0.0), Point.fuzzy(0.0, 0.0), Point.fuzzy(1.0, 0.0));
-        Bezier e2 = Bezier.create(Interval.of(0.2, 0.9), Point.fuzzy(-1.0, 0.0), Point.fuzzy(1.0, 0.0));
+        Bezier b2 = Bezier.create(Point.fuzzy(-1.0, 0.0), Point.fuzzy(0.0, 0.0), Point.fuzzy(1.0, 0.0));
+        Bezier e2 = Bezier.create(Point.fuzzy(-1.0, 0.0), Point.fuzzy(1.0, 0.0));
         assertThat(b2.reduce(), is(bezierOf(e2)));
 
-        Bezier b3 = Bezier.create(Interval.of(0.2, 0.9), Point.fuzzy(-1.0, 0.0), Point.fuzzy(-1/3.0, 4/3.0), Point.fuzzy(1/3.0, 4/3.0), Point.fuzzy(1.0, 0.0));
-        Bezier e3 = Bezier.create(Interval.of(0.2, 0.9), Point.fuzzy(-1.0, 0.0), Point.fuzzy(0.0, 2.0), Point.fuzzy(1.0, 0.0));
+        Bezier b3 = Bezier.create(Point.fuzzy(-1.0, 0.0), Point.fuzzy(-1/3.0, 4/3.0), Point.fuzzy(1/3.0, 4/3.0), Point.fuzzy(1.0, 0.0));
+        Bezier e3 = Bezier.create(Point.fuzzy(-1.0, 0.0), Point.fuzzy(0.0, 2.0), Point.fuzzy(1.0, 0.0));
         assertThat(b3.reduce(), is(bezierOf(e3)));
     }
 
     /**
-     * Test of reduce method, of class Bezier.
+     * Test closed reduce method, closed class Bezier.
      */
     @Test(expected = IllegalStateException.class)
     public void testReduceException() {
         System.out.println("reduce");
-        Bezier.create(Interval.of(0.2, 0.9), Point.fuzzy(0.0, 0.0)).reduce();
+        Bezier.create(Point.fuzzy(0.0, 0.0)).reduce();
     }
 
     /**
-     * Test of subdivide method, of class Bezier.
+     * Test closed subdivide method, closed class Bezier.
      */
     @Test
     public void testSubdivide() {
         System.out.println("subdivide");
         Double t = 0.25;
-        Bezier instance = Bezier.create(Interval.of(0.2, 0.9), Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(1.0, 1.0));
+        Bezier instance = Bezier.create(Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 1.0), Point.fuzzy(1.0, 0.0), Point.fuzzy(1.0, 1.0));
         Bezier first = instance.subdivide(t)._1();
         Bezier second = instance.subdivide(t)._2();
-        assertThat(first, is(bezierOf(Bezier.create(Interval.of(0.8, 1.0), Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 0.25), Point.fuzzy(1/16.0, 3/8.0), Point.fuzzy(5/32.0, 7/16.0)))));
-        assertThat(second, is(bezierOf(Bezier.create(Interval.of(0.0, 13/15.0), Point.fuzzy(5/32.0, 7/16.0), Point.fuzzy(7/16.0, 5/8.0), Point.fuzzy(1.0, 0.250), Point.fuzzy(1.0, 1.0)))));
+        assertThat(first, is(bezierOf(Bezier.create(Point.fuzzy(0.0, 0.0), Point.fuzzy(0.0, 0.25), Point.fuzzy(1/16.0, 3/8.0), Point.fuzzy(5/32.0, 7/16.0)))));
+        assertThat(second, is(bezierOf(Bezier.create(Point.fuzzy(5/32.0, 7/16.0), Point.fuzzy(7/16.0, 5/8.0), Point.fuzzy(1.0, 0.250), Point.fuzzy(1.0, 1.0)))));
     }
 
     /**
-     * Test of toString method, of class Bezier.
+     * Test closed toString method, closed class Bezier.
      */
     @Test
     public void testToString() {

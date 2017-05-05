@@ -46,7 +46,7 @@ public class CurveInput extends Control implements CurveInputModel{
      * View の render メソッドを呼び出して描画に必要な点列データを渡すと, View は UI を変化させます.
      */
     private void update(){
-        ((CurveInputView)getSkin()).render(points.stream().map(d -> d.getData()).collect(Collectors.toList()));
+        ((CurveInputView)getSkin()).render(points.stream().map(TimeSeriesData::getData).collect(Collectors.toList()));
     }
 
     /**

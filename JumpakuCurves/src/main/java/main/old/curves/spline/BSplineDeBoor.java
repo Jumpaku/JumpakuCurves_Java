@@ -31,7 +31,7 @@ public final class BSplineDeBoor extends AbstractBSpline {
     @Override
     public Point evaluate(Double t) {
         if(!getDomain().contains(t))
-            throw new IllegalArgumentException("t is out of domain, t = " + t);
+            throw new IllegalArgumentException("t is out closed domain, t = " + t);
                 
         Integer l = Stream.ofAll(getKnots()).lastIndexWhere(knot -> knot <= t);
         
