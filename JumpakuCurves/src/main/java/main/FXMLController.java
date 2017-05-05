@@ -178,28 +178,28 @@ public class FXMLController implements Initializable {
         canvas.getGraphicsContext2D().clearRect(0, 0, 640, 430);
         canvas.getGraphicsContext2D().setLineWidth(1);
         
-        /*curve = new RationalBezierFast(Array.of(
+        /*curve = new RationalBezierFast(Array.closed(
                 new WeightedPoint2D(200+150.0, 200+0.0, 1.0),
                 new WeightedPoint2D(200+150.0, 200+50.0, 0.0),
                 new WeightedPoint2D(200+0.0, 200+50.0, 1.0)), 2);
         renderCurve(canvas.getGraphicsContext2D(), curve, Color.RED);
         renderPoints(canvas.getGraphicsContext2D(), curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE);
         renderPolyline(canvas.getGraphicsContext2D(), curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE, false);
-        curve = new RationalBezierFast(Array.of(
+        curve = new RationalBezierFast(Array.closed(
                 new WeightedPoint2D(200+0.0, 200+50.0, 1.0),
                 new WeightedPoint2D(200-150.0, 200+50.0, 0.0),
                 new WeightedPoint2D(200-150.0, 200+0.0, 1.0)), 2);
         renderCurve(canvas.getGraphicsContext2D(), curve, Color.RED);
         renderPoints(canvas.getGraphicsContext2D(), curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE);
         renderPolyline(canvas.getGraphicsContext2D(), curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE, false);
-        curve = new RationalBezierFast(Array.of(
+        curve = new RationalBezierFast(Array.closed(
                 new WeightedPoint2D(200-150.0, 200+0.0, 1.0),
                 new WeightedPoint2D(200-150.0, 200-50.0, 0.0),
                 new WeightedPoint2D(200+0.0, 200-50.0, 1.0)), 2);
         renderCurve(canvas.getGraphicsContext2D(), curve, Color.RED);
         renderPoints(canvas.getGraphicsContext2D(), curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE);
         renderPolyline(canvas.getGraphicsContext2D(), curve.getControlPoints().map(p->new Point2D(p)).toJavaList(), Color.BLUE, false);
-        curve = new RationalBezierFast(Array.of(
+        curve = new RationalBezierFast(Array.closed(
                 new WeightedPoint2D(200+0.0, 200-50.0, 1.0),
                 new WeightedPoint2D(200+150.0, 200-50.0, 0.0),
                 new WeightedPoint2D(200+150.0, 200+0.0, 1.0)), 2);

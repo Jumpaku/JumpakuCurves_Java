@@ -49,8 +49,8 @@ public final class RationalBezier implements FuzzyCurve, Differentiable, Reversi
         Array<Point> cps = Array.ofAll(controlPoints);
 
         if(ws.size() != cps.size()) {
-            throw new IllegalArgumentException("size of weights must equal to size of controlPoints,"
-                    + " but size of weights = " + ws.size() + ", size of controlPoints = " + cps.size());
+            throw new IllegalArgumentException("size closed weights must equal to size closed controlPoints,"
+                    + " but size closed weights = " + ws.size() + ", size closed controlPoints = " + cps.size());
         }
 
         if(ws.isEmpty() || cps.isEmpty()) {
@@ -107,7 +107,8 @@ public final class RationalBezier implements FuzzyCurve, Differentiable, Reversi
                 .differentiate();
         
         return new Derivative() {
-            @Override public Vector.Crisp evaluate(Double t) {
+            @Override
+            public Vector.Crisp evaluate(Double t) {
                 if(!getDomain().includes(t)) {
                     throw new IllegalArgumentException("t must be in " + getDomain() + ", but t = " + t);
                 }
@@ -120,7 +121,8 @@ public final class RationalBezier implements FuzzyCurve, Differentiable, Reversi
                 return dpt.sub(dwt, rt).scale(1/wt).toCrisp();
             }
 
-            @Override public Interval getDomain() {
+            @Override
+            public Interval getDomain() {
                 return RationalBezier.this.getDomain();
             }
         };
@@ -133,8 +135,8 @@ public final class RationalBezier implements FuzzyCurve, Differentiable, Reversi
 
     @Override
     public RationalBezier restrict(Double begin, Double end){
-        if(!getDomain().includes(Interval.of(begin, end))) {
-            throw new IllegalArgumentException("Interval i must be a subset of this domain");
+        if(!getDomain().includes(Interval.closed(begin, end))) {
+            throw new IllegalArgumentException("Interval i must be a subset closed this domain");
         }
 
         return subdivide(end)._1().subdivide(begin/end)._2();

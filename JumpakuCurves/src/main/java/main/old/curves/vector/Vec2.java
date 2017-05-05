@@ -80,7 +80,7 @@ public class Vec2 implements Vec{
     @Override
     public Double get(Integer i) {
         if(i < 0 && 2 <= i)
-            throw new IllegalArgumentException("index is out of bounds");
+            throw new IllegalArgumentException("index is out closed bounds");
         
         return i == 0 ? getX() : getY();
     }

@@ -2,12 +2,11 @@ package org.jumpaku.curve.bspline;
 
 import javaslang.collection.Stream;
 import org.jumpaku.affine.Point;
-import org.jumpaku.curve.Interval;
 import org.jumpaku.curve.Knot;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
-import static org.jumpaku.curve.bspline.BSplineDerivativeMatcher.bSplineDerivativeOf;
+import static org.jumpaku.curve.bspline.BSplineMatcher.bSplineOf;
 import static org.junit.Assert.*;
 
 /**
@@ -21,9 +20,9 @@ public class JsonBSplineDerivativeTest {
         BSplineDerivative expected = BSplineDerivative.create(BSpline.create(
                 3,
                 Stream.of(Point.fuzzy(-2.0, 0.0, 1.0), Point.fuzzy(-1.0, 1.0, 2.0), Point.fuzzy(0.0, 0.0, 3.0), Point.fuzzy(1.0, -1.0, 4.0), Point.fuzzy(2.0, 0.0, 5.0)),
-                Knot.createClampedUniformKnots(3, 5)));
+                Knot.clampedUniformKnots(3, 5)));
         BSplineDerivative actual = new JsonBSplineDerivative().fromJson(new JsonBSplineDerivative().toJson(expected)).get();
-        assertThat(actual, is(bSplineDerivativeOf(expected)));
+        assertThat(actual.toBSpline(), is(bSplineOf(expected.toBSpline())));
     }
 
     @Test
@@ -34,12 +33,12 @@ public class JsonBSplineDerivativeTest {
         BSplineDerivative expected = BSplineDerivative.create(BSpline.create(
                 3,
                 Stream.of(Point.fuzzy(-2.0, 0.0, 1.0), Point.fuzzy(-1.0, 1.0, 2.0), Point.fuzzy(0.0, 0.0, 3.0), Point.fuzzy(1.0, -1.0, 4.0), Point.fuzzy(2.0, 0.0, 5.0)),
-                Knot.createClampedUniformKnots(3, 5)));
-        assertThat(actual, is(bSplineDerivativeOf(expected)));
+                Knot.clampedUniformKnots(3, 5)));
+        assertThat(actual.toBSpline(), is(bSplineOf(expected.toBSpline())));
     }
 
     /**
-     * Test of getTemporaryType method, of class JsonBSpline.
+     * Test closed getTemporaryType method, closed class JsonBSpline.
      */
     @Test
     public void testGetTemporaryType() {
@@ -48,7 +47,7 @@ public class JsonBSplineDerivativeTest {
     }
 
     /**
-     * Test of toTemporary method, of class JsonBSpline.
+     * Test closed toTemporary method, closed class JsonBSpline.
      */
     @Test
     public void testToTemporary() {
@@ -56,7 +55,7 @@ public class JsonBSplineDerivativeTest {
         BSplineDerivative instance = BSplineDerivative.create(BSpline.create(
                 3,
                 Stream.of(Point.fuzzy(-2.0, 0.0, 1.0), Point.fuzzy(-1.0, 1.0, 2.0), Point.fuzzy(0.0, 0.0, 3.0), Point.fuzzy(1.0, -1.0, 4.0), Point.fuzzy(2.0, 0.0, 5.0)),
-                Knot.createClampedUniformKnots(3, 5)));
-        assertThat(new JsonBSplineDerivative().toTemporary(instance).newInstance(), is(bSplineDerivativeOf(instance)));
+                Knot.clampedUniformKnots(3, 5)));
+        assertThat(new JsonBSplineDerivative().toTemporary(instance).newInstance().toBSpline(), is(bSplineOf(instance.toBSpline())));
     }
 }

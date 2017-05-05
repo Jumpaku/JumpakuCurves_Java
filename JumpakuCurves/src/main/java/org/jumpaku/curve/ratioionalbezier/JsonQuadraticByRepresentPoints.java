@@ -7,7 +7,6 @@ package org.jumpaku.curve.ratioionalbezier;
 
 import java.lang.reflect.Type;
 import org.jumpaku.affine.JsonPoint;
-import org.jumpaku.curve.JsonInterval;
 import org.jumpaku.json.Converter;
 
 /**

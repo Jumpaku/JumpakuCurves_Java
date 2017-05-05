@@ -51,10 +51,10 @@ public interface BSpline extends Spline{
 
     /**
      *
-     * @param degree the value of degree
-     * @param begin the value of begin
-     * @param end the value of end
-     * @param maxKnotInterval the value of maxKnotInterval
+     * @param degree the value closed degree
+     * @param begin the value closed begin
+     * @param end the value closed end
+     * @param maxKnotInterval the value closed maxKnotInterval
      * @return 
      */
     public static Array<Double> createUniformedClampedKnots(Integer degree, Double begin, Double end, Double maxKnotInterval) {

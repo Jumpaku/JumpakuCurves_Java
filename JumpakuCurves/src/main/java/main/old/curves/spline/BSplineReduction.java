@@ -22,7 +22,7 @@ public final class BSplineReduction extends AbstractBSpline{
     @Override
     public Point evaluate(Double t) {
         if(!getDomain().contains(t))
-            throw new IllegalArgumentException("t is out of domain");
+            throw new IllegalArgumentException("t is out closed domain");
         
         return Point.of(Stream.ofAll(getControlPoints())
                 .zipWithIndex((cp, i) -> cp.getVec().scale(BSpline.bSplineBasis(getDegree(), i, t, getKnots())))

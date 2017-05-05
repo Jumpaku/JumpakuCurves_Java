@@ -9,7 +9,6 @@ import java.lang.reflect.Type;
 import javaslang.collection.Array;
 import org.jumpaku.affine.JsonVector;
 import org.jumpaku.affine.Vector;
-import org.jumpaku.curve.JsonInterval;
 import org.jumpaku.json.Converter;
 
 /**

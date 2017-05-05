@@ -30,7 +30,7 @@ public class QuadraticByRepresentPointsTest {
     
     private static final Double R2 = Math.sqrt(2);
     /**
-     * Test of evaluate method, of class ConicSection.
+     * Test closed evaluate method, closed class ConicSection.
      */
     @Test
     public void testEvaluate() {
@@ -49,7 +49,7 @@ public class QuadraticByRepresentPointsTest {
     }
 
     /**
-     * Test of getDomain method, of class QuadraticByRepresentPoints.
+     * Test closed getDomain method, closed class QuadraticByRepresentPoints.
      */
     @Test
     public void testGetDomain() {
@@ -65,7 +65,7 @@ public class QuadraticByRepresentPointsTest {
     }
 
     /**
-     * Test of differentiate method, of class QuadraticByRepresentPoints.
+     * Test closed differentiate method, closed class QuadraticByRepresentPoints.
      */
     @Test
     public void testDifferentiate() {
@@ -87,7 +87,7 @@ public class QuadraticByRepresentPointsTest {
     }
 
     /**
-     * Test of reverse method, of class QuadraticByRepresentPoints.
+     * Test closed reverse method, closed class QuadraticByRepresentPoints.
      */
     @Test
     public void testReverse() {
@@ -107,7 +107,7 @@ public class QuadraticByRepresentPointsTest {
     }
 
     /**
-     * Test of getDegree method, of class QuadraticByRepresentPoints.
+     * Test closed getDegree method, closed class QuadraticByRepresentPoints.
      */
     @Test
     public void testGetDegree() {
@@ -121,7 +121,7 @@ public class QuadraticByRepresentPointsTest {
     }
 
     /**
-     * Test of toString method, of class QuadraticByRepresentPoints.
+     * Test closed toString method, closed class QuadraticByRepresentPoints.
      */
     @Test
     public void testToString() {
@@ -136,7 +136,7 @@ public class QuadraticByRepresentPointsTest {
     }
     
     /**
-     * Test of getRepresentPoints method, of class QuadraticByRepresentPoints.
+     * Test closed getRepresentPoints method, closed class QuadraticByRepresentPoints.
      */
     @Test
     public void testGetRepresentPoints() {
@@ -157,7 +157,7 @@ public class QuadraticByRepresentPointsTest {
     }
 
     /**
-     * Test of toCrispRationalBezier method, of class QuadraticByRepresentPoints.
+     * Test closed toCrispRationalBezier method, closed class QuadraticByRepresentPoints.
      */
     @Test
     public void testToCrispRationalBezier() {
@@ -177,7 +177,7 @@ public class QuadraticByRepresentPointsTest {
     }
 
     /**
-     * Test of createCrispRationalBezier method, of class QuadraticByRepresentPoints.
+     * Test closed createCrispRationalBezier method, closed class QuadraticByRepresentPoints.
      */
     @Test
     public void testCreateCrispControlPoints() {
@@ -196,7 +196,7 @@ public class QuadraticByRepresentPointsTest {
     }
 
     /**
-     * Test of getWeight method, of class QuadraticByRepresentPoints.
+     * Test closed getWeight method, closed class QuadraticByRepresentPoints.
      */
     @Test
     public void testGetWeight() {
@@ -210,7 +210,7 @@ public class QuadraticByRepresentPointsTest {
     }
 
     /**
-     * Test of complement method, of class QuadraticByRepresentPoints.
+     * Test closed complement method, closed class QuadraticByRepresentPoints.
      */
     @Test
     public void testComplement() {

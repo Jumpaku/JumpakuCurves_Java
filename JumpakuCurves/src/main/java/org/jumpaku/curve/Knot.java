@@ -1,9 +1,8 @@
 package org.jumpaku.curve;
 
-import javaslang.Tuple;
-import javaslang.Tuple2;
 import javaslang.collection.Array;
 import javaslang.collection.Stream;
+import javaslang.control.Option;
 
 
 /**
@@ -11,16 +10,37 @@ import javaslang.collection.Stream;
  */
 public final class Knot implements Comparable<Knot> {
 
-    public static Knot of(Double value, Integer multiple) {
-        return new Knot(value, multiple);
+    public static Knot of(Double value, Integer multiplicity) {
+        if (multiplicity < 0) {
+            throw new IllegalArgumentException("negative multiplicity");
+        }
+        return new Knot(value, multiplicity);
     }
 
-    public static Array<Knot> createClampedUniformKnots(Integer degree, Integer numOfControlPoints){
-        int middle = numOfControlPoints + degree + 1 - 2*(degree+1);
-        return Stream.of(Knot.of(0.0, degree+1))
-                .appendAll(Stream.rangeBy(1.0, middle+1.0, 1.0).map(t->Knot.of(t, 1)))
-                .appendAll(Stream.of(Knot.of(middle+1.0, degree+1)))
+    public static Array<Knot> clampedUniformKnots(Integer degree, Integer nControlPoints){
+        return clampedUniformKnots(0.0, (double)(nControlPoints - degree), degree, nControlPoints);
+    }
+
+    public static Array<Knot> clampedUniformKnots(Interval domain, Integer degree, Integer nControlPoints){
+        return clampedUniformKnots(domain.getBegin(), domain.getEnd(), degree, nControlPoints);
+    }
+
+    public static Array<Knot> clampedUniformKnots(Double begin, Double end, Integer degree, Integer nControlPoints){
+        int l = nControlPoints - degree;
+
+        return Stream.of(Knot.of(begin, degree+1))
+                .appendAll(Stream.range(1, l).map(
+                        i->Knot.of((1.0-i)/l*begin + i/(double)l*end, 1)))
+                .appendAll(Stream.of(Knot.of(end, degree+1)))
                 .toArray();
+    }
+
+    public static String toJson(Knot knot) {
+        return JsonKnot.CONVERTER.toJson(knot);
+    }
+
+    public static Option<Knot> fromJson(String json){
+        return JsonKnot.CONVERTER.fromJson(json);
     }
 
     private final Double value;
@@ -30,6 +50,16 @@ public final class Knot implements Comparable<Knot> {
     public Knot(Double value, Integer multiplicity) {
         this.value = value;
         this.multiplicity = multiplicity;
+    }
+
+    @Override
+    public int compareTo(Knot o) {
+        return Double.compare(getValue(), o.getValue());
+    }
+
+    @Override
+    public String toString() {
+        return Knot.toJson(this);
     }
 
     public Double getValue() {
@@ -56,14 +86,5 @@ public final class Knot implements Comparable<Knot> {
 
     public Knot elevateMultiplicity(Integer m) {
         return of(getValue(), getMultiplicity() + m);
-    }
-
-    @Override
-    public int compareTo(Knot o) {
-        return Double.compare(getValue(), o.getValue());
-    }
-
-    public Tuple2<Double, Integer> toTuple() {
-        return Tuple.of(getValue(), getMultiplicity());
     }
 }

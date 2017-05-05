@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 public class VectorTest {
     
     /**
-     * Test of equals method, of class Vector.
+     * Test closed equals method, closed class Vector.
      */
     @Test
     public void testEquals() {
@@ -34,7 +34,7 @@ public class VectorTest {
         assertTrue(Vector.equals(e, f, 1.0e-10));
     }
     /**
-     * Test of fuzzy method, of class Vector.
+     * Test closed fuzzy method, closed class Vector.
      */
     @Test
     public void testFuzzy_VectorCrisp_Double() {
@@ -47,7 +47,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of fuzzy method, of class Vector.
+     * Test closed fuzzy method, closed class Vector.
      */
     @Test
     public void testFuzzy_4args() {
@@ -60,7 +60,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of fuzzy method, of class Vector.
+     * Test closed fuzzy method, closed class Vector.
      */
     @Test
     public void testFuzzy_3args() {
@@ -73,7 +73,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of fuzzy method, of class Vector.
+     * Test closed fuzzy method, closed class Vector.
      */
     @Test
     public void testFuzzy_Double_Double() {
@@ -86,7 +86,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of zero method, of class Vector.
+     * Test closed zero method, closed class Vector.
      */
     @Test
     public void testZero_Double() {
@@ -99,7 +99,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of crisp method, of class Vector.
+     * Test closed crisp method, closed class Vector.
      */
     @Test
     public void testCrisp_3args() {
@@ -112,7 +112,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of crisp method, of class Vector.
+     * Test closed crisp method, closed class Vector.
      */
     @Test
     public void testCrisp_Double_Double() {
@@ -125,7 +125,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of crisp method, of class Vector.
+     * Test closed crisp method, closed class Vector.
      */
     @Test
     public void testCrisp_Double() {
@@ -138,7 +138,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of zero method, of class Vector.
+     * Test closed zero method, closed class Vector.
      */
     @Test
     public void testZero_0args() {
@@ -151,7 +151,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of toJson method, of class Vector.
+     * Test closed toJson method, closed class Vector.
      */
     @Test
     public void testToJson() {
@@ -161,7 +161,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of fromJson method, of class Vector.
+     * Test closed fromJson method, closed class Vector.
      */
     @Test
     public void testFromJson() {
@@ -172,7 +172,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of add method, of class Vector.
+     * Test closed add method, closed class Vector.
      */
     @Test
     public void testAdd_Vector() {
@@ -188,7 +188,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of scale method, of class Vector.
+     * Test closed scale method, closed class Vector.
      */
     @Test
     public void testScale() {
@@ -202,7 +202,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of getX method, of class Vector.
+     * Test closed getX method, closed class Vector.
      */
     @Test
     public void testGetX() {
@@ -212,7 +212,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of getY method, of class Vector.
+     * Test closed getY method, closed class Vector.
      */
     @Test
     public void testGetY() {
@@ -222,7 +222,7 @@ public class VectorTest {
      }
 
     /**
-     * Test of getZ method, of class Vector.
+     * Test closed getZ method, closed class Vector.
      */
     @Test
     public void testGetZ() {
@@ -232,7 +232,7 @@ public class VectorTest {
      }
 
     /**
-     * Test of getR method, of class Vector.
+     * Test closed getR method, closed class Vector.
      */
     @Test
     public void testGetR() {
@@ -242,7 +242,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of add method, of class Vector.
+     * Test closed add method, closed class Vector.
      */
     @Test
     public void testCrispAdd_4args() {
@@ -252,7 +252,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of sub method, of class Vector.
+     * Test closed sub method, closed class Vector.
      */
     @Test
     public void testSub_Vector() {
@@ -268,7 +268,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of sub method, of class Vector.
+     * Test closed sub method, closed class Vector.
      */
     @Test
     public void testSub_Double_Vector() {
@@ -293,7 +293,7 @@ public class VectorTest {
     }
     
     /**
-     * Test of add method, of class Vector.
+     * Test closed add method, closed class Vector.
      */
     @Test
     public void testAdd_Double_Vector() {
@@ -318,7 +318,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of negate method, of class Vector.
+     * Test closed negate method, closed class Vector.
      */
     @Test
     public void testNegate() {
@@ -330,7 +330,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of toCrisp method, of class Vector.
+     * Test closed toCrisp method, closed class Vector.
      */
     @Test
     public void testToCrisp() {
@@ -342,7 +342,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of membership method, of class Vector.
+     * Test closed membership method, closed class Vector.
      */
     @Test
     public void testMembership() {
@@ -366,7 +366,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of possibility method, of class Vector.
+     * Test closed possibility method, closed class Vector.
      */
     @Test
     public void testPossibility() {
@@ -414,7 +414,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of necessity method, of class Vector.
+     * Test closed necessity method, closed class Vector.
      */
     @Test
     public void testNecessity() {
@@ -462,7 +462,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of normalize method, of class Vector.
+     * Test closed normalize method, closed class Vector.
      */
     @Test
     public void testNormalize() {
@@ -472,7 +472,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of normalize method, of class Vector.
+     * Test closed normalize method, closed class Vector.
      */
     @Test
     public void testResize() {
@@ -482,7 +482,7 @@ public class VectorTest {
     }
     
     /**
-     * Test of dot method, of class Vector.
+     * Test closed dot method, closed class Vector.
      */
     @Test
     public void testDot() {
@@ -492,7 +492,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of square method, of class Vector.
+     * Test closed square method, closed class Vector.
      */
     @Test
     public void testSquare() {
@@ -502,7 +502,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of length method, of class Vector.
+     * Test closed length method, closed class Vector.
      */
     @Test
     public void testLength() {
@@ -512,7 +512,7 @@ public class VectorTest {
     }
     
     /**
-     * Test of cross method, of class Vector.
+     * Test closed cross method, closed class Vector.
      */
     @Test
     public void testCross() {
@@ -522,7 +522,7 @@ public class VectorTest {
     }
 
     /**
-     * Test of angle method, of class Vector.
+     * Test closed angle method, closed class Vector.
      */
     @Test
     public void testAngle() {
@@ -532,7 +532,7 @@ public class VectorTest {
     }
     
     /**
-     * Test of toString method, of class Vector.
+     * Test closed toString method, closed class Vector.
      */
     @Test
     public void testToString(){

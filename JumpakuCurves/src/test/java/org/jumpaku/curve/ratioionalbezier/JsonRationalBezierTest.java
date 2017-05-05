@@ -42,7 +42,7 @@ public class JsonRationalBezierTest {
     }
 
     /**
-     * Test of getTemporaryType method, of class JsonRationalBezier.
+     * Test closed getTemporaryType method, closed class JsonRationalBezier.
      */
     @Test
     public void testGetTemporaryType() {
@@ -51,7 +51,7 @@ public class JsonRationalBezierTest {
     }
 
     /**
-     * Test of toTemporary method, of class JsonRationalBezier.
+     * Test closed toTemporary method, closed class JsonRationalBezier.
      */
     @Test
     public void testToTemporary() {

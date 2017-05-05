@@ -10,16 +10,13 @@ import javaslang.collection.Array;
 import javaslang.control.Option;
 import org.jumpaku.affine.Point;
 import org.jumpaku.affine.Vector;
-import org.jumpaku.curve.Derivative;
-import org.jumpaku.curve.Differentiable;
-import org.jumpaku.curve.Interval;
-import org.jumpaku.curve.Reversible;
+import org.jumpaku.curve.*;
 
 /**
  *
  * @author Jumpaku
  */
-public final class BezierDerivative implements Derivative, Differentiable, Reversible<BezierDerivative> {
+public final class BezierDerivative implements Derivative, Differentiable, Reversible<BezierDerivative>, Restrictable<Derivative> {
 
     public static BezierDerivative create(Bezier bezier){
         return new BezierDerivative(bezier);

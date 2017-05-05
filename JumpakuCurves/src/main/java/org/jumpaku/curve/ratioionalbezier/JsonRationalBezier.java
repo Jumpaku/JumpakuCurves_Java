@@ -7,7 +7,6 @@ import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import org.jumpaku.affine.JsonPoint;
 import org.jumpaku.affine.WeightedPoint;
-import org.jumpaku.curve.JsonInterval;
 import org.jumpaku.json.Converter;
 
 /**

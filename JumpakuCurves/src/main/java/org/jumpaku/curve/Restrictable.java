@@ -17,6 +17,6 @@ public interface Restrictable<C extends Function> {
     C restrict(Interval i);
     
     default C restrict(Double begin, Double end){
-        return restrict(Interval.of(begin, end));
+        return restrict(Interval.closed(begin, end));
     }
 }

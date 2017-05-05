@@ -21,7 +21,7 @@ import static org.jumpaku.affine.PointMatcher.pointOf;
 public class AffineTest {
 
     /**
-     * Test of translation method, of class Transform.
+     * Test closed translation method, closed class Transform.
      */
     @Test
     public void testTranslation() {
@@ -31,7 +31,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of rotation method, of class Transform.
+     * Test closed rotation method, closed class Transform.
      */
     @Test
     public void testRotation() {
@@ -41,7 +41,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of scaling method, of class Transform.
+     * Test closed scaling method, closed class Transform.
      */
     @Test
     public void testScaling() {
@@ -51,7 +51,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of of method, of class Transform.
+     * Test closed closed method, closed class Transform.
      */
     @Test
     public void testOf() {
@@ -66,7 +66,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of id method, of class Transform.
+     * Test closed id method, closed class Transform.
      */
     @Test
     public void testId() {
@@ -76,7 +76,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of similarity method, of class Transform.
+     * Test closed similarity method, closed class Transform.
      */
     @Test
     public void testSimilarity() {
@@ -88,7 +88,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of calibrate method, of class Transform.
+     * Test closed calibrate method, closed class Transform.
      */
     @Test
     public void testCalibrate() {
@@ -108,7 +108,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of transformationAt method, of class Transform.
+     * Test closed transformationAt method, closed class Transform.
      */
     @Test
     public void testTransformationAt() {
@@ -125,7 +125,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of transformAt method, of class Transform.
+     * Test closed transformAt method, closed class Transform.
      */
     @Test
     public void testTransformAt() {
@@ -142,7 +142,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of scale method, of class Transform.
+     * Test closed scale method, closed class Transform.
      */
     @Test
     public void testScale_3args() {
@@ -152,7 +152,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of scale method, of class Transform.
+     * Test closed scale method, closed class Transform.
      */
     @Test
     public void testScale_Double() {
@@ -162,7 +162,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of scaleAt method, of class Transform.
+     * Test closed scaleAt method, closed class Transform.
      */
     @Test
     public void testScaleAt_4args() {
@@ -172,7 +172,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of scaleAt method, of class Transform.
+     * Test closed scaleAt method, closed class Transform.
      */
     @Test
     public void testScaleAt_Point_Double() {
@@ -182,7 +182,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of rotate method, of class Transform.
+     * Test closed rotate method, closed class Transform.
      */
     @Test
     public void testRotate_Vector_Double() {
@@ -192,7 +192,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of rotate method, of class Transform.
+     * Test closed rotate method, closed class Transform.
      */
     @Test
     public void testRotate_3args_1() {
@@ -202,7 +202,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of rotateAt method, of class Transform.
+     * Test closed rotateAt method, closed class Transform.
      */
     @Test
     public void testRotateAt_3args_1() {
@@ -212,7 +212,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of rotate method, of class Transform.
+     * Test closed rotate method, closed class Transform.
      */
     @Test
     public void testRotate_3args_2() {
@@ -222,7 +222,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of rotate method, of class Transform.
+     * Test closed rotate method, closed class Transform.
      */
     @Test
     public void testRotate_Vector_Vector() {
@@ -232,7 +232,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of rotateAt method, of class Transform.
+     * Test closed rotateAt method, closed class Transform.
      */
     @Test
     public void testRotateAt_4args() {
@@ -242,7 +242,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of rotateAt method, of class Transform.
+     * Test closed rotateAt method, closed class Transform.
      */
     @Test
     public void testRotateAt_3args_2() {
@@ -252,7 +252,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of move method, of class Transform.
+     * Test closed move method, closed class Transform.
      */
     @Test
     public void testTranslate_Vector() {
@@ -262,7 +262,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of move method, of class Transform.
+     * Test closed move method, closed class Transform.
      */
     @Test
     public void testTranslate_3args() {
@@ -272,7 +272,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of apply method, of class Transform.
+     * Test closed apply method, closed class Transform.
      */
     @Test
     public void testApply() {
@@ -286,7 +286,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of invert method, of class Transform.
+     * Test closed invert method, closed class Transform.
      */
     @Test
     public void testInvert() {
@@ -300,7 +300,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of concatenate method, of class Transform.
+     * Test closed concatenate method, closed class Transform.
      */
     @Test
     public void testConcatenate_2args() {
@@ -311,7 +311,7 @@ public class AffineTest {
     }
 
     /**
-     * Test of concatenate method, of class Transform.
+     * Test closed concatenate method, closed class Transform.
      */
     @Test
     public void testConcatenate() {

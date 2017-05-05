@@ -4,8 +4,9 @@ import javaslang.collection.Array;
 import javaslang.collection.Stream;
 import org.jumpaku.affine.JsonVector;
 import org.jumpaku.affine.Vector;
-import org.jumpaku.curve.JsonInterval;
+import org.jumpaku.curve.JsonKnot;
 import org.jumpaku.curve.Knot;
+import org.jumpaku.curve.bezier.Bezier;
 import org.jumpaku.json.Converter;
 
 import java.lang.reflect.Type;
@@ -29,28 +30,25 @@ public class JsonBSplineDerivative implements Converter<BSplineDerivative> {
 
     public static final class Data implements Converter.Temporary<BSplineDerivative> {
 
-        private final Integer degree;
-
         private final JsonVector.Data[] controlVectors;
 
-        private final JsonBSpline.KnotData[] knots;
+        private final JsonKnot.Data[] knots;
 
         public Data(BSplineDerivative db) {
-            this.degree = db.getDegree();
             this.controlVectors = db.getControlVectors().map(JsonVector.Data::new).toJavaArray(JsonVector.Data.class);
-            this.knots = db.getKnots().map(k->new JsonBSpline.KnotData(k.getValue(), k.getMultiplicity()))
-                    .toJavaArray(JsonBSpline.KnotData.class);
+            this.knots = db.getKnots().map(JsonKnot.Data::new)
+                    .toJavaArray(JsonKnot.Data.class);
         }
 
         @Override
         public BSplineDerivative newInstance() {
+            Array<Knot> ts = Stream.of(knots)
+                    .map(JsonKnot.Data::newInstance).toArray();
+
             return BSplineDerivative.create(
-                    degree,
-                    Stream.of(controlVectors)
-                            .map(JsonVector.Data::newInstance)
-                            .map(Vector::toCrisp),
-                    Stream.of(knots)
-                            .map(k-> Knot.of(k.getValue(), k.getMultiplicity())));
+                    ts.flatMap(Knot::toArray).sum().intValue()-controlVectors.length-1,
+                    Stream.of(controlVectors).map(JsonVector.Data::newInstance).map(Vector::toCrisp),
+                    ts);
         }
     }
 }

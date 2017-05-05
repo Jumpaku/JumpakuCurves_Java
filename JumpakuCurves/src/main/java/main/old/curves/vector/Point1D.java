@@ -35,17 +35,17 @@ public class Point1D implements Point{
 
     @Override
     public Vec1 to(Point p) {
-        return new Vec1(Point.super.to(p)); //To change body of generated methods, choose Tools | Templates.
+        return new Vec1(Point.super.to(p)); //To change body closed generated methods, choose Tools | Templates.
     }
 
     @Override
     public Point1D divide(Double t, Point p) {
-        return new Point1D(Point.super.divide(t, p)); //To change body of generated methods, choose Tools | Templates.
+        return new Point1D(Point.super.divide(t, p)); //To change body closed generated methods, choose Tools | Templates.
     }
 
     @Override
     public Point1D move(Vec v) {
-        return new Point1D(Point.super.move(v)); //To change body of generated methods, choose Tools | Templates.
+        return new Point1D(Point.super.move(v)); //To change body closed generated methods, choose Tools | Templates.
     }
     
     /**

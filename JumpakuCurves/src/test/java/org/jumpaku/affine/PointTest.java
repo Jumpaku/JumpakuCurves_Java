@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 public class PointTest {
     
     /**
-     * Test of fuzzy method, of class Point.
+     * Test closed fuzzy method, closed class Point.
      */
     @Test
     public void testFuzzy_PointCrisp_Double() {
@@ -31,7 +31,7 @@ public class PointTest {
     }
 
     /**
-     * Test of fuzzy method, of class Point.
+     * Test closed fuzzy method, closed class Point.
      */
     @Test
     public void testFuzzy_4args() {
@@ -44,7 +44,7 @@ public class PointTest {
     }
 
     /**
-     * Test of fuzzy method, of class Point.
+     * Test closed fuzzy method, closed class Point.
      */
     @Test
     public void testFuzzy_3args() {
@@ -57,7 +57,7 @@ public class PointTest {
     }
 
     /**
-     * Test of fuzzy method, of class Point.
+     * Test closed fuzzy method, closed class Point.
      */
     @Test
     public void testFuzzy_Double_Double() {
@@ -70,7 +70,7 @@ public class PointTest {
     }
 
     /**
-     * Test of zero method, of class Point.
+     * Test closed zero method, closed class Point.
      */
     @Test
     public void testZero_Double() {
@@ -83,7 +83,7 @@ public class PointTest {
     }
 
     /**
-     * Test of crisp method, of class Point.
+     * Test closed crisp method, closed class Point.
      */
     @Test
     public void testCrisp_3args() {
@@ -96,7 +96,7 @@ public class PointTest {
     }
 
     /**
-     * Test of crisp method, of class Point.
+     * Test closed crisp method, closed class Point.
      */
     @Test
     public void testCrisp_Double_Double() {
@@ -109,7 +109,7 @@ public class PointTest {
     }
 
     /**
-     * Test of crisp method, of class Point.
+     * Test closed crisp method, closed class Point.
      */
     @Test
     public void testCrisp_Double() {
@@ -122,7 +122,7 @@ public class PointTest {
     }
 
     /**
-     * Test of zero method, of class Point.
+     * Test closed zero method, closed class Point.
      */
     @Test
     public void testZero_0args() {
@@ -142,7 +142,7 @@ public class PointTest {
     }
 
     /**
-     * Test of fromJson method, of class Point.
+     * Test closed fromJson method, closed class Point.
      */
     @Test
     public void testFromJson() {
@@ -153,7 +153,7 @@ public class PointTest {
     }
 
     /**
-     * Test of toVector method, of class Point.
+     * Test closed toVector method, closed class Point.
      */
     @Test
     public void testToVector() {
@@ -165,7 +165,7 @@ public class PointTest {
     }
 
     /**
-     * Test of toCrisp method, of class Point.
+     * Test closed toCrisp method, closed class Point.
      */
     @Test
     public void testToCrisp() {
@@ -177,7 +177,7 @@ public class PointTest {
     }
 
     /**
-     * Test of getR method, of class Point.
+     * Test closed getR method, closed class Point.
      */
     @Test
     public void testGetX() {
@@ -187,7 +187,7 @@ public class PointTest {
     }
 
     /**
-     * Test of getY method, of class Point.
+     * Test closed getY method, closed class Point.
      */
     @Test
     public void testGetY() {
@@ -197,7 +197,7 @@ public class PointTest {
      }
 
     /**
-     * Test of getZ method, of class Point.
+     * Test closed getZ method, closed class Point.
      */
     @Test
     public void testGetZ() {
@@ -207,7 +207,7 @@ public class PointTest {
      }
 
     /**
-     * Test of getR method, of class Point.
+     * Test closed getR method, closed class Point.
      */
     @Test
     public void testGetR() {
@@ -217,7 +217,7 @@ public class PointTest {
     }    
 
     /**
-     * Test of membership method, of class Point.
+     * Test closed membership method, closed class Point.
      */
     @Test
     public void testMembership() {
@@ -241,7 +241,7 @@ public class PointTest {
     }
 
     /**
-     * Test of possibility method, of class Point.
+     * Test closed possibility method, closed class Point.
      */
     @Test
     public void testPossibility() {
@@ -289,7 +289,7 @@ public class PointTest {
     }
 
     /**
-     * Test of necessity method, of class Point.
+     * Test closed necessity method, closed class Point.
      */
     @Test
     public void testNecessity() {
@@ -337,7 +337,7 @@ public class PointTest {
     }
 
     /**
-     * Test of divide method, of class Point.
+     * Test closed divide method, closed class Point.
      */
     @Test
     public void testDivide() {
@@ -388,7 +388,7 @@ public class PointTest {
     }
 
     /**
-     * Test of toString method, of class Point.
+     * Test closed toString method, closed class Point.
      */
     @Test
     public void testToString(){
@@ -399,7 +399,7 @@ public class PointTest {
                 is(pointOf(1.23, 4.56, -7.89, 0.0)));
     }
     /**
-     * Test of move method, of class Point.
+     * Test closed move method, closed class Point.
      */
     @Test
     public void testMove() {
@@ -409,7 +409,7 @@ public class PointTest {
     }
 
     /**
-     * Test of diff method, of class Point.
+     * Test closed diff method, closed class Point.
      */
     @Test
     public void testDiff() {
@@ -419,7 +419,7 @@ public class PointTest {
     }
 
     /**
-     * Test of dist method, of class Point.
+     * Test closed dist method, closed class Point.
      */
     @Test
     public void testDist_Point() {
@@ -428,7 +428,7 @@ public class PointTest {
     }
 
     /**
-     * Test of dist method, of class Point.
+     * Test closed dist method, closed class Point.
      */
     @Test
     public void testDist_Point_Point() {
@@ -440,7 +440,7 @@ public class PointTest {
     }
     
     /**
-     * Test of distSquare method, of class Point.
+     * Test closed distSquare method, closed class Point.
      */
     @Test
     public void testDistSquare() {
@@ -450,7 +450,7 @@ public class PointTest {
     }
 
     /**
-     * Test of area method, of class Point.
+     * Test closed area method, closed class Point.
      */
     @Test
     public void testArea() {
@@ -460,7 +460,7 @@ public class PointTest {
     }
 
     /**
-     * Test of area method, of class Point.
+     * Test closed area method, closed class Point.
      */
     @Test
     public void testVolume() {
@@ -470,7 +470,7 @@ public class PointTest {
     }
 
     /**
-     * Test of normal method, of class Point.
+     * Test closed normal method, closed class Point.
      */
     @Test
     public void testNormal() {

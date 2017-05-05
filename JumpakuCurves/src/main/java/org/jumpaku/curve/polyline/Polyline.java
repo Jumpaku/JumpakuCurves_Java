@@ -40,7 +40,7 @@ public final class Polyline implements FuzzyCurve, Reversible<Curve>, Restrictab
         }
         Array<Double> params = Array.ofAll(ss);
 
-        return new Polyline(Interval.of(0.0, params.last()), params, ps);
+        return new Polyline(Interval.closed(0.0, params.last()), params, ps);
     }
     
     public static Polyline approximate(Curve curve, Integer n){
@@ -126,8 +126,8 @@ public final class Polyline implements FuzzyCurve, Reversible<Curve>, Restrictab
 
     @Override
     public Polyline restrict(Double begin, Double end){
-        if(!getDomain().includes(Interval.of(begin, end))) {
-            throw new IllegalArgumentException("Interval i = [begin, end] must be a subset of this domain");
+        if(!getDomain().includes(Interval.closed(begin, end))) {
+            throw new IllegalArgumentException("Interval i = [begin, end] must be a subset closed this domain");
         }
 
         int ai = parameters.indexWhere(param -> begin < param);
@@ -136,7 +136,7 @@ public final class Polyline implements FuzzyCurve, Reversible<Curve>, Restrictab
         Point ap = evaluate(begin);
         Point bp = evaluate(end);
 
-        return new Polyline(Interval.of(0.0, end - begin),
+        return new Polyline(Interval.closed(0.0, end - begin),
                 parameters.subSequence(ai, bi).append(end).prepend(begin).map(d->d-begin),
                 getPoints().subSequence(ai, bi).prepend(ap).append(bp));
     }
@@ -152,7 +152,7 @@ public final class Polyline implements FuzzyCurve, Reversible<Curve>, Restrictab
     public Tuple2<Polyline, Polyline> subdivide(Double s){
         int i = parameters.indexWhere(param -> s < param);
         Point p = evaluate(s);
-        return Tuple.of(new Polyline(Interval.of(0.0, s), parameters.take(i).append(s), getPoints().take(i).append(p)),
-                new Polyline(Interval.of(0.0, getDomain().getEnd()-s), parameters.drop(i).map(d->d-s).prepend(0.0), getPoints().drop(i).prepend(p)));
+        return Tuple.of(new Polyline(Interval.closed(0.0, s), parameters.take(i).append(s), getPoints().take(i).append(p)),
+                new Polyline(Interval.closed(0.0, getDomain().getEnd()-s), parameters.drop(i).map(d->d-s).prepend(0.0), getPoints().drop(i).prepend(p)));
     }
 }

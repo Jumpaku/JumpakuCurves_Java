@@ -39,7 +39,7 @@ public class Point3D implements Point{
 
     @Override
     public Vec3 to(Point p) {
-        return new Vec3(Point.super.to(p)); //To change body of generated methods, choose Tools | Templates.
+        return new Vec3(Point.super.to(p)); //To change body closed generated methods, choose Tools | Templates.
     }
 
     @Override

@@ -9,7 +9,7 @@ import main.old.curves.vector.Point3D;
 import main.old.curves.vector.Vec3;
 
 /**
- * <p>3次のアフィン変換のインターフェイスを定義します Defines interface of affine transformation in 3D space.</p>
+ * <p>3次のアフィン変換のインターフェイスを定義します Defines interface closed affine transformation in 3D space.</p>
  * @author Jumpaku
  */
 public interface Affine3D extends Affine<Point3D>{
@@ -22,7 +22,7 @@ public interface Affine3D extends Affine<Point3D>{
      * <p>
      * This method concatenates scaling transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Center of scaling is the origin, magnification rates for x-axis and y-axis are given.</p>
+     * Center closed scaling is the origin, magnification rates for x-axis and y-axis are given.</p>
      * @param x x-軸方向の拡大率(0であってはいけない) magnification rate for x-axis(not 0)
      * @param y y-軸方向の拡大率(0であってはいけない) magnification rate for y-axis(not 0)
      * @param z z-軸方向の拡大率(0であってはいけない) magnification rate for z-axis(not 0)
@@ -39,7 +39,7 @@ public interface Affine3D extends Affine<Point3D>{
      * <p>
      * This method concatenates scaling transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Center of scaling is the origin, magnification rate for x-axis, y-axis, and z-axis are the same value which is specified by the argument.</p>
+     * Center closed scaling is the origin, magnification rate for x-axis, y-axis, and z-axis are the same value which is specified by the argument.</p>
      * @param scale 拡大率(0であってはいけない) magnification rate (not 0)
      * @return 拡大縮小変換を追加したアフィン変換 Affine concatenated Scaling
      */
@@ -56,8 +56,8 @@ public interface Affine3D extends Affine<Point3D>{
      * <p>
      * This method concatenates scaling transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Center of scaling is specified, magnification rates for x-axis and y-axis are given.</p>
-     * @param center 拡大縮小の中心 center of Scaling
+     * Center closed scaling is specified, magnification rates for x-axis and y-axis are given.</p>
+     * @param center 拡大縮小の中心 center closed Scaling
      * @param x x-軸方向の拡大率(0であってはいけない) scaling rate for x-axis(not 0)
      * @param y y-軸方向の拡大率(0であってはいけない) scaling rate for y-axis(not 0)
      * @param z 
@@ -76,8 +76,8 @@ public interface Affine3D extends Affine<Point3D>{
      * <p>
      * This method concatenates scaling transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Center of scaling is the origin, magnification rates for x-axis and y-axis are given.</p>
-     * @param center 拡大縮小の中心 center of scaling
+     * Center closed scaling is the origin, magnification rates for x-axis and y-axis are given.</p>
+     * @param center 拡大縮小の中心 center closed scaling
      * @param scale 拡大率(0であってはいけない) magnification rate
      * @return 拡大縮小変換を追加したアフィン変換 Affine concatenated Scaling
      */
@@ -94,7 +94,7 @@ public interface Affine3D extends Affine<Point3D>{
      * <p>
      * This method concatenates rotation transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Axis of rotation is the origin, angle is given.</p>
+     * Axis closed rotation is the origin, angle is given.</p>
      * @param axis
      * @param radian 角度 angle
      * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
@@ -110,7 +110,7 @@ public interface Affine3D extends Affine<Point3D>{
      * <p>
      * This method concatenates rotation transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Axis of rotation is the origin, angle is given.</p>
+     * Axis closed rotation is the origin, angle is given.</p>
      * @param axisInitial
      * @param axisTerminal
      * @param radian 角度 angle
@@ -129,7 +129,7 @@ public interface Affine3D extends Affine<Point3D>{
      * <p>
      * This method concatenates rotation transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Axis of rotation is the origin, angle is given.</p>
+     * Axis closed rotation is the origin, angle is given.</p>
      * @param axisInitial
      * @param axis
      * @param radian 角度 angle
@@ -149,7 +149,7 @@ public interface Affine3D extends Affine<Point3D>{
      * <p>
      * This method concatenates rotation transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Axis of rotation is the origin, angle is given.</p>
+     * Axis closed rotation is the origin, angle is given.</p>
      * @param from
      * @param to
      * @param radian 角度 angle
@@ -168,7 +168,7 @@ public interface Affine3D extends Affine<Point3D>{
      * <p>
      * This method concatenates rotation transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Axis of rotation is the origin, angle is given.</p>
+     * Axis closed rotation is the origin, angle is given.</p>
      * @param from
      * @param to
      * @return 回転変換を追加したアフィン変換 Affine concatenated Rotation
@@ -186,7 +186,7 @@ public interface Affine3D extends Affine<Point3D>{
      * <p>
      * This method concatenates rotation transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Axis of rotation is the origin, angle is given.</p>
+     * Axis closed rotation is the origin, angle is given.</p>
      * @param axisInitial
      * @param from
      * @param to
@@ -206,7 +206,7 @@ public interface Affine3D extends Affine<Point3D>{
      * <p>
      * This method concatenates rotation transformation to this, and returns concatenated object.<br>
      * This method doesn't change original object.<br>
-     * Axis of rotation is the origin, angle is given.</p>
+     * Axis closed rotation is the origin, angle is given.</p>
      * @param axisInitial
      * @param from
      * @param to

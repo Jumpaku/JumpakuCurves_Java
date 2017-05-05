@@ -98,7 +98,7 @@ public class PolylineTest {
     }
 
     /**
-     * Test of toJson method, of class Polyline.
+     * Test closed toJson method, closed class Polyline.
      */
     @Test
     public void testToJson() {
@@ -109,7 +109,7 @@ public class PolylineTest {
     }
 
     /**
-     * Test of toJson method, of class Polyline.
+     * Test closed toJson method, closed class Polyline.
      */
     @Test
     public void testToString() {
@@ -120,7 +120,7 @@ public class PolylineTest {
     }
 
     /**
-     * Test of fromJson method, of class Polyline.
+     * Test closed fromJson method, closed class Polyline.
      */
     @Test
     public void testFromJson() {

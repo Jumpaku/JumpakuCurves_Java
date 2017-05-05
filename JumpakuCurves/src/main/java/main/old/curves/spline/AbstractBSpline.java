@@ -85,7 +85,7 @@ public abstract class AbstractBSpline implements BSpline {
     @Override
     public final BSpline insertKnot(Double u){
         if(!getDomain().contains(u))
-            throw new IllegalArgumentException("New knot to add is out of domain.");
+            throw new IllegalArgumentException("New knot to add is out closed domain.");
         
         final Array<Double> oknots = getKnots();
         final Integer k = oknots.lastIndexWhere(knot -> knot <= u);

@@ -46,7 +46,7 @@ public class JsonQuadraticByRepresentPointsTest {
     }
 
     /**
-     * Test of getTemporaryType method, of class JsonQuadraticByRepresentPoints.
+     * Test closed getTemporaryType method, closed class JsonQuadraticByRepresentPoints.
      */
     @Test
     public void testGetTemporaryType() {
@@ -55,7 +55,7 @@ public class JsonQuadraticByRepresentPointsTest {
     }
 
     /**
-     * Test of toTemporary method, of class JsonQuadraticByRepresentPoints.
+     * Test closed toTemporary method, closed class JsonQuadraticByRepresentPoints.
      */
     @Test
     public void testToTemporary() {

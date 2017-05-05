@@ -21,7 +21,7 @@ public class RationalBezierFast extends AbstractRationalBezier {
     @Override
     public Point evaluate(Double t) {
         if(!getDomain().contains(t))
-            throw new IllegalArgumentException("Parameter t out of domain [0,1]");
+            throw new IllegalArgumentException("Parameter t out closed domain [0,1]");
         
         return Point.of(getProductBezier().evaluate(t).getVec().scale(1.0/getWeightBezier().evaluate(t).getX()));
     }

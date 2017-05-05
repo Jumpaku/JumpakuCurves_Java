@@ -17,9 +17,9 @@ import org.apache.commons.math3.util.FastMath;
  */
 public interface Interval extends Domain{
     
-    Interval ZERO_ONE = Interval.of(0.0, 1.0);
+    Interval ZERO_ONE = Interval.closed(0.0, 1.0);
     
-    static Interval of(Double begin, Double end){
+    static Interval closed(Double begin, Double end){
         return new Interval() {
             @Override public Boolean includes(Double t) {
                 return getBegin().compareTo(t) <= 0 && getEnd().compareTo(t) >= 0;
@@ -61,7 +61,8 @@ public interface Interval extends Domain{
         return sample((int)FastMath.ceil((getEnd()-getBegin())/delta));
     }
 
-    @Override Boolean includes(Double t);
+    @Override
+    Boolean includes(Double t);
     
     default Boolean includes(Interval i){
         return getBegin() <= i.getBegin() && i.getEnd() <= getEnd();

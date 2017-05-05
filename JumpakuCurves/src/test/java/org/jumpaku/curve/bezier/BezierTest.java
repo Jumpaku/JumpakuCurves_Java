@@ -15,7 +15,7 @@ import org.junit.Test;
 import static org.hamcrest.core.Is.is;
 import static org.jumpaku.affine.PointMatcher.pointOf;
 import static org.jumpaku.affine.VectorMatcher.vectorOf;
-import static org.jumpaku.curve.bezier.BezierDerivativeMatcher.bezierDerivativeOf;
+import static org.jumpaku.curve.bezier.BezierMatcher.bezierOf;
 import static org.jumpaku.curve.bezier.BezierMatcher.bezierOf;
 import static org.junit.Assert.*;
 
@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 public class BezierTest {
     
     /**
-     * Test of create method, of class Bezier.
+     * Test closed create method, closed class Bezier.
      */
     @Test
     public void testCreate_Array_Interval() {
@@ -41,7 +41,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of create method, of class Bezier.
+     * Test closed create method, closed class Bezier.
      */
     @Test
     public void testCreate_PointArr() {
@@ -57,7 +57,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of toJson method, of class Bezier.
+     * Test closed toJson method, closed class Bezier.
      */
     @Test
     public void testToJson() {
@@ -68,7 +68,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of toJson method, of class Bezier.
+     * Test closed toJson method, closed class Bezier.
      */
     @Test
     public void testFromJson() {
@@ -80,7 +80,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of evaluate method, of class Bezier.
+     * Test closed evaluate method, closed class Bezier.
      */
     @Test
     public void testEvaluate() {
@@ -95,7 +95,7 @@ public class BezierTest {
     
 
     /**
-     * Test of evaluate method, of class Bezier.
+     * Test closed evaluate method, closed class Bezier.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testEvaluateException() {
@@ -106,7 +106,7 @@ public class BezierTest {
 
 
     /**
-     * Test of decasteljau method, of class Bezier.
+     * Test closed decasteljau method, closed class Bezier.
      */
     @Test
     public void testDecasteljau() {
@@ -120,7 +120,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of getDomain method, of class Bezier.
+     * Test closed getDomain method, closed class Bezier.
      */
     @Test
     public void testGetDomain() {
@@ -132,7 +132,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of getDegree method, of class Bezier.
+     * Test closed getDegree method, closed class Bezier.
      */
     @Test
     public void testGetDegree() {
@@ -143,7 +143,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of differentiate method, of class Bezier.
+     * Test closed differentiate method, closed class Bezier.
      */
     @Test
     public void testDifferentiate_Double() {
@@ -155,18 +155,18 @@ public class BezierTest {
     }
 
     /**
-     * Test of differentiate method, of class Bezier.
+     * Test closed differentiate method, closed class Bezier.
      */
     @Test
     public void testDifferentiate_0args() {
         System.out.println("differentiate");
         Bezier instance = Bezier.create(Point.fuzzy(0.0, 0.0, 1.0), Point.fuzzy(0.0, 1.0, 2.0), Point.fuzzy(1.0, 0.0, 3.0), Point.fuzzy(1.0, 1.0, 4.0));
         BezierDerivative expResult = BezierDerivative.create(Array.of(Vector.crisp(0.0, 3.0), Vector.crisp(3.0, -3.0), Vector.crisp(0.0, 3.0)));
-        assertThat(instance.differentiate(), is(bezierDerivativeOf(expResult)));
+        assertThat(instance.differentiate().toBezier(), is(bezierOf(expResult.toBezier())));
     }
 
     /**
-     * Test of restrict method, of class Bezier.
+     * Test closed restrict method, closed class Bezier.
      */
     @Test
     public void testRestrict() {
@@ -177,7 +177,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of restrict method, of class Bezier.
+     * Test closed restrict method, closed class Bezier.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testRestrictException() {
@@ -187,7 +187,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of reverse method, of class Bezier.
+     * Test closed reverse method, closed class Bezier.
      */
     @Test
     public void testReverse() {
@@ -198,7 +198,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of getControlPoints method, of class Bezier.
+     * Test closed getControlPoints method, closed class Bezier.
      */
     @Test
     public void testGetControlPoints() {
@@ -213,7 +213,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of elevate method, of class Bezier.
+     * Test closed elevate method, closed class Bezier.
      */
     @Test
     public void testElevate() {
@@ -224,7 +224,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of reduce method, of class Bezier.
+     * Test closed reduce method, closed class Bezier.
      */
     @Test
     public void testReduce() {
@@ -243,7 +243,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of reduce method, of class Bezier.
+     * Test closed reduce method, closed class Bezier.
      */
     @Test(expected = IllegalStateException.class)
     public void testReduceException() {
@@ -252,7 +252,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of subdivide method, of class Bezier.
+     * Test closed subdivide method, closed class Bezier.
      */
     @Test
     public void testSubdivide() {
@@ -266,7 +266,7 @@ public class BezierTest {
     }
 
     /**
-     * Test of toString method, of class Bezier.
+     * Test closed toString method, closed class Bezier.
      */
     @Test
     public void testToString() {

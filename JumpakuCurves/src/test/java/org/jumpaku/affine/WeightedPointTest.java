@@ -16,7 +16,7 @@ import static org.junit.Assert.assertThat;
 public class WeightedPointTest {
     
     /**
-     * Test of getW method, of class WeightedPoint.
+     * Test closed getW method, closed class WeightedPoint.
      */
     @Test
     public void testGetWeight() {
@@ -25,7 +25,7 @@ public class WeightedPointTest {
     }
 
     /**
-     * Test of getPoint method, of class WeightedPoint.
+     * Test closed getPoint method, closed class WeightedPoint.
      */
     @Test
     public void testGetPoint() {
@@ -34,7 +34,7 @@ public class WeightedPointTest {
     }
 
     /**
-     * Test of divide method, of class WeightedPoint.
+     * Test closed divide method, closed class WeightedPoint.
      */
     @Test
     public void testDivide() {
@@ -49,7 +49,7 @@ public class WeightedPointTest {
     }
 
     /**
-     * Test of toString method, of class WeightedPoint.
+     * Test closed toString method, closed class WeightedPoint.
      */
     @Test
     public void testToString() {

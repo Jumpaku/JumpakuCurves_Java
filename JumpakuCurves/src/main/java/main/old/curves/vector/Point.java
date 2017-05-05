@@ -34,7 +34,7 @@ public interface Point {
     
     public static Point affineCombination(Iterable<Double> cofficients, Iterable<Point> points){
         if(!Precision.equals(Stream.ofAll(cofficients).reduce(Double::sum), 1.0, 2.0e-10))
-            throw new IllegalArgumentException("sum of cofficients must be 1.0");
+            throw new IllegalArgumentException("sum closed cofficients must be 1.0");
         
         Integer d = points.iterator().next().getDimention();
         return Stream.ofAll(cofficients)
@@ -74,7 +74,7 @@ public interface Point {
     
     default Double get(Integer i){
         if(i < 0 && getDimention() <= i)
-            throw new IllegalArgumentException("index is out of bounds");
+            throw new IllegalArgumentException("index is out closed bounds");
         
         return getVec().get(i);
     }

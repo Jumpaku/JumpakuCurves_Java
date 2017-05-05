@@ -25,7 +25,7 @@ public class RationalBezierAccurate extends AbstractRationalBezier {
     @Override
     public Point evaluate(Double t) {
         if(!getDomain().contains(t))
-            throw new IllegalArgumentException("Parameter t out of domain [0,1]");
+            throw new IllegalArgumentException("Parameter t out closed domain [0,1]");
         
         return deCasteljau(t, Array.ofAll(getControlPoints().zip(getWeights()))).head()._1();
     }

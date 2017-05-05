@@ -28,7 +28,7 @@ import static org.jumpaku.affine.WeightedPointMatcher.weightedPointOf;
 public class RationalBezierTest {
     
     /**
-     * Test of create method, of class RationalBezier.
+     * Test closed create method, closed class RationalBezier.
      */
     @Test
     public void testCreate_Iterable() {
@@ -49,7 +49,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of create method, of class RationalBezier.
+     * Test closed create method, closed class RationalBezier.
      */
     @Test
     public void testCreate_Interval_Iterable() {
@@ -68,7 +68,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of create method, of class RationalBezier.
+     * Test closed create method, closed class RationalBezier.
      */
     @Test
     public void testCreate_WeightedPointArr() {
@@ -88,7 +88,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of create method, of class RationalBezier.
+     * Test closed create method, closed class RationalBezier.
      */
     @Test
     public void testCreate_Interval_WeightedPointArr() {
@@ -107,7 +107,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of create method, of class RationalBezier.
+     * Test closed create method, closed class RationalBezier.
      */
     @Test
     public void testCreate_Iterable_Iterable() {
@@ -126,7 +126,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of fromBezier method, of class RationalBezier.
+     * Test closed fromBezier method, closed class RationalBezier.
      */
     @Test
     public void testFromBezier() {
@@ -145,7 +145,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of toJson method, of class RationalBezier.
+     * Test closed toJson method, closed class RationalBezier.
      */
     @Test
     public void testToJson() {
@@ -161,7 +161,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of fromJson method, of class RationalBezier.
+     * Test closed fromJson method, closed class RationalBezier.
      */
     @Test
     public void testFromJson() {
@@ -183,7 +183,7 @@ public class RationalBezierTest {
     static final double R2 = Math.sqrt(2);
 
     /**
-     * Test of evaluate method, of class RationalBezier.
+     * Test closed evaluate method, closed class RationalBezier.
      */
     @Test
     public void testEvaluate() {
@@ -202,7 +202,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of getDomain method, of class RationalBezier.
+     * Test closed getDomain method, closed class RationalBezier.
      */
     @Test
     public void testGetDomain() {
@@ -219,7 +219,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of decasteljau method, of class RationalBezier.
+     * Test closed decasteljau method, closed class RationalBezier.
      */
     @Test
     public void testDecasteljau() {
@@ -238,7 +238,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of weightBezier method, of class RationalBezier.
+     * Test closed weightBezier method, closed class RationalBezier.
      */
     @Test
     public void testWeightBezier() {
@@ -247,7 +247,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of differentiate method, of class RationalBezier.
+     * Test closed differentiate method, closed class RationalBezier.
      */
     @Test
     public void testDifferentiate() {
@@ -268,39 +268,45 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of restrict method, of class RationalBezier.
+     * Test closed restrict method, closed class RationalBezier.
      */
     @Test
     public void testRestrict_Interval() {
         System.out.println("restrict");
-        Array<WeightedPoint> points = Array.of(
-                new WeightedPoint(Point.fuzzy(0.0, 0.0, 1.0), 1.0),
+        RationalBezier result = RationalBezier.create(
+                new WeightedPoint(Point.fuzzy(0.0, 0.0, 2.0), 1.0),
                 new WeightedPoint(Point.fuzzy(0.0, 1.0, 2.0), 2.0),
-                new WeightedPoint(Point.fuzzy(1.0, 0.0, 3.0), 3.0),
-                new WeightedPoint(Point.fuzzy(1.0, 1.0, 4.0), 4.0));
-        RationalBezier result = RationalBezier.create(points).restrict(Interval.of(0.3, 0.8));
-        assertThat(result, is(rationalBezierOf(
-                RationalBezier.create(points))));
+                new WeightedPoint(Point.fuzzy(1.0, 0.0, 2.0), 2.0),
+                new WeightedPoint(Point.fuzzy(1.0, 1.0, 2.0), 1.0))
+                .restrict(Interval.closed(1/4.0, 1/2.0));
+        assertThat(result, is(rationalBezierOf(RationalBezier.create(
+                new WeightedPoint(Point.fuzzy(0.19, 0.55, 2.0),      25/16.0),
+                new WeightedPoint(Point.fuzzy(7.5/27, 15.5/27, 2.0), 27/16.0),
+                new WeightedPoint(Point.fuzzy(11/28.0, 15/28.0, 2.0),7/4.0),
+                new WeightedPoint(Point.fuzzy(0.5, 0.5, 2.0),        7/4.0)))));
     }
 
     /**
-     * Test of restrict method, of class RationalBezier.
+     * Test closed restrict method, closed class RationalBezier.
      */
     @Test
     public void testRestrict_Double_Double() {
         System.out.println("restrict");
-        Array<WeightedPoint> points = Array.of(
-                new WeightedPoint(Point.fuzzy(0.0, 0.0, 1.0), 1.0),
+        RationalBezier result = RationalBezier.create(
+                new WeightedPoint(Point.fuzzy(0.0, 0.0, 2.0), 1.0),
                 new WeightedPoint(Point.fuzzy(0.0, 1.0, 2.0), 2.0),
-                new WeightedPoint(Point.fuzzy(1.0, 0.0, 3.0), 3.0),
-                new WeightedPoint(Point.fuzzy(1.0, 1.0, 4.0), 4.0));
-        RationalBezier result = RationalBezier.create(points).restrict(0.3, 0.8);
-        assertThat(result, is(rationalBezierOf(
-                RationalBezier.create(points))));
+                new WeightedPoint(Point.fuzzy(1.0, 0.0, 2.0), 2.0),
+                new WeightedPoint(Point.fuzzy(1.0, 1.0, 2.0), 1.0))
+                .restrict(0.25, 0.5);
+        assertThat(result, is(rationalBezierOf(RationalBezier.create(
+                new WeightedPoint(Point.fuzzy(0.19, 0.55, 2.0),      25/16.0),
+                new WeightedPoint(Point.fuzzy(7.5/27, 15.5/27, 2.0), 27/16.0),
+                new WeightedPoint(Point.fuzzy(11/28.0, 15/28.0, 2.0),7/4.0),
+                new WeightedPoint(Point.fuzzy(0.5, 0.5, 2.0),        7/4.0)))));
     }
 
     /**
-     * Test of reverse method, of class RationalBezier.
+     * Test closed reverse method, closed class RationalBezier.
      */
     @Test
     public void testReverse() {
@@ -316,7 +322,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of getWeightedControlPoints method, of class RationalBezier.
+     * Test closed getWeightedControlPoints method, closed class RationalBezier.
      */
     @Test
     public void testGetWeightedControlPoints() {
@@ -335,7 +341,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of elevate method, of class RationalBezier.
+     * Test closed elevate method, closed class RationalBezier.
      */
     @Test
     public void testElevate() {
@@ -358,7 +364,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of reduce method, of class RationalBezier.
+     * Test closed reduce method, closed class RationalBezier.
      */
     @Test
     public void testReduce() {
@@ -400,7 +406,7 @@ public class RationalBezierTest {
     }
 
     /**
-     * Test of subdivide method, of class RationalBezier.
+     * Test closed subdivide method, closed class RationalBezier.
      */
     @Test
     public void testSubdivide() {
@@ -429,7 +435,7 @@ public class RationalBezierTest {
         assertThat(result._2(), is(rationalBezierOf(second)));
     }
     /**
-     * Test of getDegree method, of class RationalBezier.
+     * Test closed getDegree method, closed class RationalBezier.
      */
     @Test
     public void testGetDegree() {
@@ -445,7 +451,7 @@ public class RationalBezierTest {
 
 
     /**
-     * Test of toString method, of class RationalBezier.
+     * Test closed toString method, closed class RationalBezier.
      */
     @Test
     public void testToString() {

@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 public class GradeTest {
     
     /**
-     * Test of of method, of class Grade.
+     * Test closed closed method, closed class Grade.
      */
     @Test
     public void testOf_Double() {
@@ -36,7 +36,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of clamped method, of class Grade.
+     * Test closed clamped method, closed class Grade.
      */
     @Test
     public void testClamped() {
@@ -49,7 +49,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of of method, of class Grade.
+     * Test closed closed method, closed class Grade.
      */
     @Test
     public void testOf_Integer() {
@@ -59,7 +59,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of of method, of class Grade.
+     * Test closed closed method, closed class Grade.
      */
     @Test
     public void testOf_Boolean() {
@@ -69,7 +69,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of and method, of class Grade.
+     * Test closed and method, closed class Grade.
      */
     @Test
     public void testAnd_Grade_Grade() {
@@ -78,7 +78,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of or method, of class Grade.
+     * Test closed or method, closed class Grade.
      */
     @Test
     public void testOr_Grade_Grade() {
@@ -87,7 +87,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of not method, of class Grade.
+     * Test closed not method, closed class Grade.
      */
     @Test
     public void testNot_Grade() {
@@ -96,7 +96,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of compare method, of class Grade.
+     * Test closed compare method, closed class Grade.
      */
     @Test
     public void testCompare() {
@@ -107,7 +107,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of toString method, of class Grade.
+     * Test closed toString method, closed class Grade.
      */
     @Test
     public void testToString_Grade() {
@@ -116,7 +116,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of parseGrade method, of class Grade.
+     * Test closed parseGrade method, closed class Grade.
      */
     @Test
     public void testParseGrade() {
@@ -125,7 +125,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of getValue method, of class Grade.
+     * Test closed getValue method, closed class Grade.
      */
     @Test
     public void testGetValue() {
@@ -136,7 +136,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of and method, of class Grade.
+     * Test closed and method, closed class Grade.
      */
     @Test
     public void testAnd_Grade() {
@@ -145,7 +145,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of or method, of class Grade.
+     * Test closed or method, closed class Grade.
      */
     @Test
     public void testOr_Grade() {
@@ -154,7 +154,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of not method, of class Grade.
+     * Test closed not method, closed class Grade.
      */
     @Test
     public void testNot_0args() {
@@ -163,7 +163,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of toString method, of class Grade.
+     * Test closed toString method, closed class Grade.
      */
     @Test
     public void testToString_0args() {
@@ -172,7 +172,7 @@ public class GradeTest {
     }
 
     /**
-     * Test of compareTo method, of class Grade.
+     * Test closed compareTo method, closed class Grade.
      */
     @Test
     public void testCompareTo() {

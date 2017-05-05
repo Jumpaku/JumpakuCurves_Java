@@ -97,8 +97,8 @@ public final class Bezier implements FuzzyCurve, Differentiable, Reversible<Curv
 
     @Override
     public Bezier restrict(Double begin, Double end){
-        if(!getDomain().includes(Interval.of(begin, end))) {
-            throw new IllegalArgumentException("Interval i must be a subset of this domain");
+        if(!getDomain().includes(Interval.closed(begin, end))) {
+            throw new IllegalArgumentException("Interval i must be a subset closed this domain");
         }
 
         return subdivide(end)._1().subdivide(begin/end)._2();

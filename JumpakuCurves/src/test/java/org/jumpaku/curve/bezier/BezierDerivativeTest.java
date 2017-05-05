@@ -10,7 +10,7 @@ import static org.hamcrest.core.Is.is;
 import org.jumpaku.affine.Point;
 import org.jumpaku.affine.Vector;
 import org.jumpaku.curve.Interval;
-import static org.jumpaku.curve.bezier.BezierDerivativeMatcher.bezierDerivativeOf;
+import static org.jumpaku.curve.bezier.BezierMatcher.bezierOf;
 import static org.jumpaku.affine.VectorMatcher.vectorOf;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
 public class BezierDerivativeTest {
 
     /**
-     * Test of create method, of class BezierDerivative.
+     * Test closed create method, closed class BezierDerivative.
      */
     @Test
     public void testCreate_Bezier() {
@@ -37,7 +37,7 @@ public class BezierDerivativeTest {
     }
 
     /**
-     * Test of create method, of class BezierDerivative.
+     * Test closed create method, closed class BezierDerivative.
      */
     @Test
     public void testCreate_Array_Interval() {
@@ -52,7 +52,7 @@ public class BezierDerivativeTest {
     }
 
     /**
-     * Test of getDomain method, of class BezierDerivative.
+     * Test closed getDomain method, closed class BezierDerivative.
      */
     @Test
     public void testGetDomain() {
@@ -64,7 +64,7 @@ public class BezierDerivativeTest {
     }
 
     /**
-     * Test of evaluate method, of class Bezier.
+     * Test closed evaluate method, closed class Bezier.
      */
     @Test
     public void testEvaluate() {
@@ -79,7 +79,7 @@ public class BezierDerivativeTest {
     
 
     /**
-     * Test of evaluate method, of class Bezier.
+     * Test closed evaluate method, closed class Bezier.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testEvaluateException0() {
@@ -89,40 +89,40 @@ public class BezierDerivativeTest {
     }
     
     /**
-     * Test of differentiate method, of class BezierDerivative.
+     * Test closed differentiate method, closed class BezierDerivative.
      */
     @Test
     public void testDifferentiate() {
         System.out.println("differentiate");
         BezierDerivative instance = BezierDerivative.create(Array.of(Vector.crisp(0.0, 0.0), Vector.crisp(0.0, 1.0), Vector.crisp(1.0, 0.0), Vector.crisp(1.0, 1.0)));
         BezierDerivative expResult = BezierDerivative.create(Array.of(Vector.crisp(0.0, 3.0), Vector.crisp(3.0, -3.0), Vector.crisp(0.0, 3.0)));
-        assertThat(instance.differentiate(), is(bezierDerivativeOf(expResult)));
+        assertThat(instance.differentiate().toBezier(), is(bezierOf(expResult.toBezier())));
     }
 
     /**
-     * Test of restrict method, of class BezierDerivative.
+     * Test closed restrict method, closed class BezierDerivative.
      */
     @Test
     public void testRestrict() {
         System.out.println("restrict");
         BezierDerivative instance = BezierDerivative.create(Array.of(Vector.crisp(0.0, 0.0), Vector.crisp(0.0, 1.0), Vector.crisp(1.0, 0.0), Vector.crisp(1.0, 1.0)));
         BezierDerivative expResult = BezierDerivative.create(Array.of(Vector.crisp(0.5, 0.5), Vector.crisp(0.75, 0.5), Vector.crisp(1.0, 0.5), Vector.crisp(1.0, 1.0)));
-        assertThat(instance.restrict(0.5, 1.0), is(bezierDerivativeOf(expResult)));
+        assertThat(instance.restrict(0.5, 1.0).toBezier(), is(bezierOf(expResult.toBezier())));
     }
 
     /**
-     * Test of reverse method, of class BezierDerivative.
+     * Test closed reverse method, closed class BezierDerivative.
      */
     @Test
     public void testReverse() {
         System.out.println("reverse");
         BezierDerivative instance = BezierDerivative.create(Array.of(Vector.crisp(0.0, 0.0), Vector.crisp(0.0, 1.0), Vector.crisp(1.0, 0.0), Vector.crisp(1.0, 1.0)));
         BezierDerivative expResult = BezierDerivative.create(Array.of(Vector.crisp(1.0, 1.0), Vector.crisp(1.0, 0.0), Vector.crisp(0.0, 1.0), Vector.crisp(0.0, 0.0)));
-        assertThat(instance.reverse(), is(bezierDerivativeOf(expResult)));
+        assertThat(instance.reverse().toBezier(), is(bezierOf(expResult.toBezier())));
     }
 
     /**
-     * Test of getControlVectors method, of class BezierDerivative.
+     * Test closed getControlVectors method, closed class BezierDerivative.
      */
     @Test
     public void testGetControlVectors() {
@@ -137,7 +137,7 @@ public class BezierDerivativeTest {
     }
 
     /**
-     * Test of getDegree method, of class BezierDerivative.
+     * Test closed getDegree method, closed class BezierDerivative.
      */
     @Test
     public void testGetDegree() {
@@ -148,37 +148,37 @@ public class BezierDerivativeTest {
     }
 
     /**
-     * Test of elevate method, of class BezierDerivative.
+     * Test closed elevate method, closed class BezierDerivative.
      */
     @Test
     public void testElevate() {
         System.out.println("elevate");
         BezierDerivative instance = BezierDerivative.create(Array.of(Vector.crisp(-1.0, 0.0), Vector.crisp(0.0, 2.0), Vector.crisp(1.0, 0.0)));
         BezierDerivative expected = BezierDerivative.create(Array.of(Vector.crisp(-1.0, 0.0), Vector.crisp(-1/3.0, 4/3.0), Vector.crisp(1/3.0, 4/3.0), Vector.crisp(1.0, 0.0)));
-        assertThat(instance.elevate(), is(bezierDerivativeOf(expected)));
+        assertThat(instance.elevate().toBezier(), is(bezierOf(expected.toBezier())));
     }
 
     /**
-     * Test of reduce method, of class BezierDerivative.
+     * Test closed reduce method, closed class BezierDerivative.
      */
     @Test
     public void testReduce() {
         System.out.println("reduce");
         BezierDerivative b1 = BezierDerivative.create(Array.of(Vector.crisp(-1.0, -1.0), Vector.crisp(1.0, 1.0)));
         BezierDerivative e1 = BezierDerivative.create(Array.of(Vector.crisp(0.0, 0.0)));
-        assertThat(b1.reduce(), is(bezierDerivativeOf(e1)));
+        assertThat(b1.reduce().toBezier(), is(bezierOf(e1.toBezier())));
 
         BezierDerivative b2 = BezierDerivative.create(Array.of(Vector.crisp(-1.0, 0.0), Vector.crisp(0.0, 0.0), Vector.crisp(1.0, 0.0)));
         BezierDerivative e2 = BezierDerivative.create(Array.of(Vector.crisp(-1.0, 0.0), Vector.crisp(1.0, 0.0)));
-        assertThat(b2.reduce(), is(bezierDerivativeOf(e2)));
+        assertThat(b2.reduce().toBezier(), is(bezierOf(e2.toBezier())));
 
         BezierDerivative b3 = BezierDerivative.create(Array.of(Vector.crisp(-1.0, 0.0), Vector.crisp(-1/3.0, 4/3.0), Vector.crisp(1/3.0, 4/3.0), Vector.crisp(1.0, 0.0)));
         BezierDerivative e3 = BezierDerivative.create(Array.of(Vector.crisp(-1.0, 0.0), Vector.crisp(0.0, 2.0), Vector.crisp(1.0, 0.0)));
-        assertThat(b3.reduce(), is(bezierDerivativeOf(e3)));
+        assertThat(b3.reduce().toBezier(), is(bezierOf(e3.toBezier())));
     }
 
     /**
-     * Test of subdivide method, of class BezierDerivative.
+     * Test closed subdivide method, closed class BezierDerivative.
      */
     @Test
     public void testSubdivide() {
@@ -187,18 +187,20 @@ public class BezierDerivativeTest {
         BezierDerivative instance = BezierDerivative.create(Array.of(Vector.crisp(0.0, 0.0), Vector.crisp(0.0, 1.0), Vector.crisp(1.0, 0.0), Vector.crisp(1.0, 1.0)));
         BezierDerivative first = instance.subdivide(t)._1();
         BezierDerivative second = instance.subdivide(t)._2();
-        assertThat(first, is(bezierDerivativeOf(BezierDerivative.create(Array.of(Vector.crisp(0.0, 0.0), Vector.crisp(0.0, 0.25), Vector.crisp(1/16.0, 3/8.0), Vector.crisp(5/32.0, 7/16.0))))));
-        assertThat(second, is(bezierDerivativeOf(BezierDerivative.create(Array.of(Vector.crisp(5/32.0, 7/16.0), Vector.crisp(7/16.0, 5/8.0), Vector.crisp(1.0, 0.250), Vector.crisp(1.0, 1.0))))));
+        assertThat(first.toBezier(), is(bezierOf(Bezier.create(
+                Point.crisp(0.0, 0.0), Point.crisp(0.0, 0.25), Point.crisp(1/16.0, 3/8.0), Point.crisp(5/32.0, 7/16.0)))));
+        assertThat(second.toBezier(), is(bezierOf(Bezier.create(
+                Point.crisp(5/32.0, 7/16.0), Point.crisp(7/16.0, 5/8.0), Point.crisp(1.0, 0.250), Point.crisp(1.0, 1.0)))));
     }
 
     /**
-     * Test of toString method, of class BezierDerivative.
+     * Test closed toString method, closed class BezierDerivative.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
         BezierDerivative expected = BezierDerivative.create(Bezier.create(Point.crisp(0.0, 0.0), Point.crisp(0.0, 1.0), Point.crisp(1.0, 0.0), Point.crisp(1.0, 1.0)));
         BezierDerivative actual = new JsonBezierDerivative().fromJson(expected.toString()).get();
-        assertThat(actual, is(bezierDerivativeOf(expected)));
+        assertThat(actual.toBezier(), is(bezierOf(expected.toBezier())));
     }
 }
