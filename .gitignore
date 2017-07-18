@@ -31,3 +31,4 @@ JumpakuCurves/.idea/
 
 JumpakuCurves/target/
 *.iml
+/JumpakuCurves/.nb-gradle/
